@@ -221,11 +221,9 @@
 
   /* Tooltips */
   .tip { position:relative; cursor:help; }
-  .tip::after { content: attr(data-tip); position:absolute; left:50%; bottom:calc(100% + 8px); transform:translateX(-50%); width:max-content; max-width:15rem; background:#0b1f17; color:#e6f2ea; border:1px solid rgba(34,243,255,.4); border-radius:8px; padding:.45rem .6rem; font:500 .75rem/1.35 system-ui, sans-serif; display:none; pointer-events:none; z-index:30; text-transform:none; letter-spacing:0; }
+  .tip::after { content: attr(data-tip); position:absolute; left:50%; bottom:calc(100% + 8px); transform:translateX(-50%); width:max-content; max-width:15rem; background:#0b1f17; color:#e6f2ea; border:1px solid rgba(34,243,255,.6); box-shadow:0 6px 24px rgba(0,0,0,.85); border-radius:8px; padding:.45rem .6rem; font:500 .75rem/1.35 system-ui, sans-serif; display:none; pointer-events:none; z-index:50; text-transform:none; letter-spacing:0; }
   /* Only in layout while shown, so hidden tooltips never widen the page. */
   .tip:hover::after, .tip:focus-visible::after, .tip:focus-within::after { display:block; }
-  #badges .tip:nth-child(5n+1)::after { left:0; transform:none; }
-  #badges .tip:nth-child(5n)::after, #badges .tip:nth-child(3n)::after { left:auto; right:0; transform:none; }
   /* Locked badges dim only their icon and name, so the how-to text and the tooltip stay fully readable. */
   .badge { display:flex; flex-direction:column; align-items:center; gap:.2rem; border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:.55rem .4rem; text-align:center; background:rgba(0,0,0,.3); }
   .badge.got { border-color:rgba(255,210,63,.6); box-shadow:0 0 14px rgba(255,210,63,.25); }
@@ -965,7 +963,7 @@ function checkPB(deck, m, rigged) {
 /* =====================================================================
    8. Stats, badges, distribution, ETA
    ===================================================================== */
-// `how` is shown on every badge; `tip` is the extra fun fact on hover/focus; `progress` shows how close you are.
+// `how` and `progress` are shown on every badge; `tip` is the fun fact in the unlock toast and for screen readers.
 const BADGES = [
   { id: 'average', ico: '⚖️', name: 'Perfectly Average', how: 'Get exactly 1 match in a shuffle',
     tip: 'The statistically correct amount of luck.', progress: () => '' },
@@ -979,7 +977,7 @@ const BADGES = [
     tip: 'Switching Autopilot off or changing speed restarts the clock.', progress: () => autopilot.mode === 'L' ? `${Math.floor(autopilot.ludMs / 1000)}/60 s` : '' }
 ];
 function renderBadges() {
-  $('#badges').innerHTML = BADGES.map(b => `<div class="badge tip" id="bd-${b.id}" tabindex="0" data-tip="${b.tip}"><span class="ico" aria-hidden="true">${b.ico}</span><span class="nm">${b.name}</span><span class="how">${b.how}</span><span class="prog"></span><span class="sr-only"></span></div>`).join('');
+  $('#badges').innerHTML = BADGES.map(b => `<div class="badge" id="bd-${b.id}" role="group" aria-label="${b.name}"><span class="ico" aria-hidden="true">${b.ico}</span><span class="nm">${b.name}</span><span class="how">${b.how}</span><span class="prog"></span><span class="sr-only"></span></div>`).join('');
   updateBadges();
 }
 /** Refreshes unlocked state and progress in place (keeps hover and focus intact). */
