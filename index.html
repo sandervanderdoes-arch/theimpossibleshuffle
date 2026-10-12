@@ -574,7 +574,7 @@
         </a>
       </div>
       <a class="fund-custom mt-3" data-tier="custom" target="_blank" rel="noopener" hidden>or choose your own amount →</a>
-      <p class="mt-2 text-xs text-[#9fb5a8]">Secure checkout by Stripe. Opens in a new tab.</p>
+      <p id="fundNote" class="mt-3 text-xs text-[#9fb5a8]"></p>
     </section>
     <div id="merchBox" class="mt-6" hidden>
       <a id="merchLink" class="chip-btn merch-btn" target="_blank" rel="noopener">👕 Mission merch</a>
@@ -657,12 +657,13 @@ if (mqReduce && mqReduce.addEventListener) mqReduce.addEventListener('change', e
 const SITE = {
   goatcounter: 'theimpossibleshuffle', // GoatCounter code: 'abc' for https://abc.goatcounter.com
   plausibleDomain: '',  // or Plausible: 'theimpossibleshuffle.com'
-  fund: {              // Stripe Payment Links, one per tier; a tier stays hidden while its link is empty
+  fund: {              // one link per tier (a tier stays hidden while its link is empty); the same page for all is fine
     currency: '$',      // shown in front of the prices ('$', '€' or '£')
-    tea: '',            // $1.92  Buy the Professor a tea
-    odds: '',           // $8.07  Sponsor the odds (the featured middle tier)
-    patron: '',         // $52    Patron of the Deck
-    custom: ''          // optional "choose your own amount" link
+    tea: 'https://ko-fi.com/theimpossibleshuffle',      // $1.92  Buy the Professor a tea
+    odds: 'https://ko-fi.com/theimpossibleshuffle',     // $8.07  Sponsor the odds (the featured middle tier)
+    patron: 'https://ko-fi.com/theimpossibleshuffle',   // $52    Patron of the Deck
+    custom: '',         // optional "choose your own amount" link (hidden while empty)
+    note: 'Opens our Ko-fi page in a new tab. Pick your amount there; these are our suggestions.'
   },
   merchUrl: ''          // merch shop page
 };
@@ -707,6 +708,7 @@ function setupSupportLinks() {
     a.href = url; a.hidden = false;
     a.addEventListener('click', () => track(`fund-${a.dataset.tier}-${a.closest('#winFund') ? 'win' : 'footer'}`));
   });
+  $('#fundNote').textContent = F.note || 'Opens in a new tab.';
   $('#fundBox').hidden = !any;
   $('#winFund').hidden = !any;
   if (SITE.merchUrl) {
