@@ -11,7 +11,12 @@
 <meta property="og:url" content="https://theimpossibleshuffle.com/">
 <meta property="og:title" content="The Impossible Shuffle">
 <meta property="og:description" content="Humanity is shuffling one deck until it matches twice. The odds are 1 in 52!, about 8 × 10⁶⁷. We're trying anyway.">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://theimpossibleshuffle.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Professor Factorial next to the title The Impossible Shuffle and the odds: 1 in 8.07 × 10^67.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://theimpossibleshuffle.com/og-image.png">
 <meta name="twitter:title" content="The Impossible Shuffle">
 <meta name="twitter:description" content="Humanity is shuffling one deck until it matches twice. The odds are 1 in 52!. We're trying anyway.">
 <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
@@ -264,6 +269,8 @@
   /* Fellow shufflers ticker */
   #ticker { position:fixed; left:0; right:0; bottom:0; height:calc(2.4rem + env(safe-area-inset-bottom, 0px)); padding-bottom:env(safe-area-inset-bottom, 0px); z-index:60; display:flex; align-items:stretch; background:rgba(1,8,5,.94); border-top:1px solid rgba(255,210,63,.45); font-size:.82rem; }
   #ticker .lab { flex:none; display:flex; align-items:center; gap:.4rem; padding:0 .75rem 0 calc(.75rem + env(safe-area-inset-left, 0px)); background:#1b1405; color:#ffe68a; font-weight:800; font-size:.72rem; letter-spacing:.04em; border-right:1px solid rgba(255,210,63,.4); }
+  #ticker .lab-text { display:flex; flex-direction:column; line-height:1.05; }
+  #ticker .lab-text small { font-size:.62rem; font-weight:600; letter-spacing:.02em; color:#b9a76a; text-transform:none; margin-top:2px; }
   #tickerView { position:relative; flex:1; overflow:hidden; }
   #tickerTrack { position:absolute; top:0; bottom:0; left:0; display:flex; align-items:center; white-space:nowrap; will-change:transform; }
   #tickerTrack > span { padding:0 2.2rem 0 0; }
@@ -348,6 +355,10 @@
   .first-text b { color:#ffe68a; }
   .first-text .dim { color:var(--muted); white-space:nowrap; }
   @media (max-width: 480px) { .stamp { font-size:.68rem; } .first-text { font-size:.84rem; } }
+  /* Result card dialog */
+  #cardDlg { margin:auto; background:#04140d; color:var(--ink); border:1px solid var(--pink); border-radius:20px; padding:1rem; width:min(30rem, calc(100vw - 1.5rem)); max-height:calc(100dvh - 1.5rem); box-shadow:0 0 30px rgba(255,47,214,.35); }
+  #cardDlg::backdrop { background:rgba(0,0,0,.7); }
+  #cardDlg img { display:block; width:100%; height:auto; border-radius:14px; background:#06180f; aspect-ratio:1 / 1; }
   #rigged { position:fixed; left:.75rem; top:.75rem; z-index:110; }
   #fab { position:fixed; right:calc(1rem + env(safe-area-inset-right, 0px)); bottom:calc(3.3rem + env(safe-area-inset-bottom, 0px)); z-index:55; }
   #fab[hidden] { display:none; }
@@ -522,7 +533,7 @@
       <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-2">ACHIEVEMENTS</h3>
       <div id="badges" class="grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
 
-      <button type="button" id="shareBtn" class="chip-btn mt-5 w-full">📋 Share your futility</button>
+      <button type="button" id="shareBtn" class="chip-btn mt-5 w-full">📤 Share your futility</button>
     </section>
   </div>
 
@@ -585,10 +596,23 @@
 
 <button type="button" id="fab" class="shuffle-btn !w-auto !py-3 !px-5 !text-sm lg:hidden" hidden aria-label="Shuffle Deck 2">Shuffle</button>
 
-<div id="ticker" aria-label="Fellow shufflers feed">
-  <div class="lab"><span class="live-dot" aria-hidden="true" style="width:7px;height:7px"></span>FELLOW SHUFFLERS</div>
+<div id="ticker" aria-label="Fellow shufflers feed (jokes, not real people)">
+  <div class="lab"><span class="live-dot" aria-hidden="true" style="width:7px;height:7px"></span><span class="lab-text">FELLOW SHUFFLERS<small>jokes · not real people</small></span></div>
   <div id="tickerView"><div id="tickerTrack"></div></div>
 </div>
+
+<dialog id="cardDlg" aria-labelledby="cardTitle">
+  <div class="flex flex-col gap-3">
+    <p id="cardTitle" class="font-display text-lg neon-gold text-center">Your result card</p>
+    <img id="cardImg" alt="Your result card with your best match, number of shuffles and badges">
+    <div class="flex flex-wrap gap-2 justify-center">
+      <button type="button" id="cardShare" class="shuffle-btn !w-auto !text-sm !py-2 !px-4" hidden>📤 Share</button>
+      <button type="button" id="cardSave" class="chip-btn">⬇️ Save image</button>
+      <button type="button" id="cardCopy" class="chip-btn">📋 Copy text</button>
+      <button type="button" id="cardClose" class="chip-btn">Close</button>
+    </div>
+  </div>
+</dialog>
 
 <!-- ===================== WIN OVERLAY ===================== -->
 <div id="win" hidden role="dialog" aria-modal="true" aria-labelledby="winTitle">
@@ -2203,11 +2227,12 @@ function toast(html) {
   setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 400); }, 4500);
 }
 
-$('#shareBtn').addEventListener('click', async () => {
-  track('share');
+/* ---------- Share: a result card image plus copyable text ---------- */
+function shareText() {
   const url = location.href.split(/[?#]/)[0];
-  const best = store.best ? store.best.matches : Math.max(0, session.best);
-  const text = `I shuffled ${fmt(store.allTime)} times for humanity. Best: ${best}/52. Mathematics: 1, Humanity: 0. Your turn: ${url}`;
+  return `I shuffled ${fmt(store.allTime)} times for humanity. Best: ${bestEver()}/52. Mathematics: 1, Humanity: 0. Your turn: ${url}`;
+}
+async function copyText(text) {
   let ok = false;
   try { if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(text); ok = true; } } catch (e) { /* fall through */ }
   if (!ok) {
@@ -2224,7 +2249,94 @@ $('#shareBtn').addEventListener('click', async () => {
     toast('📋 <b>Your browser blocked copying.</b> Select this and copy it yourself:');
     $('#toasts').lastElementChild.appendChild(t);
   }
+}
+function cardTier(m) {
+  return m >= 10 ? 'Witchcraft suspected.' : m >= 6 ? 'Statisticians are nervous.' : m >= 4 ? 'Top 1% of futility.'
+    : m >= 2 ? 'Mild statistical flirtation.' : m === 1 ? 'Perfectly, aggressively average.' : 'Splendidly terrible.';
+}
+let profImg = null;
+function loadProfImg() {
+  if (profImg) return Promise.resolve(profImg);
+  return new Promise(res => { const im = new Image(); im.onload = () => res(profImg = im); im.onerror = () => res(null); im.src = 'prof-card.png'; });
+}
+function roundRectPath(c, x, y, w, h, r) {
+  c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
+}
+/** Draws a 1080×1080 result card. withProf=false skips the Professor image (if the canvas would be tainted). */
+function drawCard(cv, withProf) {
+  const S = 1080, c = cv.getContext('2d'), best = bestEver();
+  cv.width = S; cv.height = S;
+  const bg = c.createRadialGradient(S * 0.3, 0, 50, S * 0.5, S * 0.4, S * 0.9);
+  bg.addColorStop(0, '#145236'); bg.addColorStop(0.45, '#082a1a'); bg.addColorStop(1, '#020a06');
+  c.fillStyle = bg; c.fillRect(0, 0, S, S);
+  c.fillStyle = 'rgba(0,0,0,.14)'; for (let y = 0; y < S; y += 3) c.fillRect(0, y, S, 1);
+  roundRectPath(c, 30, 30, S - 60, S - 60, 36); c.strokeStyle = 'rgba(255,210,63,.5)'; c.lineWidth = 3; c.stroke();
+  let k = 0; const bulb = (x, y) => { c.beginPath(); c.arc(x, y, 6, 0, 7); c.fillStyle = k++ % 2 ? '#ffb3f0' : '#ffeaa0'; c.shadowColor = k % 2 ? 'rgba(255,47,214,.9)' : 'rgba(255,210,63,.9)'; c.shadowBlur = 12; c.fill(); c.shadowBlur = 0; };
+  for (let x = 70; x <= S - 70; x += 34) { bulb(x, 30); bulb(x, S - 30); }
+  for (let y = 70; y <= S - 70; y += 34) { bulb(30, y); bulb(S - 30, y); }
+  c.textAlign = 'center'; c.textBaseline = 'alphabetic';
+  c.font = '64px Bungee, Impact, sans-serif'; c.fillStyle = '#ff8bec'; c.shadowColor = '#ff2fd6'; c.shadowBlur = 22;
+  c.fillText('THE IMPOSSIBLE SHUFFLE', S / 2, 150); c.shadowBlur = 0;
+  if (withProf && profImg) c.drawImage(profImg, 70, 240, 280, 420);
+  const cx = withProf && profImg ? 650 : S / 2;
+  c.font = '700 34px "JetBrains Mono", monospace'; c.fillStyle = '#b9cdc1'; c.fillText('MY BEST SHUFFLE', cx, 290);
+  c.font = '230px Bungee, Impact, sans-serif'; c.fillStyle = '#ffe68a'; c.shadowColor = 'rgba(255,210,63,.75)'; c.shadowBlur = 30;
+  c.fillText(`${best}/52`, cx, 520); c.shadowBlur = 0;
+  c.font = '700 40px system-ui, sans-serif'; c.fillStyle = '#ffffff'; c.fillText(cardTier(best), cx, 600);
+  const stats = [[fmt(store.allTime), 'SHUFFLES'], [`${Object.keys(store.badges).length}/${BADGES.length}`, 'BADGES'], ['1 in 8.07×10', 'ODDS PER SHUFFLE', '67']];
+  stats.forEach(([v, l, exp], i) => {
+    const w = 300, x = 75 + i * (w + 15), y = 690;
+    roundRectPath(c, x, y, w, 150, 22); c.fillStyle = 'rgba(0,0,0,.45)'; c.fill(); c.strokeStyle = 'rgba(34,243,255,.35)'; c.lineWidth = 2; c.stroke();
+    c.font = `800 ${v.length > 11 ? 34 : 50}px "JetBrains Mono", monospace`; c.fillStyle = '#a5fbff';
+    if (exp) {   // draw the exponent as a small raised number
+      const main = c.measureText(v).width; c.font = '800 22px "JetBrains Mono", monospace'; const ew = c.measureText(exp).width;
+      const left = x + w / 2 - (main + ew + 2) / 2;
+      c.textAlign = 'left'; c.fillText(exp, left + main + 2, y + 66);
+      c.font = '800 34px "JetBrains Mono", monospace'; c.fillText(v, left, y + 85); c.textAlign = 'center';
+    } else c.fillText(v, x + w / 2, y + 85);
+    c.font = '700 22px "JetBrains Mono", monospace'; c.fillStyle = '#9fb5a8'; c.fillText(l, x + w / 2, y + 125);
+  });
+  c.font = '800 30px "JetBrains Mono", monospace'; c.fillStyle = '#ffffff'; c.fillText('MATHEMATICS 1 : 0 HUMANITY', S / 2, 920);
+  c.font = '42px Bungee, Impact, sans-serif'; c.fillStyle = '#a5fbff'; c.shadowColor = 'rgba(34,243,255,.7)'; c.shadowBlur = 16;
+  c.fillText('theimpossibleshuffle.com', S / 2, 995); c.shadowBlur = 0;
+}
+const cardState = { blob: null, url: '' };
+async function makeCard() {
+  try { await Promise.all([document.fonts.load('64px Bungee'), document.fonts.load('800 40px "JetBrains Mono"'), document.fonts.load('700 34px "JetBrains Mono"')]); } catch (e) { /* fallback fonts */ }
+  await loadProfImg();
+  const cv = document.createElement('canvas');
+  const toBlob = () => new Promise((res, rej) => { try { cv.toBlob(b => (b ? res(b) : rej(new Error('no blob'))), 'image/png'); } catch (e) { rej(e); } });
+  drawCard(cv, true);
+  try { return await toBlob(); } catch (e) { drawCard(cv, false); return toBlob(); }   // e.g. opened from disk: skip the image
+}
+$('#shareBtn').addEventListener('click', async () => {
+  track('share');
+  if (!store.allTime) { toast('🃏 <b>Shuffle at least once</b>, then share your futility.'); return; }
+  const dlg = $('#cardDlg');
+  try {
+    cardState.blob = await makeCard();
+    if (cardState.url) URL.revokeObjectURL(cardState.url);
+    cardState.url = URL.createObjectURL(cardState.blob);
+    $('#cardImg').src = cardState.url;
+    const file = new File([cardState.blob], 'impossible-shuffle.png', { type: 'image/png' });
+    $('#cardShare').hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
+  } catch (e) { copyText(shareText()); return; }       // no canvas: fall back to plain text
+  if (typeof dlg.showModal === 'function') dlg.showModal(); else copyText(shareText());
 });
+$('#cardShare').addEventListener('click', async () => {
+  const file = new File([cardState.blob], 'impossible-shuffle.png', { type: 'image/png' });
+  try { await navigator.share({ files: [file], text: shareText(), title: 'The Impossible Shuffle' }); track('share-card-native'); }
+  catch (e) { if (e.name !== 'AbortError') copyText(shareText()); }
+});
+$('#cardSave').addEventListener('click', () => {
+  const a = document.createElement('a');
+  a.href = cardState.url; a.download = 'impossible-shuffle.png';
+  document.body.appendChild(a); a.click(); a.remove();
+  track('share-card-save');
+});
+$('#cardCopy').addEventListener('click', () => { copyText(shareText()); track('share-text'); });
+$('#cardClose').addEventListener('click', () => $('#cardDlg').close());
+$('#cardDlg').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
 
 function updateRiggedBadge() {
   const box = $('#rigged');
@@ -2238,7 +2350,7 @@ el.shuffleBtn.addEventListener('click', manualShuffle);
 el.fab.addEventListener('click', manualShuffle);
 $$('.seg button').forEach(b => b.addEventListener('click', () => setAutopilot(b.dataset.ap)));
 document.addEventListener('keydown', e => {
-  if (winOpen) return;
+  if (winOpen || document.querySelector('dialog[open]')) return;
   if (e.key !== ' ' && e.key !== 'Enter') return;
   if (e.altKey || e.ctrlKey || e.metaKey) return;
   const t = e.target;
