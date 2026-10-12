@@ -338,6 +338,16 @@
     #winLog { min-height:0; font-size:.75rem; line-height:1.4; margin-top:.5rem; }
     .alarm-title { font-size:1.2rem; }
   }
+  /* "World first" stamp under the Challenger: every new deck is almost certainly unique in history. */
+  .first-stamp { margin-top:.9rem; display:flex; align-items:center; gap:.85rem; padding:.7rem .9rem; border:1px dashed rgba(255,210,63,.5); border-radius:14px; background:rgba(255,210,63,.06); }
+  .stamp { flex:none; font-family:Bungee, Impact, system-ui, sans-serif; font-size:.78rem; line-height:1.15; text-align:center; color:#ffe68a; border:2px solid var(--gold); border-radius:8px; padding:.35rem .5rem; transform:rotate(-6deg); letter-spacing:.03em; box-shadow:0 0 12px rgba(255,210,63,.35), inset 0 0 8px rgba(255,210,63,.2); }
+  .stamp.thunk { animation: thunk .5s cubic-bezier(.2,1.5,.4,1) 1; }
+  .stamp.copy { color:#bffcff; border-color:var(--cyan); box-shadow:0 0 12px rgba(34,243,255,.4); }
+  @keyframes thunk { 0% { transform:rotate(-16deg) scale(2); opacity:0; } 55% { opacity:1; } 100% { transform:rotate(-6deg) scale(1); } }
+  .first-text { margin:0; font-size:.9rem; line-height:1.45; color:#cfe3d7; min-width:0; }
+  .first-text b { color:#ffe68a; }
+  .first-text .dim { color:var(--muted); white-space:nowrap; }
+  @media (max-width: 480px) { .stamp { font-size:.68rem; } .first-text { font-size:.84rem; } }
   #rigged { position:fixed; left:.75rem; top:.75rem; z-index:110; }
   #fab { position:fixed; right:calc(1rem + env(safe-area-inset-right, 0px)); bottom:calc(3.3rem + env(safe-area-inset-bottom, 0px)); z-index:55; }
   #fab[hidden] { display:none; }
@@ -430,6 +440,10 @@
           <p class="mono text-xs text-[#9fb5a8]">✓ = same card, same position</p>
         </div>
         <div id="chalGrid" class="deck-grid" role="list" aria-label="The Challenger deck, 52 cards"></div>
+        <div class="first-stamp" id="firstBox">
+          <span class="stamp" id="firstStamp" aria-hidden="true">🌍 WORLD<br>FIRST</span>
+          <p class="first-text" id="firstText">Your first shuffle will almost certainly create a deck order <b>no human has ever seen</b>.</p>
+        </div>
       </section>
     </div>
 
@@ -1430,6 +1444,23 @@ function lightCard(i, pulse) {
   }
 }
 /** Shows a finished attempt everywhere at once: grid, highlights, meter, Professor, log, live region. */
+/** The world-first stamp: every new deck order is almost certainly unique in human history
+    (even ~10^17 shuffles ever leaves about a 1 in 10^50 chance of a repeat). */
+function ordinal(n) {
+  const v = n % 100, s = (v >= 11 && v <= 13) ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] || 'th');
+  return fmt(n) + s;
+}
+function showWorldFirst(m, animate) {
+  const stamp = $('#firstStamp'), text = $('#firstText');
+  if (m === 52) {
+    stamp.innerHTML = '🏆 PERFECT<br>COPY'; stamp.classList.add('copy');
+    text.innerHTML = 'For once, <b>not</b> a world first: this deck is an exact copy of the Holy Grail. Which is the whole point.';
+  } else {
+    stamp.innerHTML = '🌍 WORLD<br>FIRST'; stamp.classList.remove('copy');
+    text.innerHTML = `This exact deck order has almost certainly <b>never existed before</b> in human history. You just made it. <span class="dim">(Your ${ordinal(store.allTime)} world first.)</span>`;
+  }
+  if (animate && !reduceMotion) { stamp.classList.remove('thunk'); void stamp.offsetWidth; stamp.classList.add('thunk'); }
+}
 function reveal(res, staggered) {
   anim.matchTimers.forEach(clearTimeout); anim.matchTimers = [];
   current.set(res.deck); hasCurrent = true;
@@ -1442,6 +1473,7 @@ function reveal(res, staggered) {
     hits.forEach((i, k) => anim.matchTimers.push(setTimeout(() => { lightCard(i, true); }, k * step)));
   } else hits.forEach(i => lightCard(i, false));
   setMeter(res.m, true, true);
+  showWorldFirst(res.m, true);
   if (res.m < 52) profReact(res.m);
   addLogRows([res]);
   const pct = (res.m / 52 * 100).toFixed(2);
@@ -1527,6 +1559,7 @@ function flushAutopilot() {
   current.set(last.deck); hasCurrent = true;
   paintDeck(C, current, grail);
   applyMatchesInstant(current);
+  showWorldFirst(last.m, false);
   setMeter(last.m, false, false);
   const k = Math.min(ap.sinceFlush, RING), entries = [];
   for (let j = 1; j <= k; j++) entries.push(ap.ring[(ap.pos - j + RING) % RING]);
