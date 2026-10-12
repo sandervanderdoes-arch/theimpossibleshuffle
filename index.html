@@ -306,6 +306,12 @@
         <p class="mt-2 font-bold text-[#ffe68a]">0 successful matches in human history.</p>
         <p class="mt-1 text-xs text-[#9fb5a8]">(global figure simulated, much like your chances)</p>
       </div>
+
+      <div id="liveBox" class="mt-7 mx-auto max-w-xl rounded-2xl border border-[#ffd23f]/40 bg-black/30 px-4 py-4" hidden>
+        <p class="mono text-xs tracking-widest text-[#ffe68a] inline-flex items-center gap-2"><span class="live-dot" aria-hidden="true" style="width:8px;height:8px"></span>ACTUAL ATTEMPTS BY HUMANKIND</p>
+        <p id="liveCount" class="mono font-extrabold neon-gold text-2xl sm:text-4xl mt-1 tabular-nums break-all">…</p>
+        <p class="mt-1 text-xs text-[#cfe3d7]">Every shuffle by every real visitor to this site, counted live. <span id="liveYou" class="text-[#9fb5a8]"></span></p>
+      </div>
     </div>
   </header>
 
@@ -687,7 +693,7 @@ const el = {
   meterNum: $('#meterNum'), meterCount: $('#meterCount'), meterSub: $('#meterSub'),
   bubble: $('#bubble'), profSlot: $('#profSlot'), live: $('#live'),
   logBody: $('#logBody'), pbRow: $('#pbRow'), apRate: $('#apRate'),
-  globalCount: $('#globalCount'), progA: $('#progA'), progB: $('#progB'), progSr: $('#progSr')
+  globalCount: $('#globalCount'), liveCount: $('#liveCount'), liveYou: $('#liveYou'), progA: $('#progA'), progB: $('#progB'), progSr: $('#progSr')
 };
 
 function buildGrid(container) {
@@ -982,6 +988,7 @@ function record(m) {
   if (m > session.best) session.best = m;
   if (!session.firstAt) session.firstAt = performance.now();
   store.allTime++;
+  live.pending++;
   if (m === 0) { if (++session.streak0 >= 5 && !store.badges.derangement) unlock('derangement'); }
   else session.streak0 = 0;
   if (m === 1 && !store.badges.average) unlock('average');
@@ -1291,10 +1298,63 @@ function renderGlobal() {
   const text = `HUMANITY'S PROGRESS: ${pct}% · only ${zeros} zeros after the decimal point to go ·`;
   el.progA.textContent = text; el.progB.textContent = text;
 }
+/* ---------------------------------------------------------------------
+   Live counter: real attempts by every visitor, kept in Supabase.
+   Fill in the project URL and anon key (both public by design; the
+   database only lets visitors read the total and add to it through the
+   add_attempts() function, capped per call). Leave them empty and the
+   meter stays hidden. Shuffles are sent in batches every 5 seconds.
+   --------------------------------------------------------------------- */
+const LIVE_COUNTER = { url: '', anonKey: '' };
+const live = { on: !!(LIVE_COUNTER.url && LIVE_COUNTER.anonKey), total: null, pending: 0, inflight: 0, shown: 0, mine: 0, busy: false };
+const LIVE_MAX_DELTA = 5000000;   // must match the cap in add_attempts()
+function liveHeaders() {
+  return { apikey: LIVE_COUNTER.anonKey, Authorization: 'Bearer ' + LIVE_COUNTER.anonKey, 'Content-Type': 'application/json' };
+}
+async function liveFetch() {
+  try {
+    const r = await fetch(`${LIVE_COUNTER.url}/rest/v1/shuffle_stats?select=attempts&id=eq.1`, { headers: liveHeaders(), cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const rows = await r.json();
+    if (rows[0] && Number.isFinite(Number(rows[0].attempts))) live.total = Number(rows[0].attempts);
+  } catch (e) { /* offline: keep the last known total */ }
+}
+async function liveFlush(onExit) {
+  if (!live.on || live.busy) return;
+  if (!live.pending) { if (!onExit) await liveFetch(); return; }
+  const delta = Math.min(live.pending, LIVE_MAX_DELTA);
+  live.pending -= delta; live.inflight = delta; live.busy = true;
+  try {
+    const r = await fetch(`${LIVE_COUNTER.url}/rest/v1/rpc/add_attempts`, { method: 'POST', headers: liveHeaders(), body: JSON.stringify({ delta }), keepalive: true });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const total = Number(await r.json());
+    if (Number.isFinite(total)) live.total = total;
+    live.mine += delta;
+  } catch (e) { live.pending += delta; }    // try again next round
+  live.inflight = 0; live.busy = false;
+}
+function renderLive() {
+  if (!live.on) return;
+  if (live.total === null) { el.liveCount.textContent = 'connecting…'; return; }
+  const target = live.total + live.pending + live.inflight;     // include your shuffles that are still on their way
+  live.shown = live.shown && target - live.shown < 1e6 && target >= live.shown ? live.shown + Math.ceil((target - live.shown) * 0.25) : target;
+  el.liveCount.textContent = fmt(live.shown);
+  const you = live.mine + live.pending + live.inflight;
+  el.liveYou.textContent = you ? `You've added ${fmt(you)}.` : '';
+}
+if (live.on) {
+  $('#liveBox').hidden = false;
+  liveFetch();
+  setInterval(liveFlush, 5000);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') liveFlush(true); });
+  window.addEventListener('pagehide', () => liveFlush(true));
+}
+
 let tickN = 0;
 setInterval(() => {
   globalSim += BigInt(60 + RNG.below(120));           // ≈ 600–1,800 simulated shuffles per second
   renderGlobal();
+  renderLive();
   tickN++;
   if (statsDirty && (tickN % 3 === 0 || !autopilot.mode)) updateStats();
   if (tickN % 50 === 0) el.progSr.textContent = `Humanity's progress: ${ratioPercent(globalTotal(), F52, 76)} percent.`;
