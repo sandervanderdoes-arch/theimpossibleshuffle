@@ -226,10 +226,16 @@
   .tip:hover::after, .tip:focus-visible::after, .tip:focus-within::after { display:block; }
   #badges .tip:nth-child(5n+1)::after { left:0; transform:none; }
   #badges .tip:nth-child(5n)::after, #badges .tip:nth-child(3n)::after { left:auto; right:0; transform:none; }
-  .badge { border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:.5rem; text-align:center; background:rgba(0,0,0,.3); filter:grayscale(1); opacity:.45; }
-  .badge.got { filter:none; opacity:1; border-color:rgba(255,210,63,.6); box-shadow:0 0 14px rgba(255,210,63,.25); }
-  .badge .ico { font-size:1.5rem; display:block; }
-  .badge .nm { font-size:.68rem; font-weight:800; line-height:1.2; display:block; margin-top:.2rem; }
+  /* Locked badges dim only their icon and name, so the how-to text and the tooltip stay fully readable. */
+  .badge { display:flex; flex-direction:column; align-items:center; gap:.2rem; border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:.55rem .4rem; text-align:center; background:rgba(0,0,0,.3); }
+  .badge.got { border-color:rgba(255,210,63,.6); box-shadow:0 0 14px rgba(255,210,63,.25); }
+  .badge .ico { font-size:1.5rem; display:block; line-height:1.2; }
+  .badge .nm { font-size:.68rem; font-weight:800; line-height:1.2; display:block; }
+  .badge:not(.got) .ico { filter:grayscale(1); opacity:.4; }
+  .badge:not(.got) .nm { color:#b8c9bf; }
+  .badge .how { font-size:.64rem; line-height:1.3; color:#cfe3d7; display:block; }
+  .badge .prog { margin-top:auto; padding-top:.15rem; font:700 .62rem "JetBrains Mono", ui-monospace, monospace; color:var(--cyan); display:block; min-height:1.1em; }
+  .badge.got .prog { color:var(--gold); }
 
   /* Toasts */
   #toasts { position:fixed; top:.75rem; right:.75rem; z-index:120; display:flex; flex-direction:column; gap:.5rem; max-width:min(22rem, calc(100vw - 1.5rem)); }
@@ -959,25 +965,42 @@ function checkPB(deck, m, rigged) {
 /* =====================================================================
    8. Stats, badges, distribution, ETA
    ===================================================================== */
+// `how` is shown on every badge; `tip` is the extra fun fact on hover/focus; `progress` shows how close you are.
 const BADGES = [
-  { id: 'average', ico: '⚖️', name: 'Perfectly Average', tip: 'Got exactly 1 match. The statistically correct amount of luck.' },
-  { id: 'derangement', ico: '🌀', name: 'Derangement Champion', tip: '0 matches, 5 times in a row. A deck with zero matches is mathematically called a derangement.' },
-  { id: 'monocle', ico: '🧐', name: 'Monocle Popper', tip: '6 or more matches. The Professor is still looking for it.' },
-  { id: 'committed', ico: '🎖️', name: 'Committed to the Bit', tip: '1,000 attempts. There is no turning back now.' },
-  { id: 'ludicrous', ico: '🚀', name: 'Ludicrous Speed', tip: 'Ran Autopilot at Ludicrous for 60 seconds.' }
+  { id: 'average', ico: '⚖️', name: 'Perfectly Average', how: 'Get exactly 1 match in a shuffle',
+    tip: 'The statistically correct amount of luck.', progress: () => '' },
+  { id: 'derangement', ico: '🌀', name: 'Derangement Champion', how: 'Get 0 matches 5 shuffles in a row',
+    tip: 'A deck with zero matches is mathematically called a derangement.', progress: () => `streak ${Math.min(session.streak0, 5)}/5` },
+  { id: 'monocle', ico: '🧐', name: 'Monocle Popper', how: 'Get 6 or more matches in one shuffle',
+    tip: 'Happens about once in 1,700 shuffles. The Professor is still looking for his monocle.', progress: () => `best ${Math.max(0, session.best, store.best ? store.best.matches : 0)}/6` },
+  { id: 'committed', ico: '🎖️', name: 'Committed to the Bit', how: 'Shuffle 1,000 times (all-time)',
+    tip: 'Autopilot counts. There is no turning back now.', progress: () => `${fmt(Math.min(store.allTime, 1000))}/1,000` },
+  { id: 'ludicrous', ico: '🚀', name: 'Ludicrous Speed', how: 'Run Autopilot on Ludicrous for 60 seconds straight',
+    tip: 'Switching Autopilot off or changing speed restarts the clock.', progress: () => autopilot.mode === 'L' ? `${Math.floor(autopilot.ludMs / 1000)}/60 s` : '' }
 ];
 function renderBadges() {
-  $('#badges').innerHTML = BADGES.map(b => {
+  $('#badges').innerHTML = BADGES.map(b => `<div class="badge tip" id="bd-${b.id}" tabindex="0" data-tip="${b.tip}"><span class="ico" aria-hidden="true">${b.ico}</span><span class="nm">${b.name}</span><span class="how">${b.how}</span><span class="prog"></span><span class="sr-only"></span></div>`).join('');
+  updateBadges();
+}
+/** Refreshes unlocked state and progress in place (keeps hover and focus intact). */
+function updateBadges() {
+  for (const b of BADGES) {
+    const node = document.getElementById('bd-' + b.id);
+    if (!node) continue;
     const got = !!store.badges[b.id];
-    return `<div class="badge tip ${got ? 'got' : ''}" tabindex="0" data-tip="${b.tip}${got ? '' : ' (locked)'}"><span class="ico" aria-hidden="true">${b.ico}</span><span class="nm">${b.name}</span><span class="sr-only">${got ? 'unlocked' : 'locked'}: ${b.tip}</span></div>`;
-  }).join('');
+    node.classList.toggle('got', got);
+    const prog = got ? '✓ unlocked' : b.progress();
+    const p = node.querySelector('.prog');
+    if (p.textContent !== prog) p.textContent = prog;
+    node.querySelector('.sr-only').textContent = `${got ? 'Unlocked' : 'Locked'}. ${b.how}. ${prog && !got ? 'Progress: ' + prog + '.' : ''} ${b.tip}`;
+  }
 }
 function unlock(id) {
   if (store.badges[id]) return;
   store.badges[id] = Date.now();
   const b = BADGES.find(x => x.id === id);
   toast(`🏆 <b>Achievement unlocked: ${b.name}</b><br><span style="opacity:.85">${b.tip}</span>`);
-  renderBadges();
+  updateBadges();
   saveStore(true);
 }
 /** Hot path: called once per attempt, manual or autopilot. */
@@ -1049,6 +1072,7 @@ function updateStats() {
     $('#etaSub').textContent = `At your pace of ${r >= 100 ? fmt(Math.round(r)) : r.toFixed(r < 1 ? 2 : 1)} shuffles/sec: ≈ ${sci(years)} years of expected waiting.`;
   }
   if (pbDirty) renderPB();
+  updateBadges();
   updateButtonLabel();
 }
 
