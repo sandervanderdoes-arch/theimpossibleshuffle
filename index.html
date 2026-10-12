@@ -282,6 +282,9 @@
   @keyframes shake { 10%,90% { transform:translate(-2px,1px); } 20%,80% { transform:translate(4px,-2px); } 30%,50%,70% { transform:translate(-7px,3px) rotate(-.4deg); } 40%,60% { transform:translate(7px,-3px) rotate(.4deg); } }
 
   .toast .copy-text { display:block; margin-top:.4rem; padding:.4rem; background:rgba(0,0,0,.4); border-radius:6px; font:12px/1.4 "JetBrains Mono", monospace; user-select:all; word-break:break-word; }
+  .fund-btn { display:inline-flex; align-items:center; gap:.45rem; border-radius:14px; padding:.75rem 1.2rem; font-family:Bungee, Impact, system-ui, sans-serif; font-size:.95rem; color:#1d1300; text-decoration:none; background:linear-gradient(135deg,#ffe27a,#ffb000); box-shadow:0 0 0 2px #fff2bf, 0 0 22px rgba(255,210,63,.55); transition:transform .08s; }
+  .fund-btn:hover { transform:translateY(-1px); box-shadow:0 0 0 2px #fff7d6, 0 0 30px rgba(255,210,63,.8); }
+  .merch-btn { display:inline-flex; align-items:center; gap:.45rem; text-decoration:none; }
   #rigged { position:fixed; left:.75rem; top:.75rem; z-index:110; }
   #fab { position:fixed; right:1rem; bottom:3.3rem; z-index:55; }
   #fab[hidden] { display:none; }
@@ -481,6 +484,13 @@
   <footer class="px-4 mt-10 mb-6 max-w-6xl mx-auto text-center">
     <p class="text-xs font-bold tracking-widest text-[#9fb5a8]">FUN FACT</p>
     <p id="funFact" class="fade mt-1 max-w-2xl mx-auto text-sm text-[#cfe3d7] min-h-[2.5rem]"></p>
+    <div id="supportBox" class="mt-8" hidden>
+      <div class="flex flex-wrap justify-center gap-3">
+        <a id="fundLink" class="fund-btn" target="_blank" rel="noopener" hidden>🚀 Fund the mission</a>
+        <a id="merchLink" class="chip-btn merch-btn" target="_blank" rel="noopener" hidden>👕 Mission merch</a>
+      </div>
+      <p class="mt-2 text-xs text-[#9fb5a8]">Mathematics is free. The coffee keeping this mission running is not.</p>
+    </div>
     <p class="mt-6 font-display text-sm neon-pink">Made with love, despair and Fisher–Yates.</p>
   </footer>
 </div>
@@ -512,6 +522,7 @@
       <div class="mt-6 flex flex-wrap gap-3 justify-center">
         <button type="button" id="reportBtn" class="chip-btn !text-base !px-5 !py-3" style="background:#000;color:#fff;border-color:#fff">🚨 Report to Authorities</button>
         <button type="button" id="restoreBtn" class="shuffle-btn !w-auto !px-6 !py-3 !text-base">Restore Spacetime</button>
+        <a id="winFundLink" class="fund-btn" target="_blank" rel="noopener" hidden>🚀 Fund the mission</a>
       </div>
     </div>
   </div>
@@ -543,6 +554,56 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 const mqReduce = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : null;
 let reduceMotion = !!(mqReduce && mqReduce.matches);
 if (mqReduce && mqReduce.addEventListener) mqReduce.addEventListener('change', e => { reduceMotion = e.matches; });
+
+/* =====================================================================
+   0b. Site settings: fill these in to switch features on.
+       Each feature stays hidden or off while its value is empty.
+   ===================================================================== */
+const SITE = {
+  goatcounter: '',      // GoatCounter code: 'abc' for https://abc.goatcounter.com
+  plausibleDomain: '',  // or Plausible: 'theimpossibleshuffle.com'
+  fundUrl: '',          // donation page, e.g. https://ko-fi.com/yourname
+  merchUrl: ''          // merch shop page
+};
+/* Visitor stats: GoatCounter or Plausible. Both are cookieless, so no consent banner
+   is needed. Only page views and a handful of named events are sent: never the deck,
+   scores or anything personal. Nothing is sent when the page is opened from disk. */
+const analyticsOn = location.protocol.startsWith('http') && !/^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname);
+function loadAnalytics() {
+  if (!analyticsOn) return;
+  if (SITE.goatcounter) {
+    const sc = document.createElement('script');
+    sc.async = true; sc.src = 'https://gc.zgo.at/count.js';
+    sc.dataset.goatcounter = `https://${SITE.goatcounter}.goatcounter.com/count`;
+    document.head.appendChild(sc);
+  } else if (SITE.plausibleDomain) {
+    window.plausible = window.plausible || function () { (window.plausible.q = window.plausible.q || []).push(arguments); };
+    const sc = document.createElement('script');
+    sc.defer = true; sc.src = 'https://plausible.io/js/script.js';
+    sc.dataset.domain = SITE.plausibleDomain;
+    document.head.appendChild(sc);
+  }
+}
+const tracked = new Set();
+/** Counts a named event (at most once per page load). */
+function track(name) {
+  if (!analyticsOn || tracked.has(name)) return;
+  tracked.add(name);
+  try {
+    if (SITE.goatcounter && window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: 'event/' + name, title: name, event: true });
+    else if (SITE.plausibleDomain && window.plausible) window.plausible(name);
+  } catch (e) { /* stats must never break the page */ }
+}
+function setupSupportLinks() {
+  const links = [['#fundLink', SITE.fundUrl, 'fund-footer'], ['#winFundLink', SITE.fundUrl, 'fund-win'], ['#merchLink', SITE.merchUrl, 'merch']];
+  for (const [sel, url, ev] of links) {
+    const a = $(sel);
+    if (!url) continue;
+    a.href = url; a.hidden = false;
+    a.addEventListener('click', () => track(ev));
+  }
+  $('#supportBox').hidden = !(SITE.fundUrl || SITE.merchUrl);
+}
 
 /* =====================================================================
    1. Randomness: crypto + rejection sampling + Fisher–Yates
@@ -1027,6 +1088,7 @@ function unlock(id) {
   if (store.badges[id]) return;
   store.badges[id] = Date.now();
   const b = BADGES.find(x => x.id === id);
+  track('achievement-' + id);
   toast(`🏆 <b>Achievement unlocked: ${b.name}</b><br><span style="opacity:.85">${b.tip}</span>`);
   updateBadges();
   saveStore(true);
@@ -1136,6 +1198,7 @@ function manualShuffle() {
   checkPB(deck, m, rigged);
   saveStore(true);
   const res = { n: session.attempts, m, deck, ts: Date.now(), rigged };
+  track('first-shuffle');
   updateButtonLabel();
   armIdle();
   if (reduceMotion) { sfxShuffleNow(m); reveal(res, false); }
@@ -1269,6 +1332,7 @@ function setAutopilot(mode) {
   autopilot.ludMs = 0;
   rate.secs.fill(-1); rate.counts.fill(0);   // the pace readout should describe the new mode only
   if (!m) { el.apRate.textContent = ''; armIdle(); updateStats(); return; }
+  track('autopilot-' + (m === 'L' ? 'ludicrous' : m));
   if (anim.active) finishAnimNow();
   const now = performance.now();
   autopilot.start = now; autopilot.done = 0; autopilot.lastT = now; autopilot.lastFlush = 0;
@@ -1624,6 +1688,7 @@ function triggerWin(res) {
   if (autopilot.mode) setAutopilot('0');
   lastFocus = document.activeElement;
   winSeq.res = res;
+  track(res.rigged ? 'win-rigged' : 'win');
   win.className = 'stage-alarm';
   win.hidden = false;
   $('#winAlarm').hidden = false;
@@ -1697,7 +1762,7 @@ $('#reportBtn').addEventListener('click', () => {
 win.addEventListener('keydown', e => {
   if (e.key === 'Escape') { e.preventDefault(); restoreSpacetime(); return; }
   if (e.key === 'Tab') {
-    const f = [$('#skipBtn'), $('#reportBtn'), $('#restoreBtn')].filter(b => !b.closest('[hidden]'));
+    const f = [$('#skipBtn'), $('#reportBtn'), $('#restoreBtn'), $('#winFundLink')].filter(b => !b.hidden && !b.closest('[hidden]'));
     const i = f.indexOf(document.activeElement);
     e.preventDefault();
     f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus();
@@ -1842,7 +1907,7 @@ $('#soundBtn').addEventListener('click', e => {
   audio.on = !audio.on;
   e.currentTarget.setAttribute('aria-pressed', String(audio.on));
   e.currentTarget.textContent = audio.on ? '🔊 Sound: on' : '🔇 Sound: off';
-  if (audio.on) { audioCtx(); sfxShuffleNow(1); }
+  if (audio.on) { audioCtx(); sfxShuffleNow(1); track('sound-on'); }
 });
 
 /* =====================================================================
@@ -1856,6 +1921,7 @@ function toast(html) {
 }
 
 $('#shareBtn').addEventListener('click', async () => {
+  track('share');
   const url = location.href.split(/[?#]/)[0];
   const best = store.best ? store.best.matches : Math.max(0, session.best);
   const text = `I shuffled ${fmt(store.allTime)} times for humanity. Best: ${best}/52. Mathematics: 1, Humanity: 0. Your turn: ${url}`;
@@ -1979,6 +2045,8 @@ function selfTest() {
 }
 
 function boot() {
+  loadAnalytics();
+  setupSupportLinks();
   loadGrail();
   renderBadges();
   renderPB();
