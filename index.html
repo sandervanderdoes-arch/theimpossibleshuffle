@@ -452,7 +452,7 @@
       <p id="etaSub" class="text-xs text-[#9fb5a8] mt-1"></p>
 
       <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-2">ACHIEVEMENTS</h3>
-      <div id="badges" class="grid grid-cols-3 sm:grid-cols-5 gap-2"></div>
+      <div id="badges" class="grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
 
       <button type="button" id="shareBtn" class="chip-btn mt-5 w-full">📋 Share your futility</button>
     </section>
@@ -738,7 +738,8 @@ function verifyComparisons(F52) {
    ===================================================================== */
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
-  const def = { allTime: 0, best: null, badges: {} };
+  const def = { allTime: 0, best: null, badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0 };
+  const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
     const raw = localStorage.getItem(STORE_KEY);
     if (!raw) return def;
@@ -746,7 +747,8 @@ const store = (() => {
     return {
       allTime: Number.isFinite(p.allTime) ? p.allTime : 0,
       best: p.best && Number.isFinite(p.best.matches) ? p.best : null,
-      badges: p.badges && typeof p.badges === 'object' ? p.badges : {}
+      badges: p.badges && typeof p.badges === 'object' ? p.badges : {},
+      manual: n(p.manual), manualBest: n(p.manualBest), royalBest: n(p.royalBest), ludBestMs: n(p.ludBestMs)
     };
   } catch (e) { return def; }
 })();
@@ -778,7 +780,7 @@ const grail = new Uint8Array(52);
 const current = new Uint8Array(52);
 let hasCurrent = false;
 
-const session = { attempts: 0, sum: 0, best: -1, dist: [0, 0, 0, 0, 0, 0], streak0: 0, firstAt: 0 };
+const session = { attempts: 0, sum: 0, best: -1, fairBest: 0, dist: [0, 0, 0, 0, 0, 0], streak0: 0, firstAt: 0 };
 let statsDirty = true;
 let pbDirty = true;
 let winOpen = false;
@@ -830,8 +832,11 @@ function applyMatchesInstant(deck) {
     C.cards[i].classList.toggle('match', hit);
   }
 }
+const ROYAL_POS = [];   // where A♠ K♠ Q♠ J♠ 10♠ sit in the Grail (for the Royal Flush badge)
 function loadGrail() {
   GRAIL.forEach((code, i) => { grail[i] = CODES.indexOf(code); });
+  ROYAL_POS.length = 0;
+  for (const code of ['AS', 'KS', 'QS', 'JS', '10S']) ROYAL_POS.push(GRAIL.indexOf(code));
   paintDeck(G, grail, null);
 }
 
@@ -1061,12 +1066,29 @@ const BADGES = [
   { id: 'derangement', ico: '🌀', name: 'Derangement Champion', how: 'Get 0 matches 5 shuffles in a row',
     tip: 'A deck with zero matches is mathematically called a derangement.', progress: () => `streak ${Math.min(session.streak0, 5)}/5` },
   { id: 'monocle', ico: '🧐', name: 'Monocle Popper', how: 'Get 6 or more matches in one shuffle',
-    tip: 'Happens about once in 1,700 shuffles. The Professor is still looking for his monocle.', progress: () => `best ${Math.max(0, session.best, store.best ? store.best.matches : 0)}/6` },
+    tip: 'Happens about once in 1,700 shuffles. The Professor is still looking for his monocle.', progress: () => `best ${bestEver()}/6` },
   { id: 'committed', ico: '🎖️', name: 'Committed to the Bit', how: 'Shuffle 1,000 times (all-time)',
     tip: 'Autopilot counts. There is no turning back now.', progress: () => `${fmt(Math.min(store.allTime, 1000))}/1,000` },
   { id: 'ludicrous', ico: '🚀', name: 'Ludicrous Speed', how: 'Run Autopilot on Ludicrous for 60 seconds straight',
-    tip: 'Switching Autopilot off or changing speed restarts the clock.', progress: () => autopilot.mode === 'L' ? `${Math.floor(autopilot.ludMs / 1000)}/60 s` : '' }
+    tip: 'Switching Autopilot off or changing speed restarts the clock.', progress: () => autopilot.mode === 'L' ? `${Math.floor(autopilot.ludMs / 1000)}/60 s` : '' },
+  // The hard ones. Odds are exact for a random permutation of 52 (see pFixed below).
+  { id: 'lucky7', ico: '🎰', name: 'Lucky Seven', how: 'Get 7 or more matches in one shuffle (about 1 in 12,000)', hard: true,
+    tip: 'Seven cards exactly where destiny put them.', progress: () => `best ${bestEver()}/7` },
+  { id: 'barehand', ico: '✋', name: 'Bare-Handed Miracle', how: 'Get 6+ matches on a shuffle you press yourself, no autopilot', hard: true,
+    tip: 'About 1 in 1,700 presses. Your thumb has earned this.', progress: () => `best by hand ${store.manualBest}/6` },
+  { id: 'handmade', ico: '🖐️', name: 'Hand-Crafted Futility', how: 'Shuffle 1,000 times by hand (button, Space or Enter)', hard: true,
+    tip: 'Every single one artisanal. Autopilot does not count.', progress: () => `${fmt(Math.min(store.manual, 1000))}/1,000` },
+  { id: 'witchcraft', ico: '🔮', name: 'Witchcraft', how: 'Get 10 or more matches in one shuffle (about 1 in 9 million)', hard: true,
+    tip: 'Something is wrong. Check your browser for witchcraft.', progress: () => `best ${bestEver()}/10` },
+  { id: 'royal', ico: '👑', name: 'Royal Flush', how: 'Land A♠ K♠ Q♠ J♠ 10♠ all in their Grail spots in one shuffle (about 1 in 312 million)', hard: true,
+    tip: 'The five royal spades, home at last.', progress: () => `best ${store.royalBest}/5` },
+  { id: 'heatdeath', ico: '⏳', name: 'Heat Death Rehearsal', how: 'Keep Autopilot on Ludicrous for 60 minutes straight, on this tab', hard: true,
+    tip: 'The clock only runs while this tab is open and visible.', progress: () => `${Math.floor((autopilot.mode === 'L' ? Math.max(autopilot.ludMs, store.ludBestMs) : store.ludBestMs) / 60000)}/60 min` },
+  { id: 'billion', ico: '💎', name: 'Billionaire of Futility', how: 'Shuffle 1,000,000,000 times (all-time, autopilot counts)', hard: true,
+    tip: 'One billion attempts. Mathematics sends its regards.', progress: () => `${shortNum(Math.min(store.allTime, 1e9))}/1B` }
 ];
+function bestEver() { return Math.max(session.fairBest, store.best ? store.best.matches : 0); }   // rigged shuffles excluded
+function shortNum(v) { return v >= 1e9 ? (v / 1e9).toFixed(1) + 'B' : v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e4 ? Math.floor(v / 1e3) + 'K' : fmt(v); }
 function renderBadges() {
   $('#badges').innerHTML = BADGES.map(b => `<div class="badge" id="bd-${b.id}" role="group" aria-label="${b.name}"><span class="ico" aria-hidden="true">${b.ico}</span><span class="nm">${b.name}</span><span class="how">${b.how}</span><span class="prog"></span><span class="sr-only"></span></div>`).join('');
   updateBadges();
@@ -1090,11 +1112,12 @@ function unlock(id) {
   const b = BADGES.find(x => x.id === id);
   track('achievement-' + id);
   toast(`🏆 <b>Achievement unlocked: ${b.name}</b><br><span style="opacity:.85">${b.tip}</span>`);
+  if (b.hard) sfx('land', 6);
   updateBadges();
   saveStore(true);
 }
-/** Hot path: called once per attempt, manual or autopilot. */
-function record(m) {
+/** Hot path: called once per attempt, manual or autopilot. Rigged shuffles never earn luck badges. */
+function record(m, deck, manual, rigged) {
   session.attempts++;
   session.sum += m;
   session.dist[m >= 5 ? 5 : m]++;
@@ -1104,10 +1127,24 @@ function record(m) {
   live.pending++;
   if (m === 0) { if (++session.streak0 >= 5 && !store.badges.derangement) unlock('derangement'); }
   else session.streak0 = 0;
-  if (m === 1 && !store.badges.average) unlock('average');
-  if (m >= 6 && !store.badges.monocle) unlock('monocle');
+  if (manual) { store.manual++; if (store.manual >= 1000 && !store.badges.handmade) unlock('handmade'); }
   if (store.allTime >= 1000 && !store.badges.committed) unlock('committed');
+  if (store.allTime >= 1e9 && !store.badges.billion) unlock('billion');
   statsDirty = true;
+  if (rigged) return;
+  if (m > session.fairBest) session.fairBest = m;
+  if (m === 1 && !store.badges.average) unlock('average');
+  if (m >= 6) {
+    if (!store.badges.monocle) unlock('monocle');
+    if (m >= 7 && !store.badges.lucky7) unlock('lucky7');
+    if (m >= 10 && !store.badges.witchcraft) unlock('witchcraft');
+  }
+  if (manual && m > store.manualBest) { store.manualBest = m; if (m >= 6 && !store.badges.barehand) unlock('barehand'); }
+  if (m) {
+    const r = (deck[ROYAL_POS[0]] === grail[ROYAL_POS[0]]) + (deck[ROYAL_POS[1]] === grail[ROYAL_POS[1]]) + (deck[ROYAL_POS[2]] === grail[ROYAL_POS[2]])
+      + (deck[ROYAL_POS[3]] === grail[ROYAL_POS[3]]) + (deck[ROYAL_POS[4]] === grail[ROYAL_POS[4]]);
+    if (r > store.royalBest) { store.royalBest = r; if (r === 5 && !store.badges.royal) unlock('royal'); }
+  }
 }
 
 // Exact probability of k fixed points in a random permutation of 52: (1/k!) Σ_{j=0}^{52-k} (-1)^j / j!
@@ -1193,7 +1230,7 @@ function manualShuffle() {
   if (riggedArmed) { deck.set(grail); riggedArmed = false; rigged = true; updateRiggedBadge(); }
   else shuffleInto(deck);
   const m = countMatches(deck, grail);
-  record(m);
+  record(m, deck, true, rigged);
   noteRate(1);
   checkPB(deck, m, rigged);
   saveStore(true);
@@ -1358,7 +1395,7 @@ function apLoop(t) {
     const slot = ap.ring[ap.pos];
     shuffleInto(slot.deck);
     const m = countMatches(slot.deck, grail);
-    record(m);
+    record(m, slot.deck, false, false);
     if (!store.best || m > store.best.matches) checkPB(slot.deck, m, false);
     slot.m = m; slot.n = session.attempts; slot.ts = Date.now();
     ap.pos = (ap.pos + 1) % RING; ap.sinceFlush++; count++;
@@ -1367,7 +1404,12 @@ function apLoop(t) {
   }
   if (ap.mode !== 'L') ap.done += count;
   noteRate(count);
-  if (ap.mode === 'L') { ap.ludMs += dt; if (ap.ludMs >= 60000 && !store.badges.ludicrous) unlock('ludicrous'); }
+  if (ap.mode === 'L') {
+    ap.ludMs += dt;   // rAF pauses in hidden tabs, so only visible time counts
+    if (ap.ludMs > store.ludBestMs) store.ludBestMs = ap.ludMs;
+    if (ap.ludMs >= 60000 && !store.badges.ludicrous) unlock('ludicrous');
+    if (ap.ludMs >= 3600000 && !store.badges.heatdeath) unlock('heatdeath');
+  }
   if (won) {
     const res = { n: won.n, m: 52, deck: Uint8Array.from(won.deck), ts: won.ts, rigged: false };
     ap.sinceFlush = 0;
@@ -1476,31 +1518,135 @@ setInterval(() => {
   if (tickN % 50 === 0) el.progSr.textContent = `Humanity's progress: ${ratioPercent(globalTotal(), F52, 76)} percent.`;
 }, 100);
 
+/* Fellow shufflers. Lines are built from templates ({flag} {who} {whol} {city}
+   {country} {n} {after}); every list is drawn from a shuffle bag (each item once
+   before any repeats, never the same item twice across a refill), and the last
+   80 finished lines are remembered so an exact repeat almost never appears. */
 const PLACES = [
-  ['🇳🇱', 'Utrecht', 'The Netherlands'], ['🇯🇵', 'Osaka', 'Japan'], ['🇧🇷', 'São Paulo', 'Brazil'], ['🇺🇸', 'Ohio', 'America'],
-  ['🇫🇷', 'Lyon', 'France'], ['🇩🇪', 'Leipzig', 'Germany'], ['🇰🇪', 'Nairobi', 'Kenya'], ['🇮🇳', 'Pune', 'India'],
-  ['🇦🇺', 'Perth', 'Australia'], ['🇨🇦', 'Winnipeg', 'Canada'], ['🇲🇽', 'Guadalajara', 'Mexico'], ['🇮🇹', 'Bologna', 'Italy'],
+  ['🇳🇱', 'Utrecht', 'The Netherlands'], ['🇳🇱', 'Groningen', 'The Netherlands'], ['🇳🇱', 'Rotterdam', 'The Netherlands'],
+  ['🇯🇵', 'Osaka', 'Japan'], ['🇯🇵', 'Sapporo', 'Japan'], ['🇧🇷', 'São Paulo', 'Brazil'], ['🇧🇷', 'Recife', 'Brazil'],
+  ['🇺🇸', 'Boise', 'America'], ['🇺🇸', 'Tulsa', 'America'], ['🇺🇸', 'Duluth', 'America'], ['🇺🇸', 'Ohio', 'America'],
+  ['🇫🇷', 'Lyon', 'France'], ['🇫🇷', 'Nantes', 'France'], ['🇩🇪', 'Leipzig', 'Germany'], ['🇩🇪', 'Bremen', 'Germany'],
+  ['🇰🇪', 'Nairobi', 'Kenya'], ['🇮🇳', 'Pune', 'India'], ['🇮🇳', 'Kochi', 'India'], ['🇦🇺', 'Perth', 'Australia'], ['🇦🇺', 'Hobart', 'Australia'],
+  ['🇨🇦', 'Winnipeg', 'Canada'], ['🇨🇦', 'Halifax', 'Canada'], ['🇲🇽', 'Guadalajara', 'Mexico'], ['🇮🇹', 'Bologna', 'Italy'], ['🇮🇹', 'Palermo', 'Italy'],
   ['🇳🇴', 'Tromsø', 'Norway'], ['🇰🇷', 'Busan', 'South Korea'], ['🇳🇬', 'Lagos', 'Nigeria'], ['🇦🇷', 'Rosario', 'Argentina'],
-  ['🇪🇸', 'Valencia', 'Spain'], ['🇬🇧', 'Leeds', 'The United Kingdom'], ['🇮🇸', 'Reykjavík', 'Iceland'], ['🇵🇭', 'Cebu', 'The Philippines']
+  ['🇪🇸', 'Valencia', 'Spain'], ['🇬🇧', 'Leeds', 'The United Kingdom'], ['🇬🇧', 'Swindon', 'The United Kingdom'], ['🇮🇸', 'Reykjavík', 'Iceland'],
+  ['🇵🇭', 'Cebu', 'The Philippines'], ['🇧🇪', 'Ghent', 'Belgium'], ['🇩🇰', 'Aarhus', 'Denmark'], ['🇸🇪', 'Umeå', 'Sweden'], ['🇫🇮', 'Tampere', 'Finland'],
+  ['🇵🇱', 'Kraków', 'Poland'], ['🇨🇿', 'Brno', 'Czechia'], ['🇵🇹', 'Porto', 'Portugal'], ['🇮🇪', 'Galway', 'Ireland'], ['🇨🇭', 'Basel', 'Switzerland'],
+  ['🇦🇹', 'Graz', 'Austria'], ['🇬🇷', 'Thessaloniki', 'Greece'], ['🇹🇷', 'İzmir', 'Turkey'], ['🇪🇬', 'Alexandria', 'Egypt'], ['🇿🇦', 'Durban', 'South Africa'],
+  ['🇬🇭', 'Kumasi', 'Ghana'], ['🇲🇦', 'Fes', 'Morocco'], ['🇨🇱', 'Valparaíso', 'Chile'], ['🇵🇪', 'Cusco', 'Peru'], ['🇨🇴', 'Medellín', 'Colombia'],
+  ['🇳🇿', 'Dunedin', 'New Zealand'], ['🇮🇩', 'Bandung', 'Indonesia'], ['🇻🇳', 'Da Nang', 'Vietnam'], ['🇹🇭', 'Chiang Mai', 'Thailand'],
+  ['🇸🇬', 'Singapore', 'Singapore'], ['🇪🇪', 'Tartu', 'Estonia'], ['🇭🇺', 'Debrecen', 'Hungary'], ['🇷🇴', 'Cluj-Napoca', 'Romania'],
+  ['🇺🇦', 'Lviv', 'Ukraine'], ['🇦🇪', 'Sharjah', 'The UAE'], ['🇵🇰', 'Lahore', 'Pakistan'], ['🇲🇾', 'Penang', 'Malaysia'], ['🇯🇲', 'Kingston', 'Jamaica'],
+  ['🇱🇺', 'Luxembourg', 'Luxembourg'], ['🇲🇹', 'Valletta', 'Malta'], ['🇺🇾', 'Montevideo', 'Uruguay'], ['🇸🇳', 'Dakar', 'Senegal']
 ];
-const WHO = ['A dentist', 'A retired magician', 'A sleep-deprived grad student', 'A goat farmer', 'Someone\'s grandma', 'A night-shift nurse',
-  'A professional poker player', 'A bored lighthouse keeper', 'An intern', 'A tax accountant', 'A ten-year-old', 'A philosophy lecturer'];
-const PETS = ['Their cat is concerned.', 'Their houseplants have stopped making eye contact.', 'Their dog has filed for custody of the couch.', 'Their goldfish has seen things.'];
-const TICK = {
-  0: [p => `${p[0]} ${p[1]} reports 0/52. Morale remains high.`, p => `${p[0]} ${pick(WHO)} in ${p[1]} got 0/52 and called it "a learning experience."`, p => `${p[0]} ${pick(WHO)} in ${p[1]} just landed a perfect derangement. 0/52. Weirdly proud.`],
-  1: [p => `${p[0]} ${pick(WHO)} in ${p[1]} got 1/52. Exactly average. Deeply on-brand.`, p => `${p[0]} ${p[1]} checks in with 1/52. The math nods politely.`],
-  2: [p => `${p[0]} ${pick(WHO)} in ${p[1]} just got 2/52. ${p[2]} salutes you.`, p => `${p[0]} 2/52 in ${p[1]}. Local news has been alerted, then un-alerted.`],
-  3: [p => `${p[0]} ${pick(WHO)} in ${p[1]} hit 3/52. Neighbors are being informed.`],
-  4: [p => `${p[0]} ${pick(WHO)} in ${p[1]} hit 4/52. Local statisticians have been sedated.`]
+const WHO = ['A dentist', 'A retired magician', 'A sleep-deprived grad student', 'A goat farmer', "Someone's grandma", 'A night-shift nurse',
+  'A professional poker player', 'A bored lighthouse keeper', 'An intern', 'A tax accountant', 'A ten-year-old', 'A philosophy lecturer',
+  'A wedding DJ', 'A beekeeper', 'A substitute teacher', 'A tram driver on a break', 'A cruise ship magician', 'A competitive birdwatcher',
+  'A sourdough influencer', 'A retired actuary', 'A barista', 'A crossword champion', 'A plumber', 'A librarian', 'A chess hustler',
+  'A goalkeeper', 'A theoretical physicist', 'An astrologer', 'A cat (allegedly)', 'A podcast host', 'A sommelier', 'A karaoke legend',
+  'A jet-lagged pilot', 'A park ranger', 'A mime', 'A math teacher', 'A bus driver', 'A florist', 'A dungeon master', 'A retired spy',
+  'A medieval reenactor', 'A speedrunner', 'A wedding guest hiding in the bathroom', 'A lifeguard', 'A ghost (unconfirmed)',
+  'A yoga instructor', 'A submarine cook', 'A night-bus passenger', 'A professional napper', 'A very calm surgeon (off duty)',
+  'A first-time visitor', 'A conspiracy theorist', 'A hedge fund manager', 'A toddler (assisted)'];
+const AFTER = ['Their cat is concerned.', 'Their houseplants have stopped making eye contact.', 'Their dog has filed for custody of the couch.',
+  'Their goldfish has seen things.', 'Their spouse has started a support group.', 'Their thumb has formed a union.', 'Their landlord is asking questions.',
+  'Their smartwatch thinks they are jogging.', 'Their mother still thinks it is a phase.', 'Their parrot now says "again?"', 'Their neighbors have stopped waving.',
+  'Their boss thinks they are in a meeting.', 'Their phone battery gave up first.', 'Their therapist now has a therapist.',
+  'Their screen-time report has been forwarded to the authorities.', 'They describe it as "basically meditation".', 'They have not blinked since Tuesday.',
+  'They say they are "close". They are not.', 'Their mouse has developed a limp.', 'Their roommate has moved out, politely.', 'Their coffee has gone cold three times.',
+  'Their space bar has retired.', 'Their horoscope saw this coming.', 'Their cat has started shuffling too.', 'Their pizza arrived, was eaten, and was forgotten.',
+  'Their family has set up a rotating shuffle schedule.', 'Their fridge light is the only light left on.'];
+const TICKER = {
+  0: ['{flag} {city} reports 0/52. Morale remains high.', '{flag} {who} in {city} got 0/52 and called it "a learning experience".',
+    '{flag} {who} in {city} just landed a perfect derangement. 0/52. Weirdly proud.', '{flag} 0/52 in {city}. {who} has asked to speak to the manager of probability.',
+    '{flag} {who} in {city} got 0/52 and is blaming Mercury retrograde.', '{flag} {city} posts 0/52. Local pigeons unimpressed.',
+    '{flag} {who} in {city}: 0/52. "At least it was quick," they said.', '{flag} Breaking: {whol} in {city} matched nothing, again. Experts call it "consistent".',
+    '{flag} {who} in {city} got 0/52 and shuffled again without a word. Respect.', '{flag} 0/52 from {city}. The deck has asked for privacy at this difficult time.',
+    '{flag} {who} in {city} scored 0/52 and wrote the deck a strongly worded letter.', '{flag} {city} logs another 0/52. The streak is now a tourist attraction.'],
+  1: ['{flag} {who} in {city} got 1/52. Exactly average. Deeply on-brand.', '{flag} {city} checks in with 1/52. The math nods politely.',
+    '{flag} {who} in {city} got 1/52 and did a small, dignified fist pump.', '{flag} 1/52 in {city}. The Professor has been informed. He yawned.',
+    '{flag} {who} in {city} matched exactly one card and has named it.', '{flag} {who} in {city} got 1/52 and is telling everyone it was skill.',
+    '{flag} {city} reports 1/52. Perfectly, aggressively average.', '{flag} One card matched in {city}. {who} has ordered a commemorative mug.',
+    '{flag} {who} in {city} got 1/52 and has started a podcast about it.', '{flag} 1/52 for {whol} in {city}. Statisticians report: "yep, that tracks."'],
+  2: ['{flag} {who} in {city} just got 2/52. {country} salutes you.', '{flag} 2/52 in {city}. Local news has been alerted, then un-alerted.',
+    '{flag} {who} in {city} hit 2/52 and is updating their LinkedIn.', '{flag} {city} reports 2/52. A small parade has been cautiously scheduled.',
+    '{flag} {who} in {city} got 2/52 and refuses to shuffle again "to protect the streak".', '{flag} 2/52 for {whol} in {city}. Their mother is not impressed.',
+    '{flag} {who} in {city} got 2/52. Their cat looked up for almost a full second.', '{flag} Double match in {city}. {who} is now insufferable.'],
+  3: ['{flag} {who} in {city} hit 3/52. Neighbors are being informed.', '{flag} 3/52 in {city}. Bells have been rung. Mildly.',
+    '{flag} {who} in {city} got 3/52 and has been asked to leave the café.', '{flag} {city} reports 3/52. The mayor is drafting a speech, just in case.',
+    '{flag} {who} in {city}: 3/52. Now signing autographs. Nobody is asking.', '{flag} 3/52 for {whol} in {city}. A statistician somewhere spilled their tea.'],
+  4: ['{flag} {who} in {city} hit 4/52. Local statisticians have been sedated.', '{flag} 4/52 in {city}. The Professor\'s monocle twitched.',
+    '{flag} {who} in {city} got 4/52 and has stopped answering calls from the press.', '{flag} {city} reports 4/52. A public holiday is under discussion.',
+    '{flag} 4/52 for {whol} in {city}. The deck is being checked for fingerprints.'],
+  6: ['{flag} {who} in {city} hit 6/52. Somewhere, a monocle hit the floor.', '{flag} 5/52 in {city}. Scientists have asked {whol} to please stop.',
+    '{flag} {who} in {city} got 6/52 and was offered a TED talk. Declined. Too busy shuffling.'],
+  count: ['{flag} Someone in {city} has shuffled {n} times. {after}', '{flag} {who} in {city} just passed {n} shuffles. {after}',
+    '{flag} A household in {city} hit {n} shuffles this week. {after}', '{flag} {who} in {city} is on shuffle number {n}. {after}'],
+  misc: ['{flag} A group chat in {city} has renamed itself "Deck Two Truthers".', '{flag} {who} in {city} is shuffling with their eyes closed for luck. It is not working.',
+    '{flag} A book club in {city} has abandoned the book. They shuffle now.', '{flag} {who} in {city} has been on autopilot so long their screensaver gave up.',
+    '{flag} A wedding in {city} paused for a quick shuffle. 1/52. The wedding is still on.', '{flag} {who} in {city} shuffled during a job interview. Got the job. Got 0/52.',
+    '{flag} A philosophy class in {city} spent the whole lecture on 52!. Nobody passed.', '{flag} {who} in {city} says they "felt a 3 coming". It was a 0.',
+    '{flag} The mayor of {city} has declared shuffling a renewable resource.', '{flag} {who} in {city} framed the Holy Grail Sequence. It hangs next to the wedding photo.',
+    '{flag} An office in {city} has replaced its stand-up meeting with a shuffle.', '{flag} {who} in {city} tried to name their baby Fisher-Yates. The registry said no.',
+    '{flag} {who} in {city} now stretches before shuffling. Very professional.', '{flag} A choir in {city} sang all 68 digits of 52!. Four hours. Standing ovation.',
+    '{flag} {who} in {city} asked an astrologer about their odds. The astrologer laughed.', '{flag} Traffic in {city} stopped while a tram driver checked their score. 1/52.',
+    '{flag} {who} in {city} switched on Ludicrous mode and went to make lasagna.', '{flag} A school in {city} now teaches factorials with this website. Attendance doubled.',
+    '{flag} {who} in {city} invited the Professor for tea. He replied: "Delightful. Again?"', '{flag} A dog in {city} sat on the space bar. Seventeen shuffles. Zero matches. Good boy.',
+    '{flag} {who} in {city} believes the deck "knows". The deck does not know.', '{flag} {city} has reported its first case of shuffler\'s thumb.',
+    '{flag} {who} in {city} lit a candle for the Grail. 0/52. The candle is still burning.', '{flag} A gym in {city} now offers Shuffle Cardio. Nobody has lost weight.',
+    '{flag} {who} in {city} wrote "one more" on a sticky note. That was six hours ago.', '{flag} A café in {city} gives free coffee for 3/52 or better. Still fully stocked.',
+    '{flag} {who} in {city} challenged the universe to best of three. The universe leads 3–0.', '{flag} Power cut in {city}. {who} kept shuffling on battery. Respect.',
+    '{flag} {who} in {city} drew a diagram proving they are "due". They are not due.', '{flag} A retirement home in {city} has formed a competitive shuffle league. Brutal.',
+    '{flag} {who} in {city} has been shuffling since before this ticker existed.', '{flag} A mime in {city} is shuffling an invisible deck. Also 0/52.',
+    '{flag} {who} in {city} threatened to unplug the internet unless they got a match. 0/52.', '{flag} Scientists in {city} confirm: the deck is still shuffled.',
+    '{flag} {who} in {city} shuffled for the first time, got 1/52 and asked "is that good?"', '{flag} A bakery in {city} now sells a 52!-layer cake. Delivery after the heat death of the universe.',
+    '{flag} {who} in {city} now apologizes to the deck after every shuffle.', '{flag} A queue has formed outside a library in {city}. Everyone is shuffling.',
+    '{flag} {who} in {city} has taught their grandmother autopilot. She is now unstoppable.', '{flag} A taxi in {city} has been parked for an hour. The driver is shuffling.',
+    '{flag} {who} in {city} claims the Grail winked at them. Doctors are not concerned.', '{flag} A lecture hall in {city} erupted at a 2/52. The lecture was on organic chemistry.',
+    '{flag} {who} in {city} has stopped saying "good luck" and started saying "1 in 52!".', '{flag} A football match in {city} was delayed. Both goalkeepers were shuffling.',
+    '🇦🇶 A research station in Antarctica reports 1/52. The penguins are unbothered.', '🛰️ An astronaut on the ISS shuffled in zero gravity. Cards everywhere. 0/52.',
+    '🌊 A submarine crew checks in from 300 m down: 0/52. The pressure is immense.', '🏔️ A climber on the summit of a very tall mountain reports 1/52. The view was better.'],
+  claim: ['🇺🇸 A man in Ohio claims 52/52. Unverified. Probably lying.', '{flag} {who} in {city} claims 52/52, but "the screenshot didn\'t save". Sure.',
+    '{flag} {who} in {city} says they matched all 52 in a dream. Dreams do not count.', '{flag} Someone in {city} claims 52/52. The video evidence shows a cat. And 1/52.',
+    '{flag} {who} in {city} insists they got 52/52 "back in 2009". Sure, grandpa.']
 };
-function tickerLine() {
+/** Draws items in a random order without repeats until the list runs out, then reshuffles. */
+function makeBag(items) {
+  let bag = [], last;
+  return () => {
+    if (!bag.length) {
+      bag = items.slice();
+      for (let i = bag.length - 1; i > 0; i--) { const j = RNG.below(i + 1); [bag[i], bag[j]] = [bag[j], bag[i]]; }
+      if (bag.length > 1 && bag[bag.length - 1] === last) [bag[0], bag[bag.length - 1]] = [bag[bag.length - 1], bag[0]];
+    }
+    return (last = bag.pop());
+  };
+}
+const tickerBags = { place: makeBag(PLACES), who: makeBag(WHO), after: makeBag(AFTER) };
+for (const k of Object.keys(TICKER)) tickerBags[k] = makeBag(TICKER[k]);
+const recentLines = [];
+function tickerTemplate() {
   const r = rnd();
-  if (r < 0.03) return '🇺🇸 A man in Ohio claims 52/52. Unverified. Probably lying.';
-  const p = pick(PLACES);
-  if (r < 0.22) return `${p[0]} Someone in ${p[1]} has shuffled ${fmt((1 + RNG.below(90)) * 1000 + RNG.below(1000))} times. ${pick(PETS)}`;
-  const s = rnd();
-  const score = s < 0.40 ? 0 : s < 0.75 ? 1 : s < 0.91 ? 2 : s < 0.975 ? 3 : 4;
-  return pick(TICK[score])(p);
+  if (r < 0.025) return tickerBags.claim();
+  if (r < 0.37) return tickerBags.misc();
+  if (r < 0.52) return tickerBags.count();
+  const s = rnd();   // mostly 0–2 matches, rare 3–6 for drama
+  return tickerBags[s < 0.40 ? 0 : s < 0.73 ? 1 : s < 0.89 ? 2 : s < 0.96 ? 3 : s < 0.99 ? 4 : 6]();
+}
+function tickerLine() {
+  let line = '';
+  for (let tries = 0; tries < 8; tries++) {
+    const [flag, city, country] = tickerBags.place(), who = tickerBags.who();
+    const n = rnd() < 0.15 ? fmt(1e6 + RNG.below(9e6)) : fmt((1 + RNG.below(90)) * 1000 + RNG.below(1000));
+    line = tickerTemplate().replace(/\{flag\}/g, flag).replace(/\{city\}/g, city).replace(/\{country\}/g, country)
+      .replace(/\{whol\}/g, who.charAt(0).toLowerCase() + who.slice(1)).replace(/\{who\}/g, who)
+      .replace(/\{n\}/g, n).replace(/\{after\}/g, () => tickerBags.after());
+    if (!recentLines.includes(line)) break;
+  }
+  recentLines.push(line);
+  if (recentLines.length > 80) recentLines.shift();
+  return line;
 }
 const ticker = { x: 0, queue: [], lastT: 0, paused: false };
 const tView = $('#tickerView'), tTrack = $('#tickerTrack');
