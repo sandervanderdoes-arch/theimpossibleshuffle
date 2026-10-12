@@ -303,8 +303,27 @@
   @keyframes shake { 10%,90% { transform:translate(-2px,1px); } 20%,80% { transform:translate(4px,-2px); } 30%,50%,70% { transform:translate(-7px,3px) rotate(-.4deg); } 40%,60% { transform:translate(7px,-3px) rotate(.4deg); } }
 
   .toast .copy-text { display:block; margin-top:.4rem; padding:.4rem; background:rgba(0,0,0,.4); border-radius:6px; font:12px/1.4 "JetBrains Mono", monospace; user-select:all; word-break:break-word; }
-  .fund-btn { display:inline-flex; align-items:center; gap:.45rem; border-radius:14px; padding:.75rem 1.2rem; font-family:Bungee, Impact, system-ui, sans-serif; font-size:.95rem; color:#1d1300; text-decoration:none; background:linear-gradient(135deg,#ffe27a,#ffb000); box-shadow:0 0 0 2px #fff2bf, 0 0 22px rgba(255,210,63,.55); transition:transform .08s; }
-  .fund-btn:hover { transform:translateY(-1px); box-shadow:0 0 0 2px #fff7d6, 0 0 30px rgba(255,210,63,.8); }
+  /* Fund the mission: three themed tiers (footer) and compact pills (win screen). */
+  .fund-panel { border:1px solid rgba(255,210,63,.35); border-radius:22px; background:rgba(2,12,8,.72); padding:1.25rem; }
+  .fund-tiers { display:grid; gap:.75rem; grid-template-columns:repeat(auto-fit, minmax(12.5rem, 1fr)); align-items:stretch; }
+  .tier { position:relative; display:flex; flex-direction:column; align-items:center; gap:.3rem; padding:1.4rem 1rem 1.1rem; border-radius:16px; border:1px solid rgba(255,210,63,.4); background:rgba(0,0,0,.45); color:var(--ink); text-decoration:none; transition:transform .12s, border-color .12s, box-shadow .12s; }
+  .tier:hover { transform:translateY(-2px); border-color:var(--gold); box-shadow:0 0 22px rgba(255,210,63,.3); }
+  .tier .ico { font-size:1.6rem; line-height:1; }
+  .tier .price { font-family:Bungee, Impact, system-ui, sans-serif; font-size:2rem; line-height:1.1; color:#ffe68a; }
+  .tier .tname { font-weight:800; font-size:.95rem; }
+  .tier .tjoke { font-size:.8rem; line-height:1.4; color:#b9cdc1; max-width:17rem; }
+  .tier.featured { border:2px solid var(--gold); background:linear-gradient(160deg, rgba(255,210,63,.16), rgba(255,47,214,.1)); box-shadow:0 0 24px rgba(255,210,63,.3); }
+  .tier .flag { position:absolute; top:-.7rem; left:50%; transform:translateX(-50%); white-space:nowrap; font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; color:#1d1300; background:var(--gold); border-radius:999px; padding:.2rem .65rem; }
+  @media (max-width: 640px) {
+    .tier { display:grid; grid-template-columns:5.5rem minmax(0,1fr); column-gap:.8rem; row-gap:.1rem; align-items:center; text-align:left; padding:1.25rem .9rem .95rem; }
+    .tier .ico { grid-column:1; grid-row:1; justify-self:center; font-size:1.4rem; }
+    .tier .price { grid-column:1; grid-row:2; justify-self:center; font-size:1.55rem; }
+    .tier .tname { grid-column:2; grid-row:1; }
+    .tier .tjoke { grid-column:2; grid-row:2; align-self:start; }
+  }
+  .fund-custom { display:inline-flex; align-items:center; min-height:44px; color:#ff9bec; text-decoration:underline; text-underline-offset:3px; font-size:.9rem; }
+  .fund-pill { display:inline-flex; align-items:center; gap:.35rem; min-height:44px; padding:.5rem .9rem; border-radius:12px; border:1px solid #ffd23f; background:rgba(0,0,0,.6); color:#ffe68a; font-weight:800; text-decoration:none; }
+  .fund-pill:hover { background:rgba(255,210,63,.18); }
   .merch-btn { display:inline-flex; align-items:center; gap:.45rem; text-decoration:none; }
   /* Short screens (phones in landscape): a compact win card that fits without scrolling. */
   @media (max-height: 620px) {
@@ -515,12 +534,32 @@
   <footer class="px-4 mt-10 mb-6 max-w-6xl mx-auto text-center">
     <p class="text-xs font-bold tracking-widest text-[#9fb5a8]">FUN FACT</p>
     <p id="funFact" class="fade mt-1 max-w-2xl mx-auto text-sm text-[#cfe3d7] min-h-[2.5rem]"></p>
-    <div id="supportBox" class="mt-8" hidden>
-      <div class="flex flex-wrap justify-center gap-3">
-        <a id="fundLink" class="fund-btn" target="_blank" rel="noopener" hidden>🚀 Fund the mission</a>
-        <a id="merchLink" class="chip-btn merch-btn" target="_blank" rel="noopener" hidden>👕 Mission merch</a>
+    <section id="fundBox" class="fund-panel mt-8 mx-auto max-w-3xl" aria-labelledby="fundTitle" hidden>
+      <h2 id="fundTitle" class="font-display text-lg sm:text-xl neon-gold">🚀 Fund the mission</h2>
+      <p class="mt-1 text-sm text-[#cfe3d7]">Mathematics is free. The coffee keeping this mission running is not.</p>
+      <div class="fund-tiers mt-6">
+        <a class="tier" data-tier="tea" target="_blank" rel="noopener" hidden>
+          <span class="ico" aria-hidden="true">☕</span><span class="price" data-price="1.92"></span>
+          <span class="tname">Buy the Professor a tea</span>
+          <span class="tjoke">The price of one matched card: 1.92% of a deck.</span>
+        </a>
+        <a class="tier featured" data-tier="odds" target="_blank" rel="noopener" hidden>
+          <span class="flag">THE SENSIBLE CHOICE</span>
+          <span class="ico" aria-hidden="true">🃏</span><span class="price" data-price="8.07"></span>
+          <span class="tname">Sponsor the odds</span>
+          <span class="tjoke">Your odds are 1 in 8.07 × 10⁶⁷. We kindly waived the other 67 zeros.</span>
+        </a>
+        <a class="tier" data-tier="patron" target="_blank" rel="noopener" hidden>
+          <span class="ico" aria-hidden="true">👑</span><span class="price" data-price="52"></span>
+          <span class="tname">Patron of the Deck</span>
+          <span class="tjoke">One <span data-unit>dollar</span> per card. The deck salutes you.</span>
+        </a>
       </div>
-      <p class="mt-2 text-xs text-[#9fb5a8]">Mathematics is free. The coffee keeping this mission running is not.</p>
+      <a class="fund-custom mt-3" data-tier="custom" target="_blank" rel="noopener" hidden>or choose your own amount →</a>
+      <p class="mt-2 text-xs text-[#9fb5a8]">Secure checkout by Stripe. Opens in a new tab.</p>
+    </section>
+    <div id="merchBox" class="mt-6" hidden>
+      <a id="merchLink" class="chip-btn merch-btn" target="_blank" rel="noopener">👕 Mission merch</a>
     </div>
     <p class="mt-6 font-display text-sm neon-pink">Made with love, despair and Fisher–Yates.</p>
   </footer>
@@ -553,7 +592,14 @@
       <div class="mt-6 flex flex-wrap gap-3 justify-center">
         <button type="button" id="reportBtn" class="chip-btn !text-base !px-5 !py-3" style="background:#000;color:#fff;border-color:#fff">🚨 Report to Authorities</button>
         <button type="button" id="restoreBtn" class="shuffle-btn !w-auto !px-6 !py-3 !text-base">Restore Spacetime</button>
-        <a id="winFundLink" class="fund-btn" target="_blank" rel="noopener" hidden>🚀 Fund the mission</a>
+      </div>
+      <div id="winFund" class="mt-5" hidden>
+        <p class="mono text-xs sm:text-sm text-white">Celebrate responsibly. Fund the mission:</p>
+        <div class="mt-2 flex flex-wrap gap-2 justify-center">
+          <a class="fund-pill" data-tier="tea" target="_blank" rel="noopener" hidden>☕ <span data-price="1.92"></span></a>
+          <a class="fund-pill" data-tier="odds" target="_blank" rel="noopener" hidden>🃏 <span data-price="8.07"></span> · waive the zeros</a>
+          <a class="fund-pill" data-tier="patron" target="_blank" rel="noopener" hidden>👑 <span data-price="52"></span></a>
+        </div>
       </div>
     </div>
   </div>
@@ -593,7 +639,13 @@ if (mqReduce && mqReduce.addEventListener) mqReduce.addEventListener('change', e
 const SITE = {
   goatcounter: 'theimpossibleshuffle', // GoatCounter code: 'abc' for https://abc.goatcounter.com
   plausibleDomain: '',  // or Plausible: 'theimpossibleshuffle.com'
-  fundUrl: '',          // donation page, e.g. https://ko-fi.com/yourname
+  fund: {              // Stripe Payment Links, one per tier; a tier stays hidden while its link is empty
+    currency: '$',      // shown in front of the prices ('$', '€' or '£')
+    tea: '',            // $1.92  Buy the Professor a tea
+    odds: '',           // $8.07  Sponsor the odds (the featured middle tier)
+    patron: '',         // $52    Patron of the Deck
+    custom: ''          // optional "choose your own amount" link
+  },
   merchUrl: ''          // merch shop page
 };
 /* Visitor stats: GoatCounter or Plausible. Both are cookieless, so no consent banner
@@ -626,14 +678,24 @@ function track(name) {
   } catch (e) { /* stats must never break the page */ }
 }
 function setupSupportLinks() {
-  const links = [['#fundLink', SITE.fundUrl, 'fund-footer'], ['#winFundLink', SITE.fundUrl, 'fund-win'], ['#merchLink', SITE.merchUrl, 'merch']];
-  for (const [sel, url, ev] of links) {
-    const a = $(sel);
-    if (!url) continue;
+  const F = SITE.fund, cur = F.currency || '$';
+  $$('[data-price]').forEach(el => { el.textContent = cur + el.dataset.price; });
+  $$('[data-unit]').forEach(el => { el.textContent = { '€': 'euro', '£': 'pound' }[cur] || 'dollar'; });
+  let any = false;
+  $$('[data-tier]').forEach(a => {
+    const url = F[a.dataset.tier];
+    if (!url) return;
+    if (a.dataset.tier !== 'custom') any = true;
     a.href = url; a.hidden = false;
-    a.addEventListener('click', () => track(ev));
+    a.addEventListener('click', () => track(`fund-${a.dataset.tier}-${a.closest('#winFund') ? 'win' : 'footer'}`));
+  });
+  $('#fundBox').hidden = !any;
+  $('#winFund').hidden = !any;
+  if (SITE.merchUrl) {
+    $('#merchLink').href = SITE.merchUrl;
+    $('#merchLink').addEventListener('click', () => track('merch'));
+    $('#merchBox').hidden = false;
   }
-  $('#supportBox').hidden = !(SITE.fundUrl || SITE.merchUrl);
 }
 
 /* =====================================================================
@@ -1944,7 +2006,7 @@ $('#reportBtn').addEventListener('click', () => {
 win.addEventListener('keydown', e => {
   if (e.key === 'Escape') { e.preventDefault(); restoreSpacetime(); return; }
   if (e.key === 'Tab') {
-    const f = [$('#skipBtn'), $('#reportBtn'), $('#restoreBtn'), $('#winFundLink')].filter(b => !b.hidden && !b.closest('[hidden]'));
+    const f = [$('#skipBtn'), $('#reportBtn'), $('#restoreBtn'), ...$$('#winFund a')].filter(b => !b.hidden && !b.closest('[hidden]'));
     const i = f.indexOf(document.activeElement);
     e.preventDefault();
     f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus();
