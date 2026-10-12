@@ -253,7 +253,28 @@
   /* Win overlay */
   #win { position:fixed; inset:0; z-index:150; }
   #win[hidden] { display:none; }
-  .win-bg { position:absolute; inset:0; background: linear-gradient(120deg,#ff004c,#ff9d00,#ffe600,#2bff88,#00c8ff,#8a2bff,#ff00c8); animation: rainbow 2.4s linear infinite, pulse 1s ease-in-out infinite; }
+  /* Win sequence: stage-alarm (red alert over the glitching page) → white flash → stage-party (rainbow, card rain). */
+  .win-bg { position:absolute; inset:0; background:rgba(40,0,0,.72); }
+  .stage-alarm .win-bg { animation: alarm 1s steps(1) infinite; }
+  @keyframes alarm { 50% { background:rgba(110,0,0,.78); } }
+  .stage-party .win-bg { background: linear-gradient(120deg,#ff004c,#ff9d00,#ffe600,#2bff88,#00c8ff,#8a2bff,#ff00c8); animation: rainbow 2.4s linear infinite, pulse 1s ease-in-out infinite; }
+  .win-flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; }
+  .win-flash.flash { animation: flash .7s ease-out 1; }
+  @keyframes flash { 0% { opacity:1; } 100% { opacity:0; } }
+  .win-alarm { background:rgba(0,0,0,.85); border:2px solid #ff3030; border-radius:18px; box-shadow:0 0 30px rgba(255,40,40,.6); padding:1.25rem; }
+  .alarm-title { color:#ff5252; text-shadow:0 0 12px #ff0000; font-size:clamp(1.3rem,5vw,2.2rem); text-align:center; animation: blink 1s steps(1) infinite; margin:0; }
+  #winLog { margin:1rem 0 0; min-height:10.5rem; white-space:pre-wrap; word-break:break-all; color:#7cff6b; font-size:.82rem; line-height:1.55; text-shadow:0 0 6px rgba(124,255,107,.5); }
+  #winLog::after { content:"▌"; animation: blink .7s steps(1) infinite; }
+  .glitch { animation: glitch .3s steps(2) infinite; }
+  @keyframes glitch {
+    0% { transform:translate(3px,-1px); filter:drop-shadow(4px 0 0 rgba(255,0,60,.75)) drop-shadow(-4px 0 0 rgba(0,240,255,.75)); }
+    50% { transform:translate(-4px,2px) skewX(-1deg); filter:drop-shadow(-5px 0 0 rgba(255,0,60,.75)) drop-shadow(5px 0 0 rgba(0,240,255,.75)) hue-rotate(40deg); }
+    100% { transform:translate(2px,1px); filter:none; }
+  }
+  .score { font-family:"JetBrains Mono", ui-monospace, monospace; font-weight:800; color:#fff; font-size:clamp(1rem,3.5vw,1.5rem); letter-spacing:.06em; text-shadow:0 2px 0 #000; }
+  .score .num { display:inline-block; min-width:1.2em; padding:0 .25em; border-radius:6px; background:#000; border:1px solid #fff; }
+  .score .num.flip { animation: flipnum .6s ease-out 1; color:#ffe68a; border-color:#ffd23f; box-shadow:0 0 16px #ffd23f; }
+  @keyframes flipnum { 0% { transform:rotateX(0); } 50% { transform:rotateX(90deg); } 100% { transform:rotateX(0); } }
   @keyframes rainbow { to { filter: hue-rotate(360deg); } }
   @keyframes pulse { 50% { opacity:.75; } }
   .win-card { background:rgba(0,0,0,.66); border:2px solid #fff; border-radius:24px; box-shadow:0 0 40px rgba(255,255,255,.5); }
@@ -279,6 +300,7 @@
     .pose-eyebrow .p-sparkle { display:inline; }
     .fainted .end-flag { transition:none; }
     .win-bg { animation:none !important; opacity:.55; }
+    .glitch, .win-flash.flash, .alarm-title { animation:none !important; }
   }
 </style>
 </head>
@@ -474,11 +496,19 @@
 <div id="win" hidden role="dialog" aria-modal="true" aria-labelledby="winTitle">
   <div class="win-bg"></div>
   <canvas id="confetti" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+  <div id="winFlash" class="win-flash"></div>
   <div class="relative h-full overflow-auto flex items-center justify-center p-4">
-    <div id="winCard" class="win-card max-w-3xl w-full p-6 sm:p-10 text-center">
+    <div id="winAlarm" class="win-alarm max-w-2xl w-full">
+      <p class="alarm-title font-display">⚠ ANOMALY DETECTED ⚠</p>
+      <p id="winLog" class="mono" aria-live="polite"></p>
+      <div class="text-center mt-3"><button type="button" id="skipBtn" class="chip-btn" style="border-color:#ff5252;color:#ffd0d0">Skip to the celebration</button></div>
+    </div>
+    <div id="winCard" class="win-card max-w-3xl w-full p-6 sm:p-10 text-center" hidden>
       <div id="winProf" class="prof-slot w-24 mx-auto" aria-hidden="true"></div>
       <h2 id="winTitle" class="font-display text-2xl sm:text-5xl leading-tight text-white" style="text-shadow:0 3px 0 #000,0 0 30px #ff2fd6">You broke reality. Please close your browser before the universe collapses.</h2>
-      <p id="winSub" class="mono mt-4 text-sm sm:text-base text-white"></p>
+      <p class="score mt-5" aria-live="polite">MATHEMATICS <span class="num">1</span> : <span class="num" id="humScore">0</span> HUMANITY</p>
+      <p id="scoreNote" class="mono text-xs text-white/90 mt-1 min-h-[1rem]"></p>
+      <p id="winSub" class="mono mt-3 text-sm sm:text-base text-white"></p>
       <div class="mt-6 flex flex-wrap gap-3 justify-center">
         <button type="button" id="reportBtn" class="chip-btn !text-base !px-5 !py-3" style="background:#000;color:#fff;border-color:#fff">🚨 Report to Authorities</button>
         <button type="button" id="restoreBtn" class="shuffle-btn !w-auto !px-6 !py-3 !text-base">Restore Spacetime</button>
@@ -1504,20 +1534,47 @@ function burst(n) {
     });
   }
 }
+/** Playing cards tumbling down from the top of the screen, flipping as they fall. */
+function cardRain(n) {
+  for (let i = 0; i < n; i++) {
+    const c = RNG.below(52);
+    confetti.parts.push({
+      card: true, label: RANKS[c % 13] + SUITS[(c / 13) | 0].sym, red: SUITS[(c / 13) | 0].red,
+      x: rnd() * window.innerWidth, y: -40 - rnd() * 60, vx: (rnd() - 0.5) * 2, vy: 1.5 + rnd() * 2.5, g: 0.04,
+      w: 26, h: 36, rot: rnd() * 6.28, vr: (rnd() - 0.5) * 0.12, wob: rnd() * 6.28
+    });
+  }
+}
+function drawCard(p) {
+  const sx = Math.cos(p.wob);                        // flips between face and back
+  ctx2d.scale(Math.abs(sx) < 0.08 ? 0.08 : Math.abs(sx), 1);
+  ctx2d.fillStyle = sx > 0 ? '#fffdf5' : '#7d0f60';
+  ctx2d.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+  ctx2d.strokeStyle = sx > 0 ? 'rgba(0,0,0,.35)' : '#ffd23f';
+  ctx2d.lineWidth = 1.5;
+  ctx2d.strokeRect(-p.w / 2, -p.h / 2, p.w, p.h);
+  if (sx > 0) {
+    ctx2d.fillStyle = p.red ? '#d20f3c' : '#121212';
+    ctx2d.font = 'bold 11px "JetBrains Mono", monospace';
+    ctx2d.textAlign = 'center'; ctx2d.textBaseline = 'middle';
+    ctx2d.fillText(p.label, 0, 0);
+  }
+}
 function drawConfetti() {
   const H = window.innerHeight;
   ctx2d.clearRect(0, 0, window.innerWidth, H);
   for (const p of confetti.parts) {
     ctx2d.save(); ctx2d.translate(p.x, p.y); ctx2d.rotate(p.rot);
-    ctx2d.fillStyle = p.c; ctx2d.fillRect(-p.w / 2, -p.h / 2 * Math.abs(Math.cos(p.wob)), p.w, p.h * Math.abs(Math.cos(p.wob)) + 1);
+    if (p.card) drawCard(p);
+    else { ctx2d.fillStyle = p.c; ctx2d.fillRect(-p.w / 2, -p.h / 2 * Math.abs(Math.cos(p.wob)), p.w, p.h * Math.abs(Math.cos(p.wob)) + 1); }
     ctx2d.restore();
   }
 }
 function confettiLoop() {
   const H = window.innerHeight;
   for (const p of confetti.parts) {
-    p.vy += 0.28; p.vx *= 0.985; p.vy *= 0.985;
-    p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.wob += 0.15;
+    p.vy += p.g ?? 0.28; p.vx *= 0.985; p.vy *= 0.985;
+    p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.wob += p.card ? 0.06 : 0.15;
   }
   confetti.parts = confetti.parts.filter(p => p.y < H + 30);
   drawConfetti();
@@ -1529,44 +1586,109 @@ function startConfetti() {
   if (reduceMotion) {
     // Static sprinkle instead of falling confetti.
     for (let i = 0; i < 160; i++) confetti.parts.push({ x: rnd() * window.innerWidth, y: rnd() * window.innerHeight, w: 8, h: 5, rot: rnd() * 6.28, c: pick(CONF_COLORS), wob: 0 });
+    cardRain(24); confetti.parts.forEach(p => { if (p.card) { p.y = rnd() * window.innerHeight; p.wob = 0; } });
     drawConfetti();
     return;
   }
   burst(260);
+  cardRain(30);
   confettiLoop();
-  confetti.timer = setInterval(() => burst(90), 1300);
+  confetti.timer = setInterval(() => { burst(90); cardRain(12); }, 1300);
 }
 function stopConfetti() {
   cancelAnimationFrame(confetti.raf); clearInterval(confetti.timer);
   confetti.parts = []; ctx2d.clearRect(0, 0, canvas.width, canvas.height);
 }
 let lastFocus = null;
+const winSeq = { timers: [], siren: null, res: null };
+function winLater(fn, ms) { winSeq.timers.push(setTimeout(fn, ms)); }
+function stopSiren() {
+  if (winSeq.siren && audio.ctx) { winSeq.siren.gain.setTargetAtTime(0, audio.ctx.currentTime, 0.05); }
+  winSeq.siren = null;
+}
+function winLogLines(res) {
+  return [
+    '> Comparing Deck 2 with the Holy Grail Sequence…',
+    '> 52/52 positions match.',
+    '> Re-checking… 52/52. Re-re-checking… still 52/52.',
+    '> Calling a physicist… line busy.',
+    '> Notifying Mathematics… Mathematics has left the chat.',
+    `> Odds of this: 1 in ${fmtBig(F52)}.`,
+    res.rigged ? '> Hang on. Is this… rigged mode?' : '> Brace for impact.'
+  ];
+}
+/** Stage 1: red alert. Mission control panics while the page glitches behind it. */
 function triggerWin(res) {
   if (winOpen) return;
   winOpen = true;
   if (autopilot.mode) setAutopilot('0');
   lastFocus = document.activeElement;
-  $('#winSub').textContent = `52/52 on attempt #${fmt(res.n)}. Odds: 1 in ${sci(F52_NUM, 2)}.${res.rigged ? ' (Rigged. We saw that.)' : ''}`;
+  winSeq.res = res;
+  win.className = 'stage-alarm';
   win.hidden = false;
-  $('#reportBtn').textContent = '🚨 Report to Authorities';
+  $('#winAlarm').hidden = false;
+  $('#winCard').hidden = true;
   setPose('faint', LINES.faint[0]);
+  el.live.textContent = 'Fifty-two of fifty-two cards matched. Anomaly detected.';
+  const lines = winLogLines(res), log = $('#winLog');
+  if (reduceMotion) {
+    log.textContent = lines.join('\n');
+    winLater(() => winParty(), 2500);
+  } else {
+    log.textContent = '';
+    $('#app').classList.add('glitch');
+    if (audio.on && audioCtx()) winSeq.siren = SFX.siren(audio.graph, audio.ctx.currentTime + 0.01);
+    lines.forEach((line, i) => winLater(() => { log.textContent += (i ? '\n' : '') + line; }, 250 + i * 330));
+    winLater(() => winParty(), 250 + lines.length * 330 + 500);
+  }
+  $('#skipBtn').focus();
+}
+/** Stage 2: flash, rainbow, card rain, the Professor faints, the scoreboard ticks over. */
+function winParty() {
+  if (!winOpen || win.className === 'stage-party') return;
+  const res = winSeq.res;
+  winSeq.timers.forEach(clearTimeout); winSeq.timers = [];
+  stopSiren();
+  $('#app').classList.remove('glitch');
+  win.className = 'stage-party';
+  $('#winAlarm').hidden = true;
+  $('#winCard').hidden = false;
+  const flash = $('#winFlash');
+  flash.classList.remove('flash'); void flash.offsetWidth;
+  if (!reduceMotion) flash.classList.add('flash');
+  $('#winSub').textContent = `52/52 on attempt #${fmt(res.n)}. Odds: 1 in ${sci(F52_NUM, 2)}.`;
+  $('#reportBtn').textContent = '🚨 Report to Authorities';
+  const hum = $('#humScore');
+  hum.textContent = '0'; hum.classList.remove('flip');
+  $('#scoreNote').textContent = '';
+  winLater(() => {
+    hum.textContent = res.rigged ? '1*' : '1';
+    hum.classList.add('flip');
+    $('#scoreNote').textContent = res.rigged ? '*pending investigation (rigged mode detected)' : 'First point for humanity. Ever.';
+    sfx('land', 6);
+  }, reduceMotion ? 0 : 1300);
   setPose('faint', null, [$('#winProf')]);
   if (!reduceMotion) { $('#app').classList.add('shake'); $('#winCard').classList.add('shake'); }
-  setTimeout(() => { $('#app').classList.remove('shake'); $('#winCard').classList.remove('shake'); }, 1600);
+  winLater(() => { $('#app').classList.remove('shake'); $('#winCard').classList.remove('shake'); }, 1600);
   startConfetti();
   playFanfare();
-  el.live.textContent = 'Fifty-two of fifty-two cards matched. You broke reality.';
+  el.live.textContent = 'You broke reality. Mathematics 1, Humanity 1.';
   $('#restoreBtn').focus();
 }
 function restoreSpacetime() {
   if (!winOpen) return;
   winOpen = false;
+  winSeq.timers.forEach(clearTimeout); winSeq.timers = [];
+  stopSiren();
+  $('#app').classList.remove('glitch', 'shake');
   win.hidden = true;
+  win.className = '';
   stopConfetti();
   setPose('recover', LINES.recover[0]);
   armIdle();
   (lastFocus && document.contains(lastFocus) ? lastFocus : el.shuffleBtn).focus();
 }
+$('#skipBtn').addEventListener('click', () => winParty());
 $('#restoreBtn').addEventListener('click', restoreSpacetime);
 $('#reportBtn').addEventListener('click', () => {
   $('#reportBtn').textContent = '📨 Report filed. They laughed.';
@@ -1575,7 +1697,7 @@ $('#reportBtn').addEventListener('click', () => {
 win.addEventListener('keydown', e => {
   if (e.key === 'Escape') { e.preventDefault(); restoreSpacetime(); return; }
   if (e.key === 'Tab') {
-    const f = [$('#reportBtn'), $('#restoreBtn')];
+    const f = [$('#skipBtn'), $('#reportBtn'), $('#restoreBtn')].filter(b => !b.closest('[hidden]'));
     const i = f.indexOf(document.activeElement);
     e.preventDefault();
     f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus();
@@ -1674,6 +1796,17 @@ const SFX = {
   flickOut(g, t) { mallet(g, t, NOTE(19), 0.14, 0.4); mallet(g, t + 0.06, NOTE(14), 0.12, 0.5); },
   /** …and rising as the Professor flicks it back. */
   flickBack(g, t) { mallet(g, t, NOTE(14), 0.12, 0.5); mallet(g, t + 0.06, NOTE(19), 0.14, 0.3); },
+  /** Red-alert siren for the anomaly stage: a two-tone "nee-naw". Returns its gain node so it can be cut short. */
+  siren(g, t) {
+    const o = g.ac.createOscillator(), v = g.ac.createGain(), lp = g.ac.createBiquadFilter();
+    o.type = 'triangle'; lp.type = 'lowpass'; lp.frequency.value = 2200;
+    for (let k = 0; k < 12; k++) o.frequency.setValueAtTime(k % 2 ? 660 : 880, t + k * 0.25);
+    v.gain.setValueAtTime(0, t); v.gain.linearRampToValueAtTime(0.16, t + 0.05);
+    v.gain.setValueAtTime(0.16, t + 2.8); v.gain.linearRampToValueAtTime(0, t + 3);
+    o.connect(lp).connect(v).connect(g.bus);
+    o.start(t); o.stop(t + 3.05);
+    return v;
+  },
   /** 52/52: the run, twice, and a big chord. */
   fanfare(g, t) {
     const run = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24];
