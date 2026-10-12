@@ -1086,7 +1086,7 @@ function manualShuffle() {
   const res = { n: session.attempts, m, deck, ts: Date.now(), rigged };
   updateButtonLabel();
   armIdle();
-  if (reduceMotion) { sfxShuffleNow(); reveal(res, false); }
+  if (reduceMotion) { sfxShuffleNow(m); reveal(res, false); }
   else animateShuffle(res);
 }
 
@@ -1152,21 +1152,18 @@ async function animateShuffle(res) {
     return Promise.all(anims.map(a => a.finished));
   };
   try {
-    sfx('gather');
     await phase(() => 'none', stackT, 150, null, 'cubic-bezier(.5,0,.75,0)');           // 1. collapse
     if (token !== anim.token) return;
-    sfx('bend');
     await phase(stackT, splitT, 110, null, 'ease-out');                                 // 2a. split
     if (token !== anim.token) return;
-    sfx('riffle', 0.25);
+    sfx('roll');
     await phase(splitT, riffleT, 140, i => order(i) * 2, 'ease-in');                    // 2b. riffle
     if (token !== anim.token) return;
     await escapeP;                                                                       // 3. escapee returns
     if (token !== anim.token) return;
     paintDeck(C, res.deck, null);
     hasCurrent = true;
-    sfx('square');
-    setTimeout(() => { if (token === anim.token) sfx('swish'); }, 40);
+    sfx('land', res.m);
     await phase(riffleT, () => 'none', 230, i => i * 1.5, 'cubic-bezier(.2,.8,.3,1)');  // 4. fan out
     if (token !== anim.token) return;
   } catch (e) { return; }   // cancelled by a newer shuffle, which already revealed this one
@@ -1191,7 +1188,7 @@ function reveal(res, staggered) {
   for (let i = 0; i < 52; i++) if (res.deck[i] === grail[i]) hits.push(i);
   if (staggered && hits.length && !reduceMotion) {
     const step = Math.min(90, 650 / hits.length);
-    hits.forEach((i, k) => anim.matchTimers.push(setTimeout(() => { lightCard(i, true); if (k < 8 || k % 6 === 0) playDing(k); }, k * step)));
+    hits.forEach((i, k) => anim.matchTimers.push(setTimeout(() => { lightCard(i, true); }, k * step)));
   } else hits.forEach(i => lightCard(i, false));
   setMeter(res.m, true, true);
   if (res.m < 52) profReact(res.m);
@@ -1564,39 +1561,35 @@ window.addEventListener('resize', () => { if (winOpen) sizeCanvas(); });
 /* =====================================================================
    14. Sound (Web Audio, generated, off by default)
    ===================================================================== */
-/* A real riffle, layer by layer: the thumbs bend the deck (a rising paper
-   flex), 52 cards flap down in alternating left/right order as the halves
-   interleave (each flap = a crisp paper snap + a softer body thud), a dry
-   rustle runs underneath, then the deck squares up on the felt with a
-   double "thock" and fans out with a swish. Everything goes through a short
-   table-top reverb and a limiter so it stays warm and never clips. */
+/* Marimba: a warm wooden roll climbs while the cards riffle, then a chime
+   when they land that grows with the result. 0 matches: a soft falling
+   "aww" (G4, C4). 1: a happy two-note chime. 2–3: an arpeggio. 4–5: up
+   to the octave. 6+: a full run and chord. Each note is a mallet: a sine
+   fundamental, the quick woody overtone near 3.9×, and a tiny click. */
 const audio = { on: false, ctx: null, graph: null };
+const MARIMBA_LEVEL = 0.75, MARIMBA_WET = 0.3;
 
-/** Builds the shared output chain on any (Offline)AudioContext. */
+/** Shared output chain (noise for mallet clicks, small room reverb, limiter) on any (Offline)AudioContext. */
 function buildAudioGraph(ac) {
   const sr = ac.sampleRate;
-  const noise = ac.createBuffer(1, sr * 2, sr);              // 2 s of white noise; bursts start at random offsets
+  const noise = ac.createBuffer(1, sr, sr);
   const nd = noise.getChannelData(0);
   for (let i = 0; i < nd.length; i++) nd[i] = rnd() * 2 - 1;
-  const ir = ac.createBuffer(2, Math.floor(sr * 0.32), sr);  // small wooden-room impulse response
+  const ir = ac.createBuffer(2, Math.floor(sr * 1.4), sr);
   for (let ch = 0; ch < 2; ch++) {
     const d = ir.getChannelData(ch);
     let lp = 0;
-    for (let i = 0; i < d.length; i++) {
-      lp += ((rnd() * 2 - 1) - lp) * 0.35;                      // gently low-passed, so the tail sounds soft
-      d[i] = lp * Math.pow(1 - i / d.length, 3.2);
-    }
+    for (let i = 0; i < d.length; i++) { lp += ((rnd() * 2 - 1) - lp) * 0.25; d[i] = lp * Math.pow(1 - i / d.length, 5); }
   }
   const limiter = ac.createDynamicsCompressor();
-  limiter.threshold.value = -12; limiter.knee.value = 8; limiter.ratio.value = 6;
+  limiter.threshold.value = -10; limiter.knee.value = 6; limiter.ratio.value = 8;
   limiter.attack.value = 0.002; limiter.release.value = 0.15;
   const master = ac.createGain(); master.gain.value = 0.9;
   master.connect(limiter).connect(ac.destination);
-  const verb = ac.createConvolver(); verb.buffer = ir;
-  const wet = ac.createGain(); wet.gain.value = 0.22;
-  verb.connect(wet).connect(master);
-  const bus = ac.createGain();
-  bus.connect(master); bus.connect(verb);
+  const verb = ac.createConvolver(); verb.buffer = ir; verb.connect(master);
+  const bus = ac.createGain(); bus.gain.value = MARIMBA_LEVEL;
+  const send = ac.createGain(); send.gain.value = MARIMBA_WET;
+  bus.connect(master); bus.connect(send).connect(verb);
   return { ac, bus, noise };
 }
 function audioCtx() {
@@ -1610,95 +1603,58 @@ function audioCtx() {
   return audio.ctx;
 }
 function panNode(g, pan) {
-  if (!g.ac.createStereoPanner) return g.bus;
+  if (!pan || !g.ac.createStereoPanner) return g.bus;
   const p = g.ac.createStereoPanner(); p.pan.value = pan;
   p.connect(g.bus);
   return p;
 }
-/** One filtered noise burst: the building block of every paper sound. */
-function burst(g, t, { dur, freq, q = 1, gain, pan = 0, type = 'bandpass', attack = 0.0015, sweepTo }) {
-  const { ac, noise } = g;
-  const src = ac.createBufferSource(); src.buffer = noise;
-  const f = ac.createBiquadFilter(); f.type = type; f.Q.value = q;
-  f.frequency.setValueAtTime(freq, t);
-  if (sweepTo) f.frequency.exponentialRampToValueAtTime(sweepTo, t + dur);
-  const v = ac.createGain();
+function partial(g, t, f, dur, gain, pan) {
+  const o = g.ac.createOscillator(), v = g.ac.createGain();
+  o.frequency.value = f;
   v.gain.setValueAtTime(0, t);
-  v.gain.linearRampToValueAtTime(gain, t + attack);
+  v.gain.linearRampToValueAtTime(gain, t + 0.002);
   v.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-  src.connect(f).connect(v).connect(panNode(g, pan));
-  src.start(t, rnd() * (noise.duration - dur - 0.1), dur + 0.05);
-  return v;
+  o.connect(v).connect(panNode(g, pan));
+  o.start(t); o.stop(t + dur + 0.05);
 }
-/** A pitched thud for the deck landing on felt. */
-function thock(g, t, gain) {
-  const { ac } = g;
-  const o = ac.createOscillator(), v = ac.createGain();
-  o.type = 'sine';
-  o.frequency.setValueAtTime(170, t);
-  o.frequency.exponentialRampToValueAtTime(62, t + 0.09);
-  v.gain.setValueAtTime(0, t);
-  v.gain.linearRampToValueAtTime(gain, t + 0.003);
-  v.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
-  o.connect(v).connect(g.bus);
-  o.start(t); o.stop(t + 0.2);
-  burst(g, t, { dur: 0.05, freq: 1100, q: 0.7, gain: gain * 0.9, type: 'lowpass' });   // the cards' edges hitting together
-  burst(g, t, { dur: 0.02, freq: 3200, q: 1.5, gain: gain * 0.25 });                    // a little paper click on top
+/** One marimba note. */
+function mallet(g, t, f, gain, pan = 0) {
+  partial(g, t, f, 0.5, gain, pan);
+  partial(g, t, f * 3.93, 0.07, gain * 0.3, pan);
+  partial(g, t, f * 9.2, 0.02, gain * 0.08, pan);
+  const src = g.ac.createBufferSource(); src.buffer = g.noise;
+  const bp = g.ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = f * 4; bp.Q.value = 2;
+  const v = g.ac.createGain();
+  v.gain.setValueAtTime(0, t); v.gain.linearRampToValueAtTime(gain * 0.25, t + 0.001); v.gain.exponentialRampToValueAtTime(0.0001, t + 0.006);
+  src.connect(bp).connect(v).connect(panNode(g, pan));
+  src.start(t, rnd() * 0.8, 0.05);
 }
+const NOTE = s => 523.25 * Math.pow(2, s / 12);   // semitones from C5
 const SFX = {
-  /** Cards sliding together into one stack. */
-  gather(g, t) {
-    burst(g, t, { dur: 0.15, freq: 900, sweepTo: 2600, q: 0.8, gain: 0.07, attack: 0.06 });
+  /** The climbing roll while the halves interleave (about 0.21 s). */
+  roll(g, t) {
+    [-12, -10, -8, -5, -3, 0].forEach((s, i) => mallet(g, t + i * 0.042, NOTE(s), 0.17, i % 2 ? 0.25 : -0.25));
   },
-  /** Thumbs bending the two halves: tension rising. */
-  bend(g, t) {
-    burst(g, t, { dur: 0.12, freq: 700, sweepTo: 3400, q: 1.6, gain: 0.11, attack: 0.08, pan: -0.15 });
-    burst(g, t + 0.01, { dur: 0.11, freq: 760, sweepTo: 3600, q: 1.6, gain: 0.1, attack: 0.08, pan: 0.15 });
+  /** The landing chime; grows with the number of matches. */
+  land(g, t, m) {
+    if (m === 0) { mallet(g, t, NOTE(-5), 0.3); mallet(g, t + 0.13, NOTE(-12), 0.26); return; }
+    if (m === 1) { mallet(g, t, NOTE(0), 0.34, -0.1); mallet(g, t + 0.06, NOTE(7), 0.3, 0.1); return; }
+    const big = m >= 6;
+    const run = m <= 3 ? [0, 4, 7] : m <= 5 ? [0, 4, 7, 12] : [0, 2, 4, 7, 9, 12, 14, 16, 19, 24];
+    const step = big ? 0.042 : 0.065;
+    run.forEach((s, i) => mallet(g, t + i * step, NOTE(s), 0.3, (i % 3 - 1) * 0.25));
+    if (big) [12, 19, 24].forEach(s => mallet(g, t + run.length * step + 0.04, NOTE(s), 0.22));
   },
-  /** The riffle itself: 52 flaps over `dur` seconds, halves alternating left/right. */
-  riffle(g, t, dur = 0.25) {
-    burst(g, t, { dur: dur + 0.06, freq: 1500, q: 0.6, gain: 0.12, attack: dur * 0.5 });  // the dry rustle underneath
-    for (let k = 0; k < 52; k++) {
-      const u = k / 51;
-      const tk = t + dur * Math.pow(u, 1.15) + (rnd() - 0.5) * 0.003;   // speeds up slightly, like a real thumb release
-      const swell = 0.45 + 0.55 * Math.sin(Math.PI * Math.min(1, u * 1.15));
-      const loud = swell * (0.75 + rnd() * 0.5);
-      const pan = (k % 2 ? 0.32 : -0.32) + (rnd() - 0.5) * 0.1;
-      burst(g, tk, { dur: 0.011 + rnd() * 0.01, freq: 2600 + rnd() * 2200, q: 1.1, gain: 0.85 * loud, pan });  // snap
-      burst(g, tk, { dur: 0.024, freq: 520 + rnd() * 380, q: 1.8, gain: 0.4 * loud, pan: pan * 0.6 });        // body
-    }
-  },
-  /** The deck squaring up: tap-tap on the felt. */
-  square(g, t) {
-    thock(g, t, 0.34);
-    thock(g, t + 0.075, 0.17);
-  },
-  /** The escaping card zipping away… */
-  flickOut(g, t) {
-    burst(g, t, { dur: 0.2, freq: 3800, sweepTo: 700, q: 2.2, gain: 0.16, attack: 0.01, pan: 0.5 });
-  },
-  /** …and getting flicked back in. */
-  flickBack(g, t) {
-    burst(g, t, { dur: 0.012, freq: 3000, q: 1.2, gain: 0.35, pan: 0.5 });                // the flick
-    burst(g, t + 0.02, { dur: 0.24, freq: 700, sweepTo: 3600, q: 2.2, gain: 0.14, attack: 0.18, pan: 0.2 });
+  /** The escaping card: two quick high notes falling as it flies off… */
+  flickOut(g, t) { mallet(g, t, NOTE(19), 0.14, 0.4); mallet(g, t + 0.06, NOTE(14), 0.12, 0.5); },
+  /** …and rising as the Professor flicks it back. */
+  flickBack(g, t) { mallet(g, t, NOTE(14), 0.12, 0.5); mallet(g, t + 0.06, NOTE(19), 0.14, 0.3); },
+  /** 52/52: the run, twice, and a big chord. */
+  fanfare(g, t) {
+    const run = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24];
+    [0, 0.6].forEach((dt, r) => run.forEach((s, i) => mallet(g, t + dt + i * 0.045, NOTE(s - 12 + r * 12), 0.26, (i % 3 - 1) * 0.3)));
+    [0, 7, 12, 16, 24].forEach(s => mallet(g, t + 1.25, NOTE(s), 0.22));
   }
-};
-/** Cards fanning out across the table, sweeping left to right. */
-SFX.swish = (g, t) => {
-  const { ac, noise } = g;
-  const src = ac.createBufferSource(); src.buffer = noise;
-  const f = ac.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 0.9;
-  f.frequency.setValueAtTime(5200, t); f.frequency.exponentialRampToValueAtTime(1300, t + 0.26);
-  const v = ac.createGain();
-  v.gain.setValueAtTime(0, t); v.gain.linearRampToValueAtTime(0.06, t + 0.05); v.gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
-  let out = g.bus;
-  if (ac.createStereoPanner) {
-    const p = ac.createStereoPanner();
-    p.pan.setValueAtTime(-0.45, t); p.pan.linearRampToValueAtTime(0.45, t + 0.26);
-    p.connect(g.bus); out = p;
-  }
-  src.connect(f).connect(v).connect(out);
-  src.start(t, rnd() * 1.5, 0.32);
 };
 /** Plays one named sound now (no-op while sound is off). */
 function sfx(name, ...args) {
@@ -1706,41 +1662,21 @@ function sfx(name, ...args) {
   const ac = audioCtx(); if (!ac) return;
   SFX[name](audio.graph, ac.currentTime + 0.005, ...args);
 }
-/** The whole shuffle in one go, for reduced motion and the sound-on preview. */
-function sfxShuffleNow() {
+/** Roll and landing in one go, for reduced motion and the sound-on preview. */
+function sfxShuffleNow(m) {
   if (!audio.on) return;
   const ac = audioCtx(); if (!ac) return;
-  const g = audio.graph, t = ac.currentTime + 0.01;
-  SFX.bend(g, t); SFX.riffle(g, t + 0.1, 0.26); SFX.square(g, t + 0.38); SFX.swish(g, t + 0.42);
+  const t = ac.currentTime + 0.01;
+  SFX.roll(audio.graph, t);
+  SFX.land(audio.graph, t + 0.26, m);
 }
-function tone(freq, start, dur, vol, type = 'sine') {
-  const ac = audioCtx(); if (!ac) return;
-  const o = ac.createOscillator(), gn = ac.createGain();
-  o.type = type; o.frequency.value = freq;
-  gn.gain.setValueAtTime(0.0001, start);
-  gn.gain.exponentialRampToValueAtTime(vol, start + 0.01);
-  gn.gain.exponentialRampToValueAtTime(0.0001, start + dur);
-  o.connect(gn).connect(audio.graph.bus);
-  o.start(start); o.stop(start + dur + 0.05);
-}
-function playDing(k) {
-  if (!audio.on) return;
-  const ac = audioCtx(); if (!ac) return;
-  const f = 880 * Math.pow(2, Math.min(k, 12) / 12), t = ac.currentTime;
-  tone(f, t, 0.5, 0.12); tone(f * 2, t, 0.3, 0.04);
-}
-function playFanfare() {
-  if (!audio.on) return;
-  const ac = audioCtx(); if (!ac) return;
-  const t = ac.currentTime;
-  [523.25, 659.25, 783.99, 1046.5, 783.99, 1046.5].forEach((f, i) => tone(f, t + i * 0.13, 0.4, 0.12, 'triangle'));
-}
-/** Dev hook: renders the full shuffle offline and returns its stereo samples (used to check levels). */
-async function renderShuffleSound() {
+function playFanfare() { sfx('fanfare'); }
+/** Dev hook: renders a shuffle with `m` matches offline and returns its stereo samples (used to check levels). */
+async function renderShuffleSound(m = 1) {
   const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
-  const ac = new OAC(2, 44100 * 1.2, 44100);
+  const ac = new OAC(2, 44100 * 2, 44100);
   const g = buildAudioGraph(ac);
-  SFX.gather(g, 0.02); SFX.bend(g, 0.17); SFX.riffle(g, 0.28, 0.25); SFX.square(g, 0.56); SFX.swish(g, 0.6);
+  SFX.roll(g, 0.28); SFX.land(g, 0.54, m);
   const buf = await ac.startRendering();
   return [Array.from(buf.getChannelData(0)), Array.from(buf.getChannelData(1))];
 }
@@ -1748,7 +1684,7 @@ $('#soundBtn').addEventListener('click', e => {
   audio.on = !audio.on;
   e.currentTarget.setAttribute('aria-pressed', String(audio.on));
   e.currentTarget.textContent = audio.on ? '🔊 Sound: on' : '🔇 Sound: off';
-  if (audio.on) { audioCtx(); sfxShuffleNow(); }
+  if (audio.on) { audioCtx(); sfxShuffleNow(1); }
 });
 
 /* =====================================================================
