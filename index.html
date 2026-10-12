@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Impossible Shuffle</title>
 <meta name="description" content="Humankind's ultimate exercise in futility: the whole internet shuffling one deck until it matches twice. Odds: 1 in 52!.">
 <link rel="canonical" href="https://theimpossibleshuffle.com/">
@@ -37,13 +37,14 @@
 <style>
   :root { color-scheme: dark; --pink:#ff2fd6; --cyan:#22f3ff; --gold:#ffd23f; --ink:#e6f2ea; --muted:#9fb5a8; }
   * { box-sizing: border-box; }
-  html { background:#020805; overflow-x:hidden; }
+  html { background:#020805; overflow-x:hidden; touch-action:manipulation; -webkit-tap-highlight-color:transparent; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
   body {
     margin:0; min-height:100vh; color:var(--ink);
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     background:
       radial-gradient(ellipse 120% 60% at 50% -10%, #12402a 0%, #082a1a 35%, #03110a 70%, #020805 100%) fixed;
-    padding-bottom: 3.25rem;
+    padding-bottom: calc(3.25rem + env(safe-area-inset-bottom, 0px));
+    padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px);
   }
   /* Felt texture */
   body::before {
@@ -91,6 +92,7 @@
 
   /* Card grids */
   .deck-grid { display:grid; grid-template-columns:repeat(9, minmax(0,1fr)); gap:4px; perspective:900px; }
+  @media (max-width:379px) { .deck-grid { grid-template-columns:repeat(8, minmax(0,1fr)); gap:3px; } }
   @media (min-width:640px) { .deck-grid { grid-template-columns:repeat(13, minmax(0,1fr)); gap:5px; } }
   .pcard {
     position:relative; aspect-ratio:5/7; border-radius:6px; container-type:inline-size;
@@ -99,8 +101,8 @@
     font-family:"JetBrains Mono", ui-monospace, monospace; line-height:1; user-select:none;
     transition: box-shadow .25s;
   }
-  .pcard .r { position:absolute; top:7%; left:9%; font-weight:800; font-size:11px; font-size:30cqw; letter-spacing:-.04em; }
-  .pcard .s { position:absolute; left:50%; top:58%; transform:translate(-50%,-50%); font-size:16px; font-size:50cqw; }
+  .pcard .r { position:absolute; top:6%; left:8%; font-weight:800; font-size:11px; font-size:33cqw; letter-spacing:-.05em; }
+  .pcard .s { position:absolute; left:50%; top:62%; transform:translate(-50%,-50%); font-size:16px; font-size:48cqw; }
   .pcard.red { color:#d20f3c; }
   .pcard.back { background: repeating-linear-gradient(45deg,#7d0f60 0 4px,#4a0738 4px 8px); box-shadow: inset 0 0 0 2px rgba(255,210,63,.45), 0 2px 5px rgba(0,0,0,.6); }
   .pcard.back .r, .pcard.back .s { visibility:hidden; }
@@ -123,11 +125,11 @@
   .shuffle-btn:active { transform: translateY(2px) scale(.99); }
   @keyframes glow { 50% { box-shadow: 0 0 0 2px #ffd9f7, 0 0 32px rgba(255,47,214,.95), 0 0 80px rgba(255,47,214,.5), inset 0 -4px 0 rgba(0,0,0,.25); } }
   .seg { display:flex; border:1px solid rgba(34,243,255,.35); border-radius:12px; overflow:hidden; }
-  .seg button { flex:1; background:transparent; color:var(--ink); border:0; padding:.55rem .25rem; font-size:.8rem; font-weight:700; }
+  .seg button { flex:1; background:transparent; color:var(--ink); border:0; padding:.55rem .25rem; min-height:44px; font-size:.82rem; font-weight:700; }
   .seg button + button { border-left:1px solid rgba(34,243,255,.25); }
   .seg button[aria-pressed="true"] { background:rgba(34,243,255,.18); color:#bffcff; text-shadow:0 0 8px var(--cyan); }
   .seg button:focus-visible { outline-offset:-3px; }
-  .chip-btn { border:1px solid rgba(255,210,63,.45); color:#ffe9a3; background:rgba(0,0,0,.35); border-radius:10px; padding:.5rem .8rem; font-size:.85rem; font-weight:700; }
+  .chip-btn { min-height:44px; border:1px solid rgba(255,210,63,.45); color:#ffe9a3; background:rgba(0,0,0,.35); border-radius:10px; padding:.5rem .8rem; font-size:.85rem; font-weight:700; }
   .chip-btn:hover { background:rgba(255,210,63,.12); }
 
   /* Meter */
@@ -207,16 +209,25 @@
   .log thead tr.pb td { position:sticky; top:1.85rem; background:#2a2207; color:#ffe68a; z-index:2; border-bottom:1px solid rgba(255,210,63,.45); }
   .log tr.hot td { background:rgba(255,47,214,.12); color:#ffd0f6; }
   .log tr.hot td:first-child { box-shadow: inset 3px 0 0 var(--pink); }
-  .log .dk { background:none; border:0; padding:0; color:inherit; text-align:left; font:inherit; word-break:break-word; }
+  .log .dk { display:block; width:100%; min-height:36px; background:none; border:0; padding:.3rem 0; color:inherit; text-align:left; font:inherit; word-break:break-word; }
   .log .dk:hover { color:#bffcff; text-decoration:underline; }
   .log td.num { white-space:nowrap; }
+  .log .t2 { display:none; color:var(--muted); font-size:.68rem; margin-top:.15rem; }
+  /* Narrow phones: the time moves under the attempt number so the table fits. */
+  @media (max-width: 480px) {
+    .log th, .log td { padding:.3rem .35rem; }
+    .log th:nth-child(4), .log td:nth-child(4) { display:none; }
+    .log .t2 { display:block; }
+  }
+  .tip[tabindex] { display:inline-block; padding:.6rem .3rem; margin:-.6rem -.3rem; }
+  @media (hover: none) { .kbd-hint { display:none; } }
 
   /* Distribution chart */
   .dist { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; align-items:end; }
   .dist .track { position:relative; height:110px; background:rgba(255,255,255,.04); border-radius:6px; }
   .dist .bar { position:absolute; left:18%; right:18%; bottom:0; height:0; background:var(--cyan); border-radius:4px 4px 0 0; box-shadow:0 0 10px rgba(34,243,255,.5); transition: height .3s; }
   .dist .mark { position:absolute; left:4%; right:4%; height:0; border-top:2px dashed rgba(255,210,63,.6); transition: bottom .3s; }
-  .dist .pct { font-size:.68rem; text-align:center; color:var(--muted); margin-bottom:3px; font-family:"JetBrains Mono", monospace; }
+  .dist .pct { font-size:.72rem; text-align:center; color:var(--muted); margin-bottom:3px; font-family:"JetBrains Mono", monospace; }
   .dist .lbl { text-align:center; font-weight:800; font-size:.8rem; margin-top:4px; }
 
   /* Tooltips */
@@ -228,11 +239,11 @@
   .badge { display:flex; flex-direction:column; align-items:center; gap:.2rem; border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:.55rem .4rem; text-align:center; background:rgba(0,0,0,.3); }
   .badge.got { border-color:rgba(255,210,63,.6); box-shadow:0 0 14px rgba(255,210,63,.25); }
   .badge .ico { font-size:1.5rem; display:block; line-height:1.2; }
-  .badge .nm { font-size:.68rem; font-weight:800; line-height:1.2; display:block; }
+  .badge .nm { font-size:.75rem; font-weight:800; line-height:1.2; display:block; }
   .badge:not(.got) .ico { filter:grayscale(1); opacity:.4; }
   .badge:not(.got) .nm { color:#b8c9bf; }
-  .badge .how { font-size:.64rem; line-height:1.3; color:#cfe3d7; display:block; }
-  .badge .prog { margin-top:auto; padding-top:.15rem; font:700 .62rem "JetBrains Mono", ui-monospace, monospace; color:var(--cyan); display:block; min-height:1.1em; }
+  .badge .how { font-size:.72rem; line-height:1.3; color:#cfe3d7; display:block; }
+  .badge .prog { margin-top:auto; padding-top:.15rem; font:700 .7rem "JetBrains Mono", ui-monospace, monospace; color:var(--cyan); display:block; min-height:1.1em; }
   .badge.got .prog { color:var(--gold); }
 
   /* Toasts */
@@ -240,11 +251,15 @@
   .toast { background:#14051a; border:1px solid var(--pink); color:#ffe0fa; border-radius:12px; padding:.7rem .9rem; box-shadow:0 0 22px rgba(255,47,214,.45); font-size:.88rem; animation: toastIn .35s ease-out; transition: opacity .35s, transform .35s; }
   .toast.out { opacity:0; transform:translateY(-8px); }
   .toast b { color:#ffe68a; }
+  @media (max-width: 640px) {
+    #toasts { left:.75rem; right:.75rem; top:calc(.5rem + env(safe-area-inset-top, 0px)); max-width:none; }
+    .toast { font-size:.8rem; padding:.5rem .7rem; line-height:1.35; }
+  }
   @keyframes toastIn { from { opacity:0; transform:translateY(-10px); } }
 
   /* Fellow shufflers ticker */
   #ticker { position:fixed; left:0; right:0; bottom:0; height:calc(2.4rem + env(safe-area-inset-bottom, 0px)); padding-bottom:env(safe-area-inset-bottom, 0px); z-index:60; display:flex; align-items:stretch; background:rgba(1,8,5,.94); border-top:1px solid rgba(255,210,63,.45); font-size:.82rem; }
-  #ticker .lab { flex:none; display:flex; align-items:center; gap:.4rem; padding:0 .75rem; background:#1b1405; color:#ffe68a; font-weight:800; font-size:.68rem; letter-spacing:.04em; border-right:1px solid rgba(255,210,63,.4); }
+  #ticker .lab { flex:none; display:flex; align-items:center; gap:.4rem; padding:0 .75rem 0 calc(.75rem + env(safe-area-inset-left, 0px)); background:#1b1405; color:#ffe68a; font-weight:800; font-size:.72rem; letter-spacing:.04em; border-right:1px solid rgba(255,210,63,.4); }
   #tickerView { position:relative; flex:1; overflow:hidden; }
   #tickerTrack { position:absolute; top:0; bottom:0; left:0; display:flex; align-items:center; white-space:nowrap; will-change:transform; }
   #tickerTrack > span { padding:0 2.2rem 0 0; }
@@ -262,15 +277,21 @@
   .win-flash.flash { animation: flash .7s ease-out 1; }
   @keyframes flash { 0% { opacity:1; } 100% { opacity:0; } }
   .win-alarm { background:rgba(0,0,0,.85); border:2px solid #ff3030; border-radius:18px; box-shadow:0 0 30px rgba(255,40,40,.6); padding:1.25rem; }
-  .alarm-title { color:#ff5252; text-shadow:0 0 12px #ff0000; font-size:clamp(1.3rem,5vw,2.2rem); text-align:center; animation: blink 1s steps(1) infinite; margin:0; }
+  #winAlarm, #winCard { min-width:0; }
+  .alarm-title { color:#ff5252; text-shadow:0 0 12px #ff0000; font-size:clamp(1rem,5.2vw,2.2rem); overflow-wrap:anywhere; text-align:center; animation: blink 1s steps(1) infinite; margin:0; }
   #winLog { margin:1rem 0 0; min-height:10.5rem; white-space:pre-wrap; word-break:break-all; color:#7cff6b; font-size:.82rem; line-height:1.55; text-shadow:0 0 6px rgba(124,255,107,.5); }
-  #winLog::after { content:"▌"; animation: blink .7s steps(1) infinite; }
+  #winLog .ln { display:block; visibility:hidden; }
+  #winLog .ln.on { visibility:visible; }
+  #winLog .ln.cur::after { content:"▌"; animation: blink .7s steps(1) infinite; }
   .glitch { animation: glitch .3s steps(2) infinite; }
+  /* The page itself only moves vertically, so phones never see it as wider and zoom out. */
   @keyframes glitch {
-    0% { transform:translate(3px,-1px); filter:drop-shadow(4px 0 0 rgba(255,0,60,.75)) drop-shadow(-4px 0 0 rgba(0,240,255,.75)); }
-    50% { transform:translate(-4px,2px) skewX(-1deg); filter:drop-shadow(-5px 0 0 rgba(255,0,60,.75)) drop-shadow(5px 0 0 rgba(0,240,255,.75)) hue-rotate(40deg); }
-    100% { transform:translate(2px,1px); filter:none; }
+    0% { transform:translateY(-2px); filter:drop-shadow(4px 0 0 rgba(255,0,60,.75)) drop-shadow(-4px 0 0 rgba(0,240,255,.75)); }
+    50% { transform:translateY(3px); filter:drop-shadow(-5px 0 0 rgba(255,0,60,.75)) drop-shadow(5px 0 0 rgba(0,240,255,.75)) hue-rotate(40deg); }
+    100% { transform:translateY(1px); filter:none; }
   }
+  .shake-y { animation: shakeY .5s cubic-bezier(.36,.07,.19,.97) 3; }
+  @keyframes shakeY { 10%,90% { transform:translateY(-2px); } 20%,80% { transform:translateY(4px); } 30%,50%,70% { transform:translateY(-7px); } 40%,60% { transform:translateY(7px); } }
   .score { font-family:"JetBrains Mono", ui-monospace, monospace; font-weight:800; color:#fff; font-size:clamp(1rem,3.5vw,1.5rem); letter-spacing:.06em; text-shadow:0 2px 0 #000; }
   .score .num { display:inline-block; min-width:1.2em; padding:0 .25em; border-radius:6px; background:#000; border:1px solid #fff; }
   .score .num.flip { animation: flipnum .6s ease-out 1; color:#ffe68a; border-color:#ffd23f; box-shadow:0 0 16px #ffd23f; }
@@ -285,8 +306,17 @@
   .fund-btn { display:inline-flex; align-items:center; gap:.45rem; border-radius:14px; padding:.75rem 1.2rem; font-family:Bungee, Impact, system-ui, sans-serif; font-size:.95rem; color:#1d1300; text-decoration:none; background:linear-gradient(135deg,#ffe27a,#ffb000); box-shadow:0 0 0 2px #fff2bf, 0 0 22px rgba(255,210,63,.55); transition:transform .08s; }
   .fund-btn:hover { transform:translateY(-1px); box-shadow:0 0 0 2px #fff7d6, 0 0 30px rgba(255,210,63,.8); }
   .merch-btn { display:inline-flex; align-items:center; gap:.45rem; text-decoration:none; }
+  /* Short screens (phones in landscape): a compact win card that fits without scrolling. */
+  @media (max-height: 620px) {
+    #winProf { display:none; }
+    #winTitle { font-size:1.35rem; }
+    .win-card { padding:1rem 1.25rem !important; }
+    .win-card .score { margin-top:.6rem; }
+    #winLog { min-height:0; font-size:.75rem; line-height:1.4; margin-top:.5rem; }
+    .alarm-title { font-size:1.2rem; }
+  }
   #rigged { position:fixed; left:.75rem; top:.75rem; z-index:110; }
-  #fab { position:fixed; right:1rem; bottom:3.3rem; z-index:55; }
+  #fab { position:fixed; right:calc(1rem + env(safe-area-inset-right, 0px)); bottom:calc(3.3rem + env(safe-area-inset-bottom, 0px)); z-index:55; }
   #fab[hidden] { display:none; }
   .fade { transition: opacity .4s; }
   .caret::after { content:"▌"; margin-left:2px; animation: blink .8s steps(1) infinite; color:var(--cyan); }
@@ -303,7 +333,7 @@
     .pose-eyebrow .p-sparkle { display:inline; }
     .fainted .end-flag { transition:none; }
     .win-bg { animation:none !important; opacity:.55; }
-    .glitch, .win-flash.flash, .alarm-title { animation:none !important; }
+    .glitch, .shake-y, .win-flash.flash, .alarm-title { animation:none !important; }
   }
 </style>
 </head>
@@ -363,7 +393,7 @@
   <!-- ===================== GAME ===================== -->
   <main id="game" class="px-4 mt-8 max-w-6xl mx-auto lg:grid lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-6">
     <div class="space-y-5">
-      <section class="panel p-4 sm:p-5" aria-labelledby="grailTitle">
+      <section class="panel p-3 sm:p-5" aria-labelledby="grailTitle">
         <div class="flex items-center justify-between gap-3 flex-wrap mb-3">
           <h2 id="grailTitle" class="font-display text-base sm:text-lg neon-gold">The Holy Grail Sequence</h2>
           <p class="mono text-xs text-[#9fb5a8]">fixed forever · the same deck for every human</p>
@@ -371,7 +401,7 @@
         <div id="grailGrid" class="deck-grid" role="list" aria-label="The Holy Grail Sequence, 52 cards"></div>
       </section>
 
-      <section class="panel p-4 sm:p-5" aria-labelledby="chalTitle">
+      <section class="panel p-3 sm:p-5" aria-labelledby="chalTitle">
         <div class="flex items-center justify-between gap-3 flex-wrap mb-3">
           <h2 id="chalTitle" class="font-display text-base sm:text-lg neon-cyan">The Challenger <span class="mono text-xs text-[#9fb5a8] font-normal align-middle">(Deck 2)</span></h2>
           <p class="mono text-xs text-[#9fb5a8]">✓ = same card, same position</p>
@@ -384,7 +414,8 @@
       <div class="lg:sticky lg:top-4 space-y-4">
         <div class="panel p-4 space-y-3">
           <button type="button" id="shuffleBtn" class="shuffle-btn">Defy Mathematics (Shuffle Deck 2)</button>
-          <p class="text-center text-xs text-[#9fb5a8]">or press <kbd class="mono px-1 rounded bg-white/10">Space</kbd> / <kbd class="mono px-1 rounded bg-white/10">Enter</kbd></p>
+          <p id="miniResult" class="lg:hidden text-center mono text-sm font-bold min-h-[1.25rem]" aria-hidden="true"></p>
+          <p class="kbd-hint text-center text-xs text-[#9fb5a8]">or press <kbd class="mono px-1 rounded bg-white/10">Space</kbd> / <kbd class="mono px-1 rounded bg-white/10">Enter</kbd></p>
           <div>
             <p id="apLabel" class="text-xs font-bold text-[#9fb5a8] mb-1">AUTOPILOT</p>
             <div class="seg" role="group" aria-labelledby="apLabel">
@@ -393,7 +424,7 @@
               <button type="button" data-ap="100" aria-pressed="false">100/sec</button>
               <button type="button" data-ap="L" aria-pressed="false">Ludicrous</button>
             </div>
-            <p id="apRate" class="mono text-[11px] text-[#9fb5a8] mt-1 h-4"></p>
+            <p id="apRate" class="mono text-xs text-[#9fb5a8] mt-1 h-4"></p>
           </div>
           <button type="button" id="soundBtn" class="chip-btn w-full" aria-pressed="false">🔇 Sound: off</button>
         </div>
@@ -407,7 +438,7 @@
           <div class="mt-3 flex items-start gap-3">
             <div id="profSlot" class="prof-slot w-[104px] flex-none" aria-hidden="true"></div>
             <div class="flex-1 pt-3">
-              <p class="text-[10px] font-bold tracking-widest text-[#ffe68a] mb-1">PROFESSOR FACTORIAL</p>
+              <p class="text-[11px] font-bold tracking-widest text-[#ffe68a] mb-1">PROFESSOR FACTORIAL</p>
               <p id="bubble" class="bubble">Ah, a new challenger. Press the button. Defy me.</p>
             </div>
           </div>
@@ -421,7 +452,7 @@
     <section class="panel p-4 sm:p-5 min-w-0" aria-labelledby="logTitle">
       <div class="flex items-baseline justify-between gap-2 flex-wrap mb-3">
         <h2 id="logTitle" class="font-display text-base neon-cyan">Live Shuffle Log</h2>
-        <p class="mono text-[11px] text-[#9fb5a8]">newest first · last 200 kept · click a deck to expand</p>
+        <p class="mono text-xs text-[#9fb5a8]">newest first · last 200 kept · tap a deck to expand</p>
       </div>
       <div class="log-wrap">
         <table class="log">
@@ -437,15 +468,15 @@
     <section class="panel p-4 sm:p-5 min-w-0" aria-labelledby="statsTitle">
       <h2 id="statsTitle" class="font-display text-base neon-gold mb-3">Mission Control</h2>
       <dl class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div class="rounded-xl bg-black/30 p-3"><dt class="text-[11px] text-[#9fb5a8] font-bold">SESSION</dt><dd id="stSession" class="mono text-xl font-extrabold">0</dd></div>
-        <div class="rounded-xl bg-black/30 p-3"><dt class="text-[11px] text-[#9fb5a8] font-bold">ALL-TIME</dt><dd id="stAll" class="mono text-xl font-extrabold">0</dd></div>
-        <div class="rounded-xl bg-black/30 p-3"><dt class="text-[11px] text-[#9fb5a8] font-bold">BEST MATCH</dt><dd id="stBest" class="mono text-xl font-extrabold">–</dd><dd id="stBestAll" class="text-[10px] text-[#9fb5a8]"></dd></div>
-        <div class="rounded-xl bg-black/30 p-3"><dt class="text-[11px] text-[#9fb5a8] font-bold"><span class="tip" tabindex="0" data-tip="Converges to 1.00. Math is working as intended.">AVG MATCHES ⓘ</span></dt><dd id="stAvg" class="mono text-xl font-extrabold">–</dd></div>
+        <div class="rounded-xl bg-black/30 p-3"><dt class="text-xs text-[#9fb5a8] font-bold">SESSION</dt><dd id="stSession" class="mono text-xl font-extrabold">0</dd></div>
+        <div class="rounded-xl bg-black/30 p-3"><dt class="text-xs text-[#9fb5a8] font-bold">ALL-TIME</dt><dd id="stAll" class="mono text-xl font-extrabold">0</dd></div>
+        <div class="rounded-xl bg-black/30 p-3"><dt class="text-xs text-[#9fb5a8] font-bold">BEST MATCH</dt><dd id="stBest" class="mono text-xl font-extrabold">–</dd><dd id="stBestAll" class="text-[11px] text-[#9fb5a8]"></dd></div>
+        <div class="rounded-xl bg-black/30 p-3"><dt class="text-xs text-[#9fb5a8] font-bold"><span class="tip" tabindex="0" data-tip="Converges to 1.00. Math is working as intended.">AVG MATCHES ⓘ</span></dt><dd id="stAvg" class="mono text-xl font-extrabold">–</dd></div>
       </dl>
 
       <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-2">MATCH DISTRIBUTION (THIS SESSION)</h3>
       <div id="dist" class="dist" role="img" aria-label="Distribution of matches per attempt compared with theory"></div>
-      <p class="text-[11px] text-[#9fb5a8] mt-2"><span class="inline-block w-3 h-2 align-middle bg-[#22f3ff] rounded-sm"></span> your shuffles &nbsp; <span class="inline-block w-4 align-middle border-t-2 border-dashed border-[#ffd23f]/70"></span> what math predicts</p>
+      <p class="text-xs text-[#9fb5a8] mt-2"><span class="inline-block w-3 h-2 align-middle bg-[#22f3ff] rounded-sm"></span> your shuffles &nbsp; <span class="inline-block w-4 align-middle border-t-2 border-dashed border-[#ffd23f]/70"></span> what math predicts</p>
 
       <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-1">ESTIMATED TIME TO SUCCESS</h3>
       <p id="eta" class="mono text-sm text-[#ffe68a]">Shuffle at least once to calibrate the despair.</p>
@@ -507,13 +538,13 @@
   <div class="win-bg"></div>
   <canvas id="confetti" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
   <div id="winFlash" class="win-flash"></div>
-  <div class="relative h-full overflow-auto flex items-center justify-center p-4">
-    <div id="winAlarm" class="win-alarm max-w-2xl w-full">
+  <div class="relative h-full overflow-y-auto overflow-x-hidden flex p-3 sm:p-4">
+    <div id="winAlarm" class="win-alarm max-w-2xl w-full m-auto">
       <p class="alarm-title font-display">⚠ ANOMALY DETECTED ⚠</p>
       <p id="winLog" class="mono" aria-live="polite"></p>
       <div class="text-center mt-3"><button type="button" id="skipBtn" class="chip-btn" style="border-color:#ff5252;color:#ffd0d0">Skip to the celebration</button></div>
     </div>
-    <div id="winCard" class="win-card max-w-3xl w-full p-6 sm:p-10 text-center" hidden>
+    <div id="winCard" class="win-card max-w-3xl w-full m-auto p-5 sm:p-10 text-center" hidden>
       <div id="winProf" class="prof-slot w-24 mx-auto" aria-hidden="true"></div>
       <h2 id="winTitle" class="font-display text-2xl sm:text-5xl leading-tight text-white" style="text-shadow:0 3px 0 #000,0 0 30px #ff2fd6">You broke reality. Please close your browser before the universe collapses.</h2>
       <p class="score mt-5" aria-live="polite">MATHEMATICS <span class="num">1</span> : <span class="num" id="humScore">0</span> HUMANITY</p>
@@ -790,7 +821,7 @@ const el = {
   meterNum: $('#meterNum'), meterCount: $('#meterCount'), meterSub: $('#meterSub'),
   bubble: $('#bubble'), profSlot: $('#profSlot'), live: $('#live'),
   logBody: $('#logBody'), pbRow: $('#pbRow'), apRate: $('#apRate'),
-  globalCount: $('#globalCount'), liveCount: $('#liveCount'), liveYou: $('#liveYou'), progA: $('#progA'), progB: $('#progB'), progSr: $('#progSr')
+  globalCount: $('#globalCount'), miniResult: $('#miniResult'), liveCount: $('#liveCount'), liveYou: $('#liveYou'), progA: $('#progA'), progB: $('#progB'), progSr: $('#progSr')
 };
 
 function buildGrid(container) {
@@ -995,6 +1026,8 @@ function setMeter(m, animate, forceNewLine) {
   el.meterNum.style.color = color;
   el.meterNum.style.textShadow = glow;
   el.meterCount.textContent = `${m}/52 cards matched`;
+  el.miniResult.textContent = `Last shuffle: ${m}/52 matched · ${pct.toFixed(2)}%`;
+  el.miniResult.style.color = color;
   const tier = SUBTEXT.findIndex(t => m <= t.max);
   if (forceNewLine || tier !== meter.tier) { el.meterSub.textContent = pick(SUBTEXT[tier].lines); meter.tier = tier; }
   cancelAnimationFrame(meter.raf);
@@ -1016,7 +1049,7 @@ const LOG_MAX = 200;
 function deckShort(deck) { let s = ''; for (let i = 0; i < 8; i++) s += (i ? ', ' : '') + CODES[deck[i]]; return `[${s}, …]`; }
 function deckFull(deck) { let s = ''; for (let i = 0; i < 52; i++) s += (i ? ', ' : '') + CODES[deck[i]]; return `[${s}]`; }
 function logRowHTML(n, m, deck, ts, rigged) {
-  return `<tr${m >= 3 ? ' class="hot"' : ''}><td class="num">#${fmt(n)}</td><td><button type="button" class="dk" aria-expanded="false" data-full="${deckFull(deck)}" data-short="${deckShort(deck)}" aria-label="Deck for attempt ${n}, show all 52 cards">${deckShort(deck)}</button></td><td class="num">${m}/52${rigged ? ' 🃏' : ''}</td><td class="num">${timeStr(ts)}</td></tr>`;
+  return `<tr${m >= 3 ? ' class="hot"' : ''}><td class="num">#${fmt(n)}<span class="t2">${timeStr(ts)}</span></td><td><button type="button" class="dk" aria-expanded="false" data-full="${deckFull(deck)}" data-short="${deckShort(deck)}" aria-label="Deck for attempt ${n}, show all 52 cards">${deckShort(deck)}</button></td><td class="num">${m}/52${rigged ? ' 🃏' : ''}</td><td class="num">${timeStr(ts)}</td></tr>`;
 }
 /** entries: newest first. */
 function addLogRows(entries) {
@@ -1047,7 +1080,7 @@ function renderPB() {
   if (!store.best) { el.pbRow.innerHTML = '<td colspan="4">★ Personal Best: none yet. The bar is on the floor.</td>'; return; }
   const deck = Uint8Array.from(b.deck.map(code => CODES.indexOf(code)));
   const d = new Date(b.ts);
-  el.pbRow.innerHTML = `<td class="num">★ PB #${fmt(b.attempt)}</td><td><button type="button" class="dk" aria-expanded="false" data-full="${deckFull(deck)}" data-short="${deckShort(deck)}" aria-label="Personal best deck, show all 52 cards">${deckShort(deck)}</button></td><td class="num">${b.matches}/52</td><td class="num">${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} ${timeStr(b.ts)}</td>`;
+  el.pbRow.innerHTML = `<td class="num">★ PB #${fmt(b.attempt)}<span class="t2">${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span></td><td><button type="button" class="dk" aria-expanded="false" data-full="${deckFull(deck)}" data-short="${deckShort(deck)}" aria-label="Personal best deck, show all 52 cards">${deckShort(deck)}</button></td><td class="num">${b.matches}/52</td><td class="num">${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} ${timeStr(b.ts)}</td>`;
 }
 function checkPB(deck, m, rigged) {
   if (rigged) return;               // rigged wins never pollute the all-time record
@@ -1842,14 +1875,16 @@ function triggerWin(res) {
   setPose('faint', LINES.faint[0]);
   el.live.textContent = 'Fifty-two of fifty-two cards matched. Anomaly detected.';
   const lines = winLogLines(res), log = $('#winLog');
+  // All lines are laid out up front (hidden) and revealed one by one, so nothing below them moves.
+  log.textContent = '';
+  const spans = lines.map(line => { const sp = document.createElement('span'); sp.className = 'ln'; sp.textContent = line; log.appendChild(sp); return sp; });
   if (reduceMotion) {
-    log.textContent = lines.join('\n');
+    spans.forEach(sp => sp.classList.add('on'));
     winLater(() => winParty(), 2500);
   } else {
-    log.textContent = '';
     $('#app').classList.add('glitch');
     if (audio.on && audioCtx()) winSeq.siren = SFX.siren(audio.graph, audio.ctx.currentTime + 0.01);
-    lines.forEach((line, i) => winLater(() => { log.textContent += (i ? '\n' : '') + line; }, 250 + i * 330));
+    spans.forEach((sp, i) => winLater(() => { if (i) spans[i - 1].classList.remove('cur'); sp.classList.add('on', 'cur'); }, 250 + i * 330));
     winLater(() => winParty(), 250 + lines.length * 330 + 500);
   }
   $('#skipBtn').focus();
@@ -1879,19 +1914,20 @@ function winParty() {
     sfx('land', 6);
   }, reduceMotion ? 0 : 1300);
   setPose('faint', null, [$('#winProf')]);
-  if (!reduceMotion) { $('#app').classList.add('shake'); $('#winCard').classList.add('shake'); }
-  winLater(() => { $('#app').classList.remove('shake'); $('#winCard').classList.remove('shake'); }, 1600);
+  if (!reduceMotion) { $('#app').classList.add('shake-y'); $('#winCard').classList.add('shake'); }
+  winLater(() => { $('#app').classList.remove('shake-y'); $('#winCard').classList.remove('shake'); }, 1600);
   startConfetti();
   playFanfare();
   el.live.textContent = 'You broke reality. Mathematics 1, Humanity 1.';
-  $('#restoreBtn').focus();
+  $('#restoreBtn').focus({ preventScroll: true });
+  $('#winCard').parentElement.scrollTop = 0;
 }
 function restoreSpacetime() {
   if (!winOpen) return;
   winOpen = false;
   winSeq.timers.forEach(clearTimeout); winSeq.timers = [];
   stopSiren();
-  $('#app').classList.remove('glitch', 'shake');
+  $('#app').classList.remove('glitch', 'shake-y');
   win.hidden = true;
   win.className = '';
   stopConfetti();
@@ -2111,7 +2147,10 @@ document.addEventListener('keydown', e => {
 });
 
 if ('IntersectionObserver' in window) {
-  new IntersectionObserver(([entry]) => { el.fab.hidden = entry.isIntersecting; }, { threshold: 0.2 }).observe(el.shuffleBtn);
+  const seen = { game: false, btn: true };
+  const updateFab = () => { el.fab.hidden = !(seen.game && !seen.btn); };
+  new IntersectionObserver(([e]) => { seen.btn = e.isIntersecting; updateFab(); }, { threshold: 0.2 }).observe(el.shuffleBtn);
+  new IntersectionObserver(([e]) => { seen.game = e.isIntersecting; updateFab(); }, { rootMargin: '0px 0px -40% 0px' }).observe($('#game'));
 }
 
 function layoutBulbs() {
