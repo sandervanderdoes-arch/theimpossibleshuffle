@@ -1302,7 +1302,10 @@ function renderGlobal() {
    add_attempts() function, capped per call). Leave them empty and the
    meter stays hidden. Shuffles are sent in batches every 5 seconds.
    --------------------------------------------------------------------- */
-const LIVE_COUNTER = { url: '', anonKey: '' };
+const LIVE_COUNTER = {
+  url: 'https://kinyyzyzdrpzxyxuwpdt.supabase.co',
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtpbnl5enl6ZHJwenh5eHV3cGR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3NjQ1MTUsImV4cCI6MjEwNzM0MDUxNX0.Jr4pqGrwW54jTozB7H2sJubirATPjKVkxc5sVgLNZ1c'
+};
 const live = { on: !!(LIVE_COUNTER.url && LIVE_COUNTER.anonKey), total: null, pending: 0, inflight: 0, shown: 0, mine: 0, busy: false };
 const LIVE_MAX_DELTA = 5000000;   // must match the cap in add_attempts()
 function liveHeaders() {
