@@ -357,6 +357,49 @@
   .imp-deal { margin-top:auto; align-self:center; margin-bottom:.45rem; font:800 .7rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.04em; color:#ffe68a; }
   .imp-buy { text-align:center; text-decoration:none; font-size:1rem !important; }
   .imp-why { margin-top:.45rem; text-align:center; font-size:.72rem; color:#9fb5a8; font-style:italic; }
+  .hyper-box { border-radius:16px; border:1px solid rgba(34,243,255,.45); background:rgba(0,20,26,.55); padding:1rem; }
+  .hyper-box.running { box-shadow:0 0 26px rgba(34,243,255,.28); }
+  .hyper-bar { height:14px; border-radius:999px; background:rgba(0,0,0,.55); border:1px solid rgba(34,243,255,.4); overflow:hidden; }
+  #hyperFill { height:100%; width:0; background:repeating-linear-gradient(-45deg,#22f3ff 0 10px,#7ff9ff 10px 20px); transition:width .25s linear; }
+  .hyper-box.running #hyperFill { animation: hyperStripes .6s linear infinite; background-size:28px 28px; }
+  @keyframes hyperStripes { to { background-position:28px 0; } }
+  .hyper-chip { position:fixed; left:calc(.75rem + env(safe-area-inset-left, 0px)); bottom:calc(3.3rem + env(safe-area-inset-bottom, 0px)); z-index:56; min-height:44px; padding:.45rem .85rem; border-radius:999px; border:1px solid #22f3ff; background:rgba(0,20,26,.92); color:#a5fbff; font:800 .78rem "JetBrains Mono", ui-monospace, monospace; box-shadow:0 0 18px rgba(34,243,255,.35); }
+  .hyper-chip[hidden] { display:none; }
+  @media (prefers-reduced-motion: reduce) { .hyper-box.running #hyperFill { animation:none; } }
+  /* History timeline on your station: where in history your shift has reached. */
+  .hyper-track { position:relative; }
+  .tl-ticks { position:absolute; inset:2px 1px; pointer-events:none; }
+  .tl-tick { position:absolute; top:0; bottom:0; width:2px; margin-left:-1px; border-radius:1px; background:rgba(255,230,138,.55); }
+  .tl-tick.on { background:rgba(0,30,34,.55); }
+  .tl-tick.fresh { animation: tickPop 1.2s ease-out 1; }
+  @keyframes tickPop { 0% { background:#fff; box-shadow:0 0 10px 3px #ffd23f; } 100% { box-shadow:none; } }
+  .tl-ends { display:flex; justify-content:space-between; gap:.5rem; margin-top:.3rem; font:700 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.05em; color:#9fb5a8; }
+  .tl { margin-top:.8rem; border-radius:14px; border:1px solid rgba(255,210,63,.35); background:rgba(0,0,0,.35); padding:.8rem .9rem; }
+  .tl-now { display:flex; flex-wrap:wrap; align-items:baseline; gap:.2rem .6rem; }
+  .tl-now .lbl { font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.12em; color:#9fb5a8; }
+  .tl-now b { font-family:Bungee, Impact, system-ui, sans-serif; font-weight:400; font-size:1.45rem; line-height:1.15; color:#ffe68a; text-shadow:0 0 14px rgba(255,210,63,.35); font-variant-numeric:tabular-nums; }
+  .tl-event { display:flex; gap:.7rem; align-items:flex-start; margin-top:.55rem; padding:.6rem .7rem; border-radius:12px; background:rgba(255,210,63,.08); border:1px solid rgba(255,210,63,.3); }
+  .tl-event .ic { font-size:1.6rem; line-height:1; flex:none; }
+  .tl-event .when, .tl-log .when { display:block; font:800 .7rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; color:#ffd23f; }
+  .tl-event p { margin:.1rem 0 0; font-size:.92rem; line-height:1.4; color:#e6f2ea; }
+  .tl-event.pop { animation: tlPop .7s ease-out 1; }
+  @keyframes tlPop { 0% { opacity:0; transform:translateX(18px); box-shadow:0 0 0 rgba(255,210,63,0); } 40% { opacity:1; box-shadow:0 0 22px rgba(255,210,63,.45); } 100% { transform:none; box-shadow:0 0 0 rgba(255,210,63,0); } }
+  .tl-log { list-style:none; margin:.5rem 0 0; padding:0 0 0 .2rem; display:grid; gap:.3rem; }
+  .tl-log li { display:flex; gap:.55rem; align-items:baseline; font-size:.8rem; line-height:1.35; color:#9fb5a8; }
+  .tl-log li .when { display:inline; flex:none; min-width:7.5rem; color:#b89a3a; }
+  .tl-log li .ic { flex:none; }
+  .tl-next { margin-top:.55rem; font-size:.82rem; color:#a5fbff; }
+  .tl-next b { color:#e6f2ea; }
+  .tl-all { margin-top:.5rem; font-size:.8rem; color:#9fb5a8; }
+  .tl-all summary { cursor:pointer; min-height:32px; display:flex; align-items:center; font-weight:700; color:#ffe9a3; }
+  .tl-all summary::before { content:"▸"; margin-right:.4rem; }
+  .tl-all[open] summary::before { content:"▾"; }
+  .tl-all ol { list-style:none; margin:.3rem 0 0; padding:0; display:grid; gap:.25rem; max-height:16rem; overflow:auto; }
+  .tl-all li { display:flex; gap:.5rem; align-items:baseline; line-height:1.35; }
+  .tl-all li .when { flex:none; min-width:7.5rem; font:700 .7rem "JetBrains Mono", ui-monospace, monospace; color:#b89a3a; }
+  .tl-all li.later { opacity:.55; }
+  @media (max-width: 480px) { .tl-log li .when, .tl-all li .when { min-width:6.2rem; } .tl-now b { font-size:1.25rem; } }
+  @media (prefers-reduced-motion: reduce) { .tl-event.pop, .tl-tick.fresh { animation:none; } }
   .imp-extras { border-top:1px dashed rgba(255,210,63,.35); padding-top:1.1rem; }
   .skip-run { border-radius:14px; background:rgba(0,0,0,.4); border:1px solid rgba(34,243,255,.3); padding:.9rem; }
   .opt-btn { min-height:44px; padding:.45rem .8rem; border-radius:10px; border:1px solid rgba(255,210,63,.4); background:rgba(0,0,0,.35); color:#ffe9a3; font-size:.85rem; font-weight:700; }
@@ -633,7 +676,7 @@
   <section id="impatient" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="impTitle" hidden>
     <div class="panel imp-panel p-4 sm:p-6">
       <h2 id="impTitle" class="font-display text-lg sm:text-2xl neon-gold">🎖️ Become a Mission Sponsor</h2>
-      <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">A proper hand shuffle takes about 20 seconds. At that pace, humanity matches the Holy Grail in roughly <b class="text-[#ffe68a]">51 novemdecillion years</b>, give or take a Tuesday. Mission Control can't do that alone. Sponsor a stretch of the mission and your computer becomes an official <b class="text-[#a5fbff]">Mission Control station</b>: it shuffles thousands of years' worth for humanity while you get on with your life. Every shuffle is real and counts toward the total. The Professor calls it cheating. We call it volunteering.</p>
+      <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">A proper hand shuffle takes about 20 seconds. At that pace, humanity matches the Holy Grail in roughly <b class="text-[#ffe68a]">51 novemdecillion years</b>, give or take a Tuesday. Mission Control can't do that alone. Sponsor a stretch of the mission and your computer becomes an official <b class="text-[#a5fbff]">Mission Control station</b>: it shuffles thousands of years' worth for humanity while you get on with your life, and you watch history fly by on its timeline. Every shuffle is real and counts toward the total. The Professor calls it cheating. We call it volunteering.</p>
       <p class="mt-2 text-xs text-[#9fb5a8]">Exchange rate: 1 year of nonstop hand shuffling = 1,577,880 shuffles.</p>
       <div id="impTiers" class="imp-tiers mt-6"></div>
       <p class="mt-4 text-xs text-[#9fb5a8]">*Estimate for this device. Your station runs while this tab is open. Stand down anytime; it picks up where it left off on your next visit. Your rank and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
@@ -643,8 +686,16 @@
           <h3 class="font-display text-base neon-cyan">🛰️ Your station</h3>
           <span id="hyperStatus" class="mono text-xs font-bold text-[#a5fbff]">READY</span>
         </div>
-        <div class="hyper-bar mt-3" aria-hidden="true"><div id="hyperFill"></div></div>
+        <div class="hyper-track mt-3" aria-hidden="true"><div class="hyper-bar"><div id="hyperFill"></div></div><div id="tlTicks" class="tl-ticks"></div></div>
+        <div class="tl-ends" aria-hidden="true"><span id="tlStart"></span><span>TODAY</span></div>
         <p id="hyperYears" class="mono text-sm sm:text-base font-bold neon-gold mt-2" aria-live="polite">0 of 0 years shuffled</p>
+        <div id="tlBox" class="tl">
+          <p class="tl-now"><span class="lbl">🕰️ YOUR STATION HAS REACHED</span> <b id="tlYear">–</b></p>
+          <div id="tlEvent" class="tl-event" aria-live="polite"></div>
+          <ol id="tlLog" class="tl-log" aria-label="Earlier stops"></ol>
+          <p id="tlNext" class="tl-next"></p>
+          <details class="tl-all"><summary id="tlAllSum">Your route</summary><ol id="tlAll"></ol></details>
+        </div>
         <dl class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
           <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SHUFFLES DONE</dt><dd id="hyperDone" class="mono text-sm sm:text-base font-extrabold" style="overflow-wrap:anywhere">0</dd></div>
           <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SPEED</dt><dd id="hyperSpeed" class="mono text-sm sm:text-base font-extrabold">–</dd><dd id="hyperSpeedSub" class="text-[11px] text-[#9fb5a8]"></dd></div>
@@ -1024,7 +1075,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0 }, livePending: 0, lb: null, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1037,7 +1088,7 @@ const store = (() => {
       badges: p.badges && typeof p.badges === 'object' ? p.badges : {},
       manual: n(p.manual), manualBest: n(p.manualBest), royalBest: n(p.royalBest), ludBestMs: n(p.ludBestMs),
       purchases: p.purchases && typeof p.purchases === 'object' ? { tea: n(p.purchases.tea), odds: n(p.purchases.odds), patron: n(p.purchases.patron) } : {},
-      hyper: p.hyper && typeof p.hyper === 'object' ? { bought: n(p.hyper.bought), done: n(p.hyper.done), best: n(p.hyper.best), rate: n(p.hyper.rate) } : { bought: 0, done: 0, best: 0, rate: 0 },
+      hyper: p.hyper && typeof p.hyper === 'object' ? { bought: n(p.hyper.bought), done: n(p.hyper.done), best: n(p.hyper.best), rate: n(p.hyper.rate), from: Math.min(n(p.hyper.from), n(p.hyper.done)) } : { bought: 0, done: 0, best: 0, rate: 0, from: 0 },
       livePending: n(p.livePending),
       lb: p.lb && /^[0-9a-f-]{36}$/.test(p.lb.id) && /^[0-9a-f]{32,64}$/.test(p.lb.secret) ? { id: p.lb.id, secret: p.lb.secret, name: str(p.lb.name).slice(0, 20), sub: n(p.lb.sub) } : null,
       cardBack: str(p.cardBack) || 'classic', outfit: str(p.outfit) || 'classic', certId: str(p.certId), wallSubmitted: p.wallSubmitted === true
@@ -2859,6 +2910,7 @@ function handleThanks() {
   if (!t) return;
   store.purchases = store.purchases || {};
   store.purchases[id] = (store.purchases[id] || 0) + 1;
+  if (store.hyper.done >= store.hyper.bought) store.hyper.from = store.hyper.done;   // a fresh trip through history
   store.hyper.bought += t.years * HAND_YEAR;
   saveStore(true);
   track('thanks-' + id);
@@ -3009,16 +3061,161 @@ function hyperUI() {
   HYPER.rate = rate;
   renderHyper();
 }
+/* ---------- Your station's trip through history ----------
+   The years you sponsor end today, so a Captain (10,000 years) starts around 8000 BCE and
+   shuffles its way to the present. Stops appear as the station reaches them.
+   Years: y = calendar year (negative = BCE); ago = years before today (prehistory). c = approximate. */
+const HISTORY = [
+  { ago: 3300000, ic: '🪨', t: 'Oldest known stone tools (Kenya). Shuffling skills: pending.' },
+  { ago: 1000000, ic: '🔥', t: 'Earliest firm evidence of people using fire (Wonderwerk Cave, South Africa).' },
+  { ago: 780000, ic: '🧲', t: "Earth's magnetic field flips for the last time. Compasses would have been very confused." },
+  { ago: 300000, ic: '🧑', t: 'The oldest known Homo sapiens (Jebel Irhoud, Morocco). The future shufflers have arrived.' },
+  { ago: 164000, ic: '🦪', t: 'Humans start eating seafood (Pinnacle Point, South Africa).' },
+  { ago: 125000, ic: '🦛', t: 'A warm spell: hippos wallow in the River Thames.' },
+  { ago: 115000, ic: '🧊', t: 'The last Ice Age begins.' },
+  { ago: 100000, ic: '🐚', t: 'The oldest known shell beads. Humans discover accessories.' },
+  { ago: 90000, ic: '🎣', t: 'Barbed bone harpoons (Katanda, Congo). Fishing gets serious.' },
+  { ago: 74000, ic: '🌋', t: 'The Toba supervolcano erupts in Sumatra.' },
+  { ago: 73000, ic: '🖍️', t: 'The oldest known drawing: a crosshatch in ochre on a stone (Blombos Cave).' },
+  { ago: 70000, ic: '🚶', t: 'Humans head out of Africa and start spreading across the world.' },
+  { ago: 64000, ic: '🏹', t: 'The oldest known arrowheads (Sibudu Cave, South Africa).' },
+  { ago: 51000, ic: '🐖', t: 'The oldest known story painted on a cave wall: people and a wild pig (Sulawesi).' },
+  { ago: 50000, ic: '🛶', t: 'Humans reach Australia. By boat.' },
+  { ago: 47000, ic: '🧬', t: 'Humans and Neanderthals get close. Most of us still carry about 2% of their DNA.' },
+  { ago: 45000, ic: '🗺️', t: 'Modern humans settle in Europe.' },
+  { ago: 43000, ic: '📏', t: 'The Lebombo bone: the oldest known tally marks. Someone started counting. We still are.' },
+  { ago: 42000, ic: '🎶', t: 'The oldest known flutes, carved from bird bone and mammoth ivory (Germany).' },
+  { ago: 40000, ic: '👋', t: 'The Neanderthals bow out.' },
+  { ago: 36000, ic: '🐎', t: 'Chauvet Cave paintings: lions, horses and rhinos by firelight.' },
+  { ago: 26000, ic: '❄️', t: 'Ice Age peak: ice over Canada and Scandinavia, seas about 120 m lower.' },
+  { ago: 23000, ic: '👣', t: 'Footprints in White Sands, New Mexico: people are in the Americas.' },
+  { ago: 20000, ic: '🏺', t: 'The oldest known pottery (Xianrendong Cave, China).' },
+  { ago: 17000, ic: '🦬', t: 'The Lascaux cave paintings.' },
+  { ago: 14200, ic: '🐕', t: "A dog is buried with its humans (Bonn-Oberkassel). Good boy." },
+  { ago: 11700, ic: '☀️', t: 'The Ice Age ends. The mammoths are worried.' },
+  { y: -9500, c: 1, ic: '🗿', t: 'Göbekli Tepe, the oldest known temple, rises in what is now Turkey.' },
+  { y: -9000, c: 1, ic: '🌾', t: 'Farming begins in the Fertile Crescent.' },
+  { y: -8000, c: 1, ic: '🧱', t: 'Jericho builds a wall and a stone tower.' },
+  { y: -7100, c: 1, ic: '🏘️', t: 'Çatalhöyük: thousands of people, no streets, front doors in the roof.' },
+  { y: -6200, c: 1, ic: '🌊', t: 'Rising seas swallow Doggerland. Britain becomes an island.' },
+  { y: -6000, c: 1, ic: '🍷', t: 'The oldest known wine (Georgia).' },
+  { y: -3500, c: 1, ic: '🛞', t: 'The wheel is invented in Mesopotamia.' },
+  { y: -3200, c: 1, ic: '✍️', t: 'Writing is invented in Sumer. The first texts: mostly receipts.' },
+  { y: -3000, c: 1, ic: '🪨', t: 'Work on Stonehenge begins.' },
+  { y: -2560, c: 1, ic: '🔺', t: 'The Great Pyramid of Giza is finished.' },
+  { y: -2000, c: 1, ic: '🦣', t: 'The last woolly mammoths die out (Wrangel Island), centuries after the Great Pyramid.' },
+  { y: -1754, c: 1, ic: '📜', t: 'The Code of Hammurabi: 282 laws carved in stone.' },
+  { y: -1323, c: 1, ic: '👑', t: 'Tutankhamun is buried.' },
+  { y: -776, ic: '🏃', t: 'The first Olympic Games.' },
+  { y: -753, ic: '🐺', t: 'Rome is founded (according to Rome).' },
+  { y: -508, ic: '🗳️', t: 'Athens tries democracy.' },
+  { y: -221, ic: '🏯', t: 'China is united under its first emperor; work on the Great Wall begins.' },
+  { y: -44, ic: '🗡️', t: 'Julius Caesar has a very bad day at the office.' },
+  { y: 79, ic: '🌋', t: 'Vesuvius buries Pompeii.' },
+  { y: 105, ic: '📄', t: 'Cai Lun refines papermaking in China.' },
+  { y: 476, ic: '🏛️', t: 'The Western Roman Empire falls.' },
+  { y: 868, ic: '📖', t: 'The Diamond Sutra: the oldest dated printed book.' },
+  { y: 1000, c: 1, ic: '⛵', t: "Leif Erikson's Vikings reach North America." },
+  { y: 1066, ic: '⚔️', t: 'The Battle of Hastings.' },
+  { y: 1088, ic: '🎓', t: 'The University of Bologna opens. Still open today.' },
+  { y: 1215, ic: '✒️', t: 'Magna Carta.' },
+  { y: 1271, ic: '🐫', t: 'Marco Polo sets off for China.' },
+  { y: 1347, ic: '🐀', t: 'The Black Death reaches Europe.' },
+  { y: 1370, c: 1, ic: '🃏', t: 'Playing cards reach Europe. The shuffling begins.' },
+  { y: 1440, c: 1, ic: '🖨️', t: "Gutenberg's printing press." },
+  { y: 1480, c: 1, ic: '♠️', t: 'French suits appear: spades, hearts, diamonds and clubs.' },
+  { y: 1492, ic: '🧭', t: 'Columbus reaches the Americas.' },
+  { y: 1503, ic: '🖼️', t: 'Leonardo starts the Mona Lisa.' },
+  { y: 1543, ic: '🌍', t: 'Copernicus: the Earth goes round the Sun.' },
+  { y: 1609, ic: '🔭', t: 'Galileo points a telescope at the sky.' },
+  { y: 1687, ic: '🍎', t: "Newton's laws of motion." },
+  { y: 1712, ic: '🚂', t: 'The first practical steam engine.' },
+  { y: 1776, ic: '🦅', t: 'The US Declaration of Independence.' },
+  { y: 1789, ic: '🥖', t: 'The French Revolution.' },
+  { y: 1859, ic: '🐒', t: "Darwin's On the Origin of Species." },
+  { y: 1876, ic: '📞', t: 'The first phone call.' },
+  { y: 1903, ic: '✈️', t: "The Wright brothers' first flight: 12 seconds." },
+  { y: 1928, ic: '🧫', t: 'Penicillin is discovered.' },
+  { y: 1946, ic: '💾', t: 'ENIAC, one of the first computers, weighs 27 tonnes.' },
+  { y: 1953, ic: '🧬', t: "DNA's double helix." },
+  { y: 1969, ic: '🌕', t: 'Humans walk on the Moon.' },
+  { y: 1989, ic: '🧱', t: 'The Berlin Wall falls.' },
+  { y: 1991, ic: '🌐', t: 'The first website goes online.' },
+  { y: 1992, ic: '🔀', t: 'Mathematicians prove seven riffle shuffles mix a deck. Matching one is another story.' },
+  { y: 2007, ic: '📱', t: 'The iPhone.' }
+];
+function yearNow() { const d = new Date(), y0 = new Date(d.getFullYear(), 0, 1); return d.getFullYear() + (d - y0) / (365.25 * 864e5); }
+/** A point in time ("astronomical" year: 0 = 1 BCE) as a label. */
+function yearLabel(a) {
+  const y = Math.floor(a);
+  return y <= 0 ? `${fmt(1 - y)} BCE` : y < 1000 ? `${y} CE` : String(y);
+}
+function stopLabel(e) {
+  if (e.ago) return `c. ${fmt(e.ago)} years ago`;
+  return (e.c ? 'c. ' : '') + (e.y < 0 ? `${fmt(-e.y)} BCE` : e.y < 1000 ? `${e.y} CE` : String(e.y));
+}
+const TL = { key: '', stops: [], start: 0, now: 0, passed: -1 };
+const tlItem = (e, cls = '') => `<li${cls ? ` class="${cls}"` : ''}><span class="when">${stopLabel(e)}</span><span class="ic" aria-hidden="true">${e.ic}</span><span>${e.t}</span></li>`;
+function tlBuild(bought) {
+  TL.now = yearNow();
+  TL.total = handYears(bought);
+  TL.start = TL.now - TL.total;
+  TL.stops = HISTORY.map(e => ({ ...e, a: e.ago ? TL.now - e.ago : (e.y < 0 ? e.y + 1 : e.y) + .5 }))
+    .filter(e => e.a > TL.start && e.a < TL.now).sort((x, y) => x.a - y.a);
+  $('#tlTicks').innerHTML = TL.stops.map(e => `<span class="tl-tick" style="left:${((e.a - TL.start) / TL.total * 100).toFixed(3)}%"></span>`).join('');
+  $('#tlStart').textContent = yearLabel(TL.start);
+  TL.key = String(bought); TL.passed = -1;
+}
+/** Where in history the station is: called with every station update. */
+function renderTimeline(done, bought, rate) {
+  if (TL.key !== String(bought)) tlBuild(bought);
+  const finished = done >= bought;
+  const cur = finished ? TL.now : TL.start + handYears(done);
+  const passed = finished ? TL.stops.length : TL.stops.filter(e => e.a <= cur).length;
+  $('#tlYear').textContent = finished ? 'Today' : yearLabel(cur);
+  const next = TL.stops[passed];
+  const tn = $('#tlNext');
+  tn.hidden = finished;
+  if (!finished) {
+    const goal = next ? next.a : TL.now;
+    const left = Math.max(0, (goal - TL.start) / TL.total * bought - done) / (rate || hyperRateGuess());
+    const when = left < 60 ? 'less than a minute' : shortDuration(left);
+    const stop = next ? `${next.ic} ${stopLabel(next)}` : '🏁 today';
+    tn.innerHTML = rate ? `Next stop in ${when}: <b>${stop}</b>` : `Next stop: <b>${stop}</b>, ${when} of station time away`;
+  }
+  if (passed === TL.passed) return;
+  const first = TL.passed < 0;
+  TL.passed = passed;
+  $$('#tlTicks .tl-tick').forEach((t, i) => {
+    const on = i < passed;
+    if (on && !t.classList.contains('on') && !first) t.classList.add('fresh');
+    t.classList.toggle('on', on);
+  });
+  const ev = $('#tlEvent'), last = TL.stops[passed - 1];
+  ev.innerHTML = finished
+    ? `<span class="ic" aria-hidden="true">🏁</span><div><span class="when">TODAY</span><p>You made it to the present: ${fmt(Math.round(TL.total))} years of history, shuffled. Matches: 0. History repeats itself; the Holy Grail doesn't.</p></div>`
+    : last
+      ? `<span class="ic" aria-hidden="true">${last.ic}</span><div><span class="when">${stopLabel(last)}</span><p>${last.t}</p></div>`
+      : `<span class="ic" aria-hidden="true">🛰️</span><div><span class="when">${yearLabel(TL.start)}</span><p>Your station drops in. ${TL.start < -9700 ? 'Ice Age, mammoths everywhere, and' : 'Plenty going on, but'} not a single deck of cards on Earth. Start shuffling.</p></div>`;
+  if (!first && !reduceMotion) { ev.classList.remove('pop'); void ev.offsetWidth; ev.classList.add('pop'); }
+  const recent = TL.stops.slice(Math.max(0, passed - 4), Math.max(0, passed - 1)).reverse();
+  $('#tlLog').innerHTML = (finished ? TL.stops.slice(-3).reverse() : recent).map(e => tlItem(e)).join('');
+  $('#tlAllSum').textContent = `Your route: ${passed} of ${TL.stops.length} stops reached`;
+  $('#tlAll').innerHTML = TL.stops.map((e, i) => i < passed ? tlItem(e)
+    : `<li class="later"><span class="when">${stopLabel(e)}</span><span aria-hidden="true">🔒</span><span>Still ahead</span></li>`).join('');
+}
 function renderHyper() {
   const box = $('#hyperBox');
   box.hidden = !store.hyper.bought;
   const chip = $('#hyperChip');
   if (!store.hyper.bought) { chip.hidden = true; return; }
   const left = hyperLeft(), done = store.hyper.done, bought = store.hyper.bought;
-  const frac = Math.min(1, done / bought), busy = HYPER.workers.some(w => w.busy);
-  const yrs = v => handYears(v).toLocaleString('en-US', { maximumFractionDigits: handYears(bought) < 100 ? 1 : 0 });
+  const from = Math.min(store.hyper.from || 0, done), tourDone = done - from, tour = bought - from;   // this tour only
+  const frac = Math.min(1, tourDone / tour), busy = HYPER.workers.some(w => w.busy);
+  const yrs = v => handYears(v).toLocaleString('en-US', { maximumFractionDigits: handYears(tour) < 100 ? 1 : 0 });
   $('#hyperFill').style.width = (frac * 100).toFixed(2) + '%';
-  $('#hyperYears').textContent = `${yrs(done)} of ${yrs(bought)} years shuffled`;
+  $('#hyperYears').textContent = `${yrs(tourDone)} of ${yrs(tour)} years shuffled`;
+  renderTimeline(tourDone, tour, HYPER.running ? HYPER.rate || 0 : 0);
   $('#hyperDone').textContent = fmt(done);
   const rate = HYPER.running ? HYPER.rate || 0 : 0;
   $('#hyperSpeed').textContent = rate ? `${fmt(Math.round(rate))}/sec` : '–';
@@ -3034,7 +3231,7 @@ function renderHyper() {
   $('#hyperDoneNote').hidden = left > 0;
   if (left <= 0) $('#hyperDoneNote').innerHTML = `<b>Assignment complete, ${rankName()}.</b> ${yrs(bought)} years of nonstop shuffling: ${fmt(bought)} real shuffles, best match <b>${store.hyper.best}/52</b>, matches <b>0</b>.${hasOdds() ? ' Your Certificate of Trying Anyway is ready below.' : ''} Mission Control thanks you for your service. Ready for another tour? Pick a rank above.`;
   chip.hidden = !HYPER.running || HYPER.boxVisible;
-  if (!chip.hidden) chip.textContent = `🛰️ ${yrs(done)} of ${yrs(bought)} yrs`;
+  if (!chip.hidden) chip.textContent = `🛰️ ${$('#tlYear').textContent} · ${Math.floor(frac * 100)}%`;
   if (!HYPER.running) refreshEtas();
 }
 
