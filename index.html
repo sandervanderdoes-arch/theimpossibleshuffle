@@ -939,6 +939,9 @@ const leadingZeros = str => { const m = /^0\.(0*)/.exec(str); return m ? m[1].le
      Pacific Ocean ............. ≈ 7 × 10^8 km^3 (one drop ≈ 0.05 mL)
      Sheet of paper ............ 0.1 mm thick
      Earth–Sun distance ........ 1.5 × 10^11 m
+     Fastest supercomputer ..... 2 × 10^18 operations/s (exascale), ≈ 30 MW
+                                 (generously: one whole shuffle per operation)
+     The Sun ................... 3.828 × 10^26 W for ≈ 10^10 years
    This block is pure (no DOM), so verify-comparisons.mjs runs it in Node too. */
 const COMPARISONS = [
   "There are more possible deck orders than atoms on Earth. About 600 quadrillion times more.",
@@ -946,12 +949,13 @@ const COMPARISONS = [
   "It's roughly like calling 226 coin flips in a row correctly.",
   "If all 8 billion humans had shuffled once per second since the Big Bang, we'd have tried less than 1 in 10⁴⁰ of all possible orders.",
   "Even with the entire planet shuffling nonstop, one per second each, the expected wait is ~3 × 10⁵⁰ years. That's about 2 × 10⁴⁰ times the current age of the universe.",
+  "The world's fastest supercomputer, doing 2 quintillion operations per second, would need about 10⁴² years. It would also eat 10 trillion Suns' worth of energy. We're doing it with a button.",
   "Take one step every billion years around the equator. After each lap, remove one drop from the Pacific. When it's empty, lay down one sheet of paper and refill it. By the time the paper stack reaches the Sun, less than 0.1% of 52! seconds will have passed."
 ];
 function verifyComparisons(F52) {
   const C = { earthAtoms: 1.33e50, powerball: 292201338n, people: 8e9, universeYears: 1.38e10,
     yearSec: 365.25 * 86400, equatorM: 40075e3, stepM: 1, pacificM3: 7e8 * 1e9, dropM3: 5e-8,
-    paperM: 1e-4, sunM: 1.5e11 };
+    paperM: 1e-4, sunM: 1.5e11, superOps: 2e18, superWatts: 30e6, sunWatts: 3.828e26, sunYears: 1e10 };
   const f = Number(F52);
   const checks = [];
   const add = (claim, value, ok) => checks.push({ claim, value, ok });
@@ -967,6 +971,10 @@ function verifyComparisons(F52) {
   add('expected wait ≈ 3 × 10^50 years', years, years > 2.5e50 && years < 3.5e50);
   const ages = years / C.universeYears;
   add('≈ 2 × 10^40 universe ages', ages, ages > 1.5e40 && ages < 2.5e40);
+  const superSec = f / C.superOps, superYears = superSec / C.yearSec;
+  add('supercomputer needs ≈ 10^42 years', superYears, superYears > 5e41 && superYears < 5e42);
+  const suns = (superSec * C.superWatts) / (C.sunWatts * C.sunYears * C.yearSec);
+  add('≈ 10 trillion Suns of energy (lifetime output)', suns, suns > 5e12 && suns < 2e13);
   const steps = (C.equatorM / C.stepM) * (C.pacificM3 / C.dropM3) * (C.sunM / C.paperM);
   const frac = (steps * 1e9 * C.yearSec) / f;
   add('paper stack reaches the Sun before 0.1% of 52! s', frac, frac < 0.001);
