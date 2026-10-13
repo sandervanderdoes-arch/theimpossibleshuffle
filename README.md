@@ -14,7 +14,8 @@ Served by GitHub Pages from the `main` branch root. `CNAME` holds the custom dom
 
 ## Mission sponsors ("Are you impatient?")
 
-- Three Stripe Payment Links (`SITE.fund.tea`, `odds`, `patron` in `index.html`) sell a 1,000,000 / 500,000,000 / 1,000,000,000-year time skip plus extras. Each link's "After payment" redirect goes to `https://theimpossibleshuffle.com/?thanks=tea` (or `odds`, `patron`), which unlocks the extras in that browser.
-- A time skip is drawn from the exact odds: a match with probability N / 52!, and the best match from the real distribution of the maximum. It never touches the humankind counter and has no prize.
+- The unit is the hand-shuffle year: a proper hand shuffle takes about 20 seconds (seven riffles, Bayer & Diaconis 1992), so one year of nonstop hand shuffling is 1,577,880 shuffles.
+- Three Stripe Payment Links (`SITE.fund.tea`, `odds`, `patron` in `index.html`) sell 1,000 / 10,000 / 100,000 years for $1.92 / $8.07 / $52. Each link's "After payment" redirect goes to `https://theimpossibleshuffle.com/?thanks=tea` (or `odds`, `patron`), which loads the years into that browser's Hyperdrive and unlocks the extras.
+- Hyperdrive really performs every shuffle: the same crypto Fisher–Yates in Web Workers on every processor core (roughly 0.5–0.7 million shuffles per second per core). Every shuffle counts toward stats, badges and the humankind counter. The credit only goes down as shuffles are done, so pausing or closing the tab loses nothing. No prize.
 - The Certificate of Futility is drawn on a canvas and saved as an A4 PDF with jsPDF (loaded from cdnjs only when needed; falls back to a PNG).
 - The Wall of Futility uses the `sponsors` table from `supabase/sponsors.sql`. Names arrive unapproved; approve them in the Supabase Table Editor.
