@@ -9,7 +9,10 @@
 --     them (less than a 0.1% chance) and anything above 20 matches,
 --   * only lets the browser that created a row update it (secret hash).
 -- Visitors can read names and scores, never ids or secrets.
+-- Ranking: best match first; on a tie, fewer tries (shuffles needed to reach it) wins,
+-- then whoever got there first.
 -- To remove someone: Table Editor -> leaderboard -> set "hidden" to true.
+-- Safe to run again: it updates an existing leaderboard without losing entries.
 
 create extension if not exists pgcrypto with schema extensions;
 
@@ -24,7 +27,11 @@ create table if not exists public.leaderboard (
   updated_at   timestamptz not null default now(),
   hidden       boolean not null default false
 );
-create index if not exists leaderboard_rank_idx on public.leaderboard (best desc, achieved_at asc) where not hidden;
+-- Tries: the shuffle number at which the best was reached (added in v2).
+alter table public.leaderboard add column if not exists attempts bigint not null default 0 check (attempts >= 0);
+update public.leaderboard set attempts = shuffles where attempts = 0;
+drop index if exists public.leaderboard_rank_idx;
+create index leaderboard_rank_idx on public.leaderboard (best desc, attempts asc, achieved_at asc) where not hidden;
 
 alter table public.leaderboard enable row level security;
 
@@ -36,9 +43,46 @@ create policy "Anyone can read the visible leaderboard"
 -- No insert, update or delete policies: changes only happen inside submit_best().
 
 revoke all on public.leaderboard from anon, authenticated;
-grant select (name, best, shuffles, achieved_at) on public.leaderboard to anon, authenticated;
+grant select (name, best, attempts, shuffles, achieved_at) on public.leaderboard to anon, authenticated;
 
-create or replace function public.submit_best(p_player uuid, p_secret text, p_name text, p_deck text, p_shuffles bigint)
+drop function if exists public.submit_best(uuid, text, text, text, bigint);
+drop function if exists public.submit_best(uuid, text, text, text, bigint, bigint);
+drop function if exists public.leaderboard_rank(int);
+drop function if exists public.leaderboard_rank(int, uuid);
+drop function if exists public.leaderboard_rank(int, uuid, bigint);
+
+-- Where a score ranks, in the same order as the list.
+-- With p_player: that player's own position. Without: where a new score would land today.
+create function public.leaderboard_rank(p_best int, p_player uuid default null, p_attempts bigint default null)
+returns json
+language plpgsql
+stable
+security definer
+set search_path = public
+as $$
+declare
+  me public.leaderboard%rowtype;
+  r bigint;
+  n bigint;
+begin
+  select count(*) into n from public.leaderboard where not hidden;
+  if p_player is not null then
+    select * into me from public.leaderboard where player_id = p_player and not hidden;
+  end if;
+  if me.player_id is not null then
+    select 1 + count(*) into r from public.leaderboard
+     where not hidden and (best > me.best
+       or (best = me.best and (attempts < me.attempts or (attempts = me.attempts and achieved_at < me.achieved_at))));
+  else
+    select 1 + count(*) into r from public.leaderboard
+     where not hidden and (best > p_best or (best = p_best and attempts <= coalesce(p_attempts, 9223372036854775807)));
+    n := n + 1;   -- counting the newcomer
+  end if;
+  return json_build_object('rank', r, 'players', n);
+end;
+$$;
+
+create function public.submit_best(p_player uuid, p_secret text, p_name text, p_deck text, p_shuffles bigint, p_attempts bigint)
 returns json
 language plpgsql
 security definer
@@ -74,20 +118,22 @@ begin
   for i in 1..52 loop
     if cards[i] = grail[i] then m := m + 1; end if;
   end loop;
-  if m > 20 or coalesce(p_shuffles, 0) < min_shuffles[m + 1] then
+  -- p_attempts: the shuffle on which this deck came up, so it can't exceed the total.
+  if p_attempts is null or p_attempts < 1 or p_attempts > coalesce(p_shuffles, 0)
+     or m > 20 or p_attempts < min_shuffles[m + 1] then
     raise exception 'implausible';
   end if;
 
   h := encode(digest(p_secret, 'sha256'), 'hex');
   select * into row_ from public.leaderboard where player_id = p_player;
   if not found then
-    insert into public.leaderboard (player_id, secret_hash, name, best, deck, shuffles)
-    values (p_player, h, clean_name, m, p_deck, p_shuffles);
+    insert into public.leaderboard (player_id, secret_hash, name, best, deck, shuffles, attempts)
+    values (p_player, h, clean_name, m, p_deck, p_shuffles, p_attempts);
   elsif row_.secret_hash <> h then
     raise exception 'bad player';
   elsif m > row_.best then
     update public.leaderboard
-       set name = clean_name, best = m, deck = p_deck, shuffles = p_shuffles, achieved_at = now(), updated_at = now()
+       set name = clean_name, best = m, deck = p_deck, shuffles = p_shuffles, attempts = p_attempts, achieved_at = now(), updated_at = now()
      where player_id = p_player;
   else
     update public.leaderboard
@@ -98,36 +144,7 @@ begin
 end;
 $$;
 
--- Where a score ranks, in the same order as the list (best first, ties go to whoever got there first).
--- With p_player: that player's own position. Without: where a new score of p_best would land today.
-create or replace function public.leaderboard_rank(p_best int, p_player uuid default null)
-returns json
-language plpgsql
-stable
-security definer
-set search_path = public
-as $$
-declare
-  me public.leaderboard%rowtype;
-  r bigint;
-  n bigint;
-begin
-  select count(*) into n from public.leaderboard where not hidden;
-  if p_player is not null then
-    select * into me from public.leaderboard where player_id = p_player and not hidden;
-  end if;
-  if me.player_id is not null then
-    select 1 + count(*) into r from public.leaderboard
-     where not hidden and (best > me.best or (best = me.best and achieved_at < me.achieved_at));
-  else
-    select 1 + count(*) into r from public.leaderboard where not hidden and best >= p_best;
-    n := n + 1;   -- counting the newcomer
-  end if;
-  return json_build_object('rank', r, 'players', n);
-end;
-$$;
-
-revoke all on function public.submit_best(uuid, text, text, text, bigint) from public;
-revoke all on function public.leaderboard_rank(int, uuid) from public;
-grant execute on function public.submit_best(uuid, text, text, text, bigint) to anon, authenticated;
-grant execute on function public.leaderboard_rank(int, uuid) to anon, authenticated;
+revoke all on function public.submit_best(uuid, text, text, text, bigint, bigint) from public;
+revoke all on function public.leaderboard_rank(int, uuid, bigint) from public;
+grant execute on function public.submit_best(uuid, text, text, text, bigint, bigint) to anon, authenticated;
+grant execute on function public.leaderboard_rank(int, uuid, bigint) to anon, authenticated;

@@ -24,4 +24,6 @@ Served by GitHub Pages from the `main` branch root. `CNAME` holds the custom dom
 
 - Run `supabase/leaderboard.sql` once in the Supabase SQL editor. Until then the section stays hidden.
 - Joining is opt-in: a player picks a name, and every new personal best is sent as the full 52-card deck. The database counts the matches itself, rejects scores that are implausible for the number of shuffles behind them (less than a 0.1% chance) and only lets the browser that created an entry update it.
+- Ranking: best match first; on a tie, fewer tries (the shuffle number on which the best came up) wins, then whoever got there first. The file is safe to run again and upgrades an existing table.
+- "Share the top 3" draws a 1080×1350 image of the podium for Instagram.
 - To remove an entry: Table Editor → `leaderboard` → set `hidden` to true.

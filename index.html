@@ -238,6 +238,7 @@
   .lb-me .row { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.6rem; align-items:center; }
   .lb-me .nudge { margin-top:.5rem; font-size:.82rem; color:#9fb5a8; }
   .lb-me .nudge a { color:#ff9bec; text-decoration:underline; text-underline-offset:3px; }
+  @media (max-width: 640px) { .lb th:nth-child(6), .lb td:nth-child(6) { display:none; } }
   @media (max-width: 480px) { .lb th:nth-child(5), .lb td:nth-child(5) { display:none; } .lb th, .lb td { padding:.4rem .4rem; } }
   /* Narrow phones: the time moves under the attempt number so the table fits. */
   @media (max-width: 480px) {
@@ -593,13 +594,13 @@
     <div class="panel p-4 sm:p-6">
       <div class="flex items-baseline justify-between gap-2 flex-wrap">
         <h2 id="lbTitle" class="font-display text-lg sm:text-2xl neon-gold">🏆 Luckiest Shufflers</h2>
-        <span id="lbCount" class="mono text-xs text-[#9fb5a8]"></span>
+        <div class="flex items-center gap-3 flex-wrap"><span id="lbCount" class="mono text-xs text-[#9fb5a8]"></span><button type="button" id="lbShare" class="chip-btn !text-xs">📤 Share the top 3</button></div>
       </div>
-      <p class="mt-1 text-sm text-[#cfe3d7]">The best single shuffles anyone has made, worldwide. Ties go to whoever got there first. Mission Control checks every deck.</p>
+      <p class="mt-1 text-sm text-[#cfe3d7]">The best single shuffles anyone has made, worldwide. Same score? Whoever needed the fewest tries ranks higher. Mission Control checks every deck.</p>
       <div id="lbMe" class="lb-me mt-4" aria-live="polite"></div>
       <div class="lb-wrap mt-4">
         <table class="lb">
-          <thead><tr><th scope="col">#</th><th scope="col">Shuffler</th><th scope="col">Best</th><th scope="col">Odds</th><th scope="col">When</th></tr></thead>
+          <thead><tr><th scope="col">#</th><th scope="col">Shuffler</th><th scope="col">Best</th><th scope="col">Tries</th><th scope="col">Odds</th><th scope="col">When</th></tr></thead>
           <tbody id="lbBody"></tbody>
         </table>
       </div>
@@ -1839,7 +1840,7 @@ const LIVE_COUNTER = {
   anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtpbnl5enl6ZHJwenh5eHV3cGR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3NjQ1MTUsImV4cCI6MjEwNzM0MDUxNX0.Jr4pqGrwW54jTozB7H2sJubirATPjKVkxc5sVgLNZ1c'
 };
 const live = { on: !!(LIVE_COUNTER.url && LIVE_COUNTER.anonKey), total: null, pending: 0, inflight: 0, shown: 0, mine: 0, busy: false };
-const LB = { on: live.on, ready: false, rows: [], players: 0, rank: null, timer: 0, lastToast: 0, busy: false };   // leaderboard state (section 15c)
+const LB = { on: live.on, v2: true, ready: false, rows: [], players: 0, rank: null, timer: 0, lastToast: 0, busy: false };   // leaderboard state (section 15c)
 const LIVE_MAX_DELTA = 5000000;   // must match the cap in add_attempts()
 function liveHeaders() {
   return { apikey: LIVE_COUNTER.anonKey, Authorization: 'Bearer ' + LIVE_COUNTER.anonKey, 'Content-Type': 'application/json' };
@@ -2457,6 +2458,7 @@ function toast(html) {
 /* ---------- Share: a result card image plus copyable text ---------- */
 function shareText() {
   const url = location.href.split(/[?#]/)[0];
+  if (cardState.mode === 'lb') return `There's now a world ranking. Who shuffles the luckiest deck? 🃏 ${url}`;
   return `I shuffled ${fmt(store.allTime)} times for humanity. Best: ${bestEver()}/52. Mathematics: 1, Humanity: 0. Your turn: ${url}`;
 }
 async function copyText(text) {
@@ -2532,7 +2534,67 @@ function drawCard(cv, withProf) {
   c.font = '42px Bungee, Impact, sans-serif'; c.fillStyle = '#a5fbff'; c.shadowColor = 'rgba(34,243,255,.7)'; c.shadowBlur = 16;
   c.fillText('theimpossibleshuffle.com', S / 2, 995); c.shadowBlur = 0;
 }
-const cardState = { blob: null, url: '' };
+const cardState = { blob: null, url: '', mode: 'result' };
+const cardFile = () => (cardState.mode === 'lb' ? 'luckiest-shufflers.png' : 'impossible-shuffle.png');
+/** Draws the leaderboard's top 3 as a 1080×1350 card (Instagram post or story size). */
+function drawLbCard(cv) {
+  const W = 1080, H = 1350, c = cv.getContext('2d');
+  cv.width = W; cv.height = H;
+  const bg = c.createRadialGradient(W * 0.3, 0, 50, W * 0.5, H * 0.4, H * 0.9);
+  bg.addColorStop(0, '#145236'); bg.addColorStop(0.45, '#082a1a'); bg.addColorStop(1, '#020a06');
+  c.fillStyle = bg; c.fillRect(0, 0, W, H);
+  c.fillStyle = 'rgba(0,0,0,.14)'; for (let y = 0; y < H; y += 3) c.fillRect(0, y, W, 1);
+  roundRectPath(c, 30, 30, W - 60, H - 60, 36); c.strokeStyle = 'rgba(255,210,63,.5)'; c.lineWidth = 3; c.stroke();
+  let k = 0; const bulb = (x, y) => { c.beginPath(); c.arc(x, y, 6, 0, 7); c.fillStyle = k++ % 2 ? '#ffb3f0' : '#ffeaa0'; c.shadowColor = k % 2 ? 'rgba(255,47,214,.9)' : 'rgba(255,210,63,.9)'; c.shadowBlur = 12; c.fill(); c.shadowBlur = 0; };
+  for (let x = 70; x <= W - 70; x += 34) { bulb(x, 30); bulb(x, H - 30); }
+  for (let y = 70; y <= H - 70; y += 34) { bulb(30, y); bulb(W - 30, y); }
+  c.textAlign = 'center';
+  c.font = '44px Bungee, Impact, sans-serif'; c.fillStyle = '#ff8bec'; c.shadowColor = '#ff2fd6'; c.shadowBlur = 18;
+  c.fillText('THE IMPOSSIBLE SHUFFLE', W / 2, 140); c.shadowBlur = 0;
+  c.font = '96px Bungee, Impact, sans-serif'; c.fillStyle = '#ffe68a'; c.shadowColor = 'rgba(255,210,63,.75)'; c.shadowBlur = 26;
+  c.fillText('WORLD RANKING', W / 2, 270); c.shadowBlur = 0;
+  c.font = '700 44px system-ui, sans-serif'; c.fillStyle = '#ffffff';
+  c.fillText('Who shuffles the luckiest deck?', W / 2, 345);
+  const medals = [['#ffd23f', '#5b3a00'], ['#d9dde6', '#33373f'], ['#d08a4e', '#3b1d05']];
+  LB.rows.slice(0, 3).forEach((r, i) => {
+    const y = 410 + i * 230, x = 90, w = W - 180, h = 200;
+    roundRectPath(c, x, y, w, h, 28); c.fillStyle = i === 0 ? 'rgba(255,210,63,.16)' : 'rgba(0,0,0,.45)'; c.fill();
+    c.strokeStyle = i === 0 ? 'rgba(255,210,63,.8)' : 'rgba(34,243,255,.35)'; c.lineWidth = 3; c.stroke();
+    c.beginPath(); c.arc(x + 95, y + h / 2, 58, 0, 7); c.fillStyle = medals[i][0]; c.fill();
+    c.font = '64px Bungee, Impact, sans-serif'; c.fillStyle = medals[i][1]; c.textAlign = 'center'; c.fillText(String(i + 1), x + 95, y + h / 2 + 24);
+    c.textAlign = 'left'; c.font = '800 54px system-ui, sans-serif'; c.fillStyle = '#ffffff';
+    c.fillText(r.name, x + 185, y + 88, 470);
+    c.font = '600 32px system-ui, sans-serif'; c.fillStyle = '#b9cdc1';
+    c.fillText(`${r.attempts ? `in ${fmt(r.attempts)} tries · ` : ''}1 in ${oneIn(r.best)} luck`, x + 185, y + 145, 470);
+    c.textAlign = 'right'; c.font = '700 40px "JetBrains Mono", monospace'; c.fillStyle = '#ffe68a';
+    c.fillText('/52', x + w - 40, y + 135);
+    const slashW = c.measureText('/52').width;
+    c.font = '100px Bungee, Impact, sans-serif'; c.shadowColor = 'rgba(255,210,63,.6)'; c.shadowBlur = 18;
+    c.fillText(`${r.best}`, x + w - 46 - slashW, y + 135); c.shadowBlur = 0;
+  });
+  c.textAlign = 'center';
+  c.font = '800 40px system-ui, sans-serif'; c.fillStyle = '#ffffff'; c.fillText('Can you beat them?', W / 2, 1160);
+  c.font = '800 28px "JetBrains Mono", monospace'; c.fillStyle = '#9fb5a8'; c.fillText(`${fmt(LB.players)} shufflers · Mathematics 1 : 0 Humanity`, W / 2, 1210);
+  c.font = '46px Bungee, Impact, sans-serif'; c.fillStyle = '#a5fbff'; c.shadowColor = 'rgba(34,243,255,.7)'; c.shadowBlur = 16;
+  c.fillText('theimpossibleshuffle.com', W / 2, 1280); c.shadowBlur = 0;
+}
+async function openCard(mode) {
+  cardState.mode = mode;
+  try { await Promise.all([document.fonts.load('64px Bungee'), document.fonts.load('800 40px "JetBrains Mono"')]); } catch (e) { /* fallback fonts */ }
+  let blob;
+  if (mode === 'lb') {
+    const cv = document.createElement('canvas'); drawLbCard(cv);
+    blob = await new Promise((res, rej) => cv.toBlob(b => (b ? res(b) : rej(new Error('no blob'))), 'image/png'));
+  } else blob = await makeCard();
+  cardState.blob = blob;
+  if (cardState.url) URL.revokeObjectURL(cardState.url);
+  cardState.url = URL.createObjectURL(blob);
+  $('#cardImg').src = cardState.url;
+  $('#cardTitle').textContent = mode === 'lb' ? 'Share the world ranking' : 'Your result card';
+  $('#cardImg').alt = mode === 'lb' ? 'The top 3 of the world ranking' : 'Your result card with your best match, number of shuffles and badges';
+  const file = new File([blob], cardFile(), { type: 'image/png' });
+  $('#cardShare').hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
+}
 async function makeCard() {
   try { await Promise.all([document.fonts.load('64px Bungee'), document.fonts.load('800 40px "JetBrains Mono"'), document.fonts.load('700 34px "JetBrains Mono"')]); } catch (e) { /* fallback fonts */ }
   await loadProfImg();
@@ -2545,29 +2607,29 @@ $('#shareBtn').addEventListener('click', async () => {
   track('share');
   if (!store.allTime) { toast('🃏 <b>Shuffle at least once</b>, then brag about your failure.'); return; }
   const dlg = $('#cardDlg');
-  try {
-    cardState.blob = await makeCard();
-    if (cardState.url) URL.revokeObjectURL(cardState.url);
-    cardState.url = URL.createObjectURL(cardState.blob);
-    $('#cardImg').src = cardState.url;
-    const file = new File([cardState.blob], 'impossible-shuffle.png', { type: 'image/png' });
-    $('#cardShare').hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
-  } catch (e) { copyText(shareText()); return; }       // no canvas: fall back to plain text
+  try { await openCard('result'); } catch (e) { copyText(shareText()); return; }       // no canvas: fall back to plain text
   if (typeof dlg.showModal === 'function') dlg.showModal(); else copyText(shareText());
 });
 $('#cardShare').addEventListener('click', async () => {
-  const file = new File([cardState.blob], 'impossible-shuffle.png', { type: 'image/png' });
-  try { await navigator.share({ files: [file], text: shareText(), title: 'The Impossible Shuffle' }); track('share-card-native'); }
+  const file = new File([cardState.blob], cardFile(), { type: 'image/png' });
+  try { await navigator.share({ files: [file], text: shareText(), title: 'The Impossible Shuffle' }); track(cardState.mode === 'lb' ? 'share-lb-native' : 'share-card-native'); }
   catch (e) { if (e.name !== 'AbortError') copyText(shareText()); }
 });
 $('#cardSave').addEventListener('click', () => {
   const a = document.createElement('a');
-  a.href = cardState.url; a.download = 'impossible-shuffle.png';
+  a.href = cardState.url; a.download = cardFile();
   document.body.appendChild(a); a.click(); a.remove();
   track('share-card-save');
 });
 $('#cardCopy').addEventListener('click', () => { copyText(shareText()); track('share-text'); });
 $('#cardClose').addEventListener('click', () => $('#cardDlg').close());
+$('#lbShare').addEventListener('click', async () => {
+  if (!LB.rows.length) return;
+  track('share-lb');
+  try { await openCard('lb'); } catch (e) { console.warn('Leaderboard card failed:', e); copyText(shareText()); return; }
+  const dlg = $('#cardDlg');
+  if (typeof dlg.showModal === 'function') dlg.showModal(); else copyText(shareText());
+});
 $('#cardDlg').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
 
 function updateRiggedBadge() {
@@ -3152,6 +3214,11 @@ function initImpatient() {
    scores that are implausible for the number of shuffles behind them.
    Rank comments ("#23 of 1,204 shufflers") work for everyone, joined or not.
    ===================================================================== */
+function lbRankArgs(best, player) {
+  const a = { p_best: best, p_player: player };
+  if (LB.v2) a.p_attempts = store.best ? Math.max(1, store.best.attempt || 1) : null;
+  return a;
+}
 /** Chance that one shuffle gets k or more matches. */
 function tailP(k) { let q = 0; for (let j = k; j <= 52; j++) q += pFixed(j); return q; }
 const oneIn = k => fmt(Math.round(1 / tailP(k)));
@@ -3174,11 +3241,13 @@ async function lbRpc(fn, body) {
 async function lbLoad() {
   if (!LB.on) return;
   try {
-    const r = await fetch(`${LIVE_COUNTER.url}/rest/v1/leaderboard?select=name,best,shuffles,achieved_at&order=best.desc,achieved_at.asc&limit=100`, { headers: liveHeaders(), cache: 'no-store' });
+    const q = v2 => `${LIVE_COUNTER.url}/rest/v1/leaderboard?select=name,best,${v2 ? 'attempts,' : ''}shuffles,achieved_at&order=best.desc,${v2 ? 'attempts.asc,' : ''}achieved_at.asc&limit=100`;
+    let r = await fetch(q(LB.v2), { headers: liveHeaders(), cache: 'no-store' });
+    if (!r.ok && LB.v2) { r = await fetch(q(false), { headers: liveHeaders(), cache: 'no-store' }); if (r.ok) LB.v2 = false; }   // older table without tries
     if (!r.ok) throw new Error('HTTP ' + r.status);
     LB.rows = await r.json();
     const joined = store.lb && store.lb.name && store.lb.sub;
-    const stats = await lbRpc('leaderboard_rank', { p_best: store.best ? store.best.matches : 99, p_player: joined ? store.lb.id : null });
+    const stats = await lbRpc('leaderboard_rank', lbRankArgs(store.best ? store.best.matches : 99, joined ? store.lb.id : null));
     LB.players = store.best || joined ? stats.players : Math.max(0, stats.players - 1);
     if (store.best) LB.rank = stats.rank;
     LB.ready = true;
@@ -3196,8 +3265,10 @@ function renderLB() {
     const medal = ['🥇', '🥈', '🥉'][i] || String(i + 1);
     const when = new Date(r.achieved_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const name = document.createElement('span'); name.textContent = r.name;
-    return `<tr class="${cls}"><td>${medal}</td><td>${name.innerHTML}${isMe ? ' <span class="text-[#22f3ff]">(you)</span>' : ''}</td><td class="best">${r.best}/52</td><td>1 in ${oneIn(r.best)}</td><td>${when}</td></tr>`;
-  }).join('') : '<tr><td colspan="5">Nobody yet. The first spot is yours for the taking.</td></tr>';
+    const tries = r.attempts ? fmt(r.attempts) : '–';
+    return `<tr class="${cls}"><td>${medal}</td><td>${name.innerHTML}${isMe ? ' <span class="text-[#22f3ff]">(you)</span>' : ''}</td><td class="best">${r.best}/52</td><td>${tries}</td><td>1 in ${oneIn(r.best)}</td><td>${when}</td></tr>`;
+  }).join('') : '<tr><td colspan="6">Nobody yet. The first spot is yours for the taking.</td></tr>';
+  $('#lbShare').hidden = !LB.rows.length;
   $('#lbCount').textContent = LB.players ? `Top ${Math.min(100, LB.rows.length)} of ${fmt(LB.players)} shufflers` : '';
   renderLBMe();
 }
@@ -3219,10 +3290,10 @@ function renderLBMe() {
   const rankTxt = LB.rank && best !== null ? `#${fmt(LB.rank)} of ${fmt(Math.max(LB.players, LB.rank))}` : '';
   if (best === null) { box.innerHTML = 'Shuffle at least once, then claim your spot on the board.'; return; }
   if (joined) {
-    box.innerHTML = `You're on the board as <b>${escapeHtml(store.lb.name)}</b>: best <b>${best}/52</b>${rankTxt ? `, rank <b>${rankTxt}</b>` : ''}. <button type="button" class="chip-btn !text-xs !min-h-0 !py-1 ml-1" data-lb="rename">Change name</button>${lbNudge()}`;
+    box.innerHTML = `You're on the board as <b>${escapeHtml(store.lb.name)}</b>: best <b>${best}/52</b> in ${fmt(Math.max(1, store.best.attempt || 1))} tries${rankTxt ? `, rank <b>${rankTxt}</b>` : ''}. <button type="button" class="chip-btn !text-xs !min-h-0 !py-1 ml-1" data-lb="rename">Change name</button>${lbNudge()}`;
     return;
   }
-  box.innerHTML = `Your best: <b>${best}/52</b>${rankTxt ? `. That would rank <b>${rankTxt}</b> worldwide` : ''}. Put your name on the board:
+  box.innerHTML = `Your best: <b>${best}/52</b> in ${fmt(Math.max(1, store.best.attempt || 1))} tries${rankTxt ? `. That would rank <b>${rankTxt}</b> worldwide` : ''}. Put your name on the board:
     <form class="row" data-lb="join"><label class="sr-only" for="lbName">Shuffler name</label><input id="lbName" class="imp-input" maxlength="20" placeholder="Your shuffler name" autocomplete="nickname" required><button type="submit" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Join the leaderboard</button></form>${lbNudge()}`;
 }
 function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
@@ -3230,7 +3301,9 @@ async function lbSubmit(quiet) {
   if (!LB.ready || !store.lb || !store.lb.name || !store.best || LB.busy) return null;
   LB.busy = true;
   try {
-    const res = await lbRpc('submit_best', { p_player: store.lb.id, p_secret: store.lb.secret, p_name: store.lb.name, p_deck: store.best.deck.join(','), p_shuffles: store.allTime });
+    const body = { p_player: store.lb.id, p_secret: store.lb.secret, p_name: store.lb.name, p_deck: store.best.deck.join(','), p_shuffles: store.allTime };
+    if (LB.v2) body.p_attempts = Math.min(store.allTime, Math.max(1, store.best.attempt || 1));
+    const res = await lbRpc('submit_best', body);
     store.lb.sub = Math.max(store.lb.sub, store.best.matches); saveStore(true);
     LB.rank = res.rank; LB.players = res.players;
     track('leaderboard-submit');
@@ -3248,7 +3321,7 @@ function lbOnBest() {
     const best = store.best.matches;
     let res = null;
     if (LB.ready) {
-      try { res = store.lb && store.lb.name ? await lbSubmit(true) : await lbRpc('leaderboard_rank', { p_best: best, p_player: null }); } catch (e) { res = null; }
+      try { res = store.lb && store.lb.name ? await lbSubmit(true) : await lbRpc('leaderboard_rank', lbRankArgs(best, null)); } catch (e) { res = null; }
       if (res) { LB.rank = res.rank; LB.players = Math.max(res.players, res.rank); }
     }
     if (best >= 4 && Date.now() - LB.lastToast > 2500) {
