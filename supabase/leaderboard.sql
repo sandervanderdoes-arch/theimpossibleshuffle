@@ -12,6 +12,7 @@
 -- Ranking: best match first; on a tie, fewer tries (shuffles needed to reach it) wins,
 -- then whoever got there first.
 -- To remove someone: Table Editor -> leaderboard -> set "hidden" to true.
+-- Names are unique (ignoring case), and the date is when the best shuffle actually happened.
 -- Safe to run again: it updates an existing leaderboard without losing entries.
 
 create extension if not exists pgcrypto with schema extensions;
@@ -32,6 +33,13 @@ alter table public.leaderboard add column if not exists attempts bigint not null
 update public.leaderboard set attempts = shuffles where attempts = 0;
 drop index if exists public.leaderboard_rank_idx;
 create index leaderboard_rank_idx on public.leaderboard (best desc, attempts asc, achieved_at asc) where not hidden;
+-- Names are unique (ignoring upper/lower case). Older duplicates get a short suffix first (added in v3).
+update public.leaderboard l
+   set name = left(l.name, 15) || ' ' || substr(l.player_id::text, 1, 4)
+ where exists (select 1 from public.leaderboard o
+                where lower(o.name) = lower(l.name) and o.player_id <> l.player_id
+                  and (o.achieved_at, o.player_id) < (l.achieved_at, l.player_id));
+create unique index if not exists leaderboard_name_key on public.leaderboard (lower(name));
 
 alter table public.leaderboard enable row level security;
 
@@ -47,6 +55,7 @@ grant select (name, best, attempts, shuffles, achieved_at) on public.leaderboard
 
 drop function if exists public.submit_best(uuid, text, text, text, bigint);
 drop function if exists public.submit_best(uuid, text, text, text, bigint, bigint);
+drop function if exists public.submit_best(uuid, text, text, text, bigint, bigint, timestamptz);
 drop function if exists public.leaderboard_rank(int);
 drop function if exists public.leaderboard_rank(int, uuid);
 drop function if exists public.leaderboard_rank(int, uuid, bigint);
@@ -82,7 +91,9 @@ begin
 end;
 $$;
 
-create function public.submit_best(p_player uuid, p_secret text, p_name text, p_deck text, p_shuffles bigint, p_attempts bigint)
+-- p_achieved_at: when the best shuffle actually happened (from the browser, kept within sane bounds).
+create function public.submit_best(p_player uuid, p_secret text, p_name text, p_deck text, p_shuffles bigint, p_attempts bigint,
+                                   p_achieved_at timestamptz default null)
 returns json
 language plpgsql
 security definer
@@ -102,6 +113,7 @@ declare
   clean_name text := btrim(regexp_replace(coalesce(p_name, ''), '\s+', ' ', 'g'));
   h text;
   row_ public.leaderboard%rowtype;
+  when_ timestamptz;
 begin
   if p_player is null or p_secret is null or char_length(p_secret) < 16 or char_length(p_secret) > 128 then
     raise exception 'bad player';
@@ -124,16 +136,21 @@ begin
     raise exception 'implausible';
   end if;
 
+  if exists (select 1 from public.leaderboard where lower(name) = lower(clean_name) and player_id <> p_player) then
+    raise exception 'name taken';
+  end if;
+  when_ := least(now(), greatest(coalesce(p_achieved_at, now()), timestamptz '2025-01-01'));
+
   h := encode(digest(p_secret, 'sha256'), 'hex');
   select * into row_ from public.leaderboard where player_id = p_player;
   if not found then
-    insert into public.leaderboard (player_id, secret_hash, name, best, deck, shuffles, attempts)
-    values (p_player, h, clean_name, m, p_deck, p_shuffles, p_attempts);
+    insert into public.leaderboard (player_id, secret_hash, name, best, deck, shuffles, attempts, achieved_at)
+    values (p_player, h, clean_name, m, p_deck, p_shuffles, p_attempts, when_);
   elsif row_.secret_hash <> h then
     raise exception 'bad player';
   elsif m > row_.best then
     update public.leaderboard
-       set name = clean_name, best = m, deck = p_deck, shuffles = p_shuffles, attempts = p_attempts, achieved_at = now(), updated_at = now()
+       set name = clean_name, best = m, deck = p_deck, shuffles = p_shuffles, attempts = p_attempts, achieved_at = when_, updated_at = now()
      where player_id = p_player;
   else
     update public.leaderboard
@@ -141,10 +158,12 @@ begin
      where player_id = p_player;
   end if;
   return public.leaderboard_rank(greatest(m, coalesce(row_.best, 0)), p_player);
+exception when unique_violation then
+  raise exception 'name taken';
 end;
 $$;
 
-revoke all on function public.submit_best(uuid, text, text, text, bigint, bigint) from public;
+revoke all on function public.submit_best(uuid, text, text, text, bigint, bigint, timestamptz) from public;
 revoke all on function public.leaderboard_rank(int, uuid, bigint) from public;
-grant execute on function public.submit_best(uuid, text, text, text, bigint, bigint) to anon, authenticated;
+grant execute on function public.submit_best(uuid, text, text, text, bigint, bigint, timestamptz) to anon, authenticated;
 grant execute on function public.leaderboard_rank(int, uuid, bigint) to anon, authenticated;

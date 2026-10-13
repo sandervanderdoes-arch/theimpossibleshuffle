@@ -522,7 +522,7 @@
               <button type="button" data-ap="0" aria-pressed="true">Off</button>
               <button type="button" data-ap="10" aria-pressed="false">10/sec</button>
               <button type="button" data-ap="100" aria-pressed="false">100/sec</button>
-              <button type="button" data-ap="L" aria-pressed="false">Ludicrous</button>
+              <button type="button" data-ap="L" aria-pressed="false" title="1,000 shuffles per second">Ludicrous</button>
             </div>
             <p id="apRate" class="mono text-xs text-[#9fb5a8] mt-1 h-4"></p>
           </div>
@@ -943,7 +943,7 @@ const UNIVERSE_AGE_YEARS = 1.38e10;
 /* Hand-shuffle years: a proper hand shuffle takes about 20 seconds (seven riffles, Bayer & Diaconis 1992). */
 const HAND_SECONDS = 20;
 const HAND_YEAR = Math.round(SECONDS_PER_YEAR / HAND_SECONDS);   // 1,577,880 shuffles
-const LUDICROUS_RATE = 150000;                                    // typical free Ludicrous speed, shuffles/sec
+const LUDICROUS_RATE = 1000;                                      // free Ludicrous autopilot, shuffles/sec
 const handYears = n => n / HAND_YEAR;
 /** 20,000 shuffles → "4.6 days"; human-sized wording for an amount of hand shuffling. */
 function handTime(n) {
@@ -1755,13 +1755,10 @@ function apLoop(t) {
   if (!autopilot.mode || winOpen) return;
   const ap = autopilot;
   const dt = Math.min(100, t - ap.lastT); ap.lastT = t;
-  let todo;
-  if (ap.mode === 'L') todo = Infinity;
-  else {
-    const due = Math.floor((t - ap.start) / 1000 * ap.mode);
-    todo = due - ap.done;
-    if (todo > ap.mode) { ap.done = due - ap.mode; todo = ap.mode; }  // don't binge after a hidden tab
-  }
+  const perSec = ap.mode === 'L' ? LUDICROUS_RATE : ap.mode;
+  const due = Math.floor((t - ap.start) / 1000 * perSec);
+  let todo = due - ap.done;
+  if (todo > perSec) { ap.done = due - perSec; todo = perSec; }  // don't binge after a hidden tab
   const budgetEnd = performance.now() + 5;  // leave most of the frame for rendering
   let count = 0, won = null;
   while (count < todo) {
@@ -1775,7 +1772,7 @@ function apLoop(t) {
     if (m === 52) { won = slot; break; }
     if ((count & 63) === 0 && performance.now() > budgetEnd) break;
   }
-  if (ap.mode !== 'L') ap.done += count;
+  ap.done += count;
   noteRate(count);
   if (ap.mode === 'L') {
     ap.ludMs += dt;   // rAF pauses in hidden tabs, so only visible time counts
@@ -2459,7 +2456,8 @@ function toast(html) {
 function shareText() {
   const url = location.href.split(/[?#]/)[0];
   if (cardState.mode === 'lb') return `There's now a world ranking. Who shuffles the luckiest deck? 🃏 ${url}`;
-  return `I shuffled ${fmt(store.allTime)} times for humanity. Best: ${bestEver()}/52. Mathematics: 1, Humanity: 0. Your turn: ${url}`;
+  const best = bestEver(), rank = LB.ready && LB.rank ? ` World ranking: #${fmt(LB.rank)} of ${fmt(Math.max(LB.players, LB.rank))}.` : '';
+  return `I shuffled ${fmt(store.allTime)} times for humanity. Best: ${best}/52 (a ${pctText(chanceWithin(best, Math.max(1, store.allTime)))} chance in that many shuffles).${rank} Mathematics: 1, Humanity: 0. Your turn: ${url}`;
 }
 async function copyText(text) {
   let ok = false;
@@ -2491,6 +2489,22 @@ function loadProfImg() {
 function roundRectPath(c, x, y, w, h, r) {
   c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
 }
+/** Chance of getting at least `best` matches somewhere in `n` shuffles. */
+function chanceWithin(best, n) { return best <= 0 ? 1 : -Math.expm1(n * Math.log1p(-tailP(best))); }
+function pctText(p) {
+  if (p >= 0.999) return '>99.9%';
+  if (p < 0.0001) return '<0.01%';
+  return (p * 100).toLocaleString('en-US', { maximumSignificantDigits: 2 }) + '%';
+}
+/** The three boxes on the result card: shuffles, the chance of your best within them, your world rank right now. */
+function cardStats() {
+  const best = bestEver(), n = Math.max(1, store.allTime);
+  return [
+    [fmt(store.allTime), 'NUMBER OF SHUFFLES', `≈ ${handTime(store.allTime)} by hand`],
+    [pctText(chanceWithin(best, n)), 'CHANCE OF MY BEST', `${best}/52 within my shuffles`],
+    LB.ready && LB.rank ? [`#${fmt(LB.rank)}`, 'WORLD RANKING', `of ${fmt(Math.max(LB.players, LB.rank))} shufflers`] : ['–', 'WORLD RANKING', 'join the leaderboard']
+  ];
+}
 /** Draws a 1080×1080 result card. withProf=false skips the Professor image (if the canvas would be tainted). */
 function drawCard(cv, withProf) {
   const S = 1080, c = cv.getContext('2d'), best = bestEver();
@@ -2517,18 +2531,15 @@ function drawCard(cv, withProf) {
   c.font = '230px Bungee, Impact, sans-serif'; c.fillStyle = '#ffe68a'; c.shadowColor = 'rgba(255,210,63,.75)'; c.shadowBlur = 30;
   c.fillText(`${best}/52`, cx, 520); c.shadowBlur = 0;
   c.font = '700 40px system-ui, sans-serif'; c.fillStyle = '#ffffff'; c.fillText(cardTier(best), cx, 600);
-  const stats = [[fmt(store.allTime), 'SHUFFLES'], [`${Object.keys(store.badges).length}/${BADGES.length}`, 'BADGES'], ['1 in 8.07×10', 'ODDS PER SHUFFLE', '67']];
-  stats.forEach(([v, l, exp], i) => {
-    const w = 300, x = 75 + i * (w + 15), y = 690;
-    roundRectPath(c, x, y, w, 150, 22); c.fillStyle = 'rgba(0,0,0,.45)'; c.fill(); c.strokeStyle = 'rgba(34,243,255,.35)'; c.lineWidth = 2; c.stroke();
-    c.font = `800 ${v.length > 11 ? 34 : 50}px "JetBrains Mono", monospace`; c.fillStyle = '#a5fbff';
-    if (exp) {   // draw the exponent as a small raised number
-      const main = c.measureText(v).width; c.font = '800 22px "JetBrains Mono", monospace'; const ew = c.measureText(exp).width;
-      const left = x + w / 2 - (main + ew + 2) / 2;
-      c.textAlign = 'left'; c.fillText(exp, left + main + 2, y + 66);
-      c.font = '800 34px "JetBrains Mono", monospace'; c.fillText(v, left, y + 85); c.textAlign = 'center';
-    } else c.fillText(v, x + w / 2, y + 85);
-    c.font = '700 22px "JetBrains Mono", monospace'; c.fillStyle = '#9fb5a8'; c.fillText(l, x + w / 2, y + 125);
+  const stats = cardStats();
+  stats.forEach(([v, l, sub], i) => {
+    const w = 300, x = 75 + i * (w + 15), y = 680;
+    roundRectPath(c, x, y, w, 170, 22); c.fillStyle = 'rgba(0,0,0,.45)'; c.fill(); c.strokeStyle = 'rgba(34,243,255,.35)'; c.lineWidth = 2; c.stroke();
+    let fs = 54; c.font = `800 ${fs}px "JetBrains Mono", monospace`;
+    while (c.measureText(v).width > w - 30 && fs > 24) { fs -= 2; c.font = `800 ${fs}px "JetBrains Mono", monospace`; }
+    c.fillStyle = '#a5fbff'; c.fillText(v, x + w / 2, y + 78);
+    c.font = '700 22px "JetBrains Mono", monospace'; c.fillStyle = '#ffe68a'; c.fillText(l, x + w / 2, y + 118, w - 20);
+    c.font = '600 20px system-ui, sans-serif'; c.fillStyle = '#9fb5a8'; c.fillText(sub, x + w / 2, y + 148, w - 20);
   });
   c.font = '800 30px "JetBrains Mono", monospace'; c.fillStyle = '#ffffff'; c.fillText('MATHEMATICS 1 : 0 HUMANITY', S / 2, 920);
   c.font = '42px Bungee, Impact, sans-serif'; c.fillStyle = '#a5fbff'; c.shadowColor = 'rgba(34,243,255,.7)'; c.shadowBlur = 16;
@@ -2596,6 +2607,13 @@ async function openCard(mode) {
   $('#cardShare').hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
 }
 async function makeCard() {
+  if (LB.ready && store.best) {       // the world ranking at this very moment
+    try {
+      const joined = store.lb && store.lb.name && store.lb.sub;
+      const r = await lbRpc('leaderboard_rank', lbRankArgs(store.best.matches, joined ? store.lb.id : null));
+      LB.rank = r.rank; LB.players = Math.max(r.players, r.rank);
+    } catch (e) { /* keep the last known rank */ }
+  }
   try { await Promise.all([document.fonts.load('64px Bungee'), document.fonts.load('800 40px "JetBrains Mono"'), document.fonts.load('700 34px "JetBrains Mono"')]); } catch (e) { /* fallback fonts */ }
   await loadProfImg();
   const cv = document.createElement('canvas');
@@ -2757,7 +2775,10 @@ function fmtDuration(sec) {
   if (sec < 90) return 'about a minute';
   if (sec < 3600) return `about ${Math.round(sec / 60)} minutes`;
   if (sec < 48 * 3600) { const h = Math.round(sec / 1800) / 2; return `about ${h} hour${h === 1 ? '' : 's'}`; }
-  return `about ${Math.round(sec / 86400)} days`;
+  const d = sec / 86400;
+  if (d < 365) return `about ${Math.round(d)} days`;
+  const y = d / 365.25;
+  return `about ${y < 10 ? y.toFixed(1).replace(/\.0$/, '') : fmt(Math.round(y))} years`;
 }
 const POWERBALL = 292201338, ROYAL_FLUSH = 649740, LIGHTNING_YEAR = 1222000;
 /** The largest k for which (1/oneIn)^k is still MORE likely than p. */
@@ -3303,13 +3324,17 @@ async function lbSubmit(quiet) {
   try {
     const body = { p_player: store.lb.id, p_secret: store.lb.secret, p_name: store.lb.name, p_deck: store.best.deck.join(','), p_shuffles: store.allTime };
     if (LB.v2) body.p_attempts = Math.min(store.allTime, Math.max(1, store.best.attempt || 1));
-    const res = await lbRpc('submit_best', body);
+    let res;
+    try { res = await lbRpc('submit_best', { ...body, p_achieved_at: new Date(store.best.ts || Date.now()).toISOString() }); }
+    catch (e) { if (/could not find|function/i.test(e.message)) res = await lbRpc('submit_best', body); else throw e; }   // database not updated yet
     store.lb.sub = Math.max(store.lb.sub, store.best.matches); saveStore(true);
     LB.rank = res.rank; LB.players = res.players;
     track('leaderboard-submit');
     return res;
   } catch (e) {
-    if (!quiet) toast(/bad name/.test(e.message) ? '🏆 Names can use letters, numbers, spaces and . _ - \' (2 to 20 characters).' : '🏆 Mission Control could not check that score. Please try again later.');
+    if (!quiet) toast(/name taken/.test(e.message) ? '🏆 That name is already taken. Pick another one.'
+      : /bad name/.test(e.message) ? '🏆 Names can use letters, numbers, spaces and . _ - \' (2 to 20 characters).'
+      : '🏆 Mission Control could not check that score. Please try again later.');
     return null;
   } finally { LB.busy = false; }
 }
