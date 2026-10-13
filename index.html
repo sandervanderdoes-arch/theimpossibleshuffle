@@ -347,6 +347,15 @@
     .imp-years .n { font-size:min(1.9rem, 11cqi); }
   }
   .imp-story { font-size:.9rem; font-style:italic; color:#cfe3d7; }
+  .imp-tl { margin-top:.55rem; }
+  .imp-tl-bar { position:relative; height:10px; border-radius:999px; background:rgba(0,0,0,.55); border:1px solid rgba(255,210,63,.4); overflow:hidden; }
+  .imp-tl-run { position:absolute; left:0; top:0; bottom:0; width:0; background:linear-gradient(90deg, rgba(255,210,63,.5), #ffd23f); box-shadow:2px 0 10px 2px rgba(255,210,63,.75); animation: impTrip 7s ease-in-out infinite; }
+  @keyframes impTrip { 0% { width:0; } 80% { width:100%; } 100% { width:100%; opacity:0; } }
+  .imp-tl-tick { position:absolute; top:1px; bottom:1px; width:2px; margin-left:-1px; background:#fff3c4; box-shadow:0 0 0 1px rgba(40,25,0,.45); opacity:.85; }
+  .imp-tl-ends { display:flex; justify-content:space-between; margin-top:.2rem; font:700 .62rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.05em; color:#9fb5a8; }
+  .imp-tl p { margin-top:.25rem; font-size:.8rem; line-height:1.35; color:#cfe3d7; }
+  .imp-tl b { color:#ffe68a; }
+  @media (prefers-reduced-motion: reduce) { .imp-tl-run { animation:none; width:100%; opacity:.5; } }
   .imp-stats { margin-top:.6rem; padding:.55rem .7rem; border-radius:12px; background:rgba(34,243,255,.07); border:1px solid rgba(34,243,255,.25); display:grid; gap:.2rem; font-size:.85rem; color:#cfe3d7; }
   .imp-stats b { color:#a5fbff; }
   .imp-stats span { color:#9fb5a8; font-size:.78rem; }
@@ -2838,17 +2847,17 @@ const NUM_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'
 const numWord = n => NUM_WORDS[n] || fmt(n);
 const IMP_TIERS = [
   { id: 'tea', icon: '★', name: 'Cadet', years: 1000, price: '1.92',
-    story: 'Basic training: nonstop since the Vikings.', shift: 'a coffee break', deal: 'Cheaper than a coffee',
+    story: 'Basic training: nonstop since the Vikings.', trip: 'past Magna Carta, the first playing cards and the Moon landing', shift: 'a coffee break', deal: 'Cheaper than a coffee',
     cmp: p => `Your odds: still worse than being dealt <b>${timesInARow(ROYAL_FLUSH, p)} royal flushes in a row</b>.`,
     why: 'Why $1.92? One card is 1.92% of a deck.',
     perks: ['<span class="gold-star">★</span> Gold Mission Sponsor badge', '🃏 Fancy card backs'] },
   { id: 'odds', icon: '★★', name: 'Captain', years: 10000, price: '8.07', featured: true,
-    story: 'A full shift: nonstop since the last Ice Age.', shift: 'about one movie', deal: '10× the years for 4× the price',
+    story: 'A full shift: nonstop since the last Ice Age.', trip: 'past the first writing, the pyramids and the Moon landing', shift: 'about one movie', deal: '10× the years for 4× the price',
     cmp: p => `Your odds: still worse than getting <b>struck by lightning ${timesInARow(LIGHTNING_YEAR, p)} times in one year</b>.`,
     why: 'Why $8.07? 52! is 8.07 × 10⁶⁷. We waived the 67 zeros.',
     perks: ['📜 Certificate of Trying Anyway (PDF)', '🎩 Professor outfits', '<span class="gold-star">★</span> Badge and card backs included'] },
   { id: 'patron', icon: '★★★', name: 'Commander', years: 100000, price: '52',
-    story: 'Night watch: nonstop since humans left Africa.', shift: 'the overnight shift', deal: 'Report back at dawn',
+    story: 'Night watch: nonstop since humans left Africa.', trip: 'past cave paintings, the end of the Ice Age and the pyramids', shift: 'the overnight shift', deal: 'Report back at dawn',
     cmp: p => `Your odds: still worse than winning <b>${timesInARow(POWERBALL, p)} Powerball jackpots in a row</b>.`,
     why: 'Why $52? One dollar per card. The deck salutes you.',
     perks: ['🏛️ Your name on the Wall of Hopeless Heroes', '👑 The Royal Professor', '✨ Every other extra included'] }
@@ -2872,6 +2881,15 @@ const hyperRateGuess = () => store.hyper.rate || cores() * 500000;
 /* ---------- Tier cards ---------- */
 const bigShort = n => n >= 1e11 ? `${Math.round(n / 1e9)} billion` : n >= 1e9 ? `${(n / 1e9).toFixed(1)} billion` : `${Math.round(n / 1e6)} million`;
 const shortDuration = sec => fmtDuration(sec).replace('about ', '');
+/** Tier card teaser for the station's trip through history. */
+function impTrip(t) {
+  const r = tlRoute(t.years);
+  return `<div class="imp-tl">
+        <div class="imp-tl-bar" aria-hidden="true"><i class="imp-tl-run"></i>${tlTicks(r, 'imp-tl-tick')}</div>
+        <div class="imp-tl-ends" aria-hidden="true"><span>${yearLabel(r.start)}</span><span>TODAY</span></div>
+        <p>🕰️ Watch history go by: <b>${r.stops.length} stops</b>, ${t.trip}.</p>
+      </div>`;
+}
 function renderImpatient() {
   const F = SITE.fund, cur = F.currency || '$';
   let any = false;
@@ -2884,6 +2902,7 @@ function renderImpatient() {
       <p class="imp-name"><span class="gold-star">${t.icon}</span> ${t.name}</p>
       <p class="imp-years"><span class="n">${fmt(t.years)} years</span><span class="of">of shuffling</span></p>
       <p class="imp-story">${t.story}</p>
+      ${impTrip(t)}
       <div class="imp-stats">
         <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, ${t.shift}<br><span>Ludicrous would need ${shortDuration(N / LUDICROUS_RATE)}</span></p>
         <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
@@ -3156,13 +3175,17 @@ function stopLabel(e) {
 }
 const TL = { key: '', stops: [], start: 0, now: 0, passed: -1 };
 const tlItem = (e, cls = '') => `<li${cls ? ` class="${cls}"` : ''}><span class="when">${stopLabel(e)}</span><span class="ic" aria-hidden="true">${e.ic}</span><span>${e.t}</span></li>`;
+/** The stops on a trip of this many years that ends today. */
+function tlRoute(years) {
+  const now = yearNow(), start = now - years;
+  const stops = HISTORY.map(e => ({ ...e, a: e.ago ? now - e.ago : (e.y < 0 ? e.y + 1 : e.y) + .5 }))
+    .filter(e => e.a > start && e.a < now).sort((x, y) => x.a - y.a);
+  return { now, start, total: years, stops };
+}
+const tlTicks = (r, cls) => r.stops.map(e => `<span class="${cls}" style="left:${((e.a - r.start) / r.total * 100).toFixed(3)}%"></span>`).join('');
 function tlBuild(bought) {
-  TL.now = yearNow();
-  TL.total = handYears(bought);
-  TL.start = TL.now - TL.total;
-  TL.stops = HISTORY.map(e => ({ ...e, a: e.ago ? TL.now - e.ago : (e.y < 0 ? e.y + 1 : e.y) + .5 }))
-    .filter(e => e.a > TL.start && e.a < TL.now).sort((x, y) => x.a - y.a);
-  $('#tlTicks').innerHTML = TL.stops.map(e => `<span class="tl-tick" style="left:${((e.a - TL.start) / TL.total * 100).toFixed(3)}%"></span>`).join('');
+  Object.assign(TL, tlRoute(handYears(bought)));
+  $('#tlTicks').innerHTML = tlTicks(TL, 'tl-tick');
   $('#tlStart').textContent = yearLabel(TL.start);
   TL.key = String(bought); TL.passed = -1;
 }
