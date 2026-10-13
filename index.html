@@ -320,7 +320,7 @@
   .imp-card.featured { border:2px solid var(--gold); background:linear-gradient(160deg, rgba(255,210,63,.16), rgba(255,47,214,.1)); box-shadow:0 0 24px rgba(255,210,63,.3); }
   .imp-card .flag { position:absolute; top:-.7rem; left:50%; transform:translateX(-50%); white-space:nowrap; font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; color:#1d1300; background:var(--gold); border-radius:999px; padding:.2rem .65rem; }
   .imp-name { font:800 .72rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.08em; text-transform:uppercase; color:#ff9bec; }
-  .imp-years { font-family:Bungee, Impact, system-ui, sans-serif; font-size:1.5rem; line-height:1.15; color:#ffe68a; }
+  .imp-years { font-family:Bungee, Impact, system-ui, sans-serif; font-size:1.3rem; line-height:1.15; color:#ffe68a; }
   .imp-story { font-size:.9rem; font-style:italic; color:#cfe3d7; }
   .imp-stats { margin-top:.6rem; padding:.55rem .7rem; border-radius:12px; background:rgba(34,243,255,.07); border:1px solid rgba(34,243,255,.25); display:grid; gap:.2rem; font-size:.85rem; color:#cfe3d7; }
   .imp-stats b { color:#a5fbff; }
@@ -2637,18 +2637,18 @@ const NUM_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'
 const numWord = n => NUM_WORDS[n] || fmt(n);
 const IMP_TIERS = [
   { id: 'tea', icon: '★', name: 'Cadet', years: 1000, price: '1.92',
-    story: 'Basic training: shuffling nonstop since the Vikings.', shift: 'a coffee break', deal: 'Cheaper than a coffee',
-    cmp: p => `Your odds: still worse than <b>${timesInARow(ROYAL_FLUSH, p)} royal flushes in a row</b>.`,
+    story: 'Basic training: nonstop since the Vikings.', shift: 'a coffee break', deal: 'Cheaper than a coffee',
+    cmp: p => `Your odds: still worse than being dealt <b>${timesInARow(ROYAL_FLUSH, p)} royal flushes in a row</b>.`,
     why: 'Why $1.92? One card is 1.92% of a deck.',
     perks: ['★ Gold Mission Sponsor badge', '🃏 Fancy card backs'] },
   { id: 'odds', icon: '★★', name: 'Captain', years: 10000, price: '8.07', featured: true,
-    story: 'A full shift: shuffling nonstop since the last Ice Age.', shift: 'about one movie', deal: '10× the years for 4× the price',
-    cmp: p => `Your odds: still worse than <b>${timesInARow(LIGHTNING_YEAR, p)} lightning strikes in one year</b>.`,
+    story: 'A full shift: nonstop since the last Ice Age.', shift: 'about one movie', deal: '10× the years for 4× the price',
+    cmp: p => `Your odds: still worse than getting <b>struck by lightning ${timesInARow(LIGHTNING_YEAR, p)} times in one year</b>.`,
     why: 'Why $8.07? 52! is 8.07 × 10⁶⁷. We waived the 67 zeros.',
     perks: ['📜 Certificate of Trying Anyway (PDF)', '🎩 Professor outfits', '★ Badge and card backs included'] },
   { id: 'patron', icon: '★★★', name: 'Commander', years: 100000, price: '52',
-    story: 'Night watch: shuffling nonstop since humans left Africa.', shift: 'the overnight shift', deal: 'Report back at dawn',
-    cmp: p => `Your odds: still worse than <b>${timesInARow(POWERBALL, p)} Powerball jackpots in a row</b>.`,
+    story: 'Night watch: nonstop since humans left Africa.', shift: 'the overnight shift', deal: 'Report back at dawn',
+    cmp: p => `Your odds: still worse than winning <b>${timesInARow(POWERBALL, p)} Powerball jackpots in a row</b>.`,
     why: 'Why $52? One dollar per card. The deck salutes you.',
     perks: ['🏛️ Your name on the Wall of Hopeless Heroes', '👑 The Royal Professor', '✨ Every other extra included'] }
 ];
@@ -2681,7 +2681,7 @@ function renderImpatient() {
     return `<div class="imp-card${t.featured ? ' featured' : ''}">
       ${t.featured ? '<span class="flag">MISSION CONTROL RECOMMENDS</span>' : ''}
       <p class="imp-name">${t.icon} ${t.name}</p>
-      <p class="imp-years">${fmt(t.years)} years</p>
+      <p class="imp-years">${fmt(t.years)} years<br>of shuffling</p>
       <p class="imp-story">${t.story}</p>
       <div class="imp-stats">
         <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, ${t.shift}<br><span>free autopilot would need ${shortDuration(N / LUDICROUS_RATE)}</span></p>
