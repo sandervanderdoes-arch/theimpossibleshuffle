@@ -314,25 +314,40 @@
   @keyframes shake { 10%,90% { transform:translate(-2px,1px); } 20%,80% { transform:translate(4px,-2px); } 30%,50%,70% { transform:translate(-7px,3px) rotate(-.4deg); } 40%,60% { transform:translate(7px,-3px) rotate(.4deg); } }
 
   .toast .copy-text { display:block; margin-top:.4rem; padding:.4rem; background:rgba(0,0,0,.4); border-radius:6px; font:12px/1.4 "JetBrains Mono", monospace; user-select:all; word-break:break-word; }
-  /* Fund the mission: three themed tiers (footer) and compact pills (win screen). */
-  .fund-panel { border:1px solid rgba(255,210,63,.35); border-radius:22px; background:rgba(2,12,8,.72); padding:1.25rem; }
-  .fund-tiers { display:grid; gap:.75rem; grid-template-columns:repeat(auto-fit, minmax(12.5rem, 1fr)); align-items:stretch; }
-  .tier { position:relative; display:flex; flex-direction:column; align-items:center; gap:.3rem; padding:1.4rem 1rem 1.1rem; border-radius:16px; border:1px solid rgba(255,210,63,.4); background:rgba(0,0,0,.45); color:var(--ink); text-decoration:none; transition:transform .12s, border-color .12s, box-shadow .12s; }
-  .tier:hover { transform:translateY(-2px); border-color:var(--gold); box-shadow:0 0 22px rgba(255,210,63,.3); }
-  .tier .ico { font-size:1.6rem; line-height:1; }
-  .tier .price { font-family:Bungee, Impact, system-ui, sans-serif; font-size:2rem; line-height:1.1; color:#ffe68a; }
-  .tier .tname { font-weight:800; font-size:.95rem; }
-  .tier .tjoke { font-size:.8rem; line-height:1.4; color:#b9cdc1; max-width:17rem; }
-  .tier.featured { border:2px solid var(--gold); background:linear-gradient(160deg, rgba(255,210,63,.16), rgba(255,47,214,.1)); box-shadow:0 0 24px rgba(255,210,63,.3); }
-  .tier .flag { position:absolute; top:-.7rem; left:50%; transform:translateX(-50%); white-space:nowrap; font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; color:#1d1300; background:var(--gold); border-radius:999px; padding:.2rem .65rem; }
-  @media (max-width: 640px) {
-    .tier { display:grid; grid-template-columns:5.5rem minmax(0,1fr); column-gap:.8rem; row-gap:.1rem; align-items:center; text-align:left; padding:1.25rem .9rem .95rem; }
-    .tier .ico { grid-column:1; grid-row:1; justify-self:center; font-size:1.4rem; }
-    .tier .price { grid-column:1; grid-row:2; justify-self:center; font-size:1.55rem; }
-    .tier .tname { grid-column:2; grid-row:1; }
-    .tier .tjoke { grid-column:2; grid-row:2; align-self:start; }
-  }
-  .fund-custom { display:inline-flex; align-items:center; min-height:44px; color:#ff9bec; text-decoration:underline; text-underline-offset:3px; font-size:.9rem; }
+  /* Are you impatient? Time-skip tiers, sponsor extras, the Wall of Futility. */
+  .imp-tiers { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(16rem, 1fr)); align-items:stretch; }
+  .imp-card { position:relative; display:flex; flex-direction:column; gap:.2rem; padding:1.4rem 1.1rem 1.1rem; border-radius:16px; border:1px solid rgba(255,210,63,.4); background:rgba(0,0,0,.45); min-width:0; }
+  .imp-card.featured { border:2px solid var(--gold); background:linear-gradient(160deg, rgba(255,210,63,.16), rgba(255,47,214,.1)); box-shadow:0 0 24px rgba(255,210,63,.3); }
+  .imp-card .flag { position:absolute; top:-.7rem; left:50%; transform:translateX(-50%); white-space:nowrap; font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; color:#1d1300; background:var(--gold); border-radius:999px; padding:.2rem .65rem; }
+  .imp-name { font-weight:800; color:#ff9bec; font-size:.95rem; }
+  .imp-years { font-family:Bungee, Impact, system-ui, sans-serif; font-size:1.35rem; line-height:1.2; color:#ffe68a; }
+  .imp-sub { font-size:.78rem; color:#9fb5a8; overflow-wrap:anywhere; }
+  .imp-label { margin-top:.6rem; font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.08em; color:#9fb5a8; }
+  .imp-chance { font:700 .8rem/1.35 "JetBrains Mono", ui-monospace, monospace; color:#a5fbff; overflow-wrap:anywhere; word-break:break-all; }
+  .imp-cmp { margin-top:.35rem; font-size:.82rem; line-height:1.45; color:#cfe3d7; }
+  .imp-perks { margin:.7rem 0 .9rem; padding:0; list-style:none; font-size:.85rem; display:grid; gap:.25rem; }
+  .imp-perks li::before { content:"✓ "; color:#7cff6b; font-weight:800; }
+  .imp-buy { margin-top:auto; text-align:center; text-decoration:none; font-size:1rem !important; }
+  .imp-extras { border-top:1px dashed rgba(255,210,63,.35); padding-top:1.1rem; }
+  .skip-run { border-radius:14px; background:rgba(0,0,0,.4); border:1px solid rgba(34,243,255,.3); padding:.9rem; }
+  .opt-btn { min-height:44px; padding:.45rem .8rem; border-radius:10px; border:1px solid rgba(255,210,63,.4); background:rgba(0,0,0,.35); color:#ffe9a3; font-size:.85rem; font-weight:700; }
+  .opt-btn[aria-pressed="true"] { background:var(--gold); color:#1d1300; border-color:var(--gold); }
+  .imp-input { min-height:44px; min-width:0; flex:1 1 12rem; padding:.5rem .75rem; border-radius:10px; border:1px solid rgba(255,210,63,.45); background:rgba(0,0,0,.45); color:var(--ink); font-size:16px; }
+  .imp-input::placeholder { color:#7f978a; }
+  .sponsor-chip { display:inline-block; padding:.12rem .5rem; border-radius:999px; background:linear-gradient(180deg,#ffe68a,#d9a400); color:#2a1c00; font:800 .62rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; box-shadow:0 0 12px rgba(255,210,63,.55); white-space:nowrap; }
+  .sponsor-chip[hidden] { display:none; }
+  .wall-chip { padding:.45rem .75rem; border-radius:12px; border:1px solid rgba(255,210,63,.45); background:rgba(0,0,0,.4); font-size:.85rem; color:#cfe3d7; max-width:100%; overflow-wrap:anywhere; }
+  .wall-chip b { color:#ffe68a; }
+  /* Sponsor card backs (shown while the deck is in the air). */
+  .cb-gold .pcard.back { background: repeating-linear-gradient(-45deg,#d9a400 0 5px,#8a6a00 5px 10px); box-shadow: inset 0 0 0 2px #fff3c4, 0 2px 5px rgba(0,0,0,.6); }
+  .cb-cyan .pcard.back { background: radial-gradient(circle,#22f3ff 1.4px,transparent 1.6px) 0 0/7px 7px, #052a33; box-shadow: inset 0 0 0 2px rgba(34,243,255,.7), 0 2px 5px rgba(0,0,0,.6); }
+  .cb-felt .pcard.back { background: repeating-linear-gradient(45deg,transparent 0 5px,rgba(255,255,255,.12) 5px 6px), repeating-linear-gradient(-45deg,transparent 0 5px,rgba(255,255,255,.12) 5px 6px), #0f5132; box-shadow: inset 0 0 0 2px #ffd23f, 0 2px 5px rgba(0,0,0,.6); }
+  .cb-royal .pcard.back { background: repeating-linear-gradient(90deg,#3b0a6b 0 3px,#5a1aa0 3px 6px); box-shadow: inset 0 0 0 2px #ffd23f, inset 0 0 0 4px #3b0a6b, 0 2px 5px rgba(0,0,0,.6); }
+  /* Professor outfits: hat band and bow tie. */
+  .outfit-midnight .p-band, .outfit-midnight .p-bow { fill:#22f3ff; }
+  .outfit-emerald .p-band, .outfit-emerald .p-bow { fill:#2bd46b; }
+  .outfit-royal .p-band, .outfit-royal .p-bow { fill:#ffd23f; }
+  .outfit-royal .p-hat path:first-of-type { fill:#3b0a6b; }
   .fund-pill { display:inline-flex; align-items:center; gap:.35rem; min-height:44px; padding:.5rem .9rem; border-radius:12px; border:1px solid #ffd23f; background:rgba(0,0,0,.6); color:#ffe68a; font-weight:800; text-decoration:none; }
   .fund-pill:hover { background:rgba(255,210,63,.18); }
   .merch-btn { display:inline-flex; align-items:center; gap:.45rem; text-decoration:none; }
@@ -403,16 +418,10 @@
         <span><b class="text-red-300">MISSION STATUS: ONGOING.</b> Humanity is shuffling as one. Mathematics remains undefeated.</span>
       </div>
 
-      <div class="mt-8">
-        <p class="mono text-xs tracking-widest text-[#9fb5a8]">GLOBAL ATTEMPTS</p>
-        <p id="globalCount" class="mono font-extrabold neon-cyan text-2xl sm:text-4xl mt-1 tabular-nums break-all">…</p>
-        <p class="mt-2 font-bold text-[#ffe68a]">0 successful matches in human history.</p>
-        <p class="mt-1 text-xs text-[#9fb5a8]">(global figure simulated, much like your chances)</p>
-      </div>
-
-      <div id="liveBox" class="mt-7 mx-auto max-w-xl rounded-2xl border border-[#ffd23f]/40 bg-black/30 px-4 py-4" hidden>
+      <div id="liveBox" class="mt-8 mx-auto max-w-xl rounded-2xl border border-[#ffd23f]/40 bg-black/30 px-4 py-4" hidden>
         <p class="mono text-xs tracking-widest text-[#ffe68a] inline-flex items-center gap-2"><span class="live-dot" aria-hidden="true" style="width:8px;height:8px"></span>ACTUAL ATTEMPTS BY HUMANKIND</p>
         <p id="liveCount" class="mono font-extrabold neon-gold text-2xl sm:text-4xl mt-1 tabular-nums break-all">…</p>
+        <p class="mt-2 font-bold text-[#ffe68a]">0 successful matches in human history.</p>
         <p class="mt-1 text-xs text-[#cfe3d7]">Every shuffle by every real visitor to this site, counted live. <span id="liveYou" class="text-[#9fb5a8]"></span></p>
       </div>
     </div>
@@ -514,7 +523,7 @@
     </section>
 
     <section class="panel p-4 sm:p-5 min-w-0" aria-labelledby="statsTitle">
-      <h2 id="statsTitle" class="font-display text-base neon-gold mb-3">Mission Control</h2>
+      <h2 id="statsTitle" class="font-display text-base neon-gold mb-3">Mission Control <span id="sponsorChip" class="sponsor-chip align-middle ml-1" hidden>★ MISSION SPONSOR</span></h2>
       <dl class="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div class="rounded-xl bg-black/30 p-3"><dt class="text-xs text-[#9fb5a8] font-bold">SESSION</dt><dd id="stSession" class="mono text-xl font-extrabold">0</dd></div>
         <div class="rounded-xl bg-black/30 p-3"><dt class="text-xs text-[#9fb5a8] font-bold">ALL-TIME</dt><dd id="stAll" class="mono text-xl font-extrabold">0</dd></div>
@@ -559,34 +568,65 @@
     </div>
   </section>
 
+  <!-- ===================== ARE YOU IMPATIENT? ===================== -->
+  <section id="impatient" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="impTitle" hidden>
+    <div class="panel imp-panel p-4 sm:p-6">
+      <h2 id="impTitle" class="font-display text-lg sm:text-2xl neon-gold">⏩ Are you impatient?</h2>
+      <p class="mt-2 max-w-3xl text-sm sm:text-base text-[#cfe3d7]">Shuffling once a second, you would need about 10<sup>60</sup> years on average. Skip ahead instead: we fast-forward your personal mission by a million, half a billion or a billion years of nonstop shuffling, and tell you how it went.</p>
+      <div id="impTiers" class="imp-tiers mt-6"></div>
+      <p class="mt-4 text-xs text-[#9fb5a8] max-w-3xl">Spoiler: you will not win. A time skip is a simulation drawn from the exact odds, it doesn't count toward the humankind counter, and there is no prize, only bragging rights and the extras above. They unlock in this browser after checkout. Secure checkout by Stripe, opens in a new tab.</p>
+
+      <div id="myExtras" class="imp-extras mt-6" hidden>
+        <h3 class="font-display text-base neon-pink">Your sponsor extras <span class="sponsor-chip align-middle ml-1">★ MISSION SPONSOR</span></h3>
+        <div class="mt-3 flex flex-wrap gap-2" id="skipButtons"></div>
+        <div id="skipRun" class="skip-run mt-3" hidden aria-live="polite">
+          <div class="grid grid-cols-2 gap-3">
+            <div><p class="text-xs font-bold text-[#9fb5a8]">YEARS SKIPPED</p><p id="skipYears" class="mono text-base sm:text-2xl font-extrabold neon-gold tabular-nums" style="overflow-wrap:anywhere">0</p></div>
+            <div><p class="text-xs font-bold text-[#9fb5a8]">SHUFFLES</p><p id="skipShuffles" class="mono text-base sm:text-2xl font-extrabold neon-cyan tabular-nums" style="overflow-wrap:anywhere">0</p></div>
+          </div>
+          <p id="skipStatus" class="mono text-xs text-[#cfe3d7] mt-2 min-h-[1rem]"></p>
+          <p id="skipResult" class="mt-2 text-sm text-[#ffe68a]"></p>
+        </div>
+        <p id="skipHistory" class="mt-2 text-xs text-[#9fb5a8]"></p>
+
+        <div class="mt-5"><p class="text-xs font-bold text-[#9fb5a8]">CARD BACKS</p><div id="cbOptions" class="mt-2 flex flex-wrap gap-2"></div></div>
+        <div id="outfitRow" class="mt-4" hidden><p class="text-xs font-bold text-[#9fb5a8]">PROFESSOR OUTFIT</p><div id="outfitOptions" class="mt-2 flex flex-wrap gap-2"></div></div>
+
+        <div id="certRow" class="mt-5" hidden>
+          <p class="text-xs font-bold text-[#9fb5a8]">📜 CERTIFICATE OF FUTILITY</p>
+          <p class="text-xs text-[#cfe3d7] mt-1">Your name, your shuffles, your best match and your exact chance of success so far, with every zero. Printable A4 PDF.</p>
+          <div class="mt-2 flex flex-wrap gap-2">
+            <label class="sr-only" for="certName">Name on the certificate</label>
+            <input id="certName" class="imp-input" maxlength="40" placeholder="Name on the certificate" autocomplete="name">
+            <button type="button" id="certBtn" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Download PDF</button>
+          </div>
+        </div>
+
+        <div id="wallRow" class="mt-5" hidden>
+          <p class="text-xs font-bold text-[#9fb5a8]">🏛️ WALL OF FUTILITY</p>
+          <form id="wallForm" class="mt-2 flex flex-wrap gap-2">
+            <label class="sr-only" for="wallName">Name for the wall</label>
+            <input id="wallName" class="imp-input" maxlength="40" placeholder="Name for the wall" required>
+            <label class="sr-only" for="wallDedication">Dedication (optional)</label>
+            <input id="wallDedication" class="imp-input grow" maxlength="80" placeholder="Dedication (optional)">
+            <button type="submit" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Add me to the wall</button>
+          </form>
+          <p id="wallDone" class="mt-2 text-sm text-[#7cff6b]" hidden>Thank you. Your name appears on the wall once Mission Control has checked it.</p>
+        </div>
+      </div>
+
+      <div id="wallBox" class="mt-6" hidden>
+        <h3 class="font-display text-base neon-gold">🏛️ Wall of Futility</h3>
+        <p class="text-xs text-[#9fb5a8] mt-1">Mission Sponsors who skipped a billion years and still matched nothing.</p>
+        <div id="wallList" class="mt-3 flex flex-wrap gap-2"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================== FOOTER ===================== -->
   <footer class="px-4 mt-10 mb-6 max-w-6xl mx-auto text-center">
     <p class="text-xs font-bold tracking-widest text-[#9fb5a8]">FUN FACT</p>
     <p id="funFact" class="fade mt-1 max-w-2xl mx-auto text-sm text-[#cfe3d7] min-h-[2.5rem]"></p>
-    <section id="fundBox" class="fund-panel mt-8 mx-auto max-w-3xl" aria-labelledby="fundTitle" hidden>
-      <h2 id="fundTitle" class="font-display text-lg sm:text-xl neon-gold">🚀 Fund the mission</h2>
-      <p class="mt-1 text-sm text-[#cfe3d7]">Mathematics is free. The coffee keeping this mission running is not.</p>
-      <div class="fund-tiers mt-6">
-        <a class="tier" data-tier="tea" target="_blank" rel="noopener" hidden>
-          <span class="ico" aria-hidden="true">☕</span><span class="price" data-price="1.92"></span>
-          <span class="tname">Buy the Professor a tea</span>
-          <span class="tjoke">The price of one matched card: 1.92% of a deck.</span>
-        </a>
-        <a class="tier featured" data-tier="odds" target="_blank" rel="noopener" hidden>
-          <span class="flag">THE SENSIBLE CHOICE</span>
-          <span class="ico" aria-hidden="true">🃏</span><span class="price" data-price="8.07"></span>
-          <span class="tname">Sponsor the odds</span>
-          <span class="tjoke">Your odds are 1 in 8.07 × 10⁶⁷. We kindly waived the other 67 zeros.</span>
-        </a>
-        <a class="tier" data-tier="patron" target="_blank" rel="noopener" hidden>
-          <span class="ico" aria-hidden="true">👑</span><span class="price" data-price="52"></span>
-          <span class="tname">Patron of the Deck</span>
-          <span class="tjoke">One <span data-unit>dollar</span> per card. The deck salutes you.</span>
-        </a>
-      </div>
-      <a class="fund-custom mt-3" data-tier="custom" target="_blank" rel="noopener" hidden>or choose your own amount →</a>
-      <p id="fundNote" class="mt-3 text-xs text-[#9fb5a8]"></p>
-    </section>
     <div id="merchBox" class="mt-6" hidden>
       <a id="merchLink" class="chip-btn merch-btn" target="_blank" rel="noopener">👕 Mission merch</a>
     </div>
@@ -636,11 +676,11 @@
         <button type="button" id="restoreBtn" class="shuffle-btn !w-auto !px-6 !py-3 !text-base">Restore Spacetime</button>
       </div>
       <div id="winFund" class="mt-5" hidden>
-        <p class="mono text-xs sm:text-sm text-white">Celebrate responsibly. Fund the mission:</p>
+        <p class="mono text-xs sm:text-sm text-white">Celebrate responsibly. Become a Mission Sponsor:</p>
         <div class="mt-2 flex flex-wrap gap-2 justify-center">
-          <a class="fund-pill" data-tier="tea" target="_blank" rel="noopener" hidden>☕ <span data-price="1.92"></span></a>
-          <a class="fund-pill" data-tier="odds" target="_blank" rel="noopener" hidden>🃏 <span data-price="8.07"></span> · waive the zeros</a>
-          <a class="fund-pill" data-tier="patron" target="_blank" rel="noopener" hidden>👑 <span data-price="52"></span></a>
+          <a class="fund-pill" data-tier="tea" target="_blank" rel="noopener" hidden>⏩ <span data-price="1.92"></span> · skip 1M years</a>
+          <a class="fund-pill" data-tier="odds" target="_blank" rel="noopener" hidden>📜 <span data-price="8.07"></span> · certificate</a>
+          <a class="fund-pill" data-tier="patron" target="_blank" rel="noopener" hidden>🏛️ <span data-price="52"></span> · the wall</a>
         </div>
       </div>
     </div>
@@ -730,10 +770,8 @@ function setupSupportLinks() {
     if (!url) return;
     if (a.dataset.tier !== 'custom') any = true;
     a.href = url; a.hidden = false;
-    a.addEventListener('click', () => track(`fund-${a.dataset.tier}-${a.closest('#winFund') ? 'win' : 'footer'}`));
+    a.addEventListener('click', () => track(`fund-${a.dataset.tier}-win`));
   });
-  $('#fundNote').textContent = F.note || 'Opens in a new tab.';
-  $('#fundBox').hidden = !any;
   $('#winFund').hidden = !any;
   if (SITE.merchUrl) {
     $('#merchLink').href = SITE.merchUrl;
@@ -875,7 +913,9 @@ function verifyComparisons(F52) {
    ===================================================================== */
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
-  const def = { allTime: 0, best: null, badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0 };
+  const def = { allTime: 0, best: null, badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
+    purchases: {}, pendingSkips: [], skips: [], cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false };
+  const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
     const raw = localStorage.getItem(STORE_KEY);
@@ -885,7 +925,11 @@ const store = (() => {
       allTime: Number.isFinite(p.allTime) ? p.allTime : 0,
       best: p.best && Number.isFinite(p.best.matches) ? p.best : null,
       badges: p.badges && typeof p.badges === 'object' ? p.badges : {},
-      manual: n(p.manual), manualBest: n(p.manualBest), royalBest: n(p.royalBest), ludBestMs: n(p.ludBestMs)
+      manual: n(p.manual), manualBest: n(p.manualBest), royalBest: n(p.royalBest), ludBestMs: n(p.ludBestMs),
+      purchases: p.purchases && typeof p.purchases === 'object' ? { tea: n(p.purchases.tea), odds: n(p.purchases.odds), patron: n(p.purchases.patron) } : {},
+      pendingSkips: Array.isArray(p.pendingSkips) ? p.pendingSkips.filter(t => ['tea', 'odds', 'patron'].includes(t)).slice(0, 20) : [],
+      skips: Array.isArray(p.skips) ? p.skips.filter(x => x && /^\d+$/.test(x.years) && /^\d+$/.test(x.shuffles)).slice(-50) : [],
+      cardBack: str(p.cardBack) || 'classic', outfit: str(p.outfit) || 'classic', certId: str(p.certId), wallSubmitted: p.wallSubmitted === true
     };
   } catch (e) { return def; }
 })();
@@ -927,7 +971,7 @@ const el = {
   meterNum: $('#meterNum'), meterCount: $('#meterCount'), meterSub: $('#meterSub'),
   bubble: $('#bubble'), profSlot: $('#profSlot'), live: $('#live'),
   logBody: $('#logBody'), pbRow: $('#pbRow'), apRate: $('#apRate'),
-  globalCount: $('#globalCount'), miniResult: $('#miniResult'), liveCount: $('#liveCount'), liveYou: $('#liveYou'), progA: $('#progA'), progB: $('#progB'), progSr: $('#progSr')
+  miniResult: $('#miniResult'), liveCount: $('#liveCount'), liveYou: $('#liveYou'), progA: $('#progA'), progB: $('#progB'), progSr: $('#progSr')
 };
 
 function buildGrid(container) {
@@ -1004,7 +1048,7 @@ function profSVG() {
    <ellipse class="p-yawn" cx="100" cy="143" rx="9" ry="11" fill="#5a1020" stroke="${ink}" stroke-width="3"/>
    <ellipse class="p-oh" cx="100" cy="142" rx="6" ry="7" fill="#5a1020" stroke="${ink}" stroke-width="3"/>
    <path class="p-sweat" d="M146 76 q7 11 0 15 q-7 -4 0 -15 z" fill="#7fe3ff" stroke="#1b6c86" stroke-width="1.5"/>
-   <path d="M86 160 l14 8 l14 -8 v18 l-14 -8 l-14 8 z" fill="#ff2fd6" stroke="${ink}" stroke-width="2.5"/>
+   <path class="p-bow" d="M86 160 l14 8 l14 -8 v18 l-14 -8 l-14 8 z" fill="#ff2fd6" stroke="${ink}" stroke-width="2.5"/>
   </g>
   <g class="p-spray" fill="#9ad9ff"><circle cx="72" cy="146" r="3"/><circle cx="62" cy="138" r="2.5"/><circle cx="58" cy="153" r="2"/><circle cx="128" cy="146" r="3"/><circle cx="138" cy="137" r="2.5"/><circle cx="142" cy="154" r="2"/></g>
   <g class="p-arm-l">
@@ -1017,7 +1061,7 @@ function profSVG() {
    <circle cx="165" cy="168" r="6" fill="#fff" stroke="${ink}" stroke-width="2.5"/>
    <g class="p-tea"><path d="M152 172 h26 l-3 16 q-1 5 -10 5 q-9 0 -10 -5 z" fill="#fff" stroke="${ink}" stroke-width="2.5"/><path d="M178 176 q8 0 6 6 q-2 5 -8 4" stroke="${ink}" stroke-width="2.5" fill="none"/><ellipse cx="165" cy="194" rx="18" ry="3.5" fill="#fff" stroke="${ink}" stroke-width="2"/><g stroke="#cfeee6" stroke-width="2" fill="none" opacity=".75"><path d="M160 166 q-4 -6 0 -12 q4 -6 0 -12"/><path d="M170 166 q-4 -6 0 -12"/></g></g>
   </g>
-  <g class="p-hat"><ellipse cx="100" cy="62" rx="56" ry="9" fill="#151515" stroke="#000" stroke-width="2"/><path d="M66 60 L70 12 Q70 6 76 6 L124 6 Q130 6 130 12 L134 60 Z" fill="#1d1d1d" stroke="#000" stroke-width="2"/><rect x="67" y="42" width="66" height="10" fill="#ff2fd6"/><path d="M78 14 L76 38" stroke="#555" stroke-width="3" stroke-linecap="round"/></g>
+  <g class="p-hat"><ellipse cx="100" cy="62" rx="56" ry="9" fill="#151515" stroke="#000" stroke-width="2"/><path d="M66 60 L70 12 Q70 6 76 6 L124 6 Q130 6 130 12 L134 60 Z" fill="#1d1d1d" stroke="#000" stroke-width="2"/><rect class="p-band" x="67" y="42" width="66" height="10" fill="#ff2fd6"/><path d="M78 14 L76 38" stroke="#555" stroke-width="3" stroke-linecap="round"/></g>
  </g>
  <g class="p-dropped"><circle cx="156" cy="284" r="9" fill="rgba(180,240,255,.3)" stroke="#8a6a00" stroke-width="3"/><path d="M151 280 l4 -4" stroke="#fff" stroke-width="2"/></g>
 </svg>
@@ -1420,6 +1464,7 @@ async function animateShuffle(res) {
   anim.active = true; anim.pending = res;
   clearMatches();
   const cards = C.cards;
+  cards.forEach(c => c.classList.add('back'));                // show the card backs while the deck is in the air
   const g = el.chalGrid.getBoundingClientRect();
   const cx = g.left + g.width / 2, cy = g.top + g.height / 2;
   const off = cards.map(c => { const r = c.getBoundingClientRect(); return [cx - (r.left + r.width / 2), cy - (r.top + r.height / 2)]; });
@@ -1600,12 +1645,13 @@ function flushAutopilot() {
 /* =====================================================================
    11. Global counter, progress bar, fellow shufflers ticker
    ===================================================================== */
-const MISSION_EPOCH = Date.UTC(2025, 0, 1);
-let globalSim = BigInt(Math.floor((Date.now() - MISSION_EPOCH) / 1000)) * 1150n + BigInt(RNG.below(1000000));
-function globalTotal() { return globalSim + BigInt(store.allTime); }
-function renderGlobal() {
-  const g = globalTotal();
-  el.globalCount.textContent = fmtBig(g);
+/** Humanity's real total: the live counter plus shuffles still on their way (or just yours when offline). */
+function humanityTotal() {
+  const t = live.on && live.total !== null ? live.total + live.pending + live.inflight : store.allTime;
+  return BigInt(Math.max(0, Math.floor(t)));
+}
+function renderProgress() {
+  const g = humanityTotal();
   const pct = ratioPercent(g, F52, 76);
   const zeros = leadingZeros(pct);
   const text = `HUMANITY'S PROGRESS: ${pct}% · only ${zeros} zeros after the decimal point to go ·`;
@@ -1668,12 +1714,11 @@ if (live.on) {
 
 let tickN = 0;
 setInterval(() => {
-  globalSim += BigInt(60 + RNG.below(120));           // ≈ 600–1,800 simulated shuffles per second
-  renderGlobal();
+  if (tickN % 5 === 0) renderProgress();
   renderLive();
   tickN++;
   if (statsDirty && (tickN % 3 === 0 || !autopilot.mode)) updateStats();
-  if (tickN % 50 === 0) el.progSr.textContent = `Humanity's progress: ${ratioPercent(globalTotal(), F52, 76)} percent.`;
+  if (tickN % 50 === 0) el.progSr.textContent = `Humanity's progress: ${ratioPercent(humanityTotal(), F52, 76)} percent.`;
 }, 100);
 
 /* Fellow shufflers. Lines are built from templates ({flag} {who} {whol} {city}
@@ -2277,6 +2322,11 @@ function drawCard(cv, withProf) {
   c.textAlign = 'center'; c.textBaseline = 'alphabetic';
   c.font = '64px Bungee, Impact, sans-serif'; c.fillStyle = '#ff8bec'; c.shadowColor = '#ff2fd6'; c.shadowBlur = 22;
   c.fillText('THE IMPOSSIBLE SHUFFLE', S / 2, 150); c.shadowBlur = 0;
+  if (hasAny()) {      // gold sponsor badge
+    c.font = '800 26px "JetBrains Mono", monospace'; const label = '★ MISSION SPONSOR', w = c.measureText(label).width + 48;
+    roundRectPath(c, S / 2 - w / 2, 172, w, 46, 23); c.fillStyle = '#ffd23f'; c.shadowColor = 'rgba(255,210,63,.8)'; c.shadowBlur = 18; c.fill(); c.shadowBlur = 0;
+    c.fillStyle = '#2a1c00'; c.fillText(label, S / 2, 205);
+  }
   if (withProf && profImg) c.drawImage(profImg, 70, 240, 280, 420);
   const cx = withProf && profImg ? 650 : S / 2;
   c.font = '700 34px "JetBrains Mono", monospace'; c.fillStyle = '#b9cdc1'; c.fillText('MY BEST SHUFFLE', cx, 290);
@@ -2442,13 +2492,369 @@ function selfTest() {
   return allOk;
 }
 
+/* =====================================================================
+   15b. "Are you impatient?" Time skips, sponsor extras, certificate, wall
+   ---------------------------------------------------------------------
+   A time skip fast-forwards your personal mission by N years of nonstop
+   shuffling (one shuffle per second). Nothing is faked and nothing is
+   looped billions of times: the outcome is drawn from the exact odds.
+   - A match happens with probability N / 52! (we draw a uniform random
+     integer below 52! and check whether it is below N; the error versus
+     1 - (1 - 1/52!)^N is around 10^-100).
+   - The best shuffle of the N is drawn from the real distribution of the
+     maximum: P(best >= k) = 1 - (1 - q_k)^N, where q_k is the chance of
+     k or more matches in one shuffle.
+   Simulated years never touch the humankind counter. There is no prize:
+   a match earns bragging rights and nothing else.
+   Purchases unlock in this browser when Stripe sends the buyer back to
+   ?thanks=<tier>. That is an honour system (anyone can type the address);
+   fine for jokes and cosmetics, and the Wall is moderated by hand.
+   ===================================================================== */
+const SPY_BIG = 31557600n;                      // seconds in a 365.25-day year: one shuffle per second
+const IMP_TIERS = [
+  { id: 'tea', icon: '⏩', name: 'Mildly impatient', years: 1000000n, price: '1.92',
+    perks: ['1,000,000-year time skip', 'Gold “Mission Sponsor” badge', 'Custom card backs'] },
+  { id: 'odds', icon: '⏩⏩', name: 'Very impatient', years: 500000000n, price: '8.07', featured: true,
+    perks: ['500,000,000-year time skip', '📜 Certificate of Futility (PDF)', 'Card backs and Professor outfits', 'Gold “Mission Sponsor” badge'] },
+  { id: 'patron', icon: '⏩⏩⏩', name: 'Cosmically impatient', years: 1000000000n, price: '52',
+    perks: ['1,000,000,000-year time skip', '📜 Certificate of Futility (PDF)', '🏛️ Your name on the Wall of Futility', 'Every cosmetic, including the Royal Professor'] }
+];
+const tierById = id => IMP_TIERS.find(t => t.id === id);
+const POWERBALL = 292201338;
+/** Plain-language comparisons for a probability p: the most Powerball jackpots in a row that are
+    still MORE likely than p, and the number of called coin flips that is about as likely. */
+function hopelessness(p) {
+  let k = 0; while (Math.pow(1 / POWERBALL, k + 1) > p) k++;
+  return { powerballs: k, flips: Math.round(Math.log2(1 / p)) };
+}
+const ORDINAL_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const timesWord = n => (ORDINAL_WORDS[n] || fmt(n)) + (n === 1 ? ' time' : ' times');
+
+/* ---------- Exact sampling ---------- */
+function randomBigBelow(max) {                  // uniform BigInt in [0, max): random bits, rejection sampling
+  const bits = max.toString(2).length, words = Math.ceil(bits / 16), extra = BigInt(words * 16 - bits);
+  for (;;) {
+    let r = 0n;
+    for (let i = 0; i < words; i++) r = (r << 16n) | BigInt(RNG.below(0x10000));
+    r >>= extra;
+    if (r < max) return r;
+  }
+}
+const Q_TAIL = (() => {                         // q[k] = P(k or more matches in one shuffle)
+  const q = new Array(54).fill(0); let tail = 0;
+  for (let k = 52; k >= 0; k--) { tail += pFixed(k); q[k] = tail; }
+  return q;
+})();
+function simulateSkip(years) {
+  const N = years * SPY_BIG, n = Number(N);
+  const matched = randomBigBelow(F52) < N;
+  const u = rnd();
+  let best = 0;
+  for (let k = 1; k <= 52; k++) {
+    const pAtLeast = -Math.expm1(n * Math.log1p(-Q_TAIL[k]));
+    if (u < pAtLeast) best = k; else break;
+  }
+  if (matched) best = 52;
+  return { shuffles: N, best, matched };
+}
+
+/* ---------- Store helpers ---------- */
+const owned = () => store.purchases || {};
+const hasAny = () => Object.values(owned()).some(v => v > 0);
+const hasOdds = () => (owned().odds || 0) + (owned().patron || 0) > 0;
+const hasPatron = () => (owned().patron || 0) > 0;
+const skippedShuffles = () => store.skips.reduce((a, s) => a + BigInt(s.shuffles || '0'), 0n);
+const skippedYears = () => store.skips.reduce((a, s) => a + BigInt(s.years || '0'), 0n);
+const bestEverInclSkips = () => Math.max(bestEver(), ...store.skips.map(s => s.best || 0));
+
+/* ---------- Tier cards ---------- */
+function renderImpatient() {
+  const F = SITE.fund, cur = F.currency || '$';
+  let any = false;
+  $('#impTiers').innerHTML = IMP_TIERS.map(t => {
+    const url = F[t.id]; if (!url) return '';
+    any = true;
+    const N = t.years * SPY_BIG, pct = ratioPercent(N, F52, 80), z = leadingZeros(pct);
+    const p = Number(N) / F52_NUM, h = hopelessness(p);
+    const shown = pct.slice(0, z + 2 + 4);
+    return `<div class="imp-card${t.featured ? ' featured' : ''}">
+      ${t.featured ? '<span class="flag">THE SENSIBLE CHOICE</span>' : ''}
+      <p class="imp-name">${t.icon} ${t.name}</p>
+      <p class="imp-years">Skip ${fmtBig(t.years)} years</p>
+      <p class="imp-sub">= ${fmtBig(N)} shuffles, one per second, nonstop</p>
+      <p class="imp-label">CHANCE OF A MATCH</p>
+      <p class="imp-chance">${shown}…%</p>
+      <p class="imp-sub">That's ${z} zeros after the decimal point.</p>
+      <p class="imp-cmp">Less likely than winning the Powerball jackpot <b>${timesWord(h.powerballs)} in a row</b>, and about as likely as calling ${h.flips} coin flips in a row.</p>
+      <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}</ul>
+      <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}">Skip ahead · ${cur}${t.price}</a>
+    </div>`;
+  }).join('');
+  $$('#impTiers [data-imp]').forEach(a => a.addEventListener('click', () => track('impatient-' + a.dataset.imp)));
+  $('#impatient').hidden = !any;
+}
+
+/* ---------- Thank-you return from Stripe ---------- */
+function handleThanks() {
+  const params = new URLSearchParams(location.search);
+  const id = params.get('thanks');
+  const t = id && tierById(id);
+  if (!t) return;
+  store.purchases = store.purchases || {};
+  store.purchases[id] = (store.purchases[id] || 0) + 1;
+  store.pendingSkips.push(id);
+  saveStore(true);
+  track('thanks-' + id);
+  params.delete('thanks');
+  const q = params.toString();
+  try { history.replaceState(null, '', location.pathname + (q ? '?' + q : '') + '#impatient'); } catch (e) { /* file:// */ }
+  setTimeout(() => {
+    $('#impatient').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    toast(`🎉 <b>Thank you, Mission Sponsor!</b> Your ${fmtBig(t.years)}-year time skip is ready. Your extras are unlocked below.`);
+    sfx('land', 6);
+  }, 600);
+}
+
+/* ---------- Extras panel ---------- */
+const CARD_BACKS = [
+  { id: 'classic', name: 'Classic magenta', need: 'free' }, { id: 'gold', name: 'Casino gold', need: 'any' },
+  { id: 'cyan', name: 'Neon dots', need: 'any' }, { id: 'felt', name: 'Felt diamonds', need: 'any' }, { id: 'royal', name: 'Royal purple', need: 'patron' }
+];
+const OUTFITS = [
+  { id: 'classic', name: 'Classic pink', need: 'free' }, { id: 'midnight', name: 'Midnight cyan', need: 'odds' },
+  { id: 'emerald', name: 'Emerald', need: 'odds' }, { id: 'royal', name: 'Royal Professor', need: 'patron' }
+];
+const allowed = need => need === 'free' || (need === 'any' && hasAny()) || (need === 'odds' && hasOdds()) || (need === 'patron' && hasPatron());
+function applyCosmetics() {
+  const cb = CARD_BACKS.find(c => c.id === store.cardBack && allowed(c.need)) ? store.cardBack : 'classic';
+  document.body.classList.remove(...CARD_BACKS.map(c => 'cb-' + c.id));
+  document.body.classList.add('cb-' + cb);
+  const of = OUTFITS.find(o => o.id === store.outfit && allowed(o.need)) ? store.outfit : 'classic';
+  for (const slot of [el.profSlot, $('#winProf')]) { slot.classList.remove(...OUTFITS.map(o => 'outfit-' + o.id)); slot.classList.add('outfit-' + of); }
+  $('#sponsorChip').hidden = !hasAny();
+}
+function optionButtons(list, current, key) {
+  return list.filter(o => allowed(o.need)).map(o => `<button type="button" class="opt-btn" data-${key}="${o.id}" aria-pressed="${o.id === current}">${o.name}</button>`).join('');
+}
+function renderExtras() {
+  const box = $('#myExtras');
+  box.hidden = !hasAny();
+  if (!hasAny()) return;
+  const pend = store.pendingSkips;
+  $('#skipButtons').innerHTML = pend.length
+    ? pend.map((id, i) => `<button type="button" class="shuffle-btn !w-auto !text-sm !py-2 !px-4" data-runskip="${i}">⏩ Start your ${fmtBig(tierById(id).years)}-year time skip</button>`).join('')
+    : '<p class="text-sm text-[#9fb5a8]">No time skips waiting. Buy another one above if you are still impatient.</p>';
+  $('#skipHistory').innerHTML = store.skips.length
+    ? 'Your skips so far: ' + store.skips.map(s => `${fmtBig(BigInt(s.years))} years → best ${s.best}/52`).join(' · ')
+    : '';
+  $('#cbOptions').innerHTML = optionButtons(CARD_BACKS, store.cardBack || 'classic', 'cb');
+  $('#outfitRow').hidden = !hasOdds();
+  $('#outfitOptions').innerHTML = optionButtons(OUTFITS, store.outfit || 'classic', 'outfit');
+  $('#certRow').hidden = !hasOdds();
+  $('#wallRow').hidden = !hasPatron() || !WALL.on;
+  $('#wallForm').hidden = !!store.wallSubmitted;
+  $('#wallDone').hidden = !store.wallSubmitted;
+}
+
+/* ---------- Running a time skip ---------- */
+const SKIP_LINES = ['Continents drifting politely…', 'The Professor\'s tea went cold. He made another.', 'The Sun is getting noticeably warmer…',
+  'Mathematics checks in. Still winning.', 'Mountains erode. Shuffling continues.', 'A new species evolves, learns cards, joins in.', 'Still shuffling…'];
+let skipBusy = false;
+function runSkip(index) {
+  if (skipBusy) return;
+  const id = store.pendingSkips[index], t = tierById(id);
+  if (!t) return;
+  skipBusy = true;
+  const res = simulateSkip(t.years);
+  store.pendingSkips.splice(index, 1);
+  store.skips.push({ tier: id, years: t.years.toString(), shuffles: res.shuffles.toString(), best: res.best, matched: res.matched, at: Date.now() });
+  saveStore(true);
+  track('skip-' + id);
+  const run = $('#skipRun'); run.hidden = false;
+  $('#skipResult').innerHTML = '';
+  sfx('roll');
+  const dur = reduceMotion ? 0 : 4200, t0 = performance.now();
+  const yearsN = Number(t.years), shufN = Number(res.shuffles);
+  const step = now => {
+    const k = dur ? Math.min(1, (now - t0) / dur) : 1, e = 1 - Math.pow(1 - k, 3);
+    $('#skipYears').textContent = fmt(Math.round(yearsN * e));
+    $('#skipShuffles').textContent = k < 1 ? fmt(Math.round(shufN * e)) : fmtBig(res.shuffles);
+    $('#skipStatus').textContent = k < 1 ? SKIP_LINES[Math.min(SKIP_LINES.length - 1, Math.floor(k * SKIP_LINES.length))] : 'Time skip complete.';
+    if (k < 1) requestAnimationFrame(step); else finishSkip(t, res);
+  };
+  requestAnimationFrame(step);
+}
+function finishSkip(t, res) {
+  skipBusy = false;
+  const perShot = Q_TAIL[res.best], perStr = perShot > 0 ? fmt(Math.round(1 / perShot)) : '∞';
+  if (res.matched) {
+    $('#skipResult').innerHTML = '<b>52/52.</b> In a billion-to-one universe this was the one. Please stand by.';
+    triggerWin({ n: res.shuffles.toString(), m: 52, rigged: false });
+  } else {
+    $('#skipResult').innerHTML = `Best shuffle during your ${fmtBig(t.years)} years: <b>${res.best}/52</b> (about 1 in ${perStr} per shuffle). Matches: <b>0</b>. Mathematics wins again. The Professor did not even look up.`;
+  }
+  sfx('land', Math.min(6, res.best >= 10 ? 6 : 4));
+  renderExtras();
+  updateStats();
+}
+
+/* ---------- Certificate of Futility (PDF) ---------- */
+function certNumber() {
+  if (!store.certId) { store.certId = 'TIS-' + Array.from({ length: 8 }, () => '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ'[RNG.below(33)]).join(''); saveStore(true); }
+  return store.certId;
+}
+const BIG_WORDS = ['', 'thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion', 'sextillion', 'septillion', 'octillion', 'nonillion',
+  'decillion', 'undecillion', 'duodecillion', 'tredecillion', 'quattuordecillion', 'quindecillion', 'sexdecillion', 'septendecillion', 'octodecillion', 'novemdecillion', 'vigintillion'];
+/** 2.56e60 → "2.6 novemdecillion" (short scale, plain text, no superscripts). */
+function bigWords(x) {
+  const g = Math.min(BIG_WORDS.length - 1, Math.floor(Math.log10(x) / 3)), m = x / Math.pow(10, g * 3);
+  return `${m < 10 ? m.toFixed(1) : Math.round(m)} ${BIG_WORDS[g]}`.trim();
+}
+function drawCertificate(cv, name) {
+  const W = 2339, H = 1654, c = cv.getContext('2d');
+  cv.width = W; cv.height = H;
+  const total = BigInt(store.allTime) + skippedShuffles();
+  const pct = ratioPercent(total > 0n ? total : 1n, F52, 90), z = leadingZeros(pct);
+  const p = Math.max(Number(total), 1) / F52_NUM, h = hopelessness(p);
+  // parchment
+  c.fillStyle = '#fbf5e3'; c.fillRect(0, 0, W, H);
+  c.strokeStyle = '#0b3d2a'; c.lineWidth = 18; c.strokeRect(60, 60, W - 120, H - 120);
+  c.strokeStyle = '#c9971a'; c.lineWidth = 5; c.strokeRect(100, 100, W - 200, H - 200);
+  c.strokeStyle = '#ff2fd6'; c.lineWidth = 3; c.strokeRect(118, 118, W - 236, H - 236);
+  c.textAlign = 'center';
+  c.fillStyle = '#0b3d2a'; c.font = '120px Bungee, Impact, sans-serif'; c.fillText('CERTIFICATE OF FUTILITY', W / 2, 300);
+  c.fillStyle = '#5b4a1a'; c.font = 'italic 52px Georgia, "Times New Roman", serif'; c.fillText('This certifies that', W / 2, 400);
+  c.fillStyle = '#1a1206'; c.font = 'italic bold 120px Georgia, "Times New Roman", serif';
+  c.fillText(name, W / 2, 540, W - 500);
+  c.strokeStyle = '#c9971a'; c.lineWidth = 3; c.beginPath(); c.moveTo(W / 2 - 700, 572); c.lineTo(W / 2 + 700, 572); c.stroke();
+  c.fillStyle = '#2a2414'; c.font = '46px Georgia, "Times New Roman", serif';
+  c.fillText('has bravely tried to shuffle a deck of cards into the Holy Grail Sequence', W / 2, 650);
+  c.fillText('at The Impossible Shuffle, and has, as predicted, not yet succeeded.', W / 2, 708);
+  const rows = [
+    ['Shuffles by hand and autopilot', fmt(store.allTime)],
+    ['Years skipped ahead', fmtBig(skippedYears())],
+    ['Total shuffles', fmtBig(total)],
+    ['Best match ever', `${bestEverInclSkips()}/52`],
+    ['Matches', '0']
+  ];
+  rows.forEach(([k, v], i) => {
+    const y = 800 + i * 56;
+    c.textAlign = 'right'; c.fillStyle = '#5b4a1a'; c.font = '40px Georgia, serif'; c.fillText(k, W / 2 - 30, y);
+    c.textAlign = 'left'; c.fillStyle = '#0b3d2a'; c.font = 'bold 44px "JetBrains Mono", monospace'; c.fillText(v, W / 2 + 30, y);
+  });
+  c.textAlign = 'center';
+  c.fillStyle = '#5b4a1a'; c.font = '36px Georgia, serif'; c.fillText('Your total chance of success so far', W / 2, 1105);
+  c.fillStyle = '#b0128f'; c.font = 'bold 34px "JetBrains Mono", monospace';
+  c.fillText(pct.slice(0, z + 2 + 6) + '…%', W / 2, 1155, W - 300);
+  const waitYears = F52_NUM / SECONDS_PER_YEAR;
+  c.fillStyle = '#2a2414'; c.font = 'italic 34px Georgia, serif';
+  c.fillText(`That's ${z} zeros after the decimal point: less likely than winning the Powerball jackpot ${timesWord(h.powerballs)} in a row,`, W / 2, 1212, W - 320);
+  c.fillText(`and about as likely as calling ${h.flips} coin flips in a row. At one shuffle per second, a match takes about ${bigWords(waitYears)} years`, W / 2, 1258, W - 320);
+  c.fillText(`on average, roughly ${bigWords(waitYears / UNIVERSE_AGE_YEARS)} times the age of the universe. Odds per shuffle: 1 in 52!, a number with ${F52.toString().length} digits.`, W / 2, 1304, W - 320);
+  // signature, date, number
+  c.textAlign = 'left'; c.strokeStyle = '#1a1206'; c.lineWidth = 4; c.beginPath();
+  c.moveTo(300, 1440); c.bezierCurveTo(360, 1380, 400, 1480, 460, 1420); c.bezierCurveTo(520, 1370, 540, 1470, 620, 1410); c.bezierCurveTo(660, 1390, 700, 1440, 760, 1415); c.stroke();
+  c.lineWidth = 2; c.beginPath(); c.moveTo(280, 1455); c.lineTo(820, 1455); c.stroke();
+  c.fillStyle = '#2a2414'; c.font = '32px Georgia, serif'; c.fillText('Professor Factorial, Chief Statistician', 280, 1495);
+  c.textAlign = 'right';
+  c.fillText(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), W - 280, 1445);
+  c.font = '28px "JetBrains Mono", monospace'; c.fillText(`No. ${certNumber()} · theimpossibleshuffle.com`, W - 280, 1495);
+  // seal
+  const sx = W / 2, sy = 1425;
+  c.beginPath(); c.arc(sx, sy, 90, 0, Math.PI * 2); c.fillStyle = '#ffd23f'; c.fill(); c.lineWidth = 6; c.strokeStyle = '#8a6a00'; c.stroke();
+  c.beginPath(); c.arc(sx, sy, 76, 0, Math.PI * 2); c.lineWidth = 2; c.stroke();
+  if (profImg) c.drawImage(profImg, sx - 30, sy - 72, 60, 90);
+  c.textAlign = 'center'; c.fillStyle = '#5b3a00'; c.font = 'bold 15px "JetBrains Mono", monospace';
+  c.fillText('MATHEMATICS 1', sx, sy + 38); c.fillText('HUMANITY 0', sx, sy + 56);
+}
+function loadJsPDF() {
+  if (window.jspdf) return Promise.resolve(window.jspdf);
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    s.onload = () => (window.jspdf ? res(window.jspdf) : rej(new Error('jsPDF missing')));
+    s.onerror = () => rej(new Error('jsPDF failed to load'));
+    document.head.appendChild(s);
+  });
+}
+async function downloadCertificate() {
+  const name = ($('#certName').value || '').trim().slice(0, 40);
+  if (!name) { $('#certName').focus(); toast('📜 Type the name for the certificate first.'); return; }
+  track('certificate');
+  try { await Promise.all([document.fonts.load('120px Bungee'), document.fonts.load('bold 44px "JetBrains Mono"')]); } catch (e) { /* fallback fonts */ }
+  await loadProfImg();
+  const cv = document.createElement('canvas');
+  try { drawCertificate(cv, name); cv.toDataURL(); } catch (e) { profImg = null; drawCertificate(cv, name); }   // tainted canvas (file://): skip the seal image
+  const file = 'certificate-of-futility.pdf';
+  try {
+    const { jsPDF } = await loadJsPDF();
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    pdf.addImage(cv.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 297, 210);
+    pdf.setProperties({ title: 'Certificate of Futility', subject: 'The Impossible Shuffle', creator: 'theimpossibleshuffle.com' });
+    pdf.save(file);
+  } catch (e) {                                   // no PDF library: hand over a PNG instead
+    const a = document.createElement('a'); a.href = cv.toDataURL('image/png'); a.download = 'certificate-of-futility.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    toast('📜 Saved your certificate as an image (the PDF maker could not load).');
+  }
+}
+
+/* ---------- Wall of Futility (Supabase, moderated) ---------- */
+const WALL = { on: live.on, rows: [] };
+async function loadWall() {
+  if (!WALL.on) return;
+  try {
+    const r = await fetch(`${LIVE_COUNTER.url}/rest/v1/sponsors?select=name,dedication,created_at&approved=eq.true&order=created_at.desc&limit=200`, { headers: liveHeaders(), cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    WALL.rows = await r.json();
+  } catch (e) { WALL.rows = []; }
+  const box = $('#wallBox');
+  if (!WALL.rows.length) { box.hidden = true; return; }
+  $('#wallList').innerHTML = '';
+  for (const row of WALL.rows) {
+    const chip = document.createElement('div'); chip.className = 'wall-chip';
+    const n = document.createElement('b'); n.textContent = '👑 ' + row.name; chip.appendChild(n);
+    if (row.dedication) { const d = document.createElement('span'); d.textContent = ' · ' + row.dedication; chip.appendChild(d); }
+    $('#wallList').appendChild(chip);
+  }
+  box.hidden = false;
+}
+async function submitWall(e) {
+  e.preventDefault();
+  const name = $('#wallName').value.trim().slice(0, 40), dedication = $('#wallDedication').value.trim().slice(0, 80);
+  if (!name) { $('#wallName').focus(); return; }
+  try {
+    const r = await fetch(`${LIVE_COUNTER.url}/rest/v1/sponsors`, { method: 'POST', headers: { ...liveHeaders(), Prefer: 'return=minimal' }, body: JSON.stringify({ name, dedication: dedication || null }) });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    store.wallSubmitted = true; saveStore(true); track('wall-submit');
+    renderExtras();
+    toast('🏛️ <b>Sent!</b> Your name appears on the Wall once Mission Control has checked it.');
+  } catch (err) { toast('🏛️ That didn\'t go through. Please try again in a minute.'); }
+}
+
+/* ---------- Wiring ---------- */
+function initImpatient() {
+  renderImpatient();
+  handleThanks();
+  applyCosmetics();
+  renderExtras();
+  loadWall();
+  $('#myExtras').addEventListener('click', e => {
+    const run = e.target.closest('[data-runskip]'); if (run) { runSkip(Number(run.dataset.runskip)); return; }
+    const cb = e.target.closest('[data-cb]'); if (cb) { store.cardBack = cb.dataset.cb; saveStore(true); applyCosmetics(); renderExtras(); return; }
+    const of = e.target.closest('[data-outfit]'); if (of) { store.outfit = of.dataset.outfit; saveStore(true); applyCosmetics(); renderExtras(); }
+  });
+  $('#certBtn').addEventListener('click', downloadCertificate);
+  $('#wallForm').addEventListener('submit', submitWall);
+}
+
 function boot() {
   loadAnalytics();
   setupSupportLinks();
   loadGrail();
   renderBadges();
   renderPB();
-  renderGlobal();
+  renderProgress();
   updateRiggedBadge();
   updateStats();
   setPose('intro', LINES.intro[0]);
@@ -2456,6 +2862,7 @@ function boot() {
   showFact(); setInterval(showFact, 8000);
   tickerAdd(); requestAnimationFrame(tickerLoop);
   layoutBulbs();
+  initImpatient();
   try { selfTest(); } catch (e) { console.error(e); }
   window.ImpossibleShuffle = { selfTest, renderShuffleSound, verifyComparisons: () => verifyComparisons(F52), shuffleInto, countMatches };
 }
