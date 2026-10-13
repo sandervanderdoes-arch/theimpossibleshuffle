@@ -664,6 +664,12 @@
     <div id="merchBox" class="mt-6" hidden>
       <a id="merchLink" class="chip-btn merch-btn" target="_blank" rel="noopener">👕 Mission merch</a>
     </div>
+    <div id="instaBox" class="mt-4" hidden>
+      <a id="instaLink" class="chip-btn merch-btn" target="_blank" rel="noopener me" aria-label="The Impossible Shuffle on Instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+        @theimpossibleshuffle
+      </a>
+    </div>
     <p class="mt-6 font-display text-sm neon-pink">Made with love, despair and Fisher–Yates.</p>
   </footer>
 </div>
@@ -764,7 +770,8 @@ const SITE = {
     custom: '',         // optional "choose your own amount" link (hidden while empty)
     note: 'Secure checkout by Stripe. Opens in a new tab.'
   },
-  merchUrl: ''          // merch shop page
+  merchUrl: '',         // merch shop page
+  instagram: 'https://www.instagram.com/theimpossibleshuffle/'   // Instagram profile (hidden while empty)
 };
 /* Visitor stats: GoatCounter or Plausible. Both are cookieless, so no consent banner
    is needed. Only page views and a handful of named events are sent: never the deck,
@@ -808,6 +815,11 @@ function setupSupportLinks() {
     a.addEventListener('click', () => track(`fund-${a.dataset.tier}-win`));
   });
   $('#winFund').hidden = !any;
+  if (SITE.instagram) {
+    $('#instaLink').href = SITE.instagram;
+    $('#instaLink').addEventListener('click', () => track('instagram'));
+    $('#instaBox').hidden = false;
+  }
   if (SITE.merchUrl) {
     $('#merchLink').href = SITE.merchUrl;
     $('#merchLink').addEventListener('click', () => track('merch'));
