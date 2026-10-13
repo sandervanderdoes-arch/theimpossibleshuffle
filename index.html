@@ -316,32 +316,21 @@
   .toast .copy-text { display:block; margin-top:.4rem; padding:.4rem; background:rgba(0,0,0,.4); border-radius:6px; font:12px/1.4 "JetBrains Mono", monospace; user-select:all; word-break:break-word; }
   /* Are you impatient? Time-skip tiers, sponsor extras, the Wall of Futility. */
   .imp-tiers { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(16rem, 1fr)); align-items:stretch; }
-  .imp-card { position:relative; display:flex; flex-direction:column; gap:.2rem; padding:1.4rem 1.1rem 1.1rem; border-radius:16px; border:1px solid rgba(255,210,63,.4); background:rgba(0,0,0,.45); min-width:0; }
+  .imp-card { position:relative; display:flex; flex-direction:column; gap:.25rem; padding:1.4rem 1.1rem 1rem; border-radius:16px; border:1px solid rgba(255,210,63,.4); background:rgba(0,0,0,.45); min-width:0; }
   .imp-card.featured { border:2px solid var(--gold); background:linear-gradient(160deg, rgba(255,210,63,.16), rgba(255,47,214,.1)); box-shadow:0 0 24px rgba(255,210,63,.3); }
   .imp-card .flag { position:absolute; top:-.7rem; left:50%; transform:translateX(-50%); white-space:nowrap; font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; color:#1d1300; background:var(--gold); border-radius:999px; padding:.2rem .65rem; }
-  .imp-name { font-weight:800; color:#ff9bec; font-size:.95rem; }
-  .imp-years { font-family:Bungee, Impact, system-ui, sans-serif; font-size:1.35rem; line-height:1.2; color:#ffe68a; }
-  .imp-sub { font-size:.78rem; color:#9fb5a8; overflow-wrap:anywhere; }
-  .imp-label { margin-top:.6rem; font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.08em; color:#9fb5a8; }
-  .imp-chance { font:700 .8rem/1.35 "JetBrains Mono", ui-monospace, monospace; color:#a5fbff; overflow-wrap:anywhere; word-break:break-all; }
-  .imp-cmp { margin-top:.35rem; font-size:.82rem; line-height:1.45; color:#cfe3d7; }
-  .imp-perks { margin:.7rem 0 .9rem; padding:0; list-style:none; font-size:.85rem; display:grid; gap:.25rem; }
-  .imp-perks li::before { content:"✓ "; color:#7cff6b; font-weight:800; }
-  .imp-buy { margin-top:auto; text-align:center; text-decoration:none; font-size:1rem !important; }
-  .imp-story { font-size:.85rem; font-style:italic; color:#ff9bec; }
-  .imp-times { display:flex; flex-wrap:wrap; gap:.35rem .9rem; margin-top:.45rem; font-size:.78rem; color:#9fb5a8; }
-  .imp-times b { color:#e6f2ea; }
-  .imp-times span:last-child b { color:#a5fbff; }
-  .imp-why { margin:-.3rem 0 .9rem; font-size:.78rem; line-height:1.45; color:#ffe68a; font-style:italic; }
-  .hyper-box { border-radius:16px; border:1px solid rgba(34,243,255,.45); background:rgba(0,20,26,.55); padding:1rem; }
-  .hyper-box.running { box-shadow:0 0 26px rgba(34,243,255,.28); }
-  .hyper-bar { height:14px; border-radius:999px; background:rgba(0,0,0,.55); border:1px solid rgba(34,243,255,.4); overflow:hidden; }
-  #hyperFill { height:100%; width:0; background:repeating-linear-gradient(-45deg,#22f3ff 0 10px,#7ff9ff 10px 20px); transition:width .25s linear; }
-  .hyper-box.running #hyperFill { animation: hyperStripes .6s linear infinite; background-size:28px 28px; }
-  @keyframes hyperStripes { to { background-position:28px 0; } }
-  .hyper-chip { position:fixed; left:calc(.75rem + env(safe-area-inset-left, 0px)); bottom:calc(3.3rem + env(safe-area-inset-bottom, 0px)); z-index:56; min-height:44px; padding:.45rem .85rem; border-radius:999px; border:1px solid #22f3ff; background:rgba(0,20,26,.92); color:#a5fbff; font:800 .78rem "JetBrains Mono", ui-monospace, monospace; box-shadow:0 0 18px rgba(34,243,255,.35); }
-  .hyper-chip[hidden] { display:none; }
-  @media (prefers-reduced-motion: reduce) { .hyper-box.running #hyperFill { animation:none; } }
+  .imp-name { font:800 .72rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.08em; text-transform:uppercase; color:#ff9bec; }
+  .imp-years { font-family:Bungee, Impact, system-ui, sans-serif; font-size:1.5rem; line-height:1.15; color:#ffe68a; }
+  .imp-story { font-size:.9rem; font-style:italic; color:#cfe3d7; }
+  .imp-stats { margin-top:.6rem; padding:.55rem .7rem; border-radius:12px; background:rgba(34,243,255,.07); border:1px solid rgba(34,243,255,.25); display:grid; gap:.2rem; font-size:.85rem; color:#cfe3d7; }
+  .imp-stats b { color:#a5fbff; }
+  .imp-stats span { color:#9fb5a8; font-size:.78rem; }
+  .imp-perks { margin:.7rem 0 .2rem; padding:0; list-style:none; font-size:.9rem; display:grid; gap:.3rem; }
+  .imp-cmp { margin:.5rem 0 .8rem; font-size:.78rem; line-height:1.4; color:#9fb5a8; }
+  .imp-cmp b { color:#cfe3d7; font-weight:700; }
+  .imp-deal { margin-top:auto; align-self:center; margin-bottom:.45rem; font:800 .7rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.04em; color:#ffe68a; }
+  .imp-buy { text-align:center; text-decoration:none; font-size:1rem !important; }
+  .imp-why { margin-top:.45rem; text-align:center; font-size:.72rem; color:#9fb5a8; font-style:italic; }
   .imp-extras { border-top:1px dashed rgba(255,210,63,.35); padding-top:1.1rem; }
   .skip-run { border-radius:14px; background:rgba(0,0,0,.4); border:1px solid rgba(34,243,255,.3); padding:.9rem; }
   .opt-btn { min-height:44px; padding:.45rem .8rem; border-radius:10px; border:1px solid rgba(255,210,63,.4); background:rgba(0,0,0,.35); color:#ffe9a3; font-size:.85rem; font-weight:700; }
@@ -599,9 +588,9 @@
     <div class="panel imp-panel p-4 sm:p-6">
       <h2 id="impTitle" class="font-display text-lg sm:text-2xl neon-gold">⏩ Are you impatient?</h2>
       <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">A proper hand shuffle takes about 20 seconds. At that pace, you'll match the Holy Grail in roughly <b class="text-[#ffe68a]">51 novemdecillion years</b>, give or take a Tuesday. Not a patient person? Fire up the <b class="text-[#a5fbff]">Hyperdrive</b>: it really does every single shuffle of those years, just absurdly faster, and every one counts toward humanity's total. The Professor calls it cheating. We call it efficiency.</p>
-      <p class="mt-2 text-xs text-[#9fb5a8]">Exchange rate: 1 year of nonstop hand shuffling = 1,577,880 shuffles. Every step up adds a zero to your shuffles and knocks one zero off your odds.</p>
+      <p class="mt-2 text-xs text-[#9fb5a8]">Exchange rate: 1 year of nonstop hand shuffling = 1,577,880 shuffles.</p>
       <div id="impTiers" class="imp-tiers mt-6"></div>
-      <p class="mt-4 text-xs text-[#9fb5a8]">*Estimate for this device. Hyperdrive runs while this tab is open; pause whenever you like and the years you haven't used stay saved. Years and extras unlock in the browser you paid in. Spoiler: you will not win. Odds per shuffle stay 1 in 52!, and there is no prize, only bragging rights and the extras. Secure checkout by Stripe, opens in a new tab.</p>
+      <p class="mt-4 text-xs text-[#9fb5a8]">*Estimate for this device. Runs while this tab is open; pause anytime, unused years stay saved. Years and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
 
       <div id="hyperBox" class="hyper-box mt-6" hidden>
         <div class="flex items-center justify-between gap-2 flex-wrap">
@@ -2644,20 +2633,20 @@ const NUM_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'
 const numWord = n => NUM_WORDS[n] || fmt(n);
 const IMP_TIERS = [
   { id: 'tea', icon: '⏩', name: 'Mildly impatient', years: 1000, price: '1.92',
-    story: 'Nonstop hand shuffling since the Vikings.',
-    cmp: p => `Less likely than being dealt a royal flush <b>${numWord(timesInARow(ROYAL_FLUSH, p))} hands in a row</b>.`,
+    story: 'Shuffle nonstop since the Vikings.', deal: 'Cheaper than a coffee',
+    cmp: p => `Your odds: still worse than <b>${timesInARow(ROYAL_FLUSH, p)} royal flushes in a row</b>.`,
     why: 'Why $1.92? One card is 1.92% of a deck.',
-    perks: ['1,000 years of real shuffles', '★ A gold “Mission Sponsor” badge on your stats and share card', '🃏 New card backs while you shuffle: casino gold, neon dots or green felt'] },
+    perks: ['★ Gold sponsor badge', '🃏 Fancy card backs'] },
   { id: 'odds', icon: '⏩⏩', name: 'Very impatient', years: 10000, price: '8.07', featured: true,
-    story: 'Nonstop hand shuffling since the end of the last Ice Age.',
-    cmp: p => `Less likely than being struck by lightning <b>${numWord(timesInARow(LIGHTNING_YEAR, p))} times in the same year</b>.`,
-    why: 'Why $8.07? There are 8.07 × 10⁶⁷ ways to order a deck. We kindly waived the other 67 zeros.',
-    perks: ['10,000 years of real shuffles', '📜 Certificate of Futility: a printable PDF with your name, best match and every zero of your odds', '🎩 Dress the Professor: a cyan or emerald hat band and bow tie', '★ Plus the gold badge and the new card backs'] },
+    story: 'Shuffle nonstop since the last Ice Age.', deal: '10× the years for 4× the price',
+    cmp: p => `Your odds: still worse than <b>${timesInARow(LIGHTNING_YEAR, p)} lightning strikes in one year</b>.`,
+    why: 'Why $8.07? 52! is 8.07 × 10⁶⁷. We waived the 67 zeros.',
+    perks: ['📜 Certificate of Futility (PDF)', '🎩 Professor outfits', '★ Badge and card backs included'] },
   { id: 'patron', icon: '⏩⏩⏩', name: 'Cosmically impatient', years: 100000, price: '52',
-    story: 'Nonstop hand shuffling since the first humans walked out of Africa.',
-    cmp: p => `Less likely than winning the Powerball jackpot <b>${numWord(timesInARow(POWERBALL, p))} times in a row</b>.`,
-    why: 'Why $52? One dollar per card. The deck salutes you.',
-    perks: ['100,000 years of real shuffles', '🏛️ Your name and a dedication on the public Wall of Futility', '👑 The Royal Professor: purple top hat, gold band, gold bow tie', '🃏 Royal purple card backs', '📜 Plus the certificate, the badge and every other extra'] }
+    story: 'Shuffle nonstop since humans left Africa.', deal: 'Eternal glory, mostly',
+    cmp: p => `Your odds: still worse than <b>${timesInARow(POWERBALL, p)} Powerball jackpots in a row</b>.`,
+    why: 'Why $52? One dollar per card.',
+    perks: ['🏛️ Your name on the Wall of Futility', '👑 The Royal Professor', '✨ Every other extra included'] }
 ];
 const tierById = id => IMP_TIERS.find(t => t.id === id);
 /** Generic comparisons for any probability (used on the certificate). */
@@ -2674,34 +2663,36 @@ const cores = () => Math.max(1, Math.min(16, navigator.hardwareConcurrency || 4)
 const hyperRateGuess = () => store.hyper.rate || cores() * 500000;
 
 /* ---------- Tier cards ---------- */
+const bigShort = n => n >= 1e11 ? `${Math.round(n / 1e9)} billion` : n >= 1e9 ? `${(n / 1e9).toFixed(1)} billion` : `${Math.round(n / 1e6)} million`;
+const shortDuration = sec => fmtDuration(sec).replace('about ', '');
 function renderImpatient() {
   const F = SITE.fund, cur = F.currency || '$';
   let any = false;
   $('#impTiers').innerHTML = IMP_TIERS.map(t => {
     const url = F[t.id]; if (!url) return '';
     any = true;
-    const N = t.years * HAND_YEAR, pct = ratioPercent(BigInt(N), F52, 80), z = leadingZeros(pct);
+    const N = t.years * HAND_YEAR;
     return `<div class="imp-card${t.featured ? ' featured' : ''}">
       ${t.featured ? '<span class="flag">THE SENSIBLE CHOICE</span>' : ''}
       <p class="imp-name">${t.icon} ${t.name}</p>
       <p class="imp-years">Skip ${fmt(t.years)} years</p>
       <p class="imp-story">${t.story}</p>
-      <p class="imp-sub">= ${fmt(N)} real shuffles, every one performed and counted.</p>
-      <div class="imp-times"><span>Free Ludicrous <b>${fmtDuration(N / LUDICROUS_RATE).replace('about ', '')}</b></span><span>Hyperdrive <b data-eta="${N}">${fmtDuration(N / hyperRateGuess()).replace('about ', '')}</b>*</span></div>
-      <p class="imp-label">CHANCE OF A MATCH</p>
-      <p class="imp-chance">${pct.slice(0, z + 2 + 4)}…%</p>
-      <p class="imp-sub">That's ${z} zeros after the decimal point.</p>
-      <p class="imp-cmp">${t.cmp(N / F52_NUM)}</p>
+      <div class="imp-stats">
+        <p>⚡ Done in <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*<br><span>instead of ${shortDuration(N / LUDICROUS_RATE)} on free autopilot</span></p>
+        <p>🃏 <b>${bigShort(N)}</b> real shuffles</p>
+      </div>
       <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}</ul>
-      <p class="imp-why">${t.why}</p>
+      <p class="imp-cmp">${t.cmp(N / F52_NUM)}</p>
+      <span class="imp-deal">${t.deal}</span>
       <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}">Skip ${fmt(t.years)} years · ${cur}${t.price}</a>
+      <p class="imp-why">${t.why}</p>
     </div>`;
   }).join('');
   $$('#impTiers [data-imp]').forEach(a => a.addEventListener('click', () => track('impatient-' + a.dataset.imp)));
   $('#impatient').hidden = !any;
 }
 function refreshEtas() {
-  $$('#impTiers [data-eta]').forEach(b => { b.textContent = fmtDuration(Number(b.dataset.eta) / hyperRateGuess()).replace('about ', ''); });
+  $$('#impTiers [data-eta]').forEach(b => { b.textContent = shortDuration(Number(b.dataset.eta) / hyperRateGuess()); });
 }
 
 /* ---------- Thank-you return from Stripe ---------- */
