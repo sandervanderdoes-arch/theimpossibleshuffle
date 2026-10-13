@@ -393,6 +393,8 @@
   #cardDlg::backdrop { background:rgba(0,0,0,.7); }
   #cardDlg img { display:block; width:100%; height:auto; border-radius:14px; background:#06180f; aspect-ratio:1 / 1; }
   #rigged { position:fixed; left:.75rem; top:.75rem; z-index:110; }
+  .merch-top { position:absolute; top:.75rem; right:calc(.75rem + env(safe-area-inset-right, 0px)); z-index:20; }
+  .merch-top[hidden] { display:none; }
   #fab { position:fixed; right:calc(1rem + env(safe-area-inset-right, 0px)); bottom:calc(3.3rem + env(safe-area-inset-bottom, 0px)); z-index:55; }
   #fab[hidden] { display:none; }
   .fade { transition: opacity .4s; }
@@ -420,12 +422,13 @@
 <div id="rigged" hidden>
   <button type="button" id="riggedBtn" class="chip-btn" style="background:#2a0a24;border-color:#ff2fd6;color:#ffd0f6">🃏 RIGGED MODE</button>
 </div>
+<a id="merchTop" class="chip-btn merch-btn merch-top" target="_blank" rel="noopener" hidden>👕 Merch</a>
 <div id="toasts" aria-live="polite"></div>
 <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
 <div id="app">
   <!-- ===================== HERO ===================== -->
-  <header class="px-4 pt-14 sm:pt-10 max-w-6xl mx-auto">
+  <header class="px-4 pt-16 max-w-6xl mx-auto">
     <div id="hero" class="bulbs px-6 py-10 sm:px-12 sm:py-12 text-center">
       <p class="mono text-xs tracking-widest text-[#9fb5a8] mb-3">MISSION CONTROL · DEPARTMENT OF GLORIOUS FUTILITY</p>
       <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl lg:text-6xl">Welcome to Humankind's Ultimate Exercise in Futility</h1>
@@ -770,7 +773,7 @@ const SITE = {
     custom: '',         // optional "choose your own amount" link (hidden while empty)
     note: 'Secure checkout by Stripe. Opens in a new tab.'
   },
-  merchUrl: '',         // merch shop page
+  merchUrl: 'https://imposs-shuffle.redbubble.com/',   // merch shop page (Redbubble)
   instagram: 'https://www.instagram.com/theimpossibleshuffle/'   // Instagram profile (hidden while empty)
 };
 /* Visitor stats: GoatCounter or Plausible. Both are cookieless, so no consent banner
@@ -824,6 +827,9 @@ function setupSupportLinks() {
     $('#merchLink').href = SITE.merchUrl;
     $('#merchLink').addEventListener('click', () => track('merch'));
     $('#merchBox').hidden = false;
+    $('#merchTop').href = SITE.merchUrl;
+    $('#merchTop').addEventListener('click', () => track('merch-top'));
+    $('#merchTop').hidden = false;
   }
 }
 
