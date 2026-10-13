@@ -320,7 +320,11 @@
   .imp-card.featured { border:2px solid var(--gold); background:linear-gradient(160deg, rgba(255,210,63,.16), rgba(255,47,214,.1)); box-shadow:0 0 24px rgba(255,210,63,.3); }
   .imp-card .flag { position:absolute; top:-.7rem; left:50%; transform:translateX(-50%); white-space:nowrap; font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; color:#1d1300; background:var(--gold); border-radius:999px; padding:.2rem .65rem; }
   .imp-name { font:800 .72rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.08em; text-transform:uppercase; color:#ff9bec; }
-  .imp-years { font-family:Bungee, Impact, system-ui, sans-serif; font-size:1.3rem; line-height:1.15; color:#ffe68a; }
+  .imp-years { font-family:Bungee, Impact, system-ui, sans-serif; font-size:1rem; line-height:1.2; color:#ffe68a; white-space:nowrap; }
+  @supports (font-size: 1cqi) {   /* one line, scaled to the card's width */
+    .imp-card { container-type:inline-size; }
+    .imp-years { font-size:min(1.35rem, 5.7cqi); }
+  }
   .imp-story { font-size:.9rem; font-style:italic; color:#cfe3d7; }
   .imp-stats { margin-top:.6rem; padding:.55rem .7rem; border-radius:12px; background:rgba(34,243,255,.07); border:1px solid rgba(34,243,255,.25); display:grid; gap:.2rem; font-size:.85rem; color:#cfe3d7; }
   .imp-stats b { color:#a5fbff; }
@@ -2682,7 +2686,7 @@ function renderImpatient() {
     return `<div class="imp-card${t.featured ? ' featured' : ''}">
       ${t.featured ? '<span class="flag">MISSION CONTROL RECOMMENDS</span>' : ''}
       <p class="imp-name"><span class="gold-star">${t.icon}</span> ${t.name}</p>
-      <p class="imp-years">${fmt(t.years)} years<br>of shuffling</p>
+      <p class="imp-years">${fmt(t.years)} years of shuffling</p>
       <p class="imp-story">${t.story}</p>
       <div class="imp-stats">
         <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, ${t.shift}<br><span>free autopilot would need ${shortDuration(N / LUDICROUS_RATE)}</span></p>
