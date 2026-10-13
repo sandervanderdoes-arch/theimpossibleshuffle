@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Impossible Shuffle</title>
-<meta name="description" content="Humankind's ultimate exercise in futility: the whole internet shuffling one deck until it matches twice. Odds: 1 in 52!.">
+<meta name="description" content="The most pointless mission on the internet: everyone shuffling one deck until it matches twice. Odds: 1 in 52!.">
 <link rel="canonical" href="https://theimpossibleshuffle.com/">
 <meta name="theme-color" content="#03110a">
 <meta property="og:type" content="website">
@@ -314,7 +314,7 @@
   @keyframes shake { 10%,90% { transform:translate(-2px,1px); } 20%,80% { transform:translate(4px,-2px); } 30%,50%,70% { transform:translate(-7px,3px) rotate(-.4deg); } 40%,60% { transform:translate(7px,-3px) rotate(.4deg); } }
 
   .toast .copy-text { display:block; margin-top:.4rem; padding:.4rem; background:rgba(0,0,0,.4); border-radius:6px; font:12px/1.4 "JetBrains Mono", monospace; user-select:all; word-break:break-word; }
-  /* Are you impatient? Time-skip tiers, sponsor extras, the Wall of Futility. */
+  /* Are you impatient? Time-skip tiers, sponsor extras, the Wall of Hopeless Heroes. */
   .imp-tiers { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(16rem, 1fr)); align-items:stretch; }
   .imp-card { position:relative; display:flex; flex-direction:column; gap:.25rem; padding:1.4rem 1.1rem 1rem; border-radius:16px; border:1px solid rgba(255,210,63,.4); background:rgba(0,0,0,.45); min-width:0; }
   .imp-card.featured { border:2px solid var(--gold); background:linear-gradient(160deg, rgba(255,210,63,.16), rgba(255,47,214,.1)); box-shadow:0 0 24px rgba(255,210,63,.3); }
@@ -367,6 +367,8 @@
   .replay-note { margin-top:.75rem; padding:.6rem .85rem; border-radius:12px; border:1px solid rgba(34,243,255,.45); background:rgba(34,243,255,.07); font-size:.85rem; line-height:1.5; color:#cfe3d7; }
   .replay-note b { color:#a5fbff; }
   .replay-note .dim { color:#9fb5a8; font-size:.78rem; }
+  .replay-note .odds { display:block; margin-top:.3rem; color:#ffe68a; }
+  .replay-note .odds b { color:#ffe68a; }
   .replay-note .tag { display:inline-block; margin-right:.35rem; padding:.05rem .45rem; border-radius:999px; background:#22f3ff; color:#03262b; font:800 .65rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; vertical-align:1px; }
   .first-stamp { margin-top:.9rem; display:flex; align-items:center; gap:.85rem; padding:.7rem .9rem; border:1px dashed rgba(255,210,63,.5); border-radius:14px; background:rgba(255,210,63,.06); }
   .stamp { flex:none; font-family:Bungee, Impact, system-ui, sans-serif; font-size:.78rem; line-height:1.15; text-align:center; color:#ffe68a; border:2px solid var(--gold); border-radius:8px; padding:.35rem .5rem; transform:rotate(-6deg); letter-spacing:.03em; box-shadow:0 0 12px rgba(255,210,63,.35), inset 0 0 8px rgba(255,210,63,.2); }
@@ -419,8 +421,8 @@
   <!-- ===================== HERO ===================== -->
   <header class="px-4 pt-16 max-w-6xl mx-auto">
     <div id="hero" class="bulbs px-6 py-10 sm:px-12 sm:py-12 text-center">
-      <p class="mono text-xs tracking-widest text-[#9fb5a8] mb-3">MISSION CONTROL · DEPARTMENT OF GLORIOUS FUTILITY</p>
-      <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl lg:text-6xl">Welcome to Humankind's Ultimate Exercise in Futility</h1>
+      <p class="mono text-xs tracking-widest text-[#9fb5a8] mb-3">MISSION CONTROL · DEPARTMENT OF LOST CAUSES</p>
+      <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl lg:text-6xl">Welcome to Humankind's Most Pointless Mission</h1>
       <p class="mt-5 max-w-2xl mx-auto text-base sm:text-lg text-[#cfe3d7]">Together, the whole internet is shuffling one deck of cards until we match it perfectly. Mathematics says no. We say: hold my cards.</p>
 
       <div class="mt-6 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border border-red-500/50 bg-red-950/40 px-4 py-2 mono text-xs sm:text-sm">
@@ -557,7 +559,7 @@
       <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-2">ACHIEVEMENTS</h3>
       <div id="badges" class="grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
 
-      <button type="button" id="shareBtn" class="chip-btn mt-5 w-full">📤 Share your futility</button>
+      <button type="button" id="shareBtn" class="chip-btn mt-5 w-full">📤 Brag about your failure</button>
     </section>
   </div>
 
@@ -619,7 +621,7 @@
         <div id="outfitRow" class="mt-4" hidden><p class="text-xs font-bold text-[#9fb5a8]">PROFESSOR OUTFIT</p><div id="outfitOptions" class="mt-2 flex flex-wrap gap-2"></div></div>
 
         <div id="certRow" class="mt-5" hidden>
-          <p class="text-xs font-bold text-[#9fb5a8]">📜 CERTIFICATE OF FUTILITY</p>
+          <p class="text-xs font-bold text-[#9fb5a8]">📜 CERTIFICATE OF TRYING ANYWAY</p>
           <p class="text-xs text-[#cfe3d7] mt-1">Your name, your shuffles, your best match and your exact chance of success so far, with every zero. Printable A4 PDF.</p>
           <div class="mt-2 flex flex-wrap gap-2">
             <label class="sr-only" for="certName">Name on the certificate</label>
@@ -629,7 +631,7 @@
         </div>
 
         <div id="wallRow" class="mt-5" hidden>
-          <p class="text-xs font-bold text-[#9fb5a8]">🏛️ WALL OF FUTILITY</p>
+          <p class="text-xs font-bold text-[#9fb5a8]">🏛️ WALL OF HOPELESS HEROES</p>
           <form id="wallForm" class="mt-2 flex flex-wrap gap-2">
             <label class="sr-only" for="wallName">Name for the wall</label>
             <input id="wallName" class="imp-input" maxlength="40" placeholder="Name for the wall" required>
@@ -642,7 +644,7 @@
       </div>
 
       <div id="wallBox" class="mt-6" hidden>
-        <h3 class="font-display text-base neon-gold">🏛️ Wall of Futility</h3>
+        <h3 class="font-display text-base neon-gold">🏛️ Wall of Hopeless Heroes</h3>
         <p class="text-xs text-[#9fb5a8] mt-1">Mission Sponsors who skipped 100,000 years and still matched nothing.</p>
         <div id="wallList" class="mt-3 flex flex-wrap gap-2"></div>
       </div>
@@ -1215,7 +1217,7 @@ const SUBTEXT = [
   { max: 0, lines: ['Splendidly terrible. Absolute zero.', 'Not one card. The universe noticed and laughed.', 'A flawless derangement. Mathematicians call that a result; we call it Tuesday.'] },
   { max: 1, lines: ['Perfectly, aggressively average. This is literally the expected result.', 'One card. Exactly what probability ordered, delivered on time.', 'The single most predictable outcome in the known universe.'] },
   { max: 3, lines: ['Mild statistical flirtation. Do not tell anyone.', 'A little above average. Try not to let it go to your head.', 'The deck winked at you. It meant nothing.'] },
-  { max: 5, lines: ['Top 1% of futility. Frame this moment.', 'Rarer than most things you\'ll do today. Still useless.', 'Screenshot it. Nobody will be impressed, but screenshot it.'] },
+  { max: 5, lines: ['Top 1% of trying. Frame this moment.', 'Rarer than most things you\'ll do today. Still useless.', 'Screenshot it. Nobody will be impressed, but screenshot it.'] },
   { max: 9, lines: ['Statisticians are nervously refreshing their spreadsheets.', 'Six or more happens about once in 1,700 shuffles. Someone check the cables.'] },
   { max: 25, lines: ['Something is wrong. Check your browser for witchcraft.', 'Ten or more? We are filing a formal complaint with the universe.'] },
   { max: 51, lines: ['This should not be possible. We are calling a physicist.', 'Reality is buffering. Please hold.'] },
@@ -1320,7 +1322,7 @@ const BADGES = [
     tip: 'Seven cards exactly where destiny put them.', progress: () => `best ${bestEver()}/7` },
   { id: 'barehand', ico: '✋', name: 'Bare-Handed Miracle', how: 'Get 6+ matches on a shuffle you press yourself, no autopilot', hard: true,
     tip: 'About 1 in 1,700 presses. Your thumb has earned this.', progress: () => `best by hand ${store.manualBest}/6` },
-  { id: 'handmade', ico: '🖐️', name: 'Hand-Crafted Futility', how: 'Shuffle 1,000 times by hand (button, Space or Enter)', hard: true,
+  { id: 'handmade', ico: '🖐️', name: 'Hand-Crafted Hopelessness', how: 'Shuffle 1,000 times by hand (button, Space or Enter)', hard: true,
     tip: 'Every single one artisanal. Autopilot does not count.', progress: () => `${fmt(Math.min(store.manual, 1000))}/1,000` },
   { id: 'witchcraft', ico: '🔮', name: 'Witchcraft', how: 'Get 10 or more matches in one shuffle (about 1 in 9 million)', hard: true,
     tip: 'Something is wrong. Check your browser for witchcraft.', progress: () => `best ${bestEver()}/10` },
@@ -1328,7 +1330,7 @@ const BADGES = [
     tip: 'The five royal spades, home at last.', progress: () => `best ${store.royalBest}/5` },
   { id: 'heatdeath', ico: '⏳', name: 'Heat Death Rehearsal', how: 'Keep Autopilot on Ludicrous for 60 minutes straight, on this tab', hard: true,
     tip: 'The clock only runs while this tab is open and visible.', progress: () => `${Math.floor((autopilot.mode === 'L' ? Math.max(autopilot.ludMs, store.ludBestMs) : store.ludBestMs) / 60000)}/60 min` },
-  { id: 'billion', ico: '💎', name: 'Billionaire of Futility', how: 'Shuffle 1,000,000,000 times (all-time, autopilot counts)', hard: true,
+  { id: 'billion', ico: '💎', name: 'The Billion-Shuffle Club', how: 'Shuffle 1,000,000,000 times (all-time, autopilot counts)', hard: true,
     tip: 'One billion attempts. Mathematics sends its regards.', progress: () => `${shortNum(Math.min(store.allTime, 1e9))}/1B` }
 ];
 function bestEver() { return Math.max(session.fairBest, store.best ? store.best.matches : 0); }   // rigged shuffles excluded
@@ -1643,11 +1645,13 @@ function revealReplay(res, staggered) {
   const list = hits.map(i => `<b>${cardShortName(res.deck[i])}</b> <span class="dim">at #${i + 1}</span>`).join(', ');
   const when = new Date(res.ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   const note = $('#replayNote');
-  note.innerHTML = `<span class="tag">★ REPLAY</span> Your best shuffle: <b>${res.m}/52</b> on attempt #${fmt(res.n)} (${when}). ${hits.length ? `You matched ${list}.` : ''}`;
+  let q = 0; for (let k = res.m; k <= 52; k++) q += pFixed(k);       // chance of this many matches or more
+  const odds = q > 0 ? `<span class="odds">The odds of ${res.m} or more matches: about <b>1 in ${fmt(Math.round(1 / q))}</b> shuffles (${(q * 100).toLocaleString('en-US', { maximumSignificantDigits: 2 })}%).</span>` : '';
+  note.innerHTML = `<span class="tag">★ REPLAY</span> Your best shuffle: <b>${res.m}/52</b> on attempt #${fmt(res.n)} (${when}). ${hits.length ? `You matched ${list}.` : ''} ${odds}`;
   note.hidden = false;
   $('#firstStamp').innerHTML = '🌍 WORLD<br>FIRST'; $('#firstStamp').classList.remove('copy');
   $('#firstText').innerHTML = `You made this deck on attempt #${fmt(res.n)}. As far as anyone knows, that was the <b>only time it has ever existed</b>.`;
-  el.live.textContent = `Replay of your best shuffle: ${res.m} of 52 matched: ${hits.map(i => `${NAMES[res.deck[i]]} at position ${i + 1}`).join(', ')}.`;
+  el.live.textContent = `Replay of your best shuffle: ${res.m} of 52 matched: ${hits.map(i => `${NAMES[res.deck[i]]} at position ${i + 1}`).join(', ')}.${q > 0 ? ` That happens in about 1 in ${fmt(Math.round(1 / q))} shuffles.` : ''}`;
   setPose('eyebrow', `Ah yes. Your finest ${res.m}. I remember it well. I was not worried then either.`);
 }
 $('#replayBtn').addEventListener('click', replayBest);
@@ -2398,7 +2402,7 @@ async function copyText(text) {
       document.body.appendChild(ta); ta.select(); ok = document.execCommand('copy'); ta.remove();
     } catch (e) { ok = false; }
   }
-  if (ok) toast('📋 <b>Copied.</b> Go forth and spread the futility.');
+  if (ok) toast('📋 <b>Copied.</b> Go forth and spread the hopelessness.');
   else {
     const t = document.createElement('span');
     t.className = 'copy-text'; t.textContent = text;
@@ -2407,7 +2411,7 @@ async function copyText(text) {
   }
 }
 function cardTier(m) {
-  return m >= 10 ? 'Witchcraft suspected.' : m >= 6 ? 'Statisticians are nervous.' : m >= 4 ? 'Top 1% of futility.'
+  return m >= 10 ? 'Witchcraft suspected.' : m >= 6 ? 'Statisticians are nervous.' : m >= 4 ? 'Top 1% of trying.'
     : m >= 2 ? 'Mild statistical flirtation.' : m === 1 ? 'Perfectly, aggressively average.' : 'Splendidly terrible.';
 }
 let profImg = null;
@@ -2472,7 +2476,7 @@ async function makeCard() {
 }
 $('#shareBtn').addEventListener('click', async () => {
   track('share');
-  if (!store.allTime) { toast('🃏 <b>Shuffle at least once</b>, then share your futility.'); return; }
+  if (!store.allTime) { toast('🃏 <b>Shuffle at least once</b>, then brag about your failure.'); return; }
   const dlg = $('#cardDlg');
   try {
     cardState.blob = await makeCard();
@@ -2557,7 +2561,7 @@ const FACTS = [
   'A shuffle with zero matching positions is called a derangement. About 36.8% of shuffles are one, which is 1/e. Math is weird.',
   '52! has 68 digits. Your phone number has about 10. Plan accordingly.',
   'Seven riffle shuffles are enough to mix a deck properly (Bayer and Diaconis, 1992). We use a computer, so one is plenty.',
-  'This page never uses Math.random(). Its 128 bits of state can\'t reach most of the 52! deck orders. We take futility seriously.',
+  'This page never uses Math.random(). Its 128 bits of state can\'t reach most of the 52! deck orders. We take pointlessness seriously.',
   'Six or more matches happens about once in 1,700 shuffles. If it happens to you, check on the Professor\'s monocle.'
 ];
 let factIdx = RNG.below(FACTS.length);
@@ -2641,12 +2645,12 @@ const IMP_TIERS = [
     story: 'Shuffle nonstop since the last Ice Age.', deal: '10× the years for 4× the price',
     cmp: p => `Your odds: still worse than <b>${timesInARow(LIGHTNING_YEAR, p)} lightning strikes in one year</b>.`,
     why: 'Why $8.07? 52! is 8.07 × 10⁶⁷. We waived the 67 zeros.',
-    perks: ['📜 Certificate of Futility (PDF)', '🎩 Professor outfits', '★ Badge and card backs included'] },
+    perks: ['📜 Certificate of Trying Anyway (PDF)', '🎩 Professor outfits', '★ Badge and card backs included'] },
   { id: 'patron', icon: '⏩⏩⏩', name: 'Cosmically impatient', years: 100000, price: '52',
     story: 'Shuffle nonstop since humans left Africa.', deal: 'Eternal glory, mostly',
     cmp: p => `Your odds: still worse than <b>${timesInARow(POWERBALL, p)} Powerball jackpots in a row</b>.`,
     why: 'Why $52? One dollar per card.',
-    perks: ['🏛️ Your name on the Wall of Futility', '👑 The Royal Professor', '✨ Every other extra included'] }
+    perks: ['🏛️ Your name on the Wall of Hopeless Heroes', '👑 The Royal Professor', '✨ Every other extra included'] }
 ];
 const tierById = id => IMP_TIERS.find(t => t.id === id);
 /** Generic comparisons for any probability (used on the certificate). */
@@ -2876,7 +2880,7 @@ function renderHyper() {
   $('#hyperStatus').textContent = left <= 0 ? 'COMPLETE' : HYPER.running ? `RUNNING ON ${HYPER.workers.length} CORE${HYPER.workers.length === 1 ? '' : 'S'}` : busy ? 'PAUSING…' : done ? 'PAUSED' : 'READY';
   $('#hyperBox').classList.toggle('running', HYPER.running);
   $('#hyperDoneNote').hidden = left > 0;
-  if (left <= 0) $('#hyperDoneNote').innerHTML = `<b>Hyperdrive complete.</b> ${yrs(bought)} years of nonstop shuffling: ${fmt(bought)} real shuffles, best match <b>${store.hyper.best}/52</b>, matches <b>0</b>.${hasOdds() ? ' Your Certificate of Futility is ready below.' : ''} Still impatient? Skip more years above.`;
+  if (left <= 0) $('#hyperDoneNote').innerHTML = `<b>Hyperdrive complete.</b> ${yrs(bought)} years of nonstop shuffling: ${fmt(bought)} real shuffles, best match <b>${store.hyper.best}/52</b>, matches <b>0</b>.${hasOdds() ? ' Your Certificate of Trying Anyway is ready below.' : ''} Still impatient? Skip more years above.`;
   chip.hidden = !HYPER.running || HYPER.boxVisible;
   if (!chip.hidden) chip.textContent = `🚀 ${yrs(done)} of ${yrs(bought)} yrs`;
   if (!HYPER.running) refreshEtas();
@@ -2903,7 +2907,7 @@ function applyCosmetics() {
 function optionButtons(list, current, key) {
   return list.filter(o => allowed(o.need)).map(o => `<button type="button" class="opt-btn" data-${key}="${o.id}" aria-pressed="${o.id === current}">${o.name}</button>`).join('');
 }
-/* ---------- Certificate of Futility (PDF) ---------- */
+/* ---------- Certificate of Trying Anyway (PDF) ---------- */
 function certNumber() {
   if (!store.certId) { store.certId = 'TIS-' + Array.from({ length: 8 }, () => '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ'[RNG.below(33)]).join(''); saveStore(true); }
   return store.certId;
@@ -2927,7 +2931,7 @@ function drawCertificate(cv, name) {
   c.strokeStyle = '#c9971a'; c.lineWidth = 5; c.strokeRect(100, 100, W - 200, H - 200);
   c.strokeStyle = '#ff2fd6'; c.lineWidth = 3; c.strokeRect(118, 118, W - 236, H - 236);
   c.textAlign = 'center';
-  c.fillStyle = '#0b3d2a'; c.font = '120px Bungee, Impact, sans-serif'; c.fillText('CERTIFICATE OF FUTILITY', W / 2, 300);
+  c.fillStyle = '#0b3d2a'; c.font = '112px Bungee, Impact, sans-serif'; c.fillText('CERTIFICATE OF TRYING ANYWAY', W / 2, 300, W - 320);
   c.fillStyle = '#5b4a1a'; c.font = 'italic 52px Georgia, "Times New Roman", serif'; c.fillText('This certifies that', W / 2, 400);
   c.fillStyle = '#1a1206'; c.font = 'italic bold 120px Georgia, "Times New Roman", serif';
   c.fillText(name, W / 2, 540, W - 500);
@@ -2990,21 +2994,21 @@ async function downloadCertificate() {
   await loadProfImg();
   const cv = document.createElement('canvas');
   try { drawCertificate(cv, name); cv.toDataURL(); } catch (e) { profImg = null; drawCertificate(cv, name); }   // tainted canvas (file://): skip the seal image
-  const file = 'certificate-of-futility.pdf';
+  const file = 'certificate-of-trying-anyway.pdf';
   try {
     const { jsPDF } = await loadJsPDF();
     const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
     pdf.addImage(cv.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 297, 210);
-    pdf.setProperties({ title: 'Certificate of Futility', subject: 'The Impossible Shuffle', creator: 'theimpossibleshuffle.com' });
+    pdf.setProperties({ title: 'Certificate of Trying Anyway', subject: 'The Impossible Shuffle', creator: 'theimpossibleshuffle.com' });
     pdf.save(file);
   } catch (e) {                                   // no PDF library: hand over a PNG instead
-    const a = document.createElement('a'); a.href = cv.toDataURL('image/png'); a.download = 'certificate-of-futility.png';
+    const a = document.createElement('a'); a.href = cv.toDataURL('image/png'); a.download = 'certificate-of-trying-anyway.png';
     document.body.appendChild(a); a.click(); a.remove();
     toast('📜 Saved your certificate as an image (the PDF maker could not load).');
   }
 }
 
-/* ---------- Wall of Futility (Supabase, moderated) ---------- */
+/* ---------- Wall of Hopeless Heroes (Supabase, moderated) ---------- */
 const WALL = { on: live.on, rows: [] };
 async function loadWall() {
   if (!WALL.on) return;

@@ -1,4 +1,4 @@
--- Wall of Futility on theimpossibleshuffle.com.
+-- Wall of Hopeless Heroes on theimpossibleshuffle.com.
 -- Run once in the Supabase SQL editor (same project as the live counter).
 --
 -- Visitors (the anon role) can submit a name, which arrives unapproved, and
