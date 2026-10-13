@@ -361,6 +361,10 @@
     .alarm-title { font-size:1.2rem; }
   }
   /* "World first" stamp under the Challenger: every new deck is almost certainly unique in history. */
+  .replay-note { margin-top:.75rem; padding:.6rem .85rem; border-radius:12px; border:1px solid rgba(34,243,255,.45); background:rgba(34,243,255,.07); font-size:.85rem; line-height:1.5; color:#cfe3d7; }
+  .replay-note b { color:#a5fbff; }
+  .replay-note .dim { color:#9fb5a8; font-size:.78rem; }
+  .replay-note .tag { display:inline-block; margin-right:.35rem; padding:.05rem .45rem; border-radius:999px; background:#22f3ff; color:#03262b; font:800 .65rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; vertical-align:1px; }
   .first-stamp { margin-top:.9rem; display:flex; align-items:center; gap:.85rem; padding:.7rem .9rem; border:1px dashed rgba(255,210,63,.5); border-radius:14px; background:rgba(255,210,63,.06); }
   .stamp { flex:none; font-family:Bungee, Impact, system-ui, sans-serif; font-size:.78rem; line-height:1.15; text-align:center; color:#ffe68a; border:2px solid var(--gold); border-radius:8px; padding:.35rem .5rem; transform:rotate(-6deg); letter-spacing:.03em; box-shadow:0 0 12px rgba(255,210,63,.35), inset 0 0 8px rgba(255,210,63,.2); }
   .stamp.thunk { animation: thunk .5s cubic-bezier(.2,1.5,.4,1) 1; }
@@ -457,9 +461,13 @@
       <section class="panel p-3 sm:p-5" aria-labelledby="chalTitle">
         <div class="flex items-center justify-between gap-3 flex-wrap mb-3">
           <h2 id="chalTitle" class="font-display text-base sm:text-lg neon-cyan">The Challenger <span class="mono text-xs text-[#9fb5a8] font-normal align-middle">(Deck 2)</span></h2>
-          <p class="mono text-xs text-[#9fb5a8]">✓ = same card, same position</p>
+          <div class="flex items-center gap-3 flex-wrap">
+            <p class="mono text-xs text-[#9fb5a8]">✓ = same card, same position</p>
+            <button type="button" id="replayBtn" class="chip-btn !text-xs" hidden>★ Replay my best</button>
+          </div>
         </div>
         <div id="chalGrid" class="deck-grid" role="list" aria-label="The Challenger deck, 52 cards"></div>
+        <div id="replayNote" class="replay-note" hidden aria-live="polite"></div>
         <div class="first-stamp" id="firstBox">
           <span class="stamp" id="firstStamp" aria-hidden="true">🌍 WORLD<br>FIRST</span>
           <p class="first-text" id="firstText">Your first shuffle will almost certainly create a deck order <b>no human has ever seen</b>.</p>
@@ -1004,9 +1012,11 @@ function paintDeck(grid, deck, matchAgainst) {
   }
 }
 function clearMatches() {
+  hideReplayNote();
   for (let i = 0; i < 52; i++) { G.cards[i].classList.remove('match', 'ding'); C.cards[i].classList.remove('match', 'ding'); }
 }
 function applyMatchesInstant(deck) {
+  hideReplayNote();
   for (let i = 0; i < 52; i++) {
     const hit = deck[i] === grail[i];
     G.cards[i].classList.toggle('match', hit);
@@ -1227,6 +1237,9 @@ function renderPB() {
   pbDirty = false;
   const b = store.best;
   if (b && (b.grail !== GRAIL_ID || !(Array.isArray(b.deck) && b.deck.length === 52 && b.deck.every(code => CODES.includes(code))))) store.best = null;
+  const rb = $('#replayBtn');
+  rb.hidden = !(store.best && store.best.matches >= 1);
+  if (store.best) rb.textContent = `★ Replay my best (${store.best.matches}/52)`;
   if (!store.best) { el.pbRow.innerHTML = '<td colspan="4">★ Personal Best: none yet. The bar is on the floor.</td>'; return; }
   const deck = Uint8Array.from(b.deck.map(code => CODES.indexOf(code)));
   const d = new Date(b.ts);
@@ -1432,7 +1445,7 @@ function finishAnimNow() {
   if (anim.hidden) { anim.hidden.style.visibility = ''; anim.hidden = null; }
   anim.active = false;
   const p = anim.pending; anim.pending = null;
-  if (p) reveal(p, false);
+  if (p) (p.replay ? revealReplay : reveal)(p, false);
 }
 
 function escapeCard(node, token) {
@@ -1505,7 +1518,7 @@ async function animateShuffle(res) {
   } catch (e) { return; }   // cancelled by a newer shuffle, which already revealed this one
   prev.forEach(a => a.cancel());
   anim.active = false; anim.pending = null;
-  reveal(res, true);
+  (res.replay ? revealReplay : reveal)(res, true);
 }
 
 function lightCard(i, pulse) {
@@ -1553,6 +1566,43 @@ function reveal(res, staggered) {
   if (res.m === 52) setTimeout(() => triggerWin(res), staggered && !reduceMotion ? 750 : 60);
 }
 
+/* Replay: runs your all-time best deck through the shuffle animation again and
+   lights the cards that matched, one by one. Nothing is recorded or counted. */
+const cardShortName = c => RANKS[c % 13] + SUITS[(c / 13) | 0].sym + '\uFE0E';   // text-style suits, not emoji
+function hideReplayNote() { const n = $('#replayNote'); if (n && !n.hidden) n.hidden = true; }
+function replayBest() {
+  const b = store.best;
+  if (winOpen || !b) return;
+  if (autopilot.mode) setAutopilot('0');
+  if (anim.active) finishAnimNow();
+  track('replay-best');
+  const res = { replay: true, deck: Uint8Array.from(b.deck.map(code => CODES.indexOf(code))), m: b.matches, n: b.attempt, ts: b.ts };
+  const r = el.chalGrid.getBoundingClientRect();
+  if (r.top < 0 || r.bottom > innerHeight) el.chalGrid.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+  if (reduceMotion) revealReplay(res, false);
+  else setTimeout(() => animateShuffle(res), r.top < 0 || r.bottom > innerHeight ? 450 : 0);
+}
+function revealReplay(res, staggered) {
+  anim.matchTimers.forEach(clearTimeout); anim.matchTimers = [];
+  current.set(res.deck); hasCurrent = true;
+  paintDeck(C, res.deck, grail);
+  clearMatches();
+  const hits = [];
+  for (let i = 0; i < 52; i++) if (res.deck[i] === grail[i]) hits.push(i);
+  if (staggered && hits.length && !reduceMotion) hits.forEach((i, k) => anim.matchTimers.push(setTimeout(() => lightCard(i, true), 300 + k * 380)));
+  else hits.forEach(i => lightCard(i, false));
+  const list = hits.map(i => `<b>${cardShortName(res.deck[i])}</b> <span class="dim">at #${i + 1}</span>`).join(', ');
+  const when = new Date(res.ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const note = $('#replayNote');
+  note.innerHTML = `<span class="tag">★ REPLAY</span> Your best shuffle: <b>${res.m}/52</b> on attempt #${fmt(res.n)} (${when}). ${hits.length ? `You matched ${list}.` : ''}`;
+  note.hidden = false;
+  $('#firstStamp').innerHTML = '🌍 WORLD<br>FIRST'; $('#firstStamp').classList.remove('copy');
+  $('#firstText').innerHTML = `You made this deck on attempt #${fmt(res.n)}. As far as anyone knows, that was the <b>only time it has ever existed</b>.`;
+  el.live.textContent = `Replay of your best shuffle: ${res.m} of 52 matched: ${hits.map(i => `${NAMES[res.deck[i]]} at position ${i + 1}`).join(', ')}.`;
+  setPose('eyebrow', `Ah yes. Your finest ${res.m}. I remember it well. I was not worried then either.`);
+}
+$('#replayBtn').addEventListener('click', replayBest);
+
 /* =====================================================================
    10. Autopilot
    ===================================================================== */
@@ -1569,6 +1619,7 @@ function setAutopilot(mode) {
   if (autopilot.mode) flushAutopilot();
   autopilot.mode = m;
   autopilot.ludMs = 0;
+  if (m) hideReplayNote();
   rate.secs.fill(-1); rate.counts.fill(0);   // the pace readout should describe the new mode only
   if (!m) { el.apRate.textContent = ''; armIdle(); updateStats(); return; }
   track('autopilot-' + (m === 'L' ? 'ludicrous' : m));
