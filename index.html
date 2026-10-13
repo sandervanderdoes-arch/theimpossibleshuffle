@@ -314,7 +314,7 @@
   @keyframes shake { 10%,90% { transform:translate(-2px,1px); } 20%,80% { transform:translate(4px,-2px); } 30%,50%,70% { transform:translate(-7px,3px) rotate(-.4deg); } 40%,60% { transform:translate(7px,-3px) rotate(.4deg); } }
 
   .toast .copy-text { display:block; margin-top:.4rem; padding:.4rem; background:rgba(0,0,0,.4); border-radius:6px; font:12px/1.4 "JetBrains Mono", monospace; user-select:all; word-break:break-word; }
-  /* Are you impatient? Time-skip tiers, sponsor extras, the Wall of Hopeless Heroes. */
+  /* Become a Mission Sponsor: sponsor tiers, your station, extras, the Wall of Hopeless Heroes. */
   .imp-tiers { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(16rem, 1fr)); align-items:stretch; }
   .imp-card { position:relative; display:flex; flex-direction:column; gap:.25rem; padding:1.4rem 1.1rem 1rem; border-radius:16px; border:1px solid rgba(255,210,63,.4); background:rgba(0,0,0,.45); min-width:0; }
   .imp-card.featured { border:2px solid var(--gold); background:linear-gradient(160deg, rgba(255,210,63,.16), rgba(255,47,214,.1)); box-shadow:0 0 24px rgba(255,210,63,.3); }
@@ -585,31 +585,31 @@
     </div>
   </section>
 
-  <!-- ===================== ARE YOU IMPATIENT? ===================== -->
+  <!-- ===================== BECOME A MISSION SPONSOR ===================== -->
   <section id="impatient" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="impTitle" hidden>
     <div class="panel imp-panel p-4 sm:p-6">
-      <h2 id="impTitle" class="font-display text-lg sm:text-2xl neon-gold">⏩ Are you impatient?</h2>
-      <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">A proper hand shuffle takes about 20 seconds. At that pace, you'll match the Holy Grail in roughly <b class="text-[#ffe68a]">51 novemdecillion years</b>, give or take a Tuesday. Not a patient person? Fire up the <b class="text-[#a5fbff]">Hyperdrive</b>: it really does every single shuffle of those years, just absurdly faster, and every one counts toward humanity's total. The Professor calls it cheating. We call it efficiency.</p>
+      <h2 id="impTitle" class="font-display text-lg sm:text-2xl neon-gold">🎖️ Become a Mission Sponsor</h2>
+      <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">A proper hand shuffle takes about 20 seconds. At that pace, humanity matches the Holy Grail in roughly <b class="text-[#ffe68a]">51 novemdecillion years</b>, give or take a Tuesday. Mission Control can't do that alone. Sponsor a stretch of the mission and your computer becomes an official <b class="text-[#a5fbff]">Mission Control station</b>: it shuffles thousands of years' worth for humanity while you get on with your life. Every shuffle is real and counts toward the total. The Professor calls it cheating. We call it volunteering.</p>
       <p class="mt-2 text-xs text-[#9fb5a8]">Exchange rate: 1 year of nonstop hand shuffling = 1,577,880 shuffles.</p>
       <div id="impTiers" class="imp-tiers mt-6"></div>
-      <p class="mt-4 text-xs text-[#9fb5a8]">*Estimate for this device. Runs while this tab is open; pause anytime, unused years stay saved. Years and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
+      <p class="mt-4 text-xs text-[#9fb5a8]">*Estimate for this device. Your station runs while this tab is open. Stand down anytime; it picks up where it left off on your next visit. Your rank and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
 
       <div id="hyperBox" class="hyper-box mt-6" hidden>
         <div class="flex items-center justify-between gap-2 flex-wrap">
-          <h3 class="font-display text-base neon-cyan">🚀 Your Hyperdrive</h3>
+          <h3 class="font-display text-base neon-cyan">🛰️ Your station</h3>
           <span id="hyperStatus" class="mono text-xs font-bold text-[#a5fbff]">READY</span>
         </div>
         <div class="hyper-bar mt-3" aria-hidden="true"><div id="hyperFill"></div></div>
-        <p id="hyperYears" class="mono text-sm sm:text-base font-bold neon-gold mt-2" aria-live="polite">0 of 0 years skipped</p>
+        <p id="hyperYears" class="mono text-sm sm:text-base font-bold neon-gold mt-2" aria-live="polite">0 of 0 years shuffled</p>
         <dl class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
           <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SHUFFLES DONE</dt><dd id="hyperDone" class="mono text-sm sm:text-base font-extrabold" style="overflow-wrap:anywhere">0</dd></div>
           <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SPEED</dt><dd id="hyperSpeed" class="mono text-sm sm:text-base font-extrabold">–</dd><dd id="hyperSpeedSub" class="text-[11px] text-[#9fb5a8]"></dd></div>
           <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">TIME LEFT</dt><dd id="hyperEta" class="mono text-sm sm:text-base font-extrabold">–</dd></div>
-          <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">BEST IN HYPERDRIVE</dt><dd id="hyperBest" class="mono text-sm sm:text-base font-extrabold">–</dd></div>
+          <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">BEST ON YOUR STATION</dt><dd id="hyperBest" class="mono text-sm sm:text-base font-extrabold">–</dd></div>
         </dl>
         <div class="mt-4 flex flex-wrap items-center gap-3">
-          <button type="button" id="hyperGo" class="shuffle-btn !w-auto !text-sm !py-2 !px-5" aria-pressed="false">🚀 Start Hyperdrive</button>
-          <p class="text-xs text-[#9fb5a8]">Keep this tab open. Pausing or closing it keeps the years you haven't used.</p>
+          <button type="button" id="hyperGo" class="shuffle-btn !w-auto !text-sm !py-2 !px-5" aria-pressed="false">🛰️ Start your station</button>
+          <p class="text-xs text-[#9fb5a8]">Keep this tab open while you work, binge or sleep. Standing down or closing it keeps the years you haven't shuffled.</p>
         </div>
         <p id="hyperDoneNote" class="mt-3 text-sm text-[#ffe68a]" hidden></p>
       </div>
@@ -645,7 +645,7 @@
 
       <div id="wallBox" class="mt-6" hidden>
         <h3 class="font-display text-base neon-gold">🏛️ Wall of Hopeless Heroes</h3>
-        <p class="text-xs text-[#9fb5a8] mt-1">Mission Sponsors who skipped 100,000 years and still matched nothing.</p>
+        <p class="text-xs text-[#9fb5a8] mt-1">Commanders who shuffled 100,000 years for humanity and still matched nothing.</p>
         <div id="wallList" class="mt-3 flex flex-wrap gap-2"></div>
       </div>
     </div>
@@ -668,7 +668,7 @@
   </footer>
 </div>
 
-<button type="button" id="hyperChip" class="hyper-chip" hidden aria-label="Hyperdrive progress, go to Hyperdrive"></button>
+<button type="button" id="hyperChip" class="hyper-chip" hidden aria-label="Your station's progress, go to your station"></button>
 <button type="button" id="fab" class="shuffle-btn !w-auto !py-3 !px-5 !text-sm lg:hidden" hidden aria-label="Shuffle Deck 2">Shuffle</button>
 
 <div id="ticker" aria-label="Fellow shufflers feed (jokes, not real people)">
@@ -713,9 +713,9 @@
       <div id="winFund" class="mt-5" hidden>
         <p class="mono text-xs sm:text-sm text-white">Celebrate responsibly. Become a Mission Sponsor:</p>
         <div class="mt-2 flex flex-wrap gap-2 justify-center">
-          <a class="fund-pill" data-tier="tea" target="_blank" rel="noopener" hidden>⏩ <span data-price="1.92"></span> · skip 1,000 years</a>
-          <a class="fund-pill" data-tier="odds" target="_blank" rel="noopener" hidden>⏩⏩ <span data-price="8.07"></span> · 10,000 years</a>
-          <a class="fund-pill" data-tier="patron" target="_blank" rel="noopener" hidden>⏩⏩⏩ <span data-price="52"></span> · 100,000 years</a>
+          <a class="fund-pill" data-tier="tea" target="_blank" rel="noopener" hidden>★ <span data-price="1.92"></span> · Cadet</a>
+          <a class="fund-pill" data-tier="odds" target="_blank" rel="noopener" hidden>★★ <span data-price="8.07"></span> · Captain</a>
+          <a class="fund-pill" data-tier="patron" target="_blank" rel="noopener" hidden>★★★ <span data-price="52"></span> · Commander</a>
         </div>
       </div>
     </div>
@@ -1789,7 +1789,7 @@ async function liveFlush(onExit) {
   if (!live.on || live.busy) return;
   if (!live.pending) { if (!onExit) await liveFetch(); return; }
   live.busy = true;
-  // Hyperdrive can outrun one capped call per round, so send up to 8 batches in a row.
+  // A sponsor station can outrun one capped call per round, so send up to 8 batches in a row.
   for (let round = 0; round < (onExit ? 1 : 8) && live.pending > 0; round++) {
     const delta = Math.min(live.pending, LIVE_MAX_DELTA);
     live.pending -= delta; live.inflight = delta;
@@ -2608,13 +2608,13 @@ function selfTest() {
 }
 
 /* =====================================================================
-   15b. "Are you impatient?" Hyperdrive, sponsor extras, certificate, wall
+   15b. "Become a Mission Sponsor": your station, extras, certificate, wall
    ---------------------------------------------------------------------
    The unit is the hand-shuffle year: a proper hand shuffle takes about
    20 seconds (seven riffles are needed to mix a deck, Bayer & Diaconis
    1992), so one year of nonstop hand shuffling is 1,577,880 shuffles.
-   Buying a tier adds that many years of shuffles to your Hyperdrive.
-   Hyperdrive really performs every one of them: the same crypto
+   Buying a tier adds that many years of shuffles to your station
+   (internally "hyper"). The station really performs every one of them: the same crypto
    Fisher–Yates, run in Web Workers on every processor core, and every
    shuffle counts toward your stats, badges and the humankind counter.
    The credit only goes down as shuffles are actually done, so pausing or
@@ -2636,22 +2636,24 @@ function timesInARow(oneIn, p) { let k = 0; while ((k + 1) * Math.log10(1 / oneI
 const NUM_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
 const numWord = n => NUM_WORDS[n] || fmt(n);
 const IMP_TIERS = [
-  { id: 'tea', icon: '⏩', name: 'Mildly impatient', years: 1000, price: '1.92',
-    story: 'Shuffle nonstop since the Vikings.', deal: 'Cheaper than a coffee',
+  { id: 'tea', icon: '★', name: 'Cadet', years: 1000, price: '1.92',
+    story: 'Basic training: shuffling nonstop since the Vikings.', shift: 'a coffee break', deal: 'Cheaper than a coffee',
     cmp: p => `Your odds: still worse than <b>${timesInARow(ROYAL_FLUSH, p)} royal flushes in a row</b>.`,
     why: 'Why $1.92? One card is 1.92% of a deck.',
-    perks: ['★ Gold sponsor badge', '🃏 Fancy card backs'] },
-  { id: 'odds', icon: '⏩⏩', name: 'Very impatient', years: 10000, price: '8.07', featured: true,
-    story: 'Shuffle nonstop since the last Ice Age.', deal: '10× the years for 4× the price',
+    perks: ['★ Gold Mission Sponsor badge', '🃏 Fancy card backs'] },
+  { id: 'odds', icon: '★★', name: 'Captain', years: 10000, price: '8.07', featured: true,
+    story: 'A full shift: shuffling nonstop since the last Ice Age.', shift: 'about one movie', deal: '10× the years for 4× the price',
     cmp: p => `Your odds: still worse than <b>${timesInARow(LIGHTNING_YEAR, p)} lightning strikes in one year</b>.`,
     why: 'Why $8.07? 52! is 8.07 × 10⁶⁷. We waived the 67 zeros.',
     perks: ['📜 Certificate of Trying Anyway (PDF)', '🎩 Professor outfits', '★ Badge and card backs included'] },
-  { id: 'patron', icon: '⏩⏩⏩', name: 'Cosmically impatient', years: 100000, price: '52',
-    story: 'Shuffle nonstop since humans left Africa.', deal: 'Eternal glory, mostly',
+  { id: 'patron', icon: '★★★', name: 'Commander', years: 100000, price: '52',
+    story: 'Night watch: shuffling nonstop since humans left Africa.', shift: 'the overnight shift', deal: 'Report back at dawn',
     cmp: p => `Your odds: still worse than <b>${timesInARow(POWERBALL, p)} Powerball jackpots in a row</b>.`,
-    why: 'Why $52? One dollar per card.',
+    why: 'Why $52? One dollar per card. The deck salutes you.',
     perks: ['🏛️ Your name on the Wall of Hopeless Heroes', '👑 The Royal Professor', '✨ Every other extra included'] }
 ];
+/** The highest rank this browser has bought. */
+const rankName = () => (owned().patron ? 'Commander' : owned().odds ? 'Captain' : owned().tea ? 'Cadet' : 'Sponsor');
 const tierById = id => IMP_TIERS.find(t => t.id === id);
 /** Generic comparisons for any probability (used on the certificate). */
 function hopelessness(p) { return { powerballs: timesInARow(POWERBALL, p), flips: Math.round(Math.log2(1 / p)) }; }
@@ -2677,18 +2679,18 @@ function renderImpatient() {
     any = true;
     const N = t.years * HAND_YEAR;
     return `<div class="imp-card${t.featured ? ' featured' : ''}">
-      ${t.featured ? '<span class="flag">THE SENSIBLE CHOICE</span>' : ''}
+      ${t.featured ? '<span class="flag">MISSION CONTROL RECOMMENDS</span>' : ''}
       <p class="imp-name">${t.icon} ${t.name}</p>
-      <p class="imp-years">Skip ${fmt(t.years)} years</p>
+      <p class="imp-years">${fmt(t.years)} years</p>
       <p class="imp-story">${t.story}</p>
       <div class="imp-stats">
-        <p>⚡ Done in <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*<br><span>instead of ${shortDuration(N / LUDICROUS_RATE)} on free autopilot</span></p>
-        <p>🃏 <b>${bigShort(N)}</b> real shuffles</p>
+        <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, ${t.shift}<br><span>free autopilot would need ${shortDuration(N / LUDICROUS_RATE)}</span></p>
+        <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
       </div>
       <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}</ul>
       <p class="imp-cmp">${t.cmp(N / F52_NUM)}</p>
       <span class="imp-deal">${t.deal}</span>
-      <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}">Skip ${fmt(t.years)} years · ${cur}${t.price}</a>
+      <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}">Become a ${t.name} · ${cur}${t.price}</a>
       <p class="imp-why">${t.why}</p>
     </div>`;
   }).join('');
@@ -2715,7 +2717,7 @@ function handleThanks() {
   try { history.replaceState(null, '', location.pathname + (q ? '?' + q : '') + '#hyperBox'); } catch (e) { /* file:// */ }
   setTimeout(() => {
     $('#hyperBox').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-    toast(`🎉 <b>Thank you, Mission Sponsor!</b> ${fmt(t.years)} years of shuffling are loaded into your Hyperdrive. Press Start when you're ready.`);
+    toast(`🎖️ <b>Welcome aboard, ${t.name}!</b> ${fmt(t.years)} years of shuffling are assigned to your station. Press Start when you're ready.`);
     sfx('land', 6);
   }, 600);
 }
@@ -2759,7 +2761,7 @@ function hyperEnsureWorkers() {
       const w = new Worker(url);
       w.busy = 0;
       w.onmessage = e => hyperResult(w, e.data);
-      w.onerror = () => { HYPER.failed = true; hyperPause(); toast('🚀 Hyperdrive could not start in this browser. Your years are saved; try another browser.'); };
+      w.onerror = () => { HYPER.failed = true; hyperPause(); toast('🛰️ Your station could not start in this browser. Your years are saved; try another browser.'); };
       w.postMessage({ grail: Array.from(grail), royal: ROYAL_POS.slice() });
       HYPER.workers.push(w);
     }
@@ -2768,14 +2770,14 @@ function hyperEnsureWorkers() {
 }
 function hyperStart() {
   if (HYPER.running || winOpen || hyperLeft() <= 0) return;
-  if (!hyperEnsureWorkers()) { toast('🚀 Hyperdrive needs a browser with Web Workers. Your years are saved.'); return; }
+  if (!hyperEnsureWorkers()) { toast('🛰️ Your station needs a browser with Web Workers. Your years are saved.'); return; }
   if (autopilot.mode) setAutopilot('0');
   if (anim.active) finishAnimNow();
   HYPER.running = true; HYPER.assigned = 0;
   HYPER.samples = [[performance.now(), store.hyper.done]];
   HYPER.workers.forEach(hyperAssign);
   clearInterval(HYPER.uiTimer); HYPER.uiTimer = setInterval(hyperUI, 250);
-  setPose('autopilot', 'Hyperdrive engaged. Every core you own is now shuffling. I have put the kettle on.');
+  setPose('autopilot', `Station online, ${rankName()}. Every core you own is now shuffling. I have put the kettle on.`);
   clearTimeout(prof.idleTimer);
   track('hyper-start');
   renderHyper();
@@ -2832,7 +2834,7 @@ function hyperFinish() {
   saveStore(true);
   track('hyper-done');
   const y = handYears(store.hyper.bought);
-  toast(`🚀 <b>Hyperdrive complete.</b> ${fmt(Math.round(y))} years of shuffling done. Best match: ${store.hyper.best}/52. Matches: 0. Mathematics wins again.`);
+  toast(`🎖️ <b>Assignment complete, ${rankName()}.</b> ${fmt(Math.round(y))} years of shuffling done. Best match: ${store.hyper.best}/52. Matches: 0. Mission Control thanks you for your service.`);
   setPose('autopilot', `${fmt(Math.round(y))} years of shuffling and still nothing. I must say, I expected exactly this.`);
   sfx('land', 6);
   renderHyper();
@@ -2866,7 +2868,7 @@ function renderHyper() {
   const frac = Math.min(1, done / bought), busy = HYPER.workers.some(w => w.busy);
   const yrs = v => handYears(v).toLocaleString('en-US', { maximumFractionDigits: handYears(bought) < 100 ? 1 : 0 });
   $('#hyperFill').style.width = (frac * 100).toFixed(2) + '%';
-  $('#hyperYears').textContent = `${yrs(done)} of ${yrs(bought)} years skipped`;
+  $('#hyperYears').textContent = `${yrs(done)} of ${yrs(bought)} years shuffled`;
   $('#hyperDone').textContent = fmt(done);
   const rate = HYPER.running ? HYPER.rate || 0 : 0;
   $('#hyperSpeed').textContent = rate ? `${fmt(Math.round(rate))}/sec` : '–';
@@ -2875,14 +2877,14 @@ function renderHyper() {
   $('#hyperBest').textContent = store.hyper.best > 0 ? `${store.hyper.best}/52` : '–';
   const go = $('#hyperGo');
   go.hidden = left <= 0;
-  go.textContent = HYPER.running ? '⏸ Pause' : done > 0 && left < bought ? '▶ Resume Hyperdrive' : '🚀 Start Hyperdrive';
+  go.textContent = HYPER.running ? '⏸ Stand down' : done > 0 && left < bought ? '▶ Resume your shift' : '🛰️ Start your station';
   go.setAttribute('aria-pressed', String(HYPER.running));
-  $('#hyperStatus').textContent = left <= 0 ? 'COMPLETE' : HYPER.running ? `RUNNING ON ${HYPER.workers.length} CORE${HYPER.workers.length === 1 ? '' : 'S'}` : busy ? 'PAUSING…' : done ? 'PAUSED' : 'READY';
+  $('#hyperStatus').textContent = left <= 0 ? 'ASSIGNMENT COMPLETE' : HYPER.running ? `ONLINE · ${HYPER.workers.length} CORE${HYPER.workers.length === 1 ? '' : 'S'}` : busy ? 'STANDING DOWN…' : done ? 'STOOD DOWN' : 'STANDING BY';
   $('#hyperBox').classList.toggle('running', HYPER.running);
   $('#hyperDoneNote').hidden = left > 0;
-  if (left <= 0) $('#hyperDoneNote').innerHTML = `<b>Hyperdrive complete.</b> ${yrs(bought)} years of nonstop shuffling: ${fmt(bought)} real shuffles, best match <b>${store.hyper.best}/52</b>, matches <b>0</b>.${hasOdds() ? ' Your Certificate of Trying Anyway is ready below.' : ''} Still impatient? Skip more years above.`;
+  if (left <= 0) $('#hyperDoneNote').innerHTML = `<b>Assignment complete, ${rankName()}.</b> ${yrs(bought)} years of nonstop shuffling: ${fmt(bought)} real shuffles, best match <b>${store.hyper.best}/52</b>, matches <b>0</b>.${hasOdds() ? ' Your Certificate of Trying Anyway is ready below.' : ''} Mission Control thanks you for your service. Ready for another tour? Pick a rank above.`;
   chip.hidden = !HYPER.running || HYPER.boxVisible;
-  if (!chip.hidden) chip.textContent = `🚀 ${yrs(done)} of ${yrs(bought)} yrs`;
+  if (!chip.hidden) chip.textContent = `🛰️ ${yrs(done)} of ${yrs(bought)} yrs`;
   if (!HYPER.running) refreshEtas();
 }
 
@@ -2942,7 +2944,7 @@ function drawCertificate(cv, name) {
   const rows = [
     ['Total shuffles', fmt(store.allTime)],
     ['By hand, that would take', handTime(store.allTime)],
-    ['Of which in Hyperdrive', fmt(store.hyper.done)],
+    ['Of which by your station', fmt(store.hyper.done)],
     ['Best match ever', `${bestEver()}/52`],
     ['Matches', '0']
   ];
