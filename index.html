@@ -2689,7 +2689,7 @@ function renderImpatient() {
       <p class="imp-years">${fmt(t.years)} years of shuffling</p>
       <p class="imp-story">${t.story}</p>
       <div class="imp-stats">
-        <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, ${t.shift}<br><span>free autopilot would need ${shortDuration(N / LUDICROUS_RATE)}</span></p>
+        <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, ${t.shift}<br><span>Ludicrous would need ${shortDuration(N / LUDICROUS_RATE)}</span></p>
         <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
       </div>
       <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}</ul>
