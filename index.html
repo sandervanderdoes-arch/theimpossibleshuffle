@@ -595,10 +595,10 @@
   <section id="impatient" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="impTitle" hidden>
     <div class="panel imp-panel p-4 sm:p-6">
       <h2 id="impTitle" class="font-display text-lg sm:text-2xl neon-gold">⏩ Are you impatient?</h2>
-      <p class="mt-2 max-w-3xl text-sm sm:text-base text-[#cfe3d7]">A proper hand shuffle takes about 20 seconds: mathematicians proved a deck needs seven riffles before it's truly mixed. At that pace, a match would take about 51 novemdecillion years. So skip ahead. <b class="text-[#ffe68a]">Hyperdrive</b> really performs every shuffle of those years, on all <span id="impCores">your processor cores</span> at once, and every one of them counts toward humanity's total.</p>
-      <p class="mt-2 text-xs text-[#9fb5a8]">1 year of nonstop hand shuffling = 1,577,880 shuffles. Each step up makes your chance 10× bigger: one zero fewer after the decimal point.</p>
+      <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">A proper hand shuffle takes about 20 seconds. At that pace, you'll match the Holy Grail in roughly <b class="text-[#ffe68a]">51 novemdecillion years</b>, give or take a Tuesday. Not a patient person? Fire up the <b class="text-[#a5fbff]">Hyperdrive</b>: it really does every single shuffle of those years, just absurdly faster, and every one counts toward humanity's total. The Professor calls it cheating. We call it efficiency.</p>
+      <p class="mt-2 text-xs text-[#9fb5a8]">Exchange rate: 1 year of nonstop hand shuffling = 1,577,880 shuffles. Every step up adds a zero to your shuffles and knocks one zero off your odds.</p>
       <div id="impTiers" class="imp-tiers mt-6"></div>
-      <p class="mt-4 text-xs text-[#9fb5a8] max-w-3xl">*Estimate for this device. Hyperdrive runs while this tab is open; pause whenever you like and the years you haven't used stay saved in this browser. Spoiler: you will not win. Odds per shuffle stay 1 in 52!, and there is no prize, only bragging rights and the extras. Secure checkout by Stripe, opens in a new tab.</p>
+      <p class="mt-4 text-xs text-[#9fb5a8]">*Estimate for this device. Hyperdrive runs while this tab is open; pause whenever you like and the years you haven't used stay saved in this browser. Spoiler: you will not win. Odds per shuffle stay 1 in 52!, and there is no prize, only bragging rights and the extras. Secure checkout by Stripe, opens in a new tab.</p>
 
       <div id="hyperBox" class="hyper-box mt-6" hidden>
         <div class="flex items-center justify-between gap-2 flex-wrap">
@@ -2680,7 +2680,6 @@ function renderImpatient() {
     </div>`;
   }).join('');
   $$('#impTiers [data-imp]').forEach(a => a.addEventListener('click', () => track('impatient-' + a.dataset.imp)));
-  $('#impCores').textContent = `${cores()} processor core${cores() === 1 ? '' : 's'}`;
   $('#impatient').hidden = !any;
 }
 function refreshEtas() {
