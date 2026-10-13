@@ -598,7 +598,7 @@
       <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">A proper hand shuffle takes about 20 seconds. At that pace, you'll match the Holy Grail in roughly <b class="text-[#ffe68a]">51 novemdecillion years</b>, give or take a Tuesday. Not a patient person? Fire up the <b class="text-[#a5fbff]">Hyperdrive</b>: it really does every single shuffle of those years, just absurdly faster, and every one counts toward humanity's total. The Professor calls it cheating. We call it efficiency.</p>
       <p class="mt-2 text-xs text-[#9fb5a8]">Exchange rate: 1 year of nonstop hand shuffling = 1,577,880 shuffles. Every step up adds a zero to your shuffles and knocks one zero off your odds.</p>
       <div id="impTiers" class="imp-tiers mt-6"></div>
-      <p class="mt-4 text-xs text-[#9fb5a8]">*Estimate for this device. Hyperdrive runs while this tab is open; pause whenever you like and the years you haven't used stay saved in this browser. Spoiler: you will not win. Odds per shuffle stay 1 in 52!, and there is no prize, only bragging rights and the extras. Secure checkout by Stripe, opens in a new tab.</p>
+      <p class="mt-4 text-xs text-[#9fb5a8]">*Estimate for this device. Hyperdrive runs while this tab is open; pause whenever you like and the years you haven't used stay saved. Years and extras unlock in the browser you paid in. Spoiler: you will not win. Odds per shuffle stay 1 in 52!, and there is no prize, only bragging rights and the extras. Secure checkout by Stripe, opens in a new tab.</p>
 
       <div id="hyperBox" class="hyper-box mt-6" hidden>
         <div class="flex items-center justify-between gap-2 flex-wrap">
@@ -2641,17 +2641,17 @@ const IMP_TIERS = [
     story: 'Nonstop hand shuffling since the Vikings.',
     cmp: p => `Less likely than being dealt a royal flush <b>${numWord(timesInARow(ROYAL_FLUSH, p))} hands in a row</b>.`,
     why: 'Why $1.92? One card is 1.92% of a deck.',
-    perks: ['1,000 years of real shuffles', 'Gold “Mission Sponsor” badge', 'Custom card backs'] },
+    perks: ['1,000 years of real shuffles', '★ A gold “Mission Sponsor” badge on your stats and share card', '🃏 New card backs while you shuffle: casino gold, neon dots or green felt'] },
   { id: 'odds', icon: '⏩⏩', name: 'Very impatient', years: 10000, price: '8.07', featured: true,
     story: 'Nonstop hand shuffling since the end of the last Ice Age.',
     cmp: p => `Less likely than being struck by lightning <b>${numWord(timesInARow(LIGHTNING_YEAR, p))} times in the same year</b>.`,
     why: 'Why $8.07? There are 8.07 × 10⁶⁷ ways to order a deck. We kindly waived the other 67 zeros.',
-    perks: ['10,000 years of real shuffles', '📜 Certificate of Futility (PDF)', 'Card backs and Professor outfits', 'Gold “Mission Sponsor” badge'] },
+    perks: ['10,000 years of real shuffles', '📜 Certificate of Futility: a printable PDF with your name, best match and every zero of your odds', '🎩 Dress the Professor: a cyan or emerald hat band and bow tie', '★ Plus the gold badge and the new card backs'] },
   { id: 'patron', icon: '⏩⏩⏩', name: 'Cosmically impatient', years: 100000, price: '52',
     story: 'Nonstop hand shuffling since the first humans walked out of Africa.',
     cmp: p => `Less likely than winning the Powerball jackpot <b>${numWord(timesInARow(POWERBALL, p))} times in a row</b>.`,
     why: 'Why $52? One dollar per card. The deck salutes you.',
-    perks: ['100,000 years of real shuffles', '📜 Certificate of Futility (PDF)', '🏛️ Your name on the Wall of Futility', 'Every cosmetic, including the Royal Professor'] }
+    perks: ['100,000 years of real shuffles', '🏛️ Your name and a dedication on the public Wall of Futility', '👑 The Royal Professor: purple top hat, gold band, gold bow tie', '🃏 Royal purple card backs', '📜 Plus the certificate, the badge and every other extra'] }
 ];
 const tierById = id => IMP_TIERS.find(t => t.id === id);
 /** Generic comparisons for any probability (used on the certificate). */
