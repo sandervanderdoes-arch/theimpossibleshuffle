@@ -325,6 +325,7 @@
   .imp-stats { margin-top:.6rem; padding:.55rem .7rem; border-radius:12px; background:rgba(34,243,255,.07); border:1px solid rgba(34,243,255,.25); display:grid; gap:.2rem; font-size:.85rem; color:#cfe3d7; }
   .imp-stats b { color:#a5fbff; }
   .imp-stats span { color:#9fb5a8; font-size:.78rem; }
+  .gold-star { color:#ffd23f; text-shadow:0 0 8px rgba(255,210,63,.6); }
   .imp-perks { margin:.7rem 0 .2rem; padding:0; list-style:none; font-size:.9rem; display:grid; gap:.3rem; }
   .imp-cmp { margin:.5rem 0 .8rem; font-size:.78rem; line-height:1.4; color:#9fb5a8; }
   .imp-cmp b { color:#cfe3d7; font-weight:700; }
@@ -2640,12 +2641,12 @@ const IMP_TIERS = [
     story: 'Basic training: nonstop since the Vikings.', shift: 'a coffee break', deal: 'Cheaper than a coffee',
     cmp: p => `Your odds: still worse than being dealt <b>${timesInARow(ROYAL_FLUSH, p)} royal flushes in a row</b>.`,
     why: 'Why $1.92? One card is 1.92% of a deck.',
-    perks: ['★ Gold Mission Sponsor badge', '🃏 Fancy card backs'] },
+    perks: ['<span class="gold-star">★</span> Gold Mission Sponsor badge', '🃏 Fancy card backs'] },
   { id: 'odds', icon: '★★', name: 'Captain', years: 10000, price: '8.07', featured: true,
     story: 'A full shift: nonstop since the last Ice Age.', shift: 'about one movie', deal: '10× the years for 4× the price',
     cmp: p => `Your odds: still worse than getting <b>struck by lightning ${timesInARow(LIGHTNING_YEAR, p)} times in one year</b>.`,
     why: 'Why $8.07? 52! is 8.07 × 10⁶⁷. We waived the 67 zeros.',
-    perks: ['📜 Certificate of Trying Anyway (PDF)', '🎩 Professor outfits', '★ Badge and card backs included'] },
+    perks: ['📜 Certificate of Trying Anyway (PDF)', '🎩 Professor outfits', '<span class="gold-star">★</span> Badge and card backs included'] },
   { id: 'patron', icon: '★★★', name: 'Commander', years: 100000, price: '52',
     story: 'Night watch: nonstop since humans left Africa.', shift: 'the overnight shift', deal: 'Report back at dawn',
     cmp: p => `Your odds: still worse than winning <b>${timesInARow(POWERBALL, p)} Powerball jackpots in a row</b>.`,
@@ -2680,7 +2681,7 @@ function renderImpatient() {
     const N = t.years * HAND_YEAR;
     return `<div class="imp-card${t.featured ? ' featured' : ''}">
       ${t.featured ? '<span class="flag">MISSION CONTROL RECOMMENDS</span>' : ''}
-      <p class="imp-name">${t.icon} ${t.name}</p>
+      <p class="imp-name"><span class="gold-star">${t.icon}</span> ${t.name}</p>
       <p class="imp-years">${fmt(t.years)} years<br>of shuffling</p>
       <p class="imp-story">${t.story}</p>
       <div class="imp-stats">
