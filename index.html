@@ -222,6 +222,22 @@
   .log .dk:hover { color:#bffcff; text-decoration:underline; }
   .log td.num { white-space:nowrap; }
   .log .t2 { display:none; color:var(--muted); font-size:.68rem; margin-top:.15rem; }
+  /* Leaderboard */
+  .lb-wrap { max-height: 28rem; overflow:auto; border-radius:12px; border:1px solid rgba(255,210,63,.25); }
+  .lb { width:100%; border-collapse:collapse; font-family:"JetBrains Mono", ui-monospace, monospace; font-size:.8rem; }
+  .lb th, .lb td { padding:.45rem .6rem; text-align:left; border-bottom:1px solid rgba(255,255,255,.05); white-space:nowrap; }
+  .lb td:nth-child(2) { white-space:normal; overflow-wrap:anywhere; font-family:Inter, system-ui, sans-serif; font-weight:700; }
+  .lb thead th { position:sticky; top:0; background:#1a1503; color:var(--muted); font-weight:700; z-index:2; }
+  .lb td.best { color:#ffe68a; font-weight:800; }
+  .lb tr.top1 td { background:rgba(255,210,63,.14); } .lb tr.top2 td { background:rgba(220,220,235,.08); } .lb tr.top3 td { background:rgba(205,127,50,.1); }
+  .lb tr.me td { background:rgba(34,243,255,.12); color:#bffcff; }
+  .lb tr.me td:first-child { box-shadow: inset 3px 0 0 var(--cyan); }
+  .lb-me { border-radius:14px; border:1px solid rgba(34,243,255,.35); background:rgba(0,20,26,.5); padding:.85rem 1rem; font-size:.9rem; color:#cfe3d7; }
+  .lb-me b { color:#ffe68a; }
+  .lb-me .row { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.6rem; align-items:center; }
+  .lb-me .nudge { margin-top:.5rem; font-size:.82rem; color:#9fb5a8; }
+  .lb-me .nudge a { color:#ff9bec; text-decoration:underline; text-underline-offset:3px; }
+  @media (max-width: 480px) { .lb th:nth-child(5), .lb td:nth-child(5) { display:none; } .lb th, .lb td { padding:.4rem .4rem; } }
   /* Narrow phones: the time moves under the attempt number so the table fits. */
   @media (max-width: 480px) {
     .log th, .log td { padding:.3rem .35rem; }
@@ -570,6 +586,24 @@
       <button type="button" id="shareBtn" class="chip-btn mt-5 w-full">📤 Brag about your failure</button>
     </section>
   </div>
+
+  <!-- ===================== LEADERBOARD ===================== -->
+  <section id="lbSection" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="lbTitle" hidden>
+    <div class="panel p-4 sm:p-6">
+      <div class="flex items-baseline justify-between gap-2 flex-wrap">
+        <h2 id="lbTitle" class="font-display text-lg sm:text-2xl neon-gold">🏆 Luckiest Shufflers</h2>
+        <span id="lbCount" class="mono text-xs text-[#9fb5a8]"></span>
+      </div>
+      <p class="mt-1 text-sm text-[#cfe3d7]">The best single shuffles anyone has made, worldwide. Ties go to whoever got there first. Mission Control checks every deck.</p>
+      <div id="lbMe" class="lb-me mt-4" aria-live="polite"></div>
+      <div class="lb-wrap mt-4">
+        <table class="lb">
+          <thead><tr><th scope="col">#</th><th scope="col">Shuffler</th><th scope="col">Best</th><th scope="col">Odds</th><th scope="col">When</th></tr></thead>
+          <tbody id="lbBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 
   <!-- ===================== ODDS ===================== -->
   <section class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="oddsTitle">
@@ -988,7 +1022,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0 }, livePending: 0, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0 }, livePending: 0, lb: null, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1003,6 +1037,7 @@ const store = (() => {
       purchases: p.purchases && typeof p.purchases === 'object' ? { tea: n(p.purchases.tea), odds: n(p.purchases.odds), patron: n(p.purchases.patron) } : {},
       hyper: p.hyper && typeof p.hyper === 'object' ? { bought: n(p.hyper.bought), done: n(p.hyper.done), best: n(p.hyper.best), rate: n(p.hyper.rate) } : { bought: 0, done: 0, best: 0, rate: 0 },
       livePending: n(p.livePending),
+      lb: p.lb && /^[0-9a-f-]{36}$/.test(p.lb.id) && /^[0-9a-f]{32,64}$/.test(p.lb.secret) ? { id: p.lb.id, secret: p.lb.secret, name: str(p.lb.name).slice(0, 20), sub: n(p.lb.sub) } : null,
       cardBack: str(p.cardBack) || 'classic', outfit: str(p.outfit) || 'classic', certId: str(p.certId), wallSubmitted: p.wallSubmitted === true
     };
   } catch (e) { return def; }
@@ -1316,6 +1351,7 @@ function checkPB(deck, m, rigged) {
   if (store.best && m <= store.best.matches) return;
   store.best = { matches: m, attempt: store.allTime, deck: Array.from(deck, c => CODES[c]), ts: Date.now(), grail: GRAIL_ID };
   pbDirty = true;
+  if (typeof lbOnBest === 'function') lbOnBest();
 }
 
 /* =====================================================================
@@ -1442,7 +1478,7 @@ function updateStats() {
   $('#stSession').textContent = fmt(session.attempts);
   $('#stAll').textContent = fmt(store.allTime);
   $('#stBest').textContent = session.best >= 0 ? `${session.best}/52` : '–';
-  $('#stBestAll').textContent = store.best ? `all-time: ${store.best.matches}/52` : '';
+  $('#stBestAll').textContent = store.best ? `all-time: ${store.best.matches}/52${LB.rank ? ` · #${fmt(LB.rank)} worldwide` : ''}` : '';
   $('#stAllHand').textContent = store.allTime ? `≈ ${handTime(store.allTime)} by hand` : '';
   $('#stAvg').textContent = session.attempts ? (session.sum / session.attempts).toFixed(3) : '–';
   const n = session.attempts || 1;
@@ -1789,6 +1825,7 @@ const LIVE_COUNTER = {
   anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtpbnl5enl6ZHJwenh5eHV3cGR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3NjQ1MTUsImV4cCI6MjEwNzM0MDUxNX0.Jr4pqGrwW54jTozB7H2sJubirATPjKVkxc5sVgLNZ1c'
 };
 const live = { on: !!(LIVE_COUNTER.url && LIVE_COUNTER.anonKey), total: null, pending: 0, inflight: 0, shown: 0, mine: 0, busy: false };
+const LB = { on: live.on, ready: false, rows: [], players: 0, rank: null, timer: 0, lastToast: 0, busy: false };   // leaderboard state (section 15c)
 const LIVE_MAX_DELTA = 5000000;   // must match the cap in add_attempts()
 function liveHeaders() {
   return { apikey: LIVE_COUNTER.anonKey, Authorization: 'Bearer ' + LIVE_COUNTER.anonKey, 'Content-Type': 'application/json' };
@@ -3092,6 +3129,150 @@ function initImpatient() {
   $('#wallForm').addEventListener('submit', submitWall);
 }
 
+/* =====================================================================
+   15c. Leaderboard: "Luckiest Shufflers" (Supabase, see supabase/leaderboard.sql)
+   ---------------------------------------------------------------------
+   Every browser gets a random player id and secret. Joining is opt-in
+   (pick a name); after that each new personal best is sent as the full
+   52-card deck, and the database counts the matches itself and rejects
+   scores that are implausible for the number of shuffles behind them.
+   Rank comments ("#23 of 1,204 shufflers") work for everyone, joined or not.
+   ===================================================================== */
+/** Chance that one shuffle gets k or more matches. */
+function tailP(k) { let q = 0; for (let j = k; j <= 52; j++) q += pFixed(j); return q; }
+const oneIn = k => fmt(Math.round(1 / tailP(k)));
+function lbIdentity() {
+  if (!store.lb) {
+    const hex = n => Array.from(crypto.getRandomValues(new Uint8Array(n)), b => b.toString(16).padStart(2, '0')).join('');
+    const h = hex(16);
+    const id = crypto.randomUUID ? crypto.randomUUID() : `${h.slice(0, 8)}-${h.slice(8, 12)}-4${h.slice(13, 16)}-a${h.slice(17, 20)}-${h.slice(20, 32)}`;
+    store.lb = { id, secret: hex(24), name: '', sub: 0 };
+    saveStore(true);
+  }
+  return store.lb;
+}
+async function lbRpc(fn, body) {
+  const r = await fetch(`${LIVE_COUNTER.url}/rest/v1/rpc/${fn}`, { method: 'POST', headers: liveHeaders(), body: JSON.stringify(body) });
+  const text = await r.text();
+  if (!r.ok) { let msg = text; try { msg = JSON.parse(text).message || text; } catch (e) { /* plain text */ } throw new Error(msg); }
+  return JSON.parse(text);
+}
+async function lbLoad() {
+  if (!LB.on) return;
+  try {
+    const r = await fetch(`${LIVE_COUNTER.url}/rest/v1/leaderboard?select=name,best,shuffles,achieved_at&order=best.desc,achieved_at.asc&limit=100`, { headers: liveHeaders(), cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    LB.rows = await r.json();
+    const joined = store.lb && store.lb.name && store.lb.sub;
+    const stats = await lbRpc('leaderboard_rank', { p_best: store.best ? store.best.matches : 99, p_player: joined ? store.lb.id : null });
+    LB.players = store.best || joined ? stats.players : Math.max(0, stats.players - 1);
+    if (store.best) LB.rank = stats.rank;
+    LB.ready = true;
+  } catch (e) { if (!LB.ready) { $('#lbSection').hidden = true; return; } }
+  $('#lbSection').hidden = false;
+  renderLB();
+  statsDirty = true;
+}
+function renderLB() {
+  const me = store.lb && store.lb.name && store.lb.sub ? { name: store.lb.name, best: store.lb.sub } : null;
+  let meMarked = false;
+  $('#lbBody').innerHTML = LB.rows.length ? LB.rows.map((r, i) => {
+    const isMe = !meMarked && me && r.name === me.name && r.best === me.best && (meMarked = true);
+    const cls = [i < 3 ? `top${i + 1}` : '', isMe ? 'me' : ''].join(' ').trim();
+    const medal = ['🥇', '🥈', '🥉'][i] || String(i + 1);
+    const when = new Date(r.achieved_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const name = document.createElement('span'); name.textContent = r.name;
+    return `<tr class="${cls}"><td>${medal}</td><td>${name.innerHTML}${isMe ? ' <span class="text-[#22f3ff]">(you)</span>' : ''}</td><td class="best">${r.best}/52</td><td>1 in ${oneIn(r.best)}</td><td>${when}</td></tr>`;
+  }).join('') : '<tr><td colspan="5">Nobody yet. The first spot is yours for the taking.</td></tr>';
+  $('#lbCount').textContent = LB.players ? `Top ${Math.min(100, LB.rows.length)} of ${fmt(LB.players)} shufflers` : '';
+  renderLBMe();
+}
+function lbNudge() {
+  if (!store.best || !LB.rank) return '';
+  const best = store.best.matches;
+  if (LB.rank === 1) return `<p class="nudge">You're #1 in the world. Defend the crown: every shuffle counts. <a href="#impatient">Get a station</a>.</p>`;
+  const above = LB.rows[LB.rank - 2];
+  const need = above ? above.best + 1 : best + 1;
+  const shuffles = 1 / tailP(need), lud = shuffles / LUDICROUS_RATE, station = shuffles / hyperRateGuess();
+  const soon = sec => (sec < 15 ? 'a few seconds' : fmtDuration(sec));
+  const how = lud < 600 ? `Ludicrous autopilot should find one in ${soon(lud)}.`
+    : `Ludicrous would need ${fmtDuration(lud).replace('about ', 'about ')}; your own station ${soon(station)}. <a href="#impatient">Become a Mission Sponsor</a>`;
+  return `<p class="nudge">To climb, you need <b>${need}/52</b>: about 1 in ${fmt(Math.round(shuffles))} shuffles. ${how}</p>`;
+}
+function renderLBMe() {
+  const box = $('#lbMe'), best = store.best ? store.best.matches : null;
+  const joined = store.lb && store.lb.name;
+  const rankTxt = LB.rank && best !== null ? `#${fmt(LB.rank)} of ${fmt(Math.max(LB.players, LB.rank))}` : '';
+  if (best === null) { box.innerHTML = 'Shuffle at least once, then claim your spot on the board.'; return; }
+  if (joined) {
+    box.innerHTML = `You're on the board as <b>${escapeHtml(store.lb.name)}</b>: best <b>${best}/52</b>${rankTxt ? `, rank <b>${rankTxt}</b>` : ''}. <button type="button" class="chip-btn !text-xs !min-h-0 !py-1 ml-1" data-lb="rename">Change name</button>${lbNudge()}`;
+    return;
+  }
+  box.innerHTML = `Your best: <b>${best}/52</b>${rankTxt ? `. That would rank <b>${rankTxt}</b> worldwide` : ''}. Put your name on the board:
+    <form class="row" data-lb="join"><label class="sr-only" for="lbName">Shuffler name</label><input id="lbName" class="imp-input" maxlength="20" placeholder="Your shuffler name" autocomplete="nickname" required><button type="submit" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Join the leaderboard</button></form>${lbNudge()}`;
+}
+function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+async function lbSubmit(quiet) {
+  if (!LB.ready || !store.lb || !store.lb.name || !store.best || LB.busy) return null;
+  LB.busy = true;
+  try {
+    const res = await lbRpc('submit_best', { p_player: store.lb.id, p_secret: store.lb.secret, p_name: store.lb.name, p_deck: store.best.deck.join(','), p_shuffles: store.allTime });
+    store.lb.sub = Math.max(store.lb.sub, store.best.matches); saveStore(true);
+    LB.rank = res.rank; LB.players = res.players;
+    track('leaderboard-submit');
+    return res;
+  } catch (e) {
+    if (!quiet) toast(/bad name/.test(e.message) ? '🏆 Names can use letters, numbers, spaces and . _ - \' (2 to 20 characters).' : '🏆 Mission Control could not check that score. Please try again later.');
+    return null;
+  } finally { LB.busy = false; }
+}
+/** Called (debounced) after every new personal best: rank comment, and an update if you've joined. */
+function lbOnBest() {
+  clearTimeout(LB.timer);
+  LB.timer = setTimeout(async () => {
+    if (!store.best) return;
+    const best = store.best.matches;
+    let res = null;
+    if (LB.ready) {
+      try { res = store.lb && store.lb.name ? await lbSubmit(true) : await lbRpc('leaderboard_rank', { p_best: best, p_player: null }); } catch (e) { res = null; }
+      if (res) { LB.rank = res.rank; LB.players = Math.max(res.players, res.rank); }
+    }
+    if (best >= 4 && Date.now() - LB.lastToast > 2500) {
+      LB.lastToast = Date.now();
+      const odds = `Only 1 in ${oneIn(best)} shuffles gets this lucky.`;
+      const pct = res && LB.players > 9 ? Math.max(1, Math.ceil(res.rank / LB.players * 100)) : 0;
+      let msg;
+      if (res && res.rank === 1) msg = `🥇 <b>New world record: ${best}/52!</b> Nobody on Earth has shuffled better on this site. ${odds}`;
+      else if (res) msg = `🏆 <b>New personal best: ${best}/52!</b> That ranks you <b>#${fmt(res.rank)}</b> of ${fmt(LB.players)} shufflers worldwide${pct && pct <= 25 ? ` (top ${pct}%)` : ''}. ${odds}`;
+      else msg = `🏆 <b>New personal best: ${best}/52!</b> ${odds}`;
+      if (res && !(store.lb && store.lb.name)) msg += ' <a href="#lbSection" class="underline">Claim your spot ↓</a>';
+      toast(msg);
+    }
+    if (LB.ready) lbLoad();
+  }, 1500);
+}
+function lbInit() {
+  if (!LB.on) return;
+  lbLoad();
+  setInterval(() => { if (document.visibilityState === 'visible') lbLoad(); }, 120000);
+  $('#lbMe').addEventListener('submit', async e => {
+    if (!e.target.matches('[data-lb="join"]')) return;
+    e.preventDefault();
+    const name = $('#lbName').value.trim().replace(/\s+/g, ' ');
+    if (name.length < 2) { $('#lbName').focus(); return; }
+    lbIdentity().name = name.slice(0, 20); saveStore(true);
+    const res = await lbSubmit(false);
+    if (!res) { store.lb.name = ''; saveStore(true); renderLBMe(); return; }
+    toast(`🏆 <b>Welcome to the board, ${escapeHtml(name)}!</b> You're #${fmt(res.rank)} of ${fmt(res.players)}.`);
+    lbLoad();
+  });
+  $('#lbMe').addEventListener('click', e => {
+    if (!e.target.closest('[data-lb="rename"]')) return;
+    store.lb.name = ''; saveStore(true); renderLBMe();
+    const input = $('#lbName'); if (input) input.focus();
+  });
+}
+
 function boot() {
   loadAnalytics();
   setupSupportLinks();
@@ -3107,6 +3288,7 @@ function boot() {
   tickerAdd(); requestAnimationFrame(tickerLoop);
   layoutBulbs();
   initImpatient();
+  lbInit();
   try { selfTest(); } catch (e) { console.error(e); }
   window.ImpossibleShuffle = { selfTest, renderShuffleSound, verifyComparisons: () => verifyComparisons(F52), shuffleInto, countMatches };
 }

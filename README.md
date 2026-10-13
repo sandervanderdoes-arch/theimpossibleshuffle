@@ -19,3 +19,9 @@ Served by GitHub Pages from the `main` branch root. `CNAME` holds the custom dom
 - The station (internally "Hyperdrive") really performs every shuffle: the same crypto Fisher–Yates in Web Workers on every processor core (roughly 0.5–0.7 million shuffles per second per core). Every shuffle counts toward stats, badges and the humankind counter. The credit only goes down as shuffles are done, so pausing or closing the tab loses nothing. No prize.
 - The Certificate of Trying Anyway is drawn on a canvas and saved as an A4 PDF with jsPDF (loaded from cdnjs only when needed; falls back to a PNG).
 - The Wall of Hopeless Heroes uses the `sponsors` table from `supabase/sponsors.sql`. Names arrive unapproved; approve them in the Supabase Table Editor.
+
+## Leaderboard ("Luckiest Shufflers")
+
+- Run `supabase/leaderboard.sql` once in the Supabase SQL editor. Until then the section stays hidden.
+- Joining is opt-in: a player picks a name, and every new personal best is sent as the full 52-card deck. The database counts the matches itself, rejects scores that are implausible for the number of shuffles behind them (less than a 0.1% chance) and only lets the browser that created an entry update it.
+- To remove an entry: Table Editor → `leaderboard` → set `hidden` to true.
