@@ -132,6 +132,11 @@
     transition: transform .08s;
   }
   .shuffle-btn:active { transform: translateY(2px) scale(.99); }
+  .shuffle-btn .btn-main { display:block; }
+  .shuffle-btn .btn-sub { display:block; margin-top:.2rem; font:800 .72rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.12em; text-transform:uppercase; opacity:.85; }
+  .ap-sponsor { display:inline-flex; align-items:center; min-height:32px; margin-top:.35rem; font-size:.8rem; font-weight:700; color:#ffe68a; text-decoration:underline; text-underline-offset:3px; }
+  .ap-sponsor:hover { color:#fff3c4; }
+  .ap-sponsor[hidden] { display:none; }
   @keyframes glow { 50% { box-shadow: 0 0 0 2px #ffd9f7, 0 0 32px rgba(255,47,214,.95), 0 0 80px rgba(255,47,214,.5), inset 0 -4px 0 rgba(0,0,0,.25); } }
   .seg { display:flex; border:1px solid rgba(34,243,255,.35); border-radius:12px; overflow:hidden; }
   .seg button { flex:1; background:transparent; color:var(--ink); border:0; padding:.55rem .25rem; min-height:44px; font-size:.82rem; font-weight:700; }
@@ -539,13 +544,13 @@
 
       <section class="panel p-3 sm:p-5" aria-labelledby="chalTitle">
         <div class="flex items-center justify-between gap-3 flex-wrap mb-3">
-          <h2 id="chalTitle" class="font-display text-base sm:text-lg neon-cyan">The Challenger <span class="mono text-xs text-[#9fb5a8] font-normal align-middle">(Deck 2)</span></h2>
+          <h2 id="chalTitle" class="font-display text-base sm:text-lg neon-cyan">The Challenger <span class="mono text-xs text-[#9fb5a8] font-normal align-middle">(your deck)</span></h2>
           <div class="flex items-center gap-3 flex-wrap">
             <p class="mono text-xs text-[#9fb5a8]">✓ = same card, same position</p>
             <button type="button" id="replayBtn" class="chip-btn !text-xs" hidden>★ Replay my best</button>
           </div>
         </div>
-        <div id="chalGrid" class="deck-grid" role="list" aria-label="The Challenger deck, 52 cards"></div>
+        <div id="chalGrid" class="deck-grid" role="list" aria-label="The Challenger, your deck, 52 cards"></div>
         <div id="replayNote" class="replay-note" hidden aria-live="polite"></div>
         <div class="first-stamp" id="firstBox">
           <span class="stamp" id="firstStamp" aria-hidden="true">🌍 WORLD<br>FIRST</span>
@@ -557,7 +562,7 @@
     <aside class="mt-5 lg:mt-0">
       <div class="lg:sticky lg:top-4 space-y-4">
         <div class="panel p-4 space-y-3">
-          <button type="button" id="shuffleBtn" class="shuffle-btn">Defy Mathematics (Shuffle Deck 2)</button>
+          <button type="button" id="shuffleBtn" class="shuffle-btn"><span class="btn-main">Defy Mathematics</span><span class="btn-sub">Shuffle your deck</span></button>
           <p id="miniResult" class="lg:hidden text-center mono text-sm font-bold min-h-[1.25rem]" aria-hidden="true"></p>
           <p class="kbd-hint text-center text-xs text-[#9fb5a8]">or press <kbd class="mono px-1 rounded bg-white/10">Space</kbd> / <kbd class="mono px-1 rounded bg-white/10">Enter</kbd></p>
           <div>
@@ -569,6 +574,7 @@
               <button type="button" data-ap="L" aria-pressed="false" title="1,000 shuffles per second">Ludicrous</button>
             </div>
             <p id="apRate" class="mono text-xs text-[#9fb5a8] mt-1 h-4"></p>
+            <a id="apSponsor" class="ap-sponsor" href="#impatient" hidden>🛰️ Faster than Ludicrous? Sponsor a mission ↓</a>
           </div>
           <button type="button" id="soundBtn" class="chip-btn w-full" aria-pressed="false">🔇 Sound: off</button>
         </div>
@@ -765,7 +771,7 @@
 </div>
 
 <button type="button" id="hyperChip" class="hyper-chip" hidden aria-label="Your station's progress, go to your station"></button>
-<button type="button" id="fab" class="shuffle-btn !w-auto !py-3 !px-5 !text-sm lg:hidden" hidden aria-label="Shuffle Deck 2">Shuffle</button>
+<button type="button" id="fab" class="shuffle-btn !w-auto !py-3 !px-5 !text-sm lg:hidden" hidden aria-label="Shuffle your deck">Shuffle</button>
 
 <div id="ticker" aria-label="Fellow shufflers feed (jokes, not real people)">
   <div class="lab"><span class="live-dot" aria-hidden="true" style="width:7px;height:7px"></span><span class="lab-text">FELLOW SHUFFLERS<small>jokes · not real people</small></span></div>
@@ -1572,17 +1578,18 @@ function updateStats() {
 /* =====================================================================
    9. Shuffle button + manual shuffle with riffle animation
    ===================================================================== */
+/** The big button: a headline and a smaller second line. */
 function buttonLabel(n) {
-  if (n < 10) return 'Defy Mathematics (Shuffle Deck 2)';
-  if (n < 50) return 'Defy Mathematics (Again)';
-  if (n < 200) return 'Surely This Time';
-  if (n < 1000) return 'This Is Fine 🔥';
-  return 'We Have Become One With The Shuffle';
+  if (n < 10) return ['Defy Mathematics', 'Shuffle your deck'];
+  if (n < 50) return ['Defy Mathematics', 'Again'];
+  if (n < 200) return ['Surely This Time', 'Shuffle your deck'];
+  if (n < 1000) return ['This Is Fine 🔥', 'Shuffle anyway'];
+  return ['We Have Become One', 'With The Shuffle'];
 }
 let lastLabel = '';
 function updateButtonLabel() {
-  const l = buttonLabel(session.attempts);
-  if (l !== lastLabel) { el.shuffleBtn.textContent = l; lastLabel = l; }
+  const [main, sub] = buttonLabel(session.attempts), l = main + '|' + sub;
+  if (l !== lastLabel) { el.shuffleBtn.innerHTML = `<span class="btn-main">${main}</span><span class="btn-sub">${sub}</span>`; lastLabel = l; }
 }
 
 const anim = { token: 0, active: false, pending: null, clone: null, hidden: null, matchTimers: [] };
@@ -2017,7 +2024,7 @@ const TICKER = {
     '{flag} {who} in {city} got 6/52 and was offered a TED talk. Declined. Too busy shuffling.'],
   count: ['{flag} Someone in {city} has shuffled {n} times. {after}', '{flag} {who} in {city} just passed {n} shuffles. {after}',
     '{flag} A household in {city} hit {n} shuffles this week. {after}', '{flag} {who} in {city} is on shuffle number {n}. {after}'],
-  misc: ['{flag} A group chat in {city} has renamed itself "Deck Two Truthers".', '{flag} {who} in {city} is shuffling with their eyes closed for luck. It is not working.',
+  misc: ['{flag} A group chat in {city} has renamed itself "Grail Truthers".', '{flag} {who} in {city} is shuffling with their eyes closed for luck. It is not working.',
     '{flag} A book club in {city} has abandoned the book. They shuffle now.', '{flag} {who} in {city} has been on autopilot so long their screensaver gave up.',
     '{flag} A wedding in {city} paused for a quick shuffle. 1/52. The wedding is still on.', '{flag} {who} in {city} shuffled during a job interview. Got the job. Got 0/52.',
     '{flag} A philosophy class in {city} spent the whole lecture on 52!. Nobody passed.', '{flag} {who} in {city} says they "felt a 3 coming". It was a 0.',
@@ -2252,7 +2259,7 @@ function stopSiren() {
 }
 function winLogLines(res) {
   return [
-    '> Comparing Deck 2 with the Holy Grail Sequence…',
+    '> Comparing your deck with the Holy Grail Sequence…',
     '> 52/52 positions match.',
     '> Re-checking… 52/52. Re-re-checking… still 52/52.',
     '> Calling a physicist… line busy.',
@@ -2899,6 +2906,7 @@ function renderImpatient() {
   }).join('');
   $$('#impTiers [data-imp]').forEach(a => a.addEventListener('click', () => track('impatient-' + a.dataset.imp)));
   $('#impatient').hidden = !any;
+  $('#apSponsor').hidden = !any;
 }
 function refreshEtas() {
   $$('#impTiers [data-eta]').forEach(b => { b.textContent = shortDuration(Number(b.dataset.eta) / hyperRateGuess()); });
@@ -3419,6 +3427,10 @@ function initImpatient() {
   renderHyper();
   loadWall();
   $('#hyperGo').addEventListener('click', () => (HYPER.running ? hyperPause() : hyperStart()));
+  $('#apSponsor').addEventListener('click', e => {
+    e.preventDefault(); track('autopilot-sponsor-link');
+    $('#impatient').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  });
   $('#hyperChip').addEventListener('click', () => $('#hyperBox').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' }));
   if ('IntersectionObserver' in window) new IntersectionObserver(es => { HYPER.boxVisible = es[0].isIntersecting; renderHyper(); }).observe($('#hyperBox'));
   $('#myExtras').addEventListener('click', e => {
