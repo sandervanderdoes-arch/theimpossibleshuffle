@@ -1,4 +1,4 @@
-"""The provably fair shuffle on a GPU (Numba CUDA), plus a plain-Python reference.
+"""The provably fair shuffle on a GPU (CUDA C through CuPy), plus a plain-Python reference.
 
 Same recipe as pfDeckInto() in index.html and pf_deck() in supabase/leaderboard.sql:
 
@@ -6,19 +6,28 @@ Same recipe as pfDeckInto() in index.html and pf_deck() in supabase/leaderboard.
     deck = [0, 1, ..., 51]                      # card c = suit * 13 + rank (S H D C; A 2 .. 10 J Q K)
     for i in 0..50: r = 52 - i; swap(deck[i], deck[i + H mod r]); H = H div r
 
-Each GPU thread handles shuffle numbers n = start, start + 1, ... (grid-stride), counts the
-matches against the Holy Grail, and keeps its best. One atomic max per thread at the end
-publishes the block's best as a packed number: matches << 50 | (2^48 - 1 - n), so the
+Speed tricks (none of them change a single card):
+  * 32-bit arithmetic only for SHA-256 (rotations are single funnel-shift instructions).
+  * Midstate: the first 12 SHA-256 rounds only see rand and seat, which are the same for
+    every shuffle in a mission, so they are computed once on the host.
+  * The 51 mixed-radix digits come out three at a time (H mod r(r-1)(r-2)), fully unrolled,
+    so every division is by a compile-time constant (a multiply, not a real division), and
+    limbs that are provably zero by then are skipped.
+  * Position i never changes after step i, so matches are counted on the fly against the
+    Holy Grail baked in as constants.
+
+Each GPU thread handles shuffle numbers start, start + 1, ... (grid-stride) and keeps its
+best as matches << 50 | (2^48 - 1 - n); one atomicMax per thread publishes it, so the
 highest score wins and, on a tie, the earliest shuffle.
 
-Test without a GPU: NUMBA_ENABLE_CUDASIM=1 python test_pf_cuda.py
+The same C source compiles with an ordinary C++ compiler (test_pf_cuda.py does that), so
+the exact arithmetic the GPU runs is tested against the Python reference without a GPU.
 """
 import hashlib
 
 import numpy as np
-from numba import cuda, uint8, uint64
 
-SHA_K = np.array([
+SHA_K = [
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
     0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
     0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
@@ -27,8 +36,9 @@ SHA_K = np.array([
     0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
     0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
     0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
-], dtype=np.uint32)
-SHA_IV = np.array([0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19], dtype=np.uint32)
+]
+SHA_IV = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19]
+MIDSTATE_ROUNDS = 12                               # rounds 0..11 only use message words 0..11 (rand, seat)
 
 RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 CODES = [r + s for s in 'SHDC' for r in RANKS]
@@ -37,7 +47,7 @@ GRAIL_CODES = ['5D', '2C', 'QD', 'JH', 'KH', '7H', 'KS', '3H', '10S', 'JD', 'JC'
                '9S', '9H', '4H', 'AC', '3S', '8H', '2D', '10D', '5C', 'QH', 'QC', '4C', '9D',
                'AH', '3C', '10H', '3D', '9C', '6H', '6S', '8D', '5S', 'AD', '5H', 'KC', '10C',
                '4S', '6D', '4D', '8S', 'JS', 'QS', '7C', '2S', '2H', '7D', '6C', 'AS', '8C']
-GRAIL = np.array([CODES.index(c) for c in GRAIL_CODES], dtype=np.uint8)
+GRAIL = [CODES.index(c) for c in GRAIL_CODES]
 N_LIMIT = 1 << 48            # n is 6 bytes
 
 
@@ -59,135 +69,8 @@ def matches_ref(deck) -> int:
     return sum(1 for a, b in zip(deck, GRAIL) if a == b)
 
 
-def words(b: bytes) -> np.ndarray:
-    return np.frombuffer(b, dtype='>u4').astype(np.uint32)
-
-
-# ---------------------------------------------------------------------------
-# GPU. The deck function is written once and compiled twice: as a CUDA device function, and
-# with numba.njit on the CPU, so the tests exercise exactly the typed code the GPU runs.
-# Everything is uint64 on purpose (Numba turns int64/uint64 mixes into floats).
-# ---------------------------------------------------------------------------
-U32 = np.uint64(0xFFFFFFFF)
-
-
-def _make_deck(jit):
-    @jit
-    def rotr(x, k):
-        return ((x >> np.uint64(k)) | (x << np.uint64(32 - k))) & U32
-
-    @jit
-    def pf_deck(R, S, n, K, IV, W, L, deck):
-        """Writes the shuffle for recipe (R, S, n) into deck. W: 64, L: 8 (uint64 scratch)."""
-        for i in range(8):
-            W[i] = np.uint64(R[i])
-        for i in range(4):
-            W[8 + i] = np.uint64(S[i])
-        W[12] = (n >> np.uint64(16)) & U32         # n as 6 big-endian bytes, then the 0x80 pad byte
-        W[13] = ((n & np.uint64(0xFFFF)) << np.uint64(16)) | np.uint64(0x8000)
-        W[14] = np.uint64(0)
-        W[15] = np.uint64(432)                     # 54 bytes = 432 bits
-        for i in range(16, 64):
-            x = W[i - 15]
-            y = W[i - 2]
-            s0 = rotr(x, 7) ^ rotr(x, 18) ^ (x >> np.uint64(3))
-            s1 = rotr(y, 17) ^ rotr(y, 19) ^ (y >> np.uint64(10))
-            W[i] = (W[i - 16] + s0 + W[i - 7] + s1) & U32
-        a = np.uint64(IV[0]); b = np.uint64(IV[1]); c = np.uint64(IV[2]); d = np.uint64(IV[3])
-        e = np.uint64(IV[4]); f = np.uint64(IV[5]); g = np.uint64(IV[6]); h = np.uint64(IV[7])
-        for i in range(64):
-            S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)
-            ch = (e & f) ^ ((e ^ U32) & g)
-            t1 = (h + S1 + ch + np.uint64(K[i]) + W[i]) & U32
-            S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)
-            mj = (a & b) ^ (a & c) ^ (b & c)
-            t2 = (S0 + mj) & U32
-            h = g
-            g = f
-            f = e
-            e = (d + t1) & U32
-            d = c
-            c = b
-            b = a
-            a = (t1 + t2) & U32
-        L[0] = (a + np.uint64(IV[0])) & U32; L[1] = (b + np.uint64(IV[1])) & U32
-        L[2] = (c + np.uint64(IV[2])) & U32; L[3] = (d + np.uint64(IV[3])) & U32
-        L[4] = (e + np.uint64(IV[4])) & U32; L[5] = (f + np.uint64(IV[5])) & U32
-        L[6] = (g + np.uint64(IV[6])) & U32; L[7] = (h + np.uint64(IV[7])) & U32
-        for i in range(52):
-            deck[i] = i
-        top = 0
-        # Three mixed-radix digits per long division: r(r-1)(r-2) < 2^21, so rem * 2^32 + limb fits 64 bits.
-        for i in range(0, 51, 3):
-            r = np.uint64(52 - i)
-            P = r * (r - np.uint64(1)) * (r - np.uint64(2))
-            rem = np.uint64(0)
-            for k in range(top, 8):
-                cur = (rem << np.uint64(32)) | L[k]
-                q = cur // P
-                rem = cur - q * P
-                L[k] = q
-            while top < 7 and L[top] == np.uint64(0):
-                top += 1
-            j = i + np.int64(rem % r)
-            t = deck[i]; deck[i] = deck[j]; deck[j] = t
-            rem = rem // r
-            j = i + 1 + np.int64(rem % (r - np.uint64(1)))
-            t = deck[i + 1]; deck[i + 1] = deck[j]; deck[j] = t
-            j = i + 2 + np.int64(rem // (r - np.uint64(1)))
-            t = deck[i + 2]; deck[i + 2] = deck[j]; deck[j] = t
-
-    return pf_deck
-
-
-pf_deck_dev = _make_deck(cuda.jit(device=True))
-
-
-def pf_deck_cpu_factory():
-    """The same deck function compiled for the CPU (tests only)."""
-    from numba import njit
-    return _make_deck(njit)
-
-
-@cuda.jit
-def shuffle_kernel(R, S, grail, K, IV, start, count, best_out):
-    """Shuffles n = start .. start + count - 1; best_out[0] gets the packed best (atomic max)."""
-    W = cuda.local.array(64, uint64)
-    L = cuda.local.array(8, uint64)
-    deck = cuda.local.array(52, uint8)
-    G = cuda.shared.array(52, uint8)
-    for p in range(cuda.threadIdx.x, 52, cuda.blockDim.x):
-        G[p] = grail[p]
-    cuda.syncthreads()
-    i = uint64(cuda.grid(1))
-    stride = uint64(cuda.gridsize(1))
-    best = uint64(0)
-    while i < count:
-        n = start + i
-        pf_deck_dev(R, S, n, K, IV, W, L, deck)
-        m = uint64(0)
-        for p in range(52):
-            if deck[p] == G[p]:
-                m += uint64(1)
-        packed = (m << uint64(50)) | (uint64(N_LIMIT - 1) - n)
-        if packed > best:
-            best = packed
-        i += stride
-    if best > 0:
-        cuda.atomic.max(best_out, 0, best)
-
-
-@cuda.jit
-def decks_kernel(R, S, K, IV, start, out):
-    """Test helper: writes the decks for n = start .. start + len(out) - 1."""
-    W = cuda.local.array(64, uint64)
-    L = cuda.local.array(8, uint64)
-    deck = cuda.local.array(52, uint8)
-    i = cuda.grid(1)
-    if i < out.shape[0]:
-        pf_deck_dev(R, S, uint64(start + i), K, IV, W, L, deck)
-        for p in range(52):
-            out[i, p] = deck[p]
+def words(b: bytes) -> list:
+    return [int.from_bytes(b[i:i + 4], 'big') for i in range(0, len(b), 4)]
 
 
 def unpack_best(packed: int):
@@ -197,32 +80,166 @@ def unpack_best(packed: int):
     return packed >> 50, (N_LIMIT - 1) - (packed & ((1 << 50) - 1))
 
 
+# ---------------------------------------------------------------------------
+# Host-side precomputation: the midstate and the constant message words.
+# ---------------------------------------------------------------------------
+def _rotr(x, k):
+    return ((x >> k) | (x << (32 - k))) & 0xFFFFFFFF
+
+
+def params_for(rand: bytes, seat: bytes) -> np.ndarray:
+    """uint32[24]: SHA-256 state after rounds 0..11, then message words 0..15 (12 and 13 depend on n)."""
+    assert len(rand) == 32 and len(seat) == 16
+    w = words(rand) + words(seat) + [0, 0, 0, 432]
+    a, b, c, d, e, f, g, h = SHA_IV
+    for i in range(MIDSTATE_ROUNDS):
+        s1 = _rotr(e, 6) ^ _rotr(e, 11) ^ _rotr(e, 25)
+        t1 = (h + s1 + ((e & f) ^ (~e & g)) + SHA_K[i] + w[i]) & 0xFFFFFFFF
+        s0 = _rotr(a, 2) ^ _rotr(a, 13) ^ _rotr(a, 22)
+        t2 = (s0 + ((a & b) ^ (a & c) ^ (b & c))) & 0xFFFFFFFF
+        h, g, f, e, d, c, b, a = g, f, e, (d + t1) & 0xFFFFFFFF, c, b, a, (t1 + t2) & 0xFFFFFFFF
+    return np.array([a, b, c, d, e, f, g, h] + w, dtype=np.uint32)
+
+
+# ---------------------------------------------------------------------------
+# The CUDA C source, generated once (so every divisor and Grail card is a constant).
+# ---------------------------------------------------------------------------
+def _digit_code() -> str:
+    lines, maxv = [], (1 << 256) - 1
+    for i in range(0, 51, 3):
+        r = 52 - i
+        P = r * (r - 1) * (r - 2)
+        first = 8 - (maxv.bit_length() + 31) // 32       # limbs above this one are zero by now
+        lines.append(f'  {{ /* digits {i}..{i + 2}: H mod {r}*{r - 1}*{r - 2} */ u64 rem = 0, cur, q;')
+        for k in range(first, 8):
+            lines.append(f'    cur = (rem << 32) | L{k}; q = cur / {P}ULL; rem = cur - q * {P}ULL; L{k} = (u32)q;')
+        lines.append(f'    u32 x = (u32)rem, j, t;')
+        lines.append(f'    j = {i} + x % {r}u; t = d[{i}]; d[{i}] = d[j]; d[j] = t; m += (d[{i}] == {GRAIL[i]});')
+        lines.append(f'    x /= {r}u; j = {i + 1} + x % {r - 1}u; t = d[{i + 1}]; d[{i + 1}] = d[j]; d[j] = t; m += (d[{i + 1}] == {GRAIL[i + 1]});')
+        lines.append(f'    j = {i + 2} + x / {r - 1}u; t = d[{i + 2}]; d[{i + 2}] = d[j]; d[j] = t; m += (d[{i + 2}] == {GRAIL[i + 2]}); }}')
+        maxv //= P
+    lines.append(f'  m += (d[51] == {GRAIL[51]});')
+    return '\n'.join(lines)
+
+
+def _sha_code() -> str:
+    k = ', '.join(f'0x{x:08x}u' for x in SHA_K)
+    iv = ', '.join(f'0x{x:08x}u' for x in SHA_IV)
+    return f'#define SHA_K_LIST {k}\n#define SHA_IV_LIST {iv}\n'
+
+
+KERNEL_SRC = r'''
+typedef unsigned int u32;
+typedef unsigned long long u64;
+typedef unsigned char u8;
+#ifdef __CUDACC__
+#define DEV __device__ __forceinline__
+#define ROTR(x, k) __funnelshift_r((x), (x), (k))
+#define UNROLL _Pragma("unroll")
+#else
+#define DEV static inline
+#define ROTR(x, k) (((x) >> (k)) | ((x) << (32 - (k))))
+#define UNROLL
+#endif
+''' + _sha_code() + r'''
+/* Writes the deck for shuffle n into d and returns its matches with the Holy Grail.
+   p: params_for() = midstate (8 words) then message words 0..15. */
+DEV u32 pf_deck(const u32 *p, u64 n, u8 *d) {
+  const u32 K[64] = { SHA_K_LIST };
+  const u32 IV[8] = { SHA_IV_LIST };
+  u32 W[64];
+  UNROLL for (int i = 0; i < 16; i++) W[i] = p[8 + i];
+  W[12] = (u32)(n >> 16);                       /* n as 6 big-endian bytes, then the 0x80 pad byte */
+  W[13] = ((u32)(n & 0xFFFFu) << 16) | 0x8000u;
+  UNROLL for (int i = 16; i < 64; i++) {
+    u32 x = W[i - 15], y = W[i - 2];
+    W[i] = W[i - 16] + (ROTR(x, 7) ^ ROTR(x, 18) ^ (x >> 3)) + W[i - 7] + (ROTR(y, 17) ^ ROTR(y, 19) ^ (y >> 10));
+  }
+  u32 a = p[0], b = p[1], c = p[2], e = p[4], f = p[5], g = p[6], h = p[7], dd = p[3];
+  UNROLL for (int i = 12; i < 64; i++) {        /* rounds 0..11 are in the midstate */
+    u32 t1 = h + (ROTR(e, 6) ^ ROTR(e, 11) ^ ROTR(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + W[i];
+    u32 t2 = (ROTR(a, 2) ^ ROTR(a, 13) ^ ROTR(a, 22)) + ((a & b) ^ (a & c) ^ (b & c));
+    h = g; g = f; f = e; e = dd + t1; dd = c; c = b; b = a; a = t1 + t2;
+  }
+  u32 L0 = a + IV[0], L1 = b + IV[1], L2 = c + IV[2], L3 = dd + IV[3];
+  u32 L4 = e + IV[4], L5 = f + IV[5], L6 = g + IV[6], L7 = h + IV[7];
+  UNROLL for (int i = 0; i < 52; i++) d[i] = (u8)i;
+  u32 m = 0;
+''' + _digit_code() + r'''
+  return m;
+}
+
+#ifdef __CUDACC__
+extern "C" __global__ void shuffle_kernel(const u32 *__restrict__ params, u64 start, u64 count, u64 *best_out) {
+  u32 p[24];
+  UNROLL for (int i = 0; i < 24; i++) p[i] = params[i];
+  u8 d[52];
+  u64 best = 0;
+  for (u64 i = (u64)blockIdx.x * blockDim.x + threadIdx.x; i < count; i += (u64)gridDim.x * blockDim.x) {
+    u64 n = start + i;
+    u64 packed = ((u64)pf_deck(p, n, d) << 50) | ((1ULL << 48) - 1 - n);
+    if (packed > best) best = packed;
+  }
+  if (best) atomicMax(best_out, best);
+}
+
+extern "C" __global__ void decks_kernel(const u32 *__restrict__ params, u64 start, u32 count, u8 *out) {
+  u32 i = blockIdx.x * blockDim.x + threadIdx.x;
+  if (i >= count) return;
+  u32 p[24];
+  UNROLL for (int k = 0; k < 24; k++) p[k] = params[k];
+  u8 d[52];
+  pf_deck(p, start + i, d);
+  for (int k = 0; k < 52; k++) out[(u64)i * 52 + k] = d[k];
+}
+#endif
+'''
+
+
 class Shuffler:
-    """Keeps the constants on the device and runs batches."""
+    """Compiles the kernel once (CuPy + NVRTC) and runs batches of shuffles for one rand + seat."""
 
     def __init__(self, rand: bytes, seat: bytes, blocks: int = 0, threads: int = 256):
-        self.R = cuda.to_device(words(rand))
-        self.S = cuda.to_device(words(seat))
-        self.K = cuda.to_device(SHA_K)
-        self.IV = cuda.to_device(SHA_IV)
-        self.G = cuda.to_device(GRAIL)
-        self.best = cuda.to_device(np.zeros(1, dtype=np.uint64))
-        if not blocks:
-            try:
-                blocks = cuda.get_current_device().MULTIPROCESSOR_COUNT * 8
-            except Exception:                       # simulator
-                blocks = 2
-        self.blocks, self.threads = blocks, threads
+        import cupy as cp
+        self.cp = cp
+        self.params = cp.asarray(params_for(rand, seat))
+        mod = cp.RawModule(code=KERNEL_SRC, options=('--std=c++14',))
+        self.k_shuffle = mod.get_function('shuffle_kernel')
+        self.k_decks = mod.get_function('decks_kernel')
+        self.best = cp.zeros(1, dtype=cp.uint64)
+        self.sms = cp.cuda.Device().attributes['MultiProcessorCount']
+        self.blocks, self.threads = blocks or self.sms * 16, threads
 
     def run(self, start: int, count: int):
         """Shuffles count recipes from start; returns (best matches, its n) for this batch."""
-        self.best.copy_to_device(np.zeros(1, dtype=np.uint64))
-        shuffle_kernel[self.blocks, self.threads](self.R, self.S, self.G, self.K, self.IV, np.uint64(start), np.uint64(count), self.best)
-        cuda.synchronize()
-        return unpack_best(int(self.best.copy_to_host()[0]))
+        cp = self.cp
+        self.best.fill(0)
+        self.k_shuffle((self.blocks,), (self.threads,), (self.params, np.uint64(start), np.uint64(count), self.best))
+        cp.cuda.Device().synchronize()
+        return unpack_best(int(self.best.get()[0]))
 
     def decks(self, start: int, count: int) -> np.ndarray:
-        out = cuda.to_device(np.zeros((count, 52), dtype=np.uint8))
-        decks_kernel[(count + 63) // 64, 64](self.R, self.S, self.K, self.IV, np.uint64(start), out)
-        cuda.synchronize()
-        return out.copy_to_host()
+        cp = self.cp
+        out = cp.zeros(count * 52, dtype=cp.uint8)
+        self.k_decks(((count + 127) // 128,), (128,), (self.params, np.uint64(start), np.uint32(count), out))
+        cp.cuda.Device().synchronize()
+        return out.get().reshape(count, 52)
+
+    def tune(self, seconds_each: float = 1.0) -> float:
+        """Tries a few launch shapes and keeps the fastest; returns its rate (shuffles a second)."""
+        import time
+        best = (0.0, self.blocks, self.threads)
+        self.run(0, 1 << 22)                                   # compile and warm up
+        for threads in (128, 256, 512):
+            for per_sm in (4, 8, 16, 32):
+                self.blocks, self.threads = self.sms * per_sm, threads
+                count, t0 = 1 << 26, time.time()
+                done = 0
+                while time.time() - t0 < seconds_each:
+                    self.run(done, count)
+                    done += count
+                rate = done / (time.time() - t0)
+                if rate > best[0]:
+                    best = (rate, self.blocks, self.threads)
+        _, self.blocks, self.threads = best
+        return best[0]

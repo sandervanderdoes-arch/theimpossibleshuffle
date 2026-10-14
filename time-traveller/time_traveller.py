@@ -40,7 +40,7 @@ secret = modal.Secret.from_name('impossible-shuffle')   # STRIPE_*, SUPABASE_* (
 web_image = modal.Image.debian_slim(python_version='3.12').pip_install('stripe>=10', 'requests', 'fastapi[standard]')
 gpu_image = (
     modal.Image.from_registry('nvidia/cuda:12.6.3-devel-ubuntu24.04', add_python='3.12')
-    .pip_install('numba-cuda[cu12]', 'numpy<2.4', 'requests')
+    .pip_install('cupy-cuda12x', 'numpy', 'requests')
     .add_local_python_source('pf_cuda')
 )
 
@@ -154,6 +154,7 @@ def shuffle_on_gpu(job):
         return {'done': 0, 'best': 0}
     rand, seat = bytes.fromhex(rand_hex), bytes.fromhex(seat_hex)
     sh = pc.Shuffler(rand, seat)
+    sh.tune(0.5)                                         # pick the fastest launch shape on this GPU (~6 s)
     # Before shuffling for anyone: this GPU must produce exactly the reference decks.
     decks = sh.decks(start, 256)
     for i in range(256):
@@ -196,22 +197,23 @@ def benchmark_gpu(seconds: int = 60):
     sh = pc.Shuffler(rand, seat)
     decks = sh.decks(0, 256)
     assert all(list(decks[i]) == pc.deck_ref(rand, seat, i) for i in range(256)), 'self-check failed'
-    sh.run(0, 1 << 22)                                   # warm up (compile)
+    sh.tune(1.0)
     done, batch, t0 = 0, 1 << 26, time.time()
     while time.time() - t0 < seconds:
         tb = time.time()
-        sh.run((1 << 22) + done, batch)
+        sh.run((1 << 30) + done, batch)
         done += batch
         batch = int(min(1 << 34, max(1 << 24, batch / max(time.time() - tb, 1e-3))))
-    return done / (time.time() - t0)
+    return {'rate': done / (time.time() - t0), 'blocks': sh.blocks, 'threads': sh.threads}
 
 
 @app.local_entrypoint()
 def benchmark(seconds: int = 60, gpu_dollars_per_hour: float = 3.95):
-    rate = benchmark_gpu.remote(seconds)
+    res = benchmark_gpu.remote(seconds)
+    rate = res['rate']
     total = rate * GPUS
     hours = TARGET / total / 3600
-    print(f'One H100: {rate:,.0f} shuffles/s. Eight: {total:,.0f}/s.')
+    print(f"One H100: {rate:,.0f} shuffles/s ({res['blocks']} blocks × {res['threads']} threads). Eight: {total:,.0f}/s.")
     print(f'A mission ({TARGET:,} shuffles) takes {hours:.2f} h on {GPUS} GPUs ≈ ${hours * GPUS * gpu_dollars_per_hour:,.0f} of GPU time.')
     print(f"Put TT.rate = {total:.3g} in index.html so the card's speed is the measured one.")
 

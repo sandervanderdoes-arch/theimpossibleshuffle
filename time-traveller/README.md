@@ -16,10 +16,12 @@ browser (?traveller=cs_…) ──reads──▶ travellers row (public, read-on
 
 Files:
 
-- `pf_cuda.py`: the provably fair shuffle as a Numba CUDA kernel (same recipe as
+- `pf_cuda.py`: the provably fair shuffle as a CUDA C kernel run through CuPy (same recipe as
   `pfDeckInto()` in `index.html` and `pf_deck()` in `supabase/leaderboard.sql`).
 - `time_traveller.py`: the Modal app (webhook, mission, GPU workers, benchmark, dry run).
-- `test_pf_cuda.py`: tests without a GPU (`NUMBA_ENABLE_CUDASIM=1 python test_pf_cuda.py`).
+- `test_pf_cuda.py`: tests without a GPU (`python test_pf_cuda.py`): compiles the kernel's C source with
+  g++/clang++ and checks it card for card against the Python reference, and compiles it for the H100 if
+  NVRTC is installed.
 
 ## Honest numbers
 
