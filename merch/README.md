@@ -44,8 +44,8 @@ A parody of the classic "Welcome to Fabulous Las Vegas" sign: "Welcome to the Im
 |---|---|---|
 | `shop-banner-wide.png` | 3000 × 1000 | Shop header or hero banner on desktop. Sign in the middle, "Open 24/7" and "Matches so far: 0" on the sides |
 | `shop-banner-square.png` | 1800 × 1800 | Mobile header, shop logo area, Instagram post. Empty band between the sign and the buttons (about y 1180–1520) for a shop button |
-| `shop-banner-landscape.png` | 2400 × 1350 (16:9) | Same layout as the square one, for landscape hero sections. Empty band about y 880–1120 |
-| `shop-banner-1920x1080.png` | 1920 × 1080 (16:9) | The landscape banner at the standard full-HD size. Empty band about y 705–895 |
+| `shop-banner-landscape.png` | 2400 × 1350 (16:9) | Same layout as the square one, for landscape hero sections. Empty band about y 790–1035 |
+| `shop-banner-1920x1080.png` | 1920 × 1080 (16:9) | The landscape banner at the standard full-HD size. Empty band about y 630–830 |
 | `welcome-sign.png` | 4500 × 5400, transparent | The sign on its own with "Odds of a match: 1 in 8 × 10⁶⁷ · Refunds: also impossible". For T-shirts, hoodie backs and stickers |
 
 The sign sits in the middle of both banners, so it survives the shop cropping the edges.
