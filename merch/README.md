@@ -11,6 +11,24 @@ Print-ready T-shirt designs for The Impossible Shuffle.
 | `loading.png` | Loading screen: "Shuffling…", an empty progress bar, "ETA 51 novemdecillion years", "Do not turn off your deck" |
 | `preview.png` | All five on a dark shirt colour, for a quick look |
 
+### Hoodies, caps and more
+
+| File | Design | Good for |
+|---|---|---|
+| `mission-patch.png` | Round patch: "Mission Control · Dept. of Lost Causes", an orbiting ace, "Matches: 0" | Hoodie chest or back, cap side, stickers |
+| `do-not-disturb.png` | "Do not disturb. My computer is shuffling for humanity", progress bar, "Station online · ETA: never" | Hoodies (lounge wear) |
+| `world-first.png` | "World first" stamp: "My deck order had never existed in the history of the universe. It still didn't match." | Hoodie back, T-shirts |
+| `this-close.png` | "I was this close": two cards 45 cards apart, "Best match: 7/52" | Hoodies, T-shirts |
+| `cap-0-52.png` | "0/52 · Still shuffling" with an ace | Cap front (embroidery) |
+| `cap-one-more.png` | "Just one more shuffle" | Cap front (embroidery) |
+| `preview-2.png` | All six on dark tiles and a cap shape | |
+
+- Hoodie designs: 4500 × 5400 px like the T-shirt files. For a chest print, upload the same file and
+  scale it down to about 4 in wide in the shop's editor.
+- Cap designs: 2700 × 1050 px (4.5 × 1.75 in at 600 dpi), three flat colours and thick letters so they
+  embroider cleanly. Embroidery services re-digitise the PNG; pick thread colours close to gold
+  `#ffd23f`, pink `#ff3fd8` and cream `#fff8e6`, on a black or navy cap.
+
 - 4500 × 5400 px (15 × 18 in at 300 dpi), transparent background: the standard size for
   Printful, Spring, Redbubble and most print-on-demand shops.
 - Made for **dark shirts** (black, charcoal, navy, dark green). Flat colours, no glows or
