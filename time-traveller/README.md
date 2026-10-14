@@ -23,12 +23,12 @@ Files:
 
 ## Honest numbers
 
-The site's card says "about an hour" and "≈ 29 billion shuffles a second" (3.6 billion
-per H100). **That is a target, not a measurement.** Run the benchmark below before you
-sell anything and put the measured speed in `index.html` (`TT.rate`). The mission always
-does the full 104 trillion shuffles, however long that takes (capped at
-`TT_MAX_SECONDS`, 5 hours per GPU by default), so a slower GPU costs you more, never the
-buyer. At Modal's ~$3.95 per H100-hour: 1 hour ≈ $32, 3 hours ≈ $95.
+Measured with `benchmark` (October 2026): **1.2 billion shuffles a second per H100**, so
+9.6 billion a second on eight. A mission takes **about 3 hours** and about **$95** of GPU time
+at Modal's ~$3.95 per H100-hour. The card says exactly that (`TT.rate = 9.57e9` in
+`index.html`). The mission always does the full 104 trillion shuffles, however long that takes
+(capped at `TT_MAX_SECONDS`, 5 hours per GPU by default), so a slower GPU costs you more, never
+the buyer. Run the benchmark again after changing the kernel and update `TT.rate`.
 
 Each GPU worker first recomputes 256 decks and compares them with the plain-Python
 reference; if a single card differs, it refuses to shuffle (the mission shows as failed,
