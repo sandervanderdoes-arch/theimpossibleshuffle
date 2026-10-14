@@ -481,6 +481,67 @@
     .win-bg { animation:none !important; opacity:.55; }
     .glitch, .shake-y, .win-flash.flash, .alarm-title { animation:none !important; }
   }
+
+  /* ---------- Provably fair, honors, mission accomplished, Time Travellers ---------- */
+  .pf-tick { display:inline-flex; align-items:center; justify-content:center; width:1.25rem; height:1.25rem; margin-left:.3rem; vertical-align:middle; border-radius:999px; border:1px solid rgba(124,255,107,.6); background:rgba(124,255,107,.12); color:#7cff6b; font:800 .7rem/1 Inter, system-ui, sans-serif; padding:0; cursor:pointer; }
+  button.pf-tick { position:relative; }
+  button.pf-tick::after { content:""; position:absolute; inset:-.6rem; }   /* bigger touch target */
+  .honors-steps { display:grid; gap:.8rem; grid-template-columns:repeat(auto-fit, minmax(13rem, 1fr)); list-style:none; padding:0; margin-left:0; margin-right:0; }
+  .honors-steps li { display:flex; flex-direction:column; gap:.25rem; padding:1rem; border-radius:14px; background:rgba(0,0,0,.4); border:1px solid rgba(255,210,63,.28); }
+  .honors-steps .ic { font-size:1.7rem; line-height:1; }
+  .honors-steps b { color:#ffe68a; }
+  .honors-steps li > span:last-child { font-size:.88rem; color:#cfe3d7; }
+  .honors-name { color:#ffe68a; font-style:normal; font-weight:700; }
+  .honors-final { padding:1rem 1.1rem; border-radius:14px; border:2px solid var(--gold); background:linear-gradient(160deg, rgba(255,210,63,.14), rgba(0,0,0,.35)); }
+  .tt-gold { color:#ffe68a; background:linear-gradient(180deg, #fff7c9 0%, #ffd23f 45%, #c98a0b 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 10px rgba(255,210,63,.4)); }
+  .verify summary { cursor:pointer; color:#7cff6b; min-height:44px; display:flex; align-items:center; }
+  .verify-form { display:grid; gap:.6rem; grid-template-columns:repeat(auto-fit, minmax(14rem, 1fr)); }
+  .verify-form label { display:flex; flex-direction:column; gap:.2rem; font-size:.75rem; font-weight:700; color:#9fb5a8; min-width:0; }
+  .verify-form .imp-input { width:100%; min-width:0; flex:none; height:auto; }
+  .verify-form > div { grid-column:1 / -1; }
+  .verify-out .deck { display:flex; flex-wrap:wrap; gap:.25rem; margin-top:.4rem; font:700 .75rem "JetBrains Mono", ui-monospace, monospace; }
+  .verify-out .deck span { padding:.1rem .3rem; border-radius:5px; background:rgba(255,255,255,.06); color:#cfe3d7; }
+  .verify-out .deck span.hit { background:rgba(34,243,255,.2); color:#bffcff; box-shadow:0 0 0 1px var(--cyan); }
+  .verify-out .deck span.red { color:#ff9db0; }
+  .verify-out .deck span.hit.red { color:#ffd0dc; }
+  .verify-out .res { font-weight:800; color:#ffe68a; }
+  .plaque { position:relative; max-width:44rem; margin-left:auto; margin-right:auto; padding:1.4rem 1.2rem 1.2rem; border-radius:18px; border:3px solid #c98a0b; background:linear-gradient(170deg, #3a2a05, #140d01 60%, #2a1d03); box-shadow:0 0 0 2px #000, 0 0 40px rgba(255,210,63,.35), inset 0 0 30px rgba(255,210,63,.15); }
+  .plaque .kicker { font:800 .7rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.2em; color:#ffd23f; }
+  .plaque .big { font-family:Bungee, Impact, system-ui, sans-serif; font-size:clamp(1.3rem, 5vw, 2.4rem); line-height:1.1; margin-top:.4rem; }
+  .plaque .who { font-family:Georgia, "Times New Roman", serif; font-style:italic; font-size:clamp(1.2rem, 4vw, 1.8rem); color:#fff7c9; margin-top:.6rem; overflow-wrap:anywhere; }
+  .plaque .facts { margin-top:.6rem; font-size:.85rem; color:#e9dcb0; }
+  .plaque .facts b { color:#ffe68a; }
+  .plaque .forever { margin-top:.7rem; font:700 .72rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.08em; color:#c9a75a; }
+  body.mission-done #missionStatus { border-color:rgba(255,210,63,.6); background:rgba(60,42,4,.55); }
+  .win-claim { padding:1rem; border-radius:14px; border:2px solid var(--gold); background:rgba(0,0,0,.55); text-align:left; }
+  .win-claim form { display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; margin-top:.5rem; }
+  .win-claim .imp-input { flex:1 1 12rem; min-width:0; }
+  .tt-panel { border-color:rgba(255,210,63,.45); background:radial-gradient(120% 140% at 0% 0%, rgba(255,210,63,.14), rgba(2,12,8,.78) 55%); }
+  .tt-ava { width:2.6rem; height:2.6rem; flex:none; filter:drop-shadow(0 0 8px rgba(255,210,63,.45)); }
+  .tt-ava-lg { width:4.2rem; height:4.2rem; }
+  .tt-track { height:16px; border-radius:999px; background:rgba(0,0,0,.55); border:1px solid rgba(255,210,63,.5); overflow:hidden; }
+  .tt-track > div { height:100%; width:0; background:linear-gradient(90deg, #c98a0b, #ffd23f, #fff7c9); box-shadow:0 0 14px rgba(255,210,63,.6); transition:width .8s ease; }
+  .tt-board { display:grid; gap:.75rem; grid-template-columns:repeat(auto-fill, minmax(17rem, 1fr)); }
+  .tt-row { display:flex; gap:.75rem; align-items:center; padding:.8rem .9rem; border-radius:14px; border:1px solid rgba(255,210,63,.4); background:rgba(0,0,0,.45); min-width:0; }
+  .tt-row.first { border:2px solid var(--gold); box-shadow:0 0 22px rgba(255,210,63,.3); }
+  .tt-row .nm { font-weight:800; color:#fff7c9; overflow-wrap:anywhere; }
+  .tt-row .meta { font:700 .72rem "JetBrains Mono", ui-monospace, monospace; color:#9fb5a8; }
+  .tt-row .best { font:800 1.05rem "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; white-space:nowrap; }
+  .tt-row .rk { font:800 .8rem "JetBrains Mono", ui-monospace, monospace; color:#ffd23f; }
+  .tt-live { display:inline-flex; align-items:center; gap:.3rem; font:800 .65rem "JetBrains Mono", ui-monospace, monospace; color:#ff8a8a; letter-spacing:.08em; }
+  .tt-empty { padding:1rem; border-radius:14px; border:1px dashed rgba(255,210,63,.5); color:#cfe3d7; font-size:.9rem; }
+  .tt-card { position:relative; display:grid; gap:1.2rem; grid-template-columns:minmax(0, 1fr); padding:1.5rem 1.2rem 1.2rem; border-radius:20px; border:2px solid #ffd23f; background:radial-gradient(120% 120% at 100% 0%, rgba(255,210,63,.22), rgba(20,5,26,.85) 50%, rgba(0,0,0,.6)); box-shadow:0 0 0 1px #000, 0 0 40px rgba(255,210,63,.35); }
+  @media (min-width: 900px) { .tt-card { grid-template-columns:minmax(0, 1.25fr) minmax(0, 1fr); padding:1.8rem; } }
+  .tt-card .flag { position:absolute; top:-.75rem; left:1.2rem; white-space:nowrap; font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; color:#1d1300; background:linear-gradient(90deg, #fff7c9, #ffd23f); border-radius:999px; padding:.2rem .7rem; }
+  .tt-card h3 { font-family:Bungee, Impact, system-ui, sans-serif; font-weight:400; font-size:clamp(1.25rem, 3.6vw, 1.9rem); line-height:1.15; }
+  .tt-stats { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:.6rem; }
+  .tt-stats div { padding:.6rem .7rem; border-radius:12px; background:rgba(0,0,0,.45); border:1px solid rgba(255,210,63,.25); min-width:0; }
+  .tt-stats b { display:block; font:800 clamp(1rem, 3vw, 1.35rem) "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; overflow-wrap:anywhere; }
+  .tt-stats span { font-size:.75rem; color:#cfe3d7; }
+  .tt-odds { padding:.8rem .9rem; border-radius:12px; background:rgba(34,243,255,.07); border:1px solid rgba(34,243,255,.3); font-size:.88rem; color:#cfe3d7; }
+  .tt-odds b { color:#a5fbff; }
+  .tt-buy { display:block; text-align:center; background:linear-gradient(180deg, #fff7c9, #ffd23f 45%, #c98a0b) !important; color:#1d1300 !important; border-color:#6e4500 !important; text-shadow:none !important; }
+  .tt-buy[aria-disabled="true"] { filter:grayscale(.6); opacity:.75; cursor:not-allowed; }
 </style>
 </head>
 <body>
@@ -494,6 +555,27 @@
 <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
 <div id="app">
+  <!-- Golden-helmet astronaut for the Time Travellers (one definition, used everywhere with <use href="#ttAstro">) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <radialGradient id="ttGold" cx="35%" cy="28%" r="80%"><stop offset="0" stop-color="#fff7c9"/><stop offset=".3" stop-color="#ffd23f"/><stop offset=".72" stop-color="#c98a0b"/><stop offset="1" stop-color="#6e4500"/></radialGradient>
+      <linearGradient id="ttVisor" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46206e"/><stop offset=".55" stop-color="#090316"/><stop offset="1" stop-color="#1fb8c2"/></linearGradient>
+      <linearGradient id="ttSuit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c9d2de"/></linearGradient>
+      <symbol id="ttAstro" viewBox="0 0 64 64">
+        <path d="M12 63 v-12 q0 -12 20 -12 q20 0 20 12 v12 z" fill="url(#ttSuit)" stroke="#8792a3" stroke-width="1.4"/>
+        <rect x="24.5" y="47" width="15" height="9" rx="2" fill="#23102e" stroke="#ffd23f" stroke-width="1.2"/>
+        <circle cx="28.5" cy="51.5" r="1.6" fill="#ff2fd6"/><circle cx="32" cy="51.5" r="1.6" fill="#22f3ff"/><circle cx="35.5" cy="51.5" r="1.6" fill="#ffd23f"/>
+        <path d="M17 45 l-3 -2.5 M47 45 l3 -2.5" stroke="#ffd23f" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="32" cy="25" r="20.5" fill="url(#ttGold)" stroke="#6e4500" stroke-width="1.6"/>
+        <circle cx="11.5" cy="26" r="3.4" fill="#ffd23f" stroke="#6e4500" stroke-width="1.2"/><circle cx="52.5" cy="26" r="3.4" fill="#ffd23f" stroke="#6e4500" stroke-width="1.2"/>
+        <rect x="16.5" y="15.5" width="31" height="20" rx="10" fill="url(#ttVisor)" stroke="#3b2600" stroke-width="1.6"/>
+        <g transform="rotate(14 39 25)"><rect x="35.5" y="20" width="7" height="9.5" rx="1.2" fill="#fff" opacity=".9"/><path d="M39 22.3 l1.6 2.2 l-1.6 2.2 l-1.6 -2.2 z" fill="#ff2fd6"/></g>
+        <path d="M21 21.5 q4 -4.5 11 -3.5" stroke="#fff" stroke-opacity=".75" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <path d="M32 4.5 v-3" stroke="#6e4500" stroke-width="1.6"/><circle cx="32" cy="2" r="2" fill="#ff2fd6"/>
+        <path d="M20 9.5 q12 -6 24 0" stroke="#fff7c9" stroke-opacity=".8" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      </symbol>
+    </defs>
+  </svg>
   <!-- ===================== HERO ===================== -->
   <header class="px-4 pt-16 max-w-6xl mx-auto">
     <div id="hero" class="bulbs px-6 py-10 sm:px-12 sm:py-12 text-center">
@@ -501,20 +583,46 @@
       <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl lg:text-6xl">Welcome to Humankind's Most Pointless Mission</h1>
       <p class="mt-5 max-w-4xl mx-auto text-base sm:text-lg text-[#cfe3d7]"><span class="block" style="text-wrap:balance">Together, the whole internet is shuffling one deck of cards until we match it perfectly.</span> <span class="block mt-1" style="text-wrap:balance">Mathematics says no. We say: hold my cards.</span></p>
 
-      <div class="mt-6 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border border-red-500/50 bg-red-950/40 px-4 py-2 mono text-xs sm:text-sm">
+      <div id="missionStatus" class="mt-6 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border border-red-500/50 bg-red-950/40 px-4 py-2 mono text-xs sm:text-sm">
         <span class="inline-flex items-center gap-2 font-bold text-red-400"><span class="live-dot" aria-hidden="true"></span>LIVE</span>
         <span><b class="text-red-300">MISSION STATUS: ONGOING.</b> Humanity is shuffling as one. Mathematics remains undefeated.</span>
       </div>
+      <div id="plaque" class="plaque mt-8" hidden></div>
 
       <div id="liveBox" class="mt-8 mx-auto max-w-xl rounded-2xl border border-[#ffd23f]/40 bg-black/30 px-4 py-4" hidden>
         <p class="mono text-xs tracking-widest text-[#ffe68a] inline-flex items-center gap-2"><span class="live-dot" aria-hidden="true" style="width:8px;height:8px"></span>ACTUAL ATTEMPTS BY HUMANKIND</p>
         <p id="liveCount" class="mono font-extrabold neon-gold text-2xl sm:text-4xl mt-1 tabular-nums break-all">…</p>
-        <p class="mt-2 font-bold text-[#ffe68a]">0 successful matches in human history.</p>
+        <p id="liveWins" class="mt-2 font-bold text-[#ffe68a]">0 successful matches in human history.</p>
         <p id="liveYears" class="mt-1 text-xs text-[#a5fbff]"></p>
         <p class="mt-1 text-xs text-[#cfe3d7]">Every shuffle by every real visitor to this site, counted live. <span id="liveYou" class="text-[#9fb5a8]"></span></p>
       </div>
     </div>
   </header>
+
+  <!-- ===================== A TIME TRAVELLER'S LIVE MISSION (after checkout) ===================== -->
+  <section id="ttMission" class="px-4 mt-6 max-w-6xl mx-auto" aria-labelledby="ttmTitle" hidden>
+    <div class="panel tt-panel p-4 sm:p-6">
+      <div class="flex items-center gap-3 flex-wrap">
+        <svg class="tt-ava tt-ava-lg" viewBox="0 0 64 64" aria-hidden="true"><use href="#ttAstro"/></svg>
+        <div class="min-w-0">
+          <p class="mono text-xs tracking-widest text-[#ffe68a]">TIME TRAVELLER MISSION CONTROL</p>
+          <h2 id="ttmTitle" class="font-display text-lg sm:text-2xl tt-gold">Boarding…</h2>
+          <p id="ttmStatus" class="mono text-xs sm:text-sm text-[#cfe3d7] mt-1" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="tt-track mt-4" aria-hidden="true"><div id="ttmFill"></div></div>
+      <div class="tl-ends" aria-hidden="true"><span>66 MILLION YEARS AGO</span><span>TODAY</span></div>
+      <p class="tl-now mt-3"><span class="lbl">🕰️ YOUR GPUs HAVE REACHED</span> <b id="ttmYear">66 million years ago</b></p>
+      <div id="ttmEvent" class="tl-event" aria-live="polite"></div>
+      <dl class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
+        <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SHUFFLES DONE</dt><dd id="ttmDone" class="mono text-sm sm:text-base font-extrabold" style="overflow-wrap:anywhere">0</dd><dd id="ttmDoneSub" class="text-[11px] text-[#9fb5a8]"></dd></div>
+        <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SPEED</dt><dd id="ttmSpeed" class="mono text-sm sm:text-base font-extrabold">–</dd><dd id="ttmSpeedSub" class="text-[11px] text-[#9fb5a8]"></dd></div>
+        <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">YOUR CHANCE SO FAR</dt><dd id="ttmOdds" class="mono text-sm sm:text-base font-extrabold">–</dd><dd id="ttmOddsSub" class="text-[11px] text-[#9fb5a8]"></dd></div>
+        <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">BEST SHUFFLE</dt><dd id="ttmBest" class="mono text-sm sm:text-base font-extrabold">–</dd><dd id="ttmBestSub" class="text-[11px] text-[#9fb5a8]"></dd></div>
+      </dl>
+      <p id="ttmNote" class="mt-3 text-xs text-[#9fb5a8]">Bookmark this page: it is your mission control. It keeps updating while your eight GPUs shuffle, and shows the final result when they're done.</p>
+    </div>
+  </section>
 
   <!-- ===================== PROGRESS BAR ===================== -->
   <section aria-labelledby="progTitle" class="px-4 mt-6 max-w-6xl mx-auto">
@@ -605,7 +713,7 @@
         <h2 id="lbTitle" class="font-display text-lg sm:text-2xl neon-gold">🏆 Luckiest Shufflers</h2>
         <div class="flex items-center gap-3 flex-wrap"><span id="lbCount" class="mono text-xs text-[#9fb5a8]"></span><button type="button" id="lbShare" class="chip-btn !text-xs">📤 Share the top 3</button></div>
       </div>
-      <p class="mt-1 text-sm text-[#cfe3d7]">The best single shuffles anyone has made, worldwide. Same score? Whoever needed the fewest tries ranks higher. Mission Control checks every deck.</p>
+      <p class="mt-1 text-sm text-[#cfe3d7]">The best single shuffles anyone has made, worldwide. Same score? Whoever needed the fewest tries ranks higher. Every score is provably fair: tap <span class="pf-tick" aria-hidden="true">✓</span> to replay that exact shuffle yourself.</p>
       <div id="lbMe" class="lb-me mt-4" aria-live="polite"></div>
       <div class="lb-wrap mt-4">
         <table class="lb">
@@ -613,6 +721,20 @@
           <tbody id="lbBody"></tbody>
         </table>
       </div>
+    </div>
+  </section>
+
+  <!-- ===================== TIME TRAVELLERS BOARD ===================== -->
+  <section id="ttSection" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="ttTitle" hidden>
+    <div class="panel tt-panel p-4 sm:p-6">
+      <div class="flex items-center gap-3 flex-wrap">
+        <svg class="tt-ava tt-ava-lg" viewBox="0 0 64 64" aria-hidden="true"><use href="#ttAstro"/></svg>
+        <div class="min-w-0">
+          <h2 id="ttTitle" class="font-display text-lg sm:text-2xl tt-gold">🚀 The Time Travellers</h2>
+          <p class="text-sm text-[#cfe3d7] mt-1">Humanity's most unnecessary space program. Each of them took eight of the fastest chips on Earth back to the day the asteroid hit, and shuffled all the way to today.</p>
+        </div>
+      </div>
+      <div id="ttBoard" class="tt-board mt-4"></div>
     </div>
   </section>
 
@@ -678,6 +800,40 @@
     </div>
   </section>
 
+  <!-- ===================== WHAT IF SOMEBODY ACTUALLY DOES IT? ===================== -->
+  <section id="honors" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="honorsTitle">
+    <div class="panel honors-panel p-4 sm:p-6">
+      <h2 id="honorsTitle" class="font-display text-lg sm:text-2xl neon-gold">What If Somebody Actually Does It?</h2>
+      <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">Then it's over. Forever. <b class="text-[#ffe68a]">One mission, one winner, eternal glory.</b></p>
+      <ol class="honors-steps mt-5">
+        <li><span class="ic" aria-hidden="true">🔍</span><b>The universe checks.</b><span>Every shuffle on this site has a public recipe. Mission Control's database rebuilds the winning shuffle from scratch before it believes a thing. No screenshots, no "trust me".</span></li>
+        <li><span class="ic" aria-hidden="true">🏛️</span><b>The Grail takes your name.</b><span>The Holy Grail Sequence becomes <i>The <span class="honors-name">Your Name</span> Sequence</i>. On every page, every certificate, every brag card. Forever.</span></li>
+        <li><span class="ic" aria-hidden="true">🗿</span><b>A monument.</b><span>Your name goes on the plaque at the top of this site, with the date, the exact shuffle and how many shuffles humanity needed to get there. The Professor faints. Permanently.</span></li>
+        <li><span class="ic" aria-hidden="true">📜</span><b>The certificate.</b><span>The one and only Certificate of Doing the Impossible. Edition of one.</span></li>
+      </ol>
+      <div class="honors-final mt-5">
+        <p class="font-display text-base sm:text-xl tt-gold">Humankind: Mission Accomplished.</p>
+        <p class="mt-2 text-sm text-[#cfe3d7]">There is no reset. No new target. No Season 2. The sponsorships close, the station goes quiet and this site becomes a monument. Every shuffle anyone ever made becomes part of the story of how humanity got there. Mission Control's database refuses to change or delete the winning record, even for us.</p>
+        <p class="mt-2 text-xs text-[#9fb5a8]">No money, no prizes: the honor is the prize. Mathematics isn't a lottery, and neither are we.</p>
+      </div>
+
+      <details id="verifyBox" class="verify mt-5">
+        <summary class="font-bold text-sm">✓ Provably fair: check any shuffle yourself</summary>
+        <div class="mt-3 text-sm text-[#cfe3d7]">
+          <p>Each shuffle is cooked from three ingredients: the <b>randomness of a public drand round</b> (published every 30 seconds by the <a class="underline" href="https://www.drand.love/" target="_blank" rel="noopener">League of Entropy</a>, so nobody could know it in advance), a <b>seat</b> (your browser's id, so nobody can hand in your shuffles) and a <b>number</b> (1st, 2nd, 3rd shuffle with that round). Those go through SHA-256, and the 256-bit result picks the order of all 52 cards (Fisher–Yates). Same recipe, same deck, on any computer. Faking a winning shuffle means trying recipes until one works, which is just shuffling the long way round.</p>
+          <form id="verifyForm" class="verify-form mt-3">
+            <label>drand round <input id="vRound" class="imp-input" inputmode="numeric" placeholder="0 = local randomness" autocomplete="off"></label>
+            <label>Randomness (64 hex) <input id="vRand" class="imp-input mono" maxlength="64" spellcheck="false" autocomplete="off"></label>
+            <label>Seat (32 hex) <input id="vSeat" class="imp-input mono" maxlength="32" spellcheck="false" autocomplete="off"></label>
+            <label>Number <input id="vN" class="imp-input" inputmode="numeric" autocomplete="off"></label>
+            <div class="flex flex-wrap gap-2 items-end"><button type="submit" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Replay shuffle</button><button type="button" id="vMine" class="chip-btn !text-xs">Use my last shuffle</button></div>
+          </form>
+          <div id="verifyOut" class="verify-out mt-3" aria-live="polite"></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
   <!-- ===================== BECOME A MISSION SPONSOR ===================== -->
   <section id="impatient" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="impTitle" hidden>
     <div class="panel imp-panel p-4 sm:p-6">
@@ -685,6 +841,8 @@
       <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">A proper hand shuffle takes about 20 seconds. At that pace, humanity matches the Holy Grail in roughly <b class="text-[#ffe68a]">51 novemdecillion years</b>, give or take a Tuesday. Mission Control can't do that alone. Sponsor a stretch of the mission and your computer becomes an official <b class="text-[#a5fbff]">Mission Control station</b>: it shuffles thousands of years' worth for humanity while you get on with your life, and you watch history fly by on its timeline. Every shuffle is real and counts toward the total. The Professor calls it cheating. We call it volunteering.</p>
       <p class="mt-2 text-xs text-[#9fb5a8]">Exchange rate: 1 year of nonstop hand shuffling = 1,577,880 shuffles.</p>
       <div id="impTiers" class="imp-tiers mt-6"></div>
+      <div id="ttCard" class="mt-6" hidden></div>
+      <p id="impClosed" class="mt-4 text-sm text-[#ffe68a]" hidden></p>
       <p class="mt-4 text-xs text-[#9fb5a8]">*Estimate for this device. Your station runs while this tab is open. Stand down anytime; it picks up where it left off on your next visit. Your rank and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
 
       <div id="hyperBox" class="hyper-box mt-6" hidden>
@@ -807,6 +965,7 @@
       <p class="score mt-5" aria-live="polite">MATHEMATICS <span class="num">1</span> : <span class="num" id="humScore">0</span> HUMANITY</p>
       <p id="scoreNote" class="mono text-xs text-white/90 mt-1 min-h-[1rem]"></p>
       <p id="winSub" class="mono mt-3 text-sm sm:text-base text-white"></p>
+      <div id="winClaim" class="win-claim mt-5" hidden></div>
       <div class="mt-6 flex flex-wrap gap-3 justify-center">
         <button type="button" id="reportBtn" class="chip-btn !text-base !px-5 !py-3" style="background:#000;color:#fff;border-color:#fff">🚨 Report to Authorities</button>
         <button type="button" id="restoreBtn" class="shuffle-btn !w-auto !px-6 !py-3 !text-base">Restore Spacetime</button>
@@ -862,6 +1021,7 @@ const SITE = {
     tea: 'https://buy.stripe.com/7sYcN524Zc0c1iH5ZDco000',      // $1.92  Buy the Professor a tea (Stripe)
     odds: 'https://buy.stripe.com/8x29AT5hb9S44uTco1co001',     // $8.07  Sponsor the odds (Stripe, featured)
     patron: 'https://buy.stripe.com/5kQ5kD5hb9S49Pd87Lco002',   // $52    Patron of the Deck (Stripe)
+    traveller: '',      // $500   Time Traveller (Stripe Payment Link; see time-traveller/README.md). Empty: "Launch window opening soon"
     custom: '',         // optional "choose your own amount" link (hidden while empty)
     note: 'Secure checkout by Stripe. Opens in a new tab.'
   },
@@ -910,6 +1070,7 @@ function setupSupportLinks() {
     a.addEventListener('click', () => track(`fund-${a.dataset.tier}-win`));
   });
   $('#winFund').hidden = !any;
+  $('#winFund').dataset.any = any ? '1' : '';
   if (SITE.instagram) {
     $('#instaLink').href = SITE.instagram;
     $('#instaLink').addEventListener('click', () => track('instagram'));
@@ -976,6 +1137,143 @@ function countMatches(a, b) {
   for (let i = 0; i < 52; i++) if (a[i] === b[i]) m++;
   return m;
 }
+
+/* =====================================================================
+   1b. Provably fair shuffles
+   ---------------------------------------------------------------------
+   Every shuffle on this site has a public recipe:
+     R = the randomness of a drand round (public, published every 30 s
+         by the League of Entropy; nobody can predict it in advance)
+     S = a random 16-byte seat id for this visit
+     n = the attempt number within that round (0, 1, 2, …)
+   The deck is H = SHA-256(R ‖ S ‖ n as 6 bytes), read as a number and
+   turned into a shuffle with Fisher–Yates driven by its mixed-radix
+   digits (H mod 52, then mod 51, …): shuffle number H mod 52! in the
+   factorial number system. Anyone can recompute any shuffle from its
+   recipe, and the database does exactly that before accepting a score.
+   Faking a win would mean trying recipes until one works, which is the
+   shuffling itself. (The bias from 2^256 not being a multiple of 52! is
+   about 1 in 10^9 of a percent of a percent; nothing to see here.)
+   ===================================================================== */
+/*PF-CORE-START*/
+const SHA_K = new Int32Array([
+  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+]);
+/** The shuffle for recipe (R, S, n). R: 8 words, S: 4 words (big-endian), n < 2^48. W, L: scratch. */
+function pfDeckInto(deck, R, S, n, W, L) {
+  for (let i = 0; i < 8; i++) W[i] = R[i];
+  W[8] = S[0]; W[9] = S[1]; W[10] = S[2]; W[11] = S[3];
+  W[12] = Math.floor(n / 65536) | 0;              // n as 6 big-endian bytes, then the 0x80 pad byte
+  W[13] = ((n % 65536) << 16) | 0x8000;
+  W[14] = 0; W[15] = 432;                         // message length: 54 bytes = 432 bits
+  for (let i = 16; i < 64; i++) {
+    const x = W[i - 15], y = W[i - 2];
+    const s0 = ((x >>> 7) | (x << 25)) ^ ((x >>> 18) | (x << 14)) ^ (x >>> 3);
+    const s1 = ((y >>> 17) | (y << 15)) ^ ((y >>> 19) | (y << 13)) ^ (y >>> 10);
+    W[i] = (W[i - 16] + s0 + W[i - 7] + s1) | 0;
+  }
+  let a = 0x6a09e667 | 0, b = 0xbb67ae85 | 0, c = 0x3c6ef372 | 0, d = 0xa54ff53a | 0;
+  let e = 0x510e527f | 0, f = 0x9b05688c | 0, g = 0x1f83d9ab | 0, h = 0x5be0cd19 | 0;
+  for (let i = 0; i < 64; i++) {
+    const S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+    const t1 = (h + S1 + ((e & f) ^ (~e & g)) + SHA_K[i] + W[i]) | 0;
+    const S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+    const t2 = (S0 + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+    h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+  }
+  L[0] = (a + 0x6a09e667) >>> 0; L[1] = (b + 0xbb67ae85) >>> 0; L[2] = (c + 0x3c6ef372) >>> 0; L[3] = (d + 0xa54ff53a) >>> 0;
+  L[4] = (e + 0x510e527f) >>> 0; L[5] = (f + 0x9b05688c) >>> 0; L[6] = (g + 0x1f83d9ab) >>> 0; L[7] = (h + 0x5be0cd19) >>> 0;
+  for (let i = 0; i < 52; i++) deck[i] = i;
+  let top = 0;
+  // Digit i is H mod (52 - i), then H = floor(H / (52 - i)). Three digits per long division:
+  // H mod (r·(r-1)·(r-2)) holds the next three mixed-radix digits, and r·(r-1)·(r-2) < 2^21 keeps it exact.
+  for (let i = 0; i < 51; i += 3) {
+    const r = 52 - i, P = r * (r - 1) * (r - 2), inv = 1 / P;
+    let rem = 0;
+    for (let k = top; k < 8; k++) {
+      const cur = rem * 4294967296 + L[k];
+      let q = Math.floor(cur * inv);              // multiply by 1/P (fast), then fix the rare off-by-one
+      rem = cur - q * P;
+      if (rem < 0) { q--; rem += P; } else if (rem >= P) { q++; rem -= P; }
+      L[k] = q;
+    }
+    while (top < 7 && L[top] === 0) top++;
+    let x = rem | 0, j = i + x % r, t = deck[i]; deck[i] = deck[j]; deck[j] = t;
+    x = (x / r) | 0;
+    j = i + 1 + x % (r - 1); t = deck[i + 1]; deck[i + 1] = deck[j]; deck[j] = t;
+    j = i + 2 + ((x / (r - 1)) | 0); t = deck[i + 2]; deck[i + 2] = deck[j]; deck[j] = t;
+  }
+  return deck;
+}
+const hexToWords = hex => { const w = new Int32Array(hex.length / 8); for (let i = 0; i < w.length; i++) w[i] = parseInt(hex.slice(i * 8, i * 8 + 8), 16) | 0; return w; };
+/*PF-CORE-END*/
+/* The beacon (drand) and this visit's seat. The seat's first 8 bytes are SHA-256('seat:' + your
+   leaderboard secret), so only you can hand in your shuffles; the other 8 are fresh every visit. */
+const PF_CHAIN = '8990e7a9aaed2ffed73dbd7092123d6f289930540d7651336225dc172e51b2ce';   // drand mainnet "default" chain: one round every 30 s
+const PF_GENESIS = 1595431050, PF_PERIOD = 30;
+const PF_HOSTS = ['https://api.drand.sh', 'https://api2.drand.sh', 'https://api3.drand.sh', 'https://drand.cloudflare.com'];
+const PF = { ready: false, b: null, n: 0, S: null, Shex: '', next: 0, fetching: false, fails: 0, W: new Int32Array(64), L: new Float64Array(8) };
+const bytesHex = u8 => Array.from(u8, x => x.toString(16).padStart(2, '0')).join('');
+const pfRoundUrl = r => `${PF_HOSTS[0]}/${PF_CHAIN}/public/${r}`;
+const pfRoundTime = r => (PF_GENESIS + (r - 1) * PF_PERIOD) * 1000;
+function pfBeacon(round, Rhex) { PF.b = { r: round, R: Rhex, s: PF.Shex, Rw: hexToWords(Rhex) }; PF.n = 0; }
+async function pfInit() {
+  try {
+    const id = lbIdentity();
+    const tag = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('seat:' + id.secret))).slice(0, 8);
+    const seat = new Uint8Array(16); seat.set(tag); crypto.getRandomValues(seat.subarray(8));
+    PF.Shex = bytesHex(seat); PF.S = hexToWords(PF.Shex);
+    pfBeacon(0, bytesHex(crypto.getRandomValues(new Uint8Array(32))));   // until drand answers: local randomness ("round 0")
+    PF.ready = true;
+    pfRefresh();
+  } catch (e) { PF.ready = false; }
+}
+async function pfRefresh() {
+  if (PF.fetching) return;
+  PF.fetching = true;
+  for (let i = 0; i < PF_HOSTS.length; i++) {
+    const host = PF_HOSTS[(PF.fails + i) % PF_HOSTS.length];
+    try {
+      const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 4000);
+      const r = await fetch(`${host}/${PF_CHAIN}/public/latest`, { cache: 'no-store', signal: ctl.signal });
+      const j = await r.json();
+      clearTimeout(tm);
+      if (Number.isSafeInteger(j.round) && /^[0-9a-f]{64}$/.test(j.randomness)) {
+        if (j.round > PF.b.r) pfBeacon(j.round, j.randomness);
+        PF.next = Date.now() + Math.max(5000, pfRoundTime(j.round + 1) - Date.now() + 1500);   // just after the next round
+        PF.fetching = false;
+        return;
+      }
+    } catch (e) { /* try the next relay */ }
+    PF.fails++;
+  }
+  PF.next = Date.now() + 60000; PF.fetching = false;   // offline: keep local randomness, try again in a minute
+}
+/** Shuffles with the next recipe in line and returns its n (its beacon is PF.b), or -1 before the seat is ready. */
+function pfShuffle(deck) {
+  if (!PF.ready) { shuffleInto(deck); return -1; }
+  if (!PF.fetching && Date.now() > PF.next) pfRefresh();
+  const n = PF.n++;
+  pfDeckInto(deck, PF.b.Rw, PF.S, n, PF.W, PF.L);
+  return n;
+}
+/** A block of recipes for a station worker. */
+function pfTake(count) {
+  if (!PF.fetching && Date.now() > PF.next) pfRefresh();
+  const start = PF.n; PF.n += count;
+  return { b: PF.b, start };
+}
+const pfRec = (b, n) => (b && n >= 0 ? { r: b.r, R: b.R, s: b.s, n } : null);
+const validRec = r => r && Number.isSafeInteger(r.r) && r.r >= 0 && /^[0-9a-f]{64}$/.test(r.R) && /^[0-9a-f]{32}$/.test(r.s) && Number.isSafeInteger(r.n) && r.n >= 0 && r.n < 281474976710656;
+/** Replays a recipe: the deck (card indices) it makes. */
+function pfReplay(rec) { return pfDeckInto(new Uint8Array(52), hexToWords(rec.R), hexToWords(rec.s), rec.n, new Int32Array(64), new Float64Array(8)); }
 
 /* Cards: index c = suit * 13 + rank */
 const SUITS = [
@@ -1081,7 +1379,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1091,10 +1389,14 @@ const store = (() => {
     return {
       allTime: Number.isFinite(p.allTime) ? p.allTime : 0,
       best: p.best && Number.isFinite(p.best.matches) ? p.best : null,
+      vbest: p.vbest && Number.isFinite(p.vbest.matches) && validRec(p.vbest.pf) ? p.vbest : null,
       top: Array.isArray(p.top) ? p.top.slice(0, 5) : [],
       badges: p.badges && typeof p.badges === 'object' ? p.badges : {},
       manual: n(p.manual), manualBest: n(p.manualBest), royalBest: n(p.royalBest), ludBestMs: n(p.ludBestMs),
-      purchases: p.purchases && typeof p.purchases === 'object' ? { tea: n(p.purchases.tea), odds: n(p.purchases.odds), patron: n(p.purchases.patron) } : {},
+      purchases: p.purchases && typeof p.purchases === 'object' ? { tea: n(p.purchases.tea), odds: n(p.purchases.odds), patron: n(p.purchases.patron), traveller: n(p.purchases.traveller) } : {},
+      claim: p.claim && validRec(p.claim) ? p.claim : null,   // a winning shuffle Mission Control hasn't confirmed yet
+      missionWon: p.missionWon === true,
+      tt: Array.isArray(p.tt) ? p.tt.filter(x => typeof x === 'string' && /^cs_[A-Za-z0-9_]{8,200}$/.test(x)).slice(-5) : [],
       hyper: p.hyper && typeof p.hyper === 'object' ? { bought: n(p.hyper.bought), done: n(p.hyper.done), best: n(p.hyper.best), rate: n(p.hyper.rate), from: Math.min(n(p.hyper.from), n(p.hyper.done)) } : { bought: 0, done: 0, best: 0, rate: 0, from: 0 },
       livePending: n(p.livePending),
       lb: p.lb && /^[0-9a-f-]{36}$/.test(p.lb.id) && /^[0-9a-f]{32,64}$/.test(p.lb.secret) ? { id: p.lb.id, secret: p.lb.secret, name: str(p.lb.name).slice(0, 20), sub: n(p.lb.sub) } : null,
@@ -1378,10 +1680,10 @@ el.topBody.addEventListener('click', e => {
 });
 const validEntry = e => e && Number.isFinite(e.matches) && e.grail === GRAIL_ID && Array.isArray(e.deck) && e.deck.length === 52 && e.deck.every(code => CODES.includes(code));
 /** Hot path: keeps the five luckiest shuffles ever (on a tie, the earlier one stays). */
-function noteTop(deck, m) {
+function noteTop(deck, m, b, n) {
   const t = store.top;
   if (!m || (t.length >= TOP_N && m <= t[TOP_N - 1].matches)) return;
-  t.push({ matches: m, attempt: store.allTime, deck: Array.from(deck, c => CODES[c]), ts: Date.now(), grail: GRAIL_ID });
+  t.push({ matches: m, attempt: store.allTime, deck: Array.from(deck, c => CODES[c]), ts: Date.now(), grail: GRAIL_ID, pf: pfRec(b, n) });
   t.sort((a, b) => b.matches - a.matches || a.attempt - b.attempt);
   if (t.length > TOP_N) t.length = TOP_N;
   pbDirty = true;
@@ -1394,7 +1696,7 @@ function renderTop() {
   el.topBody.innerHTML = t.map((e, i) => {
     const deck = Uint8Array.from(e.deck.map(code => CODES.indexOf(code))), n = Math.max(1, e.attempt || 1), cls = i === 0 ? ' first' : '';
     const day = new Date(e.ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    return `<tr class="r${cls}"><td class="rk">${['🥇', '🥈', '🥉', '4', '5'][i]}</td><td class="m">${e.matches}/52</td><td>#${fmt(n)}<span class="sub">${day}</span></td><td>1 in ${fmt(Math.round(1 / tailP(e.matches)))}</td><td>${handTime(n)}</td></tr>`
+    return `<tr class="r${cls}"><td class="rk">${['🥇', '🥈', '🥉', '4', '5'][i]}</td><td class="m">${e.matches}/52${validRec(e.pf) ? ` <button type="button" class="pf-tick" data-verify='${recAttr(e.pf)}' title="Provably fair: replay this shuffle" aria-label="Replay your number ${i + 1} shuffle">✓</button>` : ''}</td><td>#${fmt(n)}<span class="sub">${day}</span></td><td>1 in ${fmt(Math.round(1 / tailP(e.matches)))}</td><td>${handTime(n)}</td></tr>`
       + `<tr class="d${cls}"><td></td><td colspan="4"><button type="button" class="dk" aria-expanded="false" data-full="${deckFull(deck)}" data-short="${deckShort(deck)}" aria-label="Deck of your number ${i + 1} shuffle, show all 52 cards">${deckShort(deck)}</button></td></tr>`;
   }).join('');
 }
@@ -1402,15 +1704,16 @@ function renderPB() {
   pbDirty = false;
   const b = store.best;
   if (b && (b.grail !== GRAIL_ID || !(Array.isArray(b.deck) && b.deck.length === 52 && b.deck.every(code => CODES.includes(code))))) store.best = null;
+  if (store.vbest && store.vbest.grail !== GRAIL_ID) store.vbest = null;
   const rb = $('#replayBtn');
   rb.hidden = !(store.best && store.best.matches >= 1);
   if (store.best) rb.textContent = `★ Replay my best (${store.best.matches}/52)`;
   renderTop();
 }
-function checkPB(deck, m, rigged) {
+function checkPB(deck, m, rigged, b, n) {
   if (rigged) return;               // rigged wins never pollute the all-time record
   if (store.best && m <= store.best.matches) return;
-  store.best = { matches: m, attempt: store.allTime, deck: Array.from(deck, c => CODES[c]), ts: Date.now(), grail: GRAIL_ID };
+  store.best = { matches: m, attempt: store.allTime, deck: Array.from(deck, c => CODES[c]), ts: Date.now(), grail: GRAIL_ID, pf: pfRec(b, n) };
   pbDirty = true;
   if (typeof lbOnBest === 'function') lbOnBest();
 }
@@ -1475,8 +1778,14 @@ function unlock(id) {
   updateBadges();
   saveStore(true);
 }
+/** Best provably fair shuffle (the one the leaderboard gets; differs from store.best only for scores from before recipes). */
+function noteVBest(m, b, n) {
+  if (n < 0 || (store.vbest && m <= store.vbest.matches)) return;
+  store.vbest = { matches: m, attempt: store.allTime, ts: Date.now(), grail: GRAIL_ID, pf: pfRec(b, n) };
+  if (typeof lbOnBest === 'function' && (!store.best || store.best.matches <= m)) lbOnBest();
+}
 /** Hot path: called once per attempt, manual or autopilot. Rigged shuffles never earn luck badges. */
-function record(m, deck, manual, rigged) {
+function record(m, deck, manual, rigged, b, n) {
   session.attempts++;
   session.sum += m;
   session.dist[m >= 5 ? 5 : m]++;
@@ -1491,7 +1800,8 @@ function record(m, deck, manual, rigged) {
   if (store.allTime >= 1e9 && !store.badges.billion) unlock('billion');
   statsDirty = true;
   if (rigged) return;
-  noteTop(deck, m);
+  noteTop(deck, m, b, n);
+  noteVBest(m, b, n);
   if (m > session.fairBest) session.fairBest = m;
   if (m === 1 && !store.badges.average) unlock('average');
   if (m >= 6) {
@@ -1601,15 +1911,16 @@ function manualShuffle() {
   if (autopilot.mode) setAutopilot('0');
   if (anim.active) finishAnimNow();
   const deck = new Uint8Array(52);
-  let rigged = false;
+  let rigged = false, pn = -1;
   if (riggedArmed) { deck.set(grail); riggedArmed = false; rigged = true; updateRiggedBadge(); }
-  else shuffleInto(deck);
-  const m = countMatches(deck, grail);
-  record(m, deck, true, rigged);
+  else pn = pfShuffle(deck);
+  const pb = PF.b, m = countMatches(deck, grail);
+  record(m, deck, true, rigged, pb, pn);
   noteRate(1);
-  checkPB(deck, m, rigged);
+  checkPB(deck, m, rigged, pb, pn);
   saveStore(true);
-  const res = { n: session.attempts, m, deck, ts: Date.now(), rigged };
+  const res = { n: session.attempts, m, deck, ts: Date.now(), rigged, pf: rigged ? null : pfRec(pb, pn) };
+  if (res.pf) lastRec = res.pf;
   track('first-shuffle');
   updateButtonLabel();
   armIdle();
@@ -1823,10 +2134,10 @@ function apLoop(t) {
   let count = 0, won = null;
   while (count < todo) {
     const slot = ap.ring[ap.pos];
-    shuffleInto(slot.deck);
+    slot.pfn = pfShuffle(slot.deck); slot.pfb = PF.b;
     const m = countMatches(slot.deck, grail);
-    record(m, slot.deck, false, false);
-    if (!store.best || m > store.best.matches) checkPB(slot.deck, m, false);
+    record(m, slot.deck, false, false, slot.pfb, slot.pfn);
+    if (!store.best || m > store.best.matches) checkPB(slot.deck, m, false, slot.pfb, slot.pfn);
     slot.m = m; slot.n = session.attempts; slot.ts = Date.now();
     ap.pos = (ap.pos + 1) % RING; ap.sinceFlush++; count++;
     if (m === 52) { won = slot; break; }
@@ -1841,7 +2152,7 @@ function apLoop(t) {
     if (ap.ludMs >= 3600000 && !store.badges.heatdeath) unlock('heatdeath');
   }
   if (won) {
-    const res = { n: won.n, m: 52, deck: Uint8Array.from(won.deck), ts: won.ts, rigged: false };
+    const res = { n: won.n, m: 52, deck: Uint8Array.from(won.deck), ts: won.ts, rigged: false, pf: pfRec(won.pfb, won.pfn) };
     ap.sinceFlush = 0;
     setAutopilot('0');
     reveal(res, false);
@@ -1857,6 +2168,7 @@ function flushAutopilot() {
   if (!ap.sinceFlush) return;
   const last = ap.ring[(ap.pos - 1 + RING) % RING];
   current.set(last.deck); hasCurrent = true;
+  lastRec = pfRec(last.pfb, last.pfn);
   paintDeck(C, current, grail);
   applyMatchesInstant(current);
   showWorldFirst(last.m, false);
@@ -1878,6 +2190,13 @@ function humanityTotal() {
   return BigInt(Math.max(0, Math.floor(t)));
 }
 function renderProgress() {
+  if (MISSION.row) {
+    const text = `HUMANITY'S PROGRESS: 100% · MISSION ACCOMPLISHED · THE ${missionName().toUpperCase()} SEQUENCE · NO RESET · NO SEASON 2 ·`;
+    el.progA.textContent = text; el.progB.textContent = text;
+    $('#progressFill').style.width = '100%';
+    $('.progress-track').setAttribute('aria-label', "Humanity's progress: 100 percent. Mission accomplished.");
+    return;
+  }
   const g = humanityTotal();
   const pct = ratioPercent(g, F52, 76);
   const zeros = leadingZeros(pct);
@@ -1896,7 +2215,7 @@ const LIVE_COUNTER = {
   anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtpbnl5enl6ZHJwenh5eHV3cGR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3NjQ1MTUsImV4cCI6MjEwNzM0MDUxNX0.Jr4pqGrwW54jTozB7H2sJubirATPjKVkxc5sVgLNZ1c'
 };
 const live = { on: !!(LIVE_COUNTER.url && LIVE_COUNTER.anonKey), total: null, pending: 0, inflight: 0, shown: 0, mine: 0, busy: false };
-const LB = { on: live.on, v2: true, ready: false, rows: [], players: 0, rank: null, timer: 0, lastToast: 0, busy: false };   // leaderboard state (section 15c)
+const LB = { on: live.on, v: 4, ready: false, rows: [], players: 0, rank: null, timer: 0, lastToast: 0, busy: false };   // leaderboard state (section 15c)
 const LIVE_MAX_DELTA = 5000000;   // must match the cap in add_attempts()
 function liveHeaders() {
   return { apikey: LIVE_COUNTER.anonKey, Authorization: 'Bearer ' + LIVE_COUNTER.anonKey, 'Content-Type': 'application/json' };
@@ -1906,7 +2225,11 @@ async function liveFetch() {
     const r = await fetch(`${LIVE_COUNTER.url}/rest/v1/shuffle_stats?select=attempts&id=eq.1`, { headers: liveHeaders(), cache: 'no-store' });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const rows = await r.json();
-    if (rows[0] && Number.isFinite(Number(rows[0].attempts))) live.total = Number(rows[0].attempts);
+    if (rows[0] && Number.isFinite(Number(rows[0].attempts))) {
+      const firstTotal = live.total === null;
+      live.total = Number(rows[0].attempts);
+      if (firstTotal && typeof renderTTCard === 'function') renderTTCard();   // "your mission alone shuffles N× humankind"
+    }
   } catch (e) { /* offline: keep the last known total */ }
 }
 async function liveFlush(onExit) {
@@ -2196,7 +2519,7 @@ function cardRain(n) {
     });
   }
 }
-function drawCard(p) {
+function drawConfettiCard(p) {
   const sx = Math.cos(p.wob);                        // flips between face and back
   ctx2d.scale(Math.abs(sx) < 0.08 ? 0.08 : Math.abs(sx), 1);
   ctx2d.fillStyle = sx > 0 ? '#fffdf5' : '#7d0f60';
@@ -2216,7 +2539,7 @@ function drawConfetti() {
   ctx2d.clearRect(0, 0, window.innerWidth, H);
   for (const p of confetti.parts) {
     ctx2d.save(); ctx2d.translate(p.x, p.y); ctx2d.rotate(p.rot);
-    if (p.card) drawCard(p);
+    if (p.card) drawConfettiCard(p);
     else { ctx2d.fillStyle = p.c; ctx2d.fillRect(-p.w / 2, -p.h / 2 * Math.abs(Math.cos(p.wob)), p.w, p.h * Math.abs(Math.cos(p.wob)) + 1); }
     ctx2d.restore();
   }
@@ -2281,6 +2604,7 @@ function triggerWin(res) {
   win.hidden = false;
   $('#winAlarm').hidden = false;
   $('#winCard').hidden = true;
+  $('#winClaim').hidden = true;
   setPose('faint', LINES.faint[0]);
   el.live.textContent = 'Fifty-two of fifty-two cards matched. Anomaly detected.';
   const lines = winLogLines(res), log = $('#winLog');
@@ -2312,6 +2636,8 @@ function winParty() {
   flash.classList.remove('flash'); void flash.offsetWidth;
   if (!reduceMotion) flash.classList.add('flash');
   $('#winSub').textContent = `52/52 on attempt #${fmt(res.n)}. Odds: 1 in ${sci(F52_NUM, 2)}.`;
+  renderWinClaim(res);
+  $('#winFund').hidden = !res.rigged || !$('#winFund').dataset.any;   // a real win ends the mission: nothing left to sponsor
   $('#reportBtn').textContent = '🚨 Report to Authorities';
   const hum = $('#humScore');
   hum.textContent = '0'; hum.classList.remove('flip');
@@ -2784,8 +3110,10 @@ function selfTest() {
   const d = new Uint8Array(52), seen = new Uint8Array(52);
   const firstPos = new Array(52).fill(0);
   const N = 52000;
+  const tR = hexToWords(bytesHex(crypto.getRandomValues(new Uint8Array(32)))), tS = hexToWords(bytesHex(crypto.getRandomValues(new Uint8Array(16))));
+  const tW = new Int32Array(64), tL = new Float64Array(8);
   for (let t = 0; t < N; t++) {
-    shuffleInto(d);
+    pfDeckInto(d, tR, tS, t, tW, tL);
     seen.fill(0);
     for (let i = 0; i < 52; i++) {
       const c = d[i];
@@ -2800,16 +3128,21 @@ function selfTest() {
   const pctOk = ODDS_ZEROS === 65 && F52.toString() === '80658175170943878571660636856403766975289505440883277824000000000000';
   const checks = verifyComparisons(F52);
   const grailOk = new Set(grail).size === 52 && grail.every(c => c < 52);
+  // Known answers, computed independently (Python hashlib, and the database's pf_deck).
+  const kR = '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f', kS = '000102030405060708090a0b0c0d0e0f';
+  const kat = [[0, '5D 10H QD 8C 5H 3C 6D QC 4H 9S'], [123456789, 'KS 8S 7D 9C JS 2S 7C 8D KH JD']]
+    .every(([n, want]) => Array.from(pfReplay({ R: kR, s: kS, n }).slice(0, 10), c => CODES[c]).join(' ') === want);
   console.groupCollapsed('%c🃏 The Impossible Shuffle: self-test', 'color:#22f3ff;font-weight:bold');
   console.log(`✅ ${fmt(N)} shuffles, every deck contains all 52 unique cards.`);
   console.log(`${chi2 < 90.6 ? '✅' : '⚠️'} Position-0 uniformity χ² = ${chi2.toFixed(1)} (51 dof, alarm above 90.6).`);
   console.log(`${pctOk ? '✅' : '❌'} 52! = ${F52}; 1/52! as a percentage has ${ODDS_ZEROS} leading zeros.`);
   console.log(`${grailOk ? '✅' : '❌'} The fixed Holy Grail Sequence has all 52 unique cards.`);
+  console.log(`${kat ? '✅' : '❌'} Provably fair recipe: SHA-256 + Fisher–Yates matches the reference answers.`);
   console.table(checks.map(c => ({ claim: c.claim, value: c.value, ok: c.ok })));
   console.groupEnd();
-  const allOk = grailOk && pctOk && checks.every(c => c.ok);
+  const allOk = grailOk && kat && pctOk && checks.every(c => c.ok);
   if (!allOk) console.warn('Self-test: a numeric claim failed verification.');
-  else console.info('%c✅ Self-test passed: crypto Fisher–Yates is uniform and every hopeless comparison checks out.', 'color:#7cff6b');
+  else console.info('%c✅ Self-test passed: provably fair Fisher–Yates is uniform and every hopeless comparison checks out.', 'color:#7cff6b');
   return allOk;
 }
 
@@ -2820,8 +3153,8 @@ function selfTest() {
    20 seconds (seven riffles are needed to mix a deck, Bayer & Diaconis
    1992), so one year of nonstop hand shuffling is 1,577,880 shuffles.
    Buying a tier adds that many years of shuffles to your station
-   (internally "hyper"). The station really performs every one of them: the same crypto
-   Fisher–Yates, run in Web Workers on every processor core, and every
+   (internally "hyper"). The station really performs every one of them: the same provably
+   fair recipe, run in Web Workers on every processor core, and every
    shuffle counts toward your stats, badges and the humankind counter.
    The credit only goes down as shuffles are actually done, so pausing or
    closing the tab never loses anything. No prize: odds per shuffle stay
@@ -2862,7 +3195,7 @@ const IMP_TIERS = [
     perks: ['🏛️ Your name on the Wall of Hopeless Heroes', '👑 The Royal Professor', '✨ Every other extra included'] }
 ];
 /** The highest rank this browser has bought. */
-const rankName = () => (owned().patron ? 'Commander' : owned().odds ? 'Captain' : owned().tea ? 'Rookie' : 'Sponsor');
+const rankName = () => (owned().traveller ? 'Time Traveller' : owned().patron ? 'Commander' : owned().odds ? 'Captain' : owned().tea ? 'Rookie' : 'Sponsor');
 const tierById = id => IMP_TIERS.find(t => t.id === id);
 /** Generic comparisons for any probability (used on the certificate). */
 function hopelessness(p) { return { powerballs: timesInARow(POWERBALL, p), flips: Math.round(Math.log2(1 / p)) }; }
@@ -2871,11 +3204,11 @@ const timesWord = n => numWord(n) + (n === 1 ? ' time' : ' times');
 /* ---------- Store helpers ---------- */
 const owned = () => store.purchases || {};
 const hasAny = () => Object.values(owned()).some(v => v > 0);
-const hasOdds = () => (owned().odds || 0) + (owned().patron || 0) > 0;
-const hasPatron = () => (owned().patron || 0) > 0;
+const hasOdds = () => (owned().odds || 0) + (owned().patron || 0) + (owned().traveller || 0) > 0;
+const hasPatron = () => (owned().patron || 0) + (owned().traveller || 0) > 0;
 const hyperLeft = () => Math.max(0, store.hyper.bought - store.hyper.done);
 const cores = () => Math.max(1, Math.min(16, navigator.hardwareConcurrency || 4));
-const hyperRateGuess = () => store.hyper.rate || cores() * 500000;
+const hyperRateGuess = () => store.hyper.rate || cores() * 400000;
 
 /* ---------- Tier cards ---------- */
 const bigShort = n => n >= 1e11 ? `${Math.round(n / 1e9)} billion` : n >= 1e9 ? `${(n / 1e9).toFixed(1)} billion` : `${Math.round(n / 1e6)} million`;
@@ -2897,6 +3230,15 @@ function shiftLike(sec) {
 function renderImpatient() {
   const F = SITE.fund, cur = F.currency || '$';
   let any = false;
+  if (MISSION.row) {                              // the mission is over: nothing left to sponsor, ever
+    $('#impTiers').innerHTML = '';
+    renderTTCard();
+    $('#impClosed').hidden = false;
+    $('#impClosed').textContent = `🏁 The mission is accomplished, so sponsorships are closed forever. Stations with years left can still finish their shift, for old times' sake.`;
+    $('#impatient').hidden = false;
+    $('#apSponsor').hidden = true;
+    return;
+  }
   $('#impTiers').innerHTML = IMP_TIERS.map(t => {
     const url = F[t.id]; if (!url) return '';
     any = true;
@@ -2918,6 +3260,8 @@ function renderImpatient() {
     </div>`;
   }).join('');
   $$('#impTiers [data-imp]').forEach(a => a.addEventListener('click', () => track('impatient-' + a.dataset.imp)));
+  renderTTCard();
+  any = any || !!F.traveller;
   $('#impatient').hidden = !any;
   $('#apSponsor').hidden = !any;
 }
@@ -2949,33 +3293,34 @@ function handleThanks() {
 }
 
 /* ---------- Hyperdrive engine ---------- */
+// The worker runs the very same provably fair recipe as the page (pfDeckInto, copied in below).
 const HYPER_WORKER = `'use strict';
-const buf = new Uint32Array(16384); let idx = buf.length;
-function next() { if (idx >= buf.length) { crypto.getRandomValues(buf); idx = 0; } return buf[idx++]; }
-function below(n) { const lim = 4294967296 - (4294967296 % n); let r; do { r = next(); } while (r >= lim); return r % n; }
+const SHA_K = new Int32Array(${JSON.stringify(Array.from(SHA_K))});
+${pfDeckInto.toString()}
+const W = new Int32Array(64), L = new Float64Array(8);
 let grail = null, royal = null, streak = 0;
 const d = new Uint8Array(52);
 onmessage = e => {
   if (e.data.grail) { grail = Uint8Array.from(e.data.grail); royal = e.data.royal; return; }
-  const n = e.data.n, dist = [0, 0, 0, 0, 0, 0];
-  let done = 0, sum = 0, best = -1, bestDeck = null, ones = 0, zeroRun = 0, royalBest = 0, win = null, lastM = 0;
+  const n = e.data.n, R = Int32Array.from(e.data.R), S = Int32Array.from(e.data.S), start = e.data.start, dist = [0, 0, 0, 0, 0, 0];
+  let done = 0, sum = 0, best = -1, bestDeck = null, bestN = -1, ones = 0, zeroRun = 0, royalBest = 0, win = null, winN = -1, lastM = 0;
   while (done < n) {
-    for (let i = 0; i < 52; i++) d[i] = i;
-    for (let i = 51; i > 0; i--) { const j = below(i + 1); const t = d[i]; d[i] = d[j]; d[j] = t; }
+    pfDeckInto(d, R, S, start + done, W, L);
     let m = 0;
     for (let i = 0; i < 52; i++) if (d[i] === grail[i]) m++;
-    done++; sum += m; lastM = m; dist[m >= 5 ? 5 : m]++;
+    sum += m; lastM = m; dist[m >= 5 ? 5 : m]++;
     if (m === 0) { if (++streak > zeroRun) zeroRun = streak; } else streak = 0;
     if (m === 1) ones++;
-    if (m > best) { best = m; bestDeck = Array.from(d); }
+    if (m > best) { best = m; bestDeck = Array.from(d); bestN = start + done; }
     if (m) {
       let r = 0;
       for (let k = 0; k < 5; k++) if (d[royal[k]] === grail[royal[k]]) r++;
       if (r > royalBest) royalBest = r;
     }
-    if (m === 52) { win = Array.from(d); break; }
+    done++;
+    if (m === 52) { win = Array.from(d); winN = start + done - 1; break; }
   }
-  postMessage({ n: done, sum, dist, best, bestDeck, ones, zeroRun, royalBest, last: Array.from(d), lastM, win });
+  postMessage({ n: done, sum, dist, best, bestDeck, bestN, ones, zeroRun, royalBest, last: Array.from(d), lastM, win, winN });
 };`;
 const HYPER_CHUNK = 200000;                     // ≈ 0.3 s of work per message on one core
 const HYPER = { workers: [], running: false, assigned: 0, samples: [], uiTimer: 0, last: null, lastM: 0, failed: false };
@@ -2996,6 +3341,7 @@ function hyperEnsureWorkers() {
 }
 function hyperStart() {
   if (HYPER.running || winOpen || hyperLeft() <= 0) return;
+  if (!PF.ready) { setTimeout(hyperStart, 300); return; }   // the seat is a few milliseconds away
   if (!hyperEnsureWorkers()) { toast('🛰️ Your station needs a browser with Web Workers. Your years are saved.'); return; }
   if (autopilot.mode) setAutopilot('0');
   if (anim.active) finishAnimNow();
@@ -3018,7 +3364,8 @@ function hyperAssign(w) {
   if (!HYPER.running || free <= 0) return;
   const n = Math.min(HYPER_CHUNK, free);
   HYPER.assigned += n; w.busy = n;
-  w.postMessage({ n });
+  w.job = pfTake(n);
+  w.postMessage({ n, R: Array.from(w.job.b.Rw), S: Array.from(PF.S), start: w.job.start });
 }
 function hyperResult(w, r) {
   HYPER.assigned -= w.busy; w.busy = 0;
@@ -3039,14 +3386,15 @@ function hyperResult(w, r) {
   if (r.best >= 7 && !store.badges.lucky7) unlock('lucky7');
   if (r.best >= 10 && !store.badges.witchcraft) unlock('witchcraft');
   if (r.royalBest > store.royalBest) { store.royalBest = r.royalBest; if (r.royalBest === 5 && !store.badges.royal) unlock('royal'); }
-  if (r.bestDeck && (!store.best || r.best > store.best.matches)) checkPB(Uint8Array.from(r.bestDeck), r.best, false);
-  if (r.bestDeck) noteTop(Uint8Array.from(r.bestDeck), r.best);
+  const jb = w.job ? w.job.b : null;
+  if (r.bestDeck && (!store.best || r.best > store.best.matches)) checkPB(Uint8Array.from(r.bestDeck), r.best, false, jb, r.bestN);
+  if (r.bestDeck) { noteTop(Uint8Array.from(r.bestDeck), r.best, jb, r.bestN); noteVBest(r.best, jb, r.bestN); }
   HYPER.last = r.last; HYPER.lastM = r.lastM;
   statsDirty = true;
   saveStore();
   if (r.win) {                                  // the end of mathematics as we know it
     hyperPause();
-    const res = { n: session.attempts, m: 52, deck: Uint8Array.from(r.win), ts: Date.now(), rigged: false };
+    const res = { n: session.attempts, m: 52, deck: Uint8Array.from(r.win), ts: Date.now(), rigged: false, pf: pfRec(jb, r.winN) };
     reveal(res, false);
     return;
   }
@@ -3296,7 +3644,7 @@ function bigWords(x) {
   const g = Math.min(BIG_WORDS.length - 1, Math.floor(Math.log10(x) / 3)), m = x / Math.pow(10, g * 3);
   return `${m < 10 ? m.toFixed(1) : Math.round(m)} ${BIG_WORDS[g]}`.trim();
 }
-function drawCertificate(cv, name) {
+function drawCertificate(cv, name, won) {
   const W = 2339, H = 1654, c = cv.getContext('2d');
   cv.width = W; cv.height = H;
   const total = BigInt(Math.max(1, store.allTime));
@@ -3308,15 +3656,22 @@ function drawCertificate(cv, name) {
   c.strokeStyle = '#c9971a'; c.lineWidth = 5; c.strokeRect(100, 100, W - 200, H - 200);
   c.strokeStyle = '#ff2fd6'; c.lineWidth = 3; c.strokeRect(118, 118, W - 236, H - 236);
   c.textAlign = 'center';
-  c.fillStyle = '#0b3d2a'; c.font = '112px Bungee, Impact, sans-serif'; c.fillText('CERTIFICATE OF TRYING ANYWAY', W / 2, 300, W - 320);
+  c.fillStyle = '#0b3d2a'; c.font = '112px Bungee, Impact, sans-serif'; c.fillText(won ? 'CERTIFICATE OF DOING THE IMPOSSIBLE' : 'CERTIFICATE OF TRYING ANYWAY', W / 2, 300, W - 320);
   c.fillStyle = '#5b4a1a'; c.font = 'italic 52px Georgia, "Times New Roman", serif'; c.fillText('This certifies that', W / 2, 400);
   c.fillStyle = '#1a1206'; c.font = 'italic bold 120px Georgia, "Times New Roman", serif';
   c.fillText(name, W / 2, 540, W - 500);
   c.strokeStyle = '#c9971a'; c.lineWidth = 3; c.beginPath(); c.moveTo(W / 2 - 700, 572); c.lineTo(W / 2 + 700, 572); c.stroke();
   c.fillStyle = '#2a2414'; c.font = '46px Georgia, "Times New Roman", serif';
-  c.fillText('has bravely tried to shuffle a deck of cards into the Holy Grail Sequence', W / 2, 650);
-  c.fillText('at The Impossible Shuffle, and has, as predicted, not yet succeeded.', W / 2, 708);
-  const rows = [
+  c.fillText(won ? 'has shuffled a deck of cards into the Holy Grail Sequence, all 52 cards in order,' : 'has bravely tried to shuffle a deck of cards into the Holy Grail Sequence', W / 2, 650);
+  c.fillText(won ? "and ended Humankind's Most Pointless Mission. Forever. Edition of one." : 'at The Impossible Shuffle, and has, as predicted, not yet succeeded.', W / 2, 708);
+  const M = MISSION.row || {};
+  const rows = won ? [
+    ['Date', new Date(M.claimed_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })],
+    ['drand round', M.pf_round ? fmt(M.pf_round) : 'local'],
+    ['Shuffle number', fmt(M.pf_n || 0)],
+    ["Humankind's shuffles until then", M.humankind ? fmt(M.humankind) : '–'],
+    ['Matches', '52 of 52']
+  ] : [
     ['Total shuffles', fmt(store.allTime)],
     ['By hand, that would take', handTime(store.allTime)],
     ['Of which by your station', fmt(store.hyper.done)],
@@ -3329,14 +3684,20 @@ function drawCertificate(cv, name) {
     c.textAlign = 'left'; c.fillStyle = '#0b3d2a'; c.font = 'bold 44px "JetBrains Mono", monospace'; c.fillText(v, W / 2 + 30, y);
   });
   c.textAlign = 'center';
-  c.fillStyle = '#5b4a1a'; c.font = '36px Georgia, serif'; c.fillText('Your total chance of success so far', W / 2, 1105);
+  c.fillStyle = '#5b4a1a'; c.font = '36px Georgia, serif'; c.fillText(won ? 'The chance of that, per shuffle' : 'Your total chance of success so far', W / 2, 1105);
   c.fillStyle = '#b0128f'; c.font = 'bold 34px "JetBrains Mono", monospace';
-  c.fillText(pct.slice(0, z + 2 + 6) + '…%', W / 2, 1155, W - 300);
+  c.fillText(won ? `1 in ${fmtBig(F52)}` : pct.slice(0, z + 2 + 6) + '…%', W / 2, 1155, W - 300);
+  if (won) {
+    c.fillStyle = '#2a2414'; c.font = 'italic 34px Georgia, serif';
+    c.fillText(`Mathematics said no. Humanity said: hold my cards. The Holy Grail Sequence is now The ${name} Sequence.`, W / 2, 1212, W - 320);
+    c.fillText('No reset. No new target. No Season 2. One mission, one winner, eternal glory.', W / 2, 1258, W - 320);
+  } else {
   const waitYears = F52_NUM * HAND_SECONDS / SECONDS_PER_YEAR;
   c.fillStyle = '#2a2414'; c.font = 'italic 34px Georgia, serif';
   c.fillText(`That's ${z} zeros after the decimal point: less likely than winning the Powerball jackpot ${timesWord(h.powerballs)} in a row,`, W / 2, 1212, W - 320);
   c.fillText(`and about as likely as calling ${h.flips} coin flips in a row. Shuffling by hand (20 seconds a shuffle), a match takes about ${bigWords(waitYears)} years`, W / 2, 1258, W - 320);
   c.fillText(`on average, roughly ${bigWords(waitYears / UNIVERSE_AGE_YEARS)} times the age of the universe. Odds per shuffle: 1 in 52!, a number with ${F52.toString().length} digits.`, W / 2, 1304, W - 320);
+  }
   // signature, date, number
   c.textAlign = 'left'; c.strokeStyle = '#1a1206'; c.lineWidth = 4; c.beginPath();
   c.moveTo(300, 1440); c.bezierCurveTo(360, 1380, 400, 1480, 460, 1420); c.bezierCurveTo(520, 1370, 540, 1470, 620, 1410); c.bezierCurveTo(660, 1390, 700, 1440, 760, 1415); c.stroke();
@@ -3344,14 +3705,14 @@ function drawCertificate(cv, name) {
   c.fillStyle = '#2a2414'; c.font = '32px Georgia, serif'; c.fillText('Professor Factorial, Chief Statistician', 280, 1495);
   c.textAlign = 'right';
   c.fillText(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), W - 280, 1445);
-  c.font = '28px "JetBrains Mono", monospace'; c.fillText(`No. ${certNumber()} · theimpossibleshuffle.com`, W - 280, 1495);
+  c.font = '28px "JetBrains Mono", monospace'; c.fillText(won ? 'No. 1 of 1 · theimpossibleshuffle.com' : `No. ${certNumber()} · theimpossibleshuffle.com`, W - 280, 1495);
   // seal
   const sx = W / 2, sy = 1425;
   c.beginPath(); c.arc(sx, sy, 90, 0, Math.PI * 2); c.fillStyle = '#ffd23f'; c.fill(); c.lineWidth = 6; c.strokeStyle = '#8a6a00'; c.stroke();
   c.beginPath(); c.arc(sx, sy, 76, 0, Math.PI * 2); c.lineWidth = 2; c.stroke();
   if (profImg) c.drawImage(profImg, sx - 30, sy - 72, 60, 90);
   c.textAlign = 'center'; c.fillStyle = '#5b3a00'; c.font = 'bold 15px "JetBrains Mono", monospace';
-  c.fillText('MATHEMATICS 1', sx, sy + 38); c.fillText('HUMANITY 0', sx, sy + 56);
+  c.fillText('MATHEMATICS 1', sx, sy + 38); c.fillText(won ? 'HUMANITY 1' : 'HUMANITY 0', sx, sy + 56);
 }
 function loadJsPDF() {
   if (window.jspdf) return Promise.resolve(window.jspdf);
@@ -3363,23 +3724,25 @@ function loadJsPDF() {
     document.head.appendChild(s);
   });
 }
-async function downloadCertificate() {
-  const name = ($('#certName').value || '').trim().slice(0, 40);
+async function downloadCertificate(e, won) {
+  const name = won === true ? missionName() : ($('#certName').value || '').trim().slice(0, 40);
   if (!name) { $('#certName').focus(); toast('📜 Type the name for the certificate first.'); return; }
+  won = won === true;
   track('certificate');
   try { await Promise.all([document.fonts.load('120px Bungee'), document.fonts.load('bold 44px "JetBrains Mono"')]); } catch (e) { /* fallback fonts */ }
   await loadProfImg();
   const cv = document.createElement('canvas');
-  try { drawCertificate(cv, name); cv.toDataURL(); } catch (e) { profImg = null; drawCertificate(cv, name); }   // tainted canvas (file://): skip the seal image
-  const file = 'certificate-of-trying-anyway.pdf';
+  try { drawCertificate(cv, name, won); cv.toDataURL(); } catch (e) { profImg = null; drawCertificate(cv, name, won); }   // tainted canvas (file://): skip the seal image
+  const title = won ? 'Certificate of Doing the Impossible' : 'Certificate of Trying Anyway';
+  const file = won ? 'certificate-of-doing-the-impossible.pdf' : 'certificate-of-trying-anyway.pdf';
   try {
     const { jsPDF } = await loadJsPDF();
     const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
     pdf.addImage(cv.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 297, 210);
-    pdf.setProperties({ title: 'Certificate of Trying Anyway', subject: 'The Impossible Shuffle', creator: 'theimpossibleshuffle.com' });
+    pdf.setProperties({ title, subject: 'The Impossible Shuffle', creator: 'theimpossibleshuffle.com' });
     pdf.save(file);
   } catch (e) {                                   // no PDF library: hand over a PNG instead
-    const a = document.createElement('a'); a.href = cv.toDataURL('image/png'); a.download = 'certificate-of-trying-anyway.png';
+    const a = document.createElement('a'); a.href = cv.toDataURL('image/png'); a.download = file.replace('.pdf', '.png');
     document.body.appendChild(a); a.click(); a.remove();
     toast('📜 Saved your certificate as an image (the PDF maker could not load).');
   }
@@ -3459,14 +3822,16 @@ function initImpatient() {
    15c. Leaderboard: "Luckiest Shufflers" (Supabase, see supabase/leaderboard.sql)
    ---------------------------------------------------------------------
    Every browser gets a random player id and secret. Joining is opt-in
-   (pick a name); after that each new personal best is sent as the full
-   52-card deck, and the database counts the matches itself and rejects
+   (pick a name); after that each new personal best is sent as its recipe
+   (v4), the database rebuilds the deck, counts the matches itself and rejects
    scores that are implausible for the number of shuffles behind them.
    Rank comments ("#23 of 1,204 shufflers") work for everyone, joined or not.
    ===================================================================== */
+/** The score the board knows you by: your best provably fair shuffle (scores from before recipes can't be checked). */
+const lbBest = () => store.vbest || null;
 function lbRankArgs(best, player) {
   const a = { p_best: best, p_player: player };
-  if (LB.v2) a.p_attempts = store.best ? Math.max(1, store.best.attempt || 1) : null;
+  if (LB.v >= 2) a.p_attempts = lbBest() ? Math.max(1, lbBest().attempt || 1) : null;
   return a;
 }
 /** Chance that one shuffle gets k or more matches. */
@@ -3491,15 +3856,19 @@ async function lbRpc(fn, body) {
 async function lbLoad() {
   if (!LB.on) return;
   try {
-    const q = v2 => `${LIVE_COUNTER.url}/rest/v1/leaderboard?select=name,best,${v2 ? 'attempts,' : ''}shuffles,achieved_at&order=best.desc,${v2 ? 'attempts.asc,' : ''}achieved_at.asc&limit=100`;
-    let r = await fetch(q(LB.v2), { headers: liveHeaders(), cache: 'no-store' });
-    if (!r.ok && LB.v2) { r = await fetch(q(false), { headers: liveHeaders(), cache: 'no-store' }); if (r.ok) LB.v2 = false; }   // older table without tries
+    const q = v => `${LIVE_COUNTER.url}/rest/v1/leaderboard?select=name,best,${v >= 2 ? 'attempts,' : ''}shuffles,achieved_at${v >= 4 ? ',verified,pf_round,pf_rand,pf_seat,pf_n' : ''}&order=best.desc,${v >= 2 ? 'attempts.asc,' : ''}achieved_at.asc&limit=100`;
+    let r = await fetch(q(LB.v), { headers: liveHeaders(), cache: 'no-store' });
+    while (!r.ok && LB.v > 1) {                    // older table: without recipes (v4), without tries (v2)
+      const v = LB.v === 4 ? 2 : 1;
+      r = await fetch(q(v), { headers: liveHeaders(), cache: 'no-store' });
+      if (r.ok) LB.v = v; else break;
+    }
     if (!r.ok) throw new Error('HTTP ' + r.status);
     LB.rows = await r.json();
-    const joined = store.lb && store.lb.name && store.lb.sub;
-    const stats = await lbRpc('leaderboard_rank', lbRankArgs(store.best ? store.best.matches : 99, joined ? store.lb.id : null));
-    LB.players = store.best || joined ? stats.players : Math.max(0, stats.players - 1);
-    if (store.best) LB.rank = stats.rank;
+    const joined = store.lb && store.lb.name && store.lb.sub, mine = lbBest();
+    const stats = await lbRpc('leaderboard_rank', lbRankArgs(mine ? mine.matches : 99, joined ? store.lb.id : null));
+    LB.players = mine || joined ? stats.players : Math.max(0, stats.players - 1);
+    if (mine) LB.rank = stats.rank;
     LB.ready = true;
   } catch (e) { if (!LB.ready) { $('#lbSection').hidden = true; return; } }
   $('#lbSection').hidden = false;
@@ -3510,21 +3879,23 @@ function renderLB() {
   const me = store.lb && store.lb.name && store.lb.sub ? { name: store.lb.name, best: store.lb.sub } : null;
   let meMarked = false;
   $('#lbBody').innerHTML = LB.rows.length ? LB.rows.map((r, i) => {
-    const isMe = !meMarked && me && r.name === me.name && r.best === me.best && (meMarked = true);
+    const isMe = !meMarked && me && r.name.toLowerCase() === me.name.toLowerCase() && (meMarked = true);   // names are unique
     const cls = [i < 3 ? `top${i + 1}` : '', isMe ? 'me' : ''].join(' ').trim();
     const medal = ['🥇', '🥈', '🥉'][i] || String(i + 1);
     const when = new Date(r.achieved_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const name = document.createElement('span'); name.textContent = r.name;
     const tries = r.attempts ? fmt(r.attempts) : '–';
-    return `<tr class="${cls}"><td>${medal}</td><td>${name.innerHTML}${isMe ? ' <span class="text-[#22f3ff]">(you)</span>' : ''}</td><td class="best">${r.best}/52</td><td>${tries}</td><td>1 in ${oneIn(r.best)}</td><td>${when}</td></tr>`;
+    const rec = r.verified ? { r: r.pf_round, R: r.pf_rand, s: r.pf_seat, n: r.pf_n } : null;
+    const tick = validRec(rec) ? ` <button type="button" class="pf-tick" data-verify='${JSON.stringify(rec)}' title="Provably fair: replay this shuffle" aria-label="Replay ${name.innerHTML}'s shuffle">✓</button>` : '';
+    return `<tr class="${cls}"><td>${medal}</td><td>${name.innerHTML}${isMe ? ' <span class="text-[#22f3ff]">(you)</span>' : ''}</td><td class="best">${r.best}/52${tick}</td><td>${tries}</td><td>1 in ${oneIn(r.best)}</td><td>${when}</td></tr>`;
   }).join('') : '<tr><td colspan="6">Nobody yet. The first spot is yours for the taking.</td></tr>';
   $('#lbShare').hidden = !LB.rows.length;
   $('#lbCount').textContent = LB.players ? `Top ${Math.min(100, LB.rows.length)} of ${fmt(LB.players)} shufflers` : '';
   renderLBMe();
 }
 function lbNudge() {
-  if (!store.best || !LB.rank) return '';
-  const best = store.best.matches;
+  if (!lbBest() || !LB.rank) return '';
+  const best = lbBest().matches;
   if (LB.rank === 1) return `<p class="nudge">You're #1 in the world. Defend the crown: every shuffle counts. <a href="#impatient">Get a station</a>.</p>`;
   const above = LB.rows[LB.rank - 2];
   const need = above ? above.best + 1 : best + 1;
@@ -3535,33 +3906,53 @@ function lbNudge() {
   return `<p class="nudge">To climb, you need <b>${need}/52</b>: about 1 in ${fmt(Math.round(shuffles))} shuffles. ${how}</p>`;
 }
 function renderLBMe() {
-  const box = $('#lbMe'), best = store.best ? store.best.matches : null;
+  const box = $('#lbMe'), mine = lbBest(), best = mine ? mine.matches : null;
   const joined = store.lb && store.lb.name;
   const rankTxt = LB.rank && best !== null ? `#${fmt(LB.rank)} of ${fmt(Math.max(LB.players, LB.rank))}` : '';
-  if (best === null) { box.innerHTML = 'Shuffle at least once, then claim your spot on the board.'; return; }
-  if (joined) {
-    box.innerHTML = `You're on the board as <b>${escapeHtml(store.lb.name)}</b>: best <b>${best}/52</b> in ${fmt(Math.max(1, store.best.attempt || 1))} tries${rankTxt ? `, rank <b>${rankTxt}</b>` : ''}. <button type="button" class="chip-btn !text-xs !min-h-0 !py-1 ml-1" data-lb="rename">Change name</button>${lbNudge()}`;
+  if (best === null) {
+    box.innerHTML = store.best ? `Your best (${store.best.matches}/52) is from before provably fair shuffles, so the board can't check it. Shuffle once more and claim your spot with a shuffle anyone can verify.`
+      : 'Shuffle at least once, then claim your spot on the board.';
+    if (!(joined && store.best)) return;
+  }
+  if (joined && best === null) {
+    box.innerHTML = `You're on the board as <b>${escapeHtml(store.lb.name)}</b>. Your next shuffle brings provably fair scores to your entry. <button type="button" class="chip-btn !text-xs !min-h-0 !py-1 ml-1" data-lb="rename">Change name</button>`;
     return;
   }
-  box.innerHTML = `Your best: <b>${best}/52</b> in ${fmt(Math.max(1, store.best.attempt || 1))} tries${rankTxt ? `. That would rank <b>${rankTxt}</b> worldwide` : ''}. Put your name on the board:
+  if (joined) {
+    box.innerHTML = `You're on the board as <b>${escapeHtml(store.lb.name)}</b>: best <b>${best}/52</b> in ${fmt(Math.max(1, mine.attempt || 1))} tries${rankTxt ? `, rank <b>${rankTxt}</b>` : ''}. <button type="button" class="chip-btn !text-xs !min-h-0 !py-1 ml-1" data-lb="rename">Change name</button>${lbNudge()}`;
+    return;
+  }
+  box.innerHTML = `Your best: <b>${best}/52</b> in ${fmt(Math.max(1, mine.attempt || 1))} tries${rankTxt ? `. That would rank <b>${rankTxt}</b> worldwide` : ''}. Put your name on the board:
     <form class="row" data-lb="join"><label class="sr-only" for="lbName">Shuffler name</label><input id="lbName" class="imp-input" maxlength="20" placeholder="Your shuffler name" autocomplete="nickname" required><button type="submit" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Join the leaderboard</button></form>${lbNudge()}`;
 }
 function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 async function lbSubmit(quiet) {
-  if (!LB.ready || !store.lb || !store.lb.name || !store.best || LB.busy) return null;
+  const mine = lbBest();
+  if (!LB.ready || !store.lb || !store.lb.name || !(mine || store.best) || LB.busy) return null;
   LB.busy = true;
   try {
-    const body = { p_player: store.lb.id, p_secret: store.lb.secret, p_name: store.lb.name, p_deck: store.best.deck.join(','), p_shuffles: store.allTime };
-    if (LB.v2) body.p_attempts = Math.min(store.allTime, Math.max(1, store.best.attempt || 1));
+    const at = mine ? new Date(mine.ts || Date.now()).toISOString() : null;
+    // v4: hand in the recipe; the database recomputes the deck. No fair shuffle yet: just the name.
+    const body = { p_player: store.lb.id, p_secret: store.lb.secret, p_name: store.lb.name,
+      p_round: mine ? mine.pf.r : null, p_rand: mine ? mine.pf.R : null, p_seat: mine ? mine.pf.s : null, p_n: mine ? mine.pf.n : null,
+      p_shuffles: store.allTime, p_attempts: mine ? Math.min(store.allTime, Math.max(1, mine.attempt || 1)) : null, p_achieved_at: at };
     let res;
-    try { res = await lbRpc('submit_best', { ...body, p_achieved_at: new Date(store.best.ts || Date.now()).toISOString() }); }
-    catch (e) { if (/could not find|function/i.test(e.message)) res = await lbRpc('submit_best', body); else throw e; }   // database not updated yet
-    store.lb.sub = Math.max(store.lb.sub, store.best.matches); saveStore(true);
+    try { res = await lbRpc('submit_best', body); }
+    catch (e) {
+      if (!/could not find|function/i.test(e.message) || !store.best) throw e;
+      // The database is still on v3 (decks, not recipes): send the deck the old way.
+      const old = { p_player: store.lb.id, p_secret: store.lb.secret, p_name: store.lb.name, p_deck: store.best.deck.join(','), p_shuffles: store.allTime,
+        p_attempts: Math.min(store.allTime, Math.max(1, store.best.attempt || 1)) };
+      try { res = await lbRpc('submit_best', { ...old, p_achieved_at: new Date(store.best.ts || Date.now()).toISOString() }); }
+      catch (e2) { if (/could not find|function/i.test(e2.message)) { delete old.p_attempts; res = await lbRpc('submit_best', old); } else throw e2; }
+    }
+    store.lb.sub = Math.max(store.lb.sub, mine ? mine.matches : 0, 1); saveStore(true);
     LB.rank = res.rank; LB.players = res.players;
     track('leaderboard-submit');
     return res;
   } catch (e) {
     if (!quiet) toast(/name taken/.test(e.message) ? '🏆 That name is already taken. Pick another one.'
+      : /no shuffle/.test(e.message) ? '🏆 Shuffle once more first: the board only takes shuffles anyone can verify.'
       : /bad name/.test(e.message) ? '🏆 Names can use letters, numbers, spaces and . _ - \' (2 to 20 characters).'
       : '🏆 Mission Control could not check that score. Please try again later.');
     return null;
@@ -3572,10 +3963,10 @@ function lbOnBest() {
   clearTimeout(LB.timer);
   LB.timer = setTimeout(async () => {
     if (!store.best) return;
-    const best = store.best.matches;
+    const best = store.best.matches, mine = lbBest();
     let res = null;
     if (LB.ready) {
-      try { res = store.lb && store.lb.name ? await lbSubmit(true) : await lbRpc('leaderboard_rank', lbRankArgs(best, null)); } catch (e) { res = null; }
+      try { res = !mine ? null : store.lb && store.lb.name ? await lbSubmit(true) : await lbRpc('leaderboard_rank', lbRankArgs(mine.matches, null)); } catch (e) { res = null; }
       if (res) { LB.rank = res.rank; LB.players = Math.max(res.players, res.rank); }
     }
     if (best >= 4 && Date.now() - LB.lastToast > 2500) {
@@ -3614,6 +4005,329 @@ function lbInit() {
   });
 }
 
+/* =====================================================================
+   15d. Provably fair verifier, the mission (honors), Time Travellers
+   ---------------------------------------------------------------------
+   The mission: one row in Supabase (supabase/honors.sql), created the
+   moment a shuffle matches all 52 cards. The database rebuilds that
+   shuffle from its recipe first. Once it exists the site turns into a
+   monument for good: no reset, no new target, no Season 2.
+   Time Travellers: $500 buys a mission on eight rented H100 GPUs
+   (time-traveller/ in this repo). Stripe tells the server, the server
+   runs the GPUs and writes progress to the travellers table; this page
+   only reads it. Nothing about a Time Traveller is decided in the browser.
+   ===================================================================== */
+let lastRec = null;                                // recipe of the deck on screen (for "Use my last shuffle")
+const recAttr = rec => escapeHtml(JSON.stringify(rec)).replace(/'/g, '&#39;');
+function verifyFill(rec) {
+  $('#vRound').value = rec.r; $('#vRand').value = rec.R; $('#vSeat').value = rec.s; $('#vN').value = rec.n;
+}
+function verifyRun() {
+  const rec = { r: Number($('#vRound').value.trim() || 0), R: $('#vRand').value.trim().toLowerCase(), s: $('#vSeat').value.trim().toLowerCase(), n: Number($('#vN').value.trim()) };
+  const out = $('#verifyOut');
+  if (!validRec(rec)) { out.innerHTML = '<p class="text-[#ff9db0]">That recipe doesn\'t look right: the round and number are whole numbers, the randomness is 64 hex characters (0-9, a-f) and the seat 32.</p>'; return; }
+  const deck = pfReplay(rec), m = countMatches(deck, grail);
+  const cards = Array.from(deck, (c, i) => `<span class="${c === grail[i] ? 'hit ' : ''}${SUITS[(c / 13) | 0].red ? 'red' : ''}">${RANKS[c % 13]}${SUITS[(c / 13) | 0].sym}</span>`).join('');
+  const beacon = rec.r > 0
+    ? `Randomness from drand round <b>${fmt(rec.r)}</b>, published ${new Date(pfRoundTime(rec.r)).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}: <a class="underline" href="${pfRoundUrl(rec.r)}" target="_blank" rel="noopener">check it at drand</a> (its "randomness" must equal the one above). The shuffle can't be older than that round.`
+    : 'Round 0: local randomness (no drand relay answered at the time). The recipe still fixes the deck; it just has no public timestamp.';
+  out.innerHTML = `<p class="res">${m === 52 ? '🏆 52/52. This is the Holy Grail itself.' : `${m}/52 cards in their Grail spot.`}</p>
+    <div class="deck" aria-label="The 52 cards of this shuffle, in order">${cards}</div>
+    <p class="mt-2 text-xs text-[#9fb5a8]">${beacon} Want to check our arithmetic too? SHA-256 of randomness ‖ seat ‖ number (6 bytes), then Fisher–Yates with the digits of that number in base 52, 51, 50, …: the page source spells it out.</p>`;
+}
+function openVerify(rec) {
+  verifyFill(rec); verifyRun();
+  const box = $('#verifyBox'); box.open = true;
+  box.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  track('verify-open');
+}
+
+/* ---------- The mission ---------- */
+const MISSION = { row: null };
+const missionName = () => (MISSION.row && MISSION.row.winner_name) || 'Unnamed Human';
+async function missionLoad() {
+  if (!live.on) return;
+  try {
+    const r = await fetch(`${LIVE_COUNTER.url}/rest/v1/mission?select=winner_name,source,pf_round,pf_rand,pf_seat,pf_n,attempts,humankind,claimed_at&id=eq.1`, { headers: liveHeaders(), cache: 'no-store' });
+    if (!r.ok) return;                             // table not there yet: the mission is (obviously) ongoing
+    const rows = await r.json();
+    if (rows && rows[0]) applyMission(rows[0]);
+  } catch (e) { /* offline */ }
+}
+function applyMission(row) {
+  const first = !MISSION.row;
+  MISSION.row = row;
+  document.body.classList.add('mission-done');
+  const name = escapeHtml(missionName());
+  const rec = { r: row.pf_round, R: row.pf_rand, s: row.pf_seat, n: row.pf_n };
+  const when = new Date(row.claimed_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const mine = store.missionWon && row.source === 'browser';
+  $('#hero h1').textContent = "Humankind's Most Pointless Mission: Accomplished";
+  $('#hero h1').nextElementSibling.innerHTML = '<span class="block" style="text-wrap:balance">Together, the whole internet shuffled one deck of cards until we matched it perfectly.</span> <span class="block mt-1" style="text-wrap:balance">Mathematics said no. We said: hold my cards.</span>';
+  $('#plaque').hidden = false;
+  $('#plaque').innerHTML = `<p class="kicker">★ HUMANKIND: MISSION ACCOMPLISHED ★</p>
+    <p class="big tt-gold">The deck has been matched.</p>
+    <p class="who">${name}</p>
+    <p class="facts">matched the Holy Grail Sequence, all 52 cards in order, on ${when}${row.humankind ? `, after <b>${fmt(row.humankind)}</b> shuffles by humankind` : ''}${row.source === 'traveller' ? ', aboard a Time Traveller mission (eight GPUs)' : ''}. The Grail is now called <b>The ${name} Sequence</b>.</p>
+    ${mine && !row.winner_name ? `<form data-claim="name" class="mt-3 flex flex-wrap gap-2 justify-center items-center"><span class="font-bold">Name it: The</span><label class="sr-only" for="plaqueName">Your name</label><input id="plaqueName" class="imp-input" maxlength="40" placeholder="Your name" autocomplete="name"><span class="font-bold">Sequence</span><button type="submit" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Carve it in stone</button></form>` : ''}
+    <div class="mt-3 flex flex-wrap gap-2 justify-center">${validRec(rec) ? `<button type="button" class="chip-btn !text-xs" data-verify='${recAttr(rec)}'>✓ Replay the winning shuffle</button>` : ''}${mine ? '<button type="button" class="chip-btn !text-xs" data-cert="won">📜 Certificate of Doing the Impossible</button>' : ''}</div>
+    <p class="forever">ONE MISSION · ONE WINNER · NO RESET · NO SEASON 2</p>`;
+  $('#missionStatus').innerHTML = `<span class="inline-flex items-center gap-2 font-bold text-[#ffd23f]">★ FOREVER</span><span><b class="text-[#ffe68a]">MISSION STATUS: ACCOMPLISHED.</b> Humanity matched the Holy Grail. There will never be another.</span>`;
+  $('#liveWins').textContent = '1 successful match in human history. The first, the last, the only.';
+  $('#grailTitle').textContent = `The ${missionName()} Sequence`;
+  $('#honorsTitle').textContent = 'Somebody Actually Did It.';
+  $$('.honors-name').forEach(n => { n.textContent = missionName(); });
+  renderProgress();
+  renderImpatient();
+  if (first) { setPose('faint', 'It… it actually happened. I need to lie down. Forever.'); track('mission-accomplished-seen'); }
+}
+/* A real 52/52: ask the database to rebuild the shuffle and end the mission. The recipe waits in
+   this browser until the database has answered, so a dropped connection can't cost anyone eternal glory. */
+async function missionClaim() {
+  const c = store.claim, box = $('#winClaim');
+  if (!c || !live.on) return;
+  const id = lbIdentity();
+  try {
+    const res = await lbRpc('claim_mission', { p_player: id.id, p_secret: id.secret, p_name: null, p_round: c.r, p_rand: c.R, p_seat: c.s, p_n: c.n, p_attempts: c.attempts || store.allTime });
+    store.claim = null; store.missionWon = !!res.won; saveStore(true);
+    track(res.won ? 'mission-claimed' : 'mission-too-late');
+    if (box && !box.hidden) {
+      box.innerHTML = res.won
+        ? `<p class="mono text-xs text-[#7cff6b]">✓ MISSION CONTROL HAS REBUILT YOUR SHUFFLE FROM ITS RECIPE. IT'S REAL.</p>
+           <p class="font-display text-lg sm:text-2xl tt-gold mt-1">Humankind: Mission Accomplished.</p>
+           <p class="text-sm text-white mt-1">There will never be another. Name the Grail:</p>
+           ${res.winner_name ? `<p class="text-white mt-1">It is <b>The ${escapeHtml(res.winner_name)} Sequence</b>.</p>` : `<form data-claim="name"><span class="text-white font-bold">The</span><label class="sr-only" for="claimName">Your name</label><input id="claimName" class="imp-input" maxlength="40" placeholder="Your name" autocomplete="name"><span class="text-white font-bold">Sequence</span><button type="submit" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Carve it in stone</button></form>`}`
+        : `<p class="text-sm text-white">Mission Control confirms your shuffle, but somebody else got there a moment earlier. The odds of that are even more absurd. Your recipe is still yours: <button type="button" class="underline" data-verify='${recAttr(c)}'>replay it</button>.</p>`;
+    }
+    missionLoad();
+  } catch (e) {
+    if (/not the grail|bad seat|bad recipe|bad player/.test(e.message)) {
+      store.claim = null; saveStore(true);
+      if (box && !box.hidden) box.innerHTML = '<p class="text-sm text-white">Mission Control could not confirm this shuffle from its recipe.</p>';
+      return;
+    }
+    if (box && !box.hidden) box.innerHTML = '<p class="text-sm text-white">Mission Control is unreachable right now. Your winning recipe is saved in this browser, and the page keeps trying. Do not clear your browser data.</p>';
+    setTimeout(missionClaim, 15000);
+  }
+}
+function renderWinClaim(res) {
+  const box = $('#winClaim');
+  if (res.rigged) {
+    box.hidden = false;
+    box.innerHTML = `<p class="mono text-xs text-[#ffe68a]">RIGGED DEMO · NOTHING IS SAVED</p>
+      <p class="text-sm text-white mt-1">In a real win, Mission Control would now rebuild your shuffle from its recipe, end the mission forever and ask you to name the Grail:</p>
+      <form data-claim="demo"><span class="text-white font-bold">The</span><label class="sr-only" for="claimName">Your name</label><input id="claimName" class="imp-input" maxlength="40" placeholder="Your name"><span class="text-white font-bold">Sequence</span><button type="submit" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Name it</button></form>`;
+    return;
+  }
+  if (!res.pf || !live.on || MISSION.row) { box.hidden = true; return; }
+  store.claim = { ...res.pf, attempts: store.allTime }; saveStore(true);
+  box.hidden = false;
+  box.innerHTML = '<p class="mono text-xs text-[#ffe68a]">MISSION CONTROL IS REBUILDING YOUR SHUFFLE FROM ITS RECIPE…</p>';
+  missionClaim();
+}
+async function submitMissionName(form) {
+  const input = form.querySelector('input'), name = input.value.trim().replace(/\s+/g, ' ');
+  if (name.length < 2 || name.length > 40) { input.focus(); return; }
+  if (form.dataset.claim === 'demo') {
+    form.outerHTML = `<p class="text-white mt-2">Behold: <b class="tt-gold">The ${escapeHtml(name)} Sequence</b>. (Rigged, so it vanishes the moment you restore spacetime.)</p>`;
+    return;
+  }
+  const id = lbIdentity();
+  try {
+    const r = await lbRpc('set_mission_name', { p_player: id.id, p_secret: id.secret, p_name: name });
+    form.outerHTML = `<p class="text-white mt-2">Carved in stone: <b class="tt-gold">The ${escapeHtml(r.winner_name)} Sequence</b>. Forever.</p>`;
+    toast(`🏛️ <b>The ${escapeHtml(r.winner_name)} Sequence.</b> It has a nice ring to it. Forever.`);
+    track('mission-named');
+    missionLoad();
+  } catch (e) {
+    toast(/bad name/.test(e.message) ? '🏛️ Names can use letters, numbers, spaces and . _ - \' (2 to 40 characters).' : '🏛️ Mission Control could not save the name. Please try again.');
+  }
+}
+
+/* ---------- Time Travellers ---------- */
+const TT = { years: 66e6, gpus: 8, price: '500', rate: 2.9e10, rows: [], timer: 0 };
+TT.N = TT.years * HAND_YEAR;                       // 104 trillion shuffles: from the asteroid to today
+/** The most likely best match among N shuffles (the mode of the maximum). */
+function likelyBest(N) {
+  let bestK = 0, bestP = -1;
+  for (let k = 1; k <= 30; k++) {
+    const pBelow = q => Math.exp(N * Math.log1p(-tailP(q)));   // P(every shuffle has fewer than q matches)
+    const p = pBelow(k + 1) - pBelow(k);
+    if (p > bestP) { bestP = p; bestK = k; }
+  }
+  return bestK;
+}
+function bigEnglish(n) {
+  return n >= 1e12 ? `${fmt(Math.round(n / 1e12))} trillion` : n >= 1e9 ? `${fmt(Math.round(n / 1e9))} billion` : n >= 1e6 ? `${fmt(Math.round(n / 1e6))} million` : fmt(Math.round(n));
+}
+function renderTTCard() {
+  const box = $('#ttCard'), url = SITE.fund.traveller, cur = SITE.fund.currency || '$';
+  if (MISSION.row) { box.hidden = true; return; }
+  const odds = F52_NUM / TT.N, exp = Math.floor(Math.log10(odds)), mant = (odds / 10 ** exp).toFixed(1);
+  const best = likelyBest(TT.N), top = LB.rows[0] ? LB.rows[0].best : 0;
+  const humans = live.total ? TT.N / Math.max(1, live.total) : 0;
+  box.hidden = false;
+  box.innerHTML = `<div class="tt-card">
+    <span class="flag">★★★★ BEYOND COMMANDER</span>
+    <div class="min-w-0">
+      <div class="flex items-center gap-3"><svg class="tt-ava tt-ava-lg" viewBox="0 0 64 64" aria-hidden="true"><use href="#ttAstro"/></svg>
+        <div class="min-w-0"><p class="imp-name"><span class="gold-star">★★★★</span> Time Traveller</p><p class="mono text-xs text-[#ffe68a]">8 × NVIDIA H100 · 66 MILLION YEARS · ONE DECK</p></div></div>
+      <h3 class="tt-gold mt-4">Eight GPUs. One deeply questionable use of human ingenuity.</h3>
+      <p class="mt-3 text-sm sm:text-base text-[#cfe3d7]">We rent eight NVIDIA H100s, the chips the world uses to train artificial intelligence, and point every one of them at a single deck of cards. Your mission starts the day the asteroid wiped out the dinosaurs and shuffles all the way to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in about an hour*</b>. You watch it live, from the first tiny mammals to the moon landing.</p>
+      <ul class="imp-perks mt-3">
+        <li>🚀 Your name on the <a class="underline" href="#ttSection">Time Travellers board</a>, golden helmet and all</li>
+        <li>📡 Your own live mission control: 66 million years of history, shuffled past at full throttle</li>
+        <li>✓ Your best shuffle, provably fair, rebuilt and checked by the database</li>
+        <li>✨ Every Commander extra included</li>
+        <li class="imp-surprise">🏛️ If one of your ${bigEnglish(TT.N)} shuffles is the one, you end the mission. Forever. The Grail takes your name.</li>
+      </ul>
+    </div>
+    <div class="flex flex-col gap-3 min-w-0">
+      <div class="tt-stats">
+        <div><b>${bigEnglish(TT.N)}</b><span>real shuffles for humanity</span></div>
+        <div><b>≈ ${bigEnglish(TT.rate)}</b><span>shuffles every second*</span></div>
+        <div><b>${fmt(Math.round(TT.years / 1e5))}×</b><span>a Commander's entire mission</span></div>
+        <div><b>${fmt(Math.round(TT.years / 80 / 1e3) * 1e3)}×</b><span>a lifetime of shuffling by hand</span></div>
+      </div>
+      <p class="tt-odds">Your chance of ending the mission: <b>1 in ${mant} × 10${sup(exp)}</b>. That's ${bigEnglish(TT.N)} times one shuffle, and ${fmt(Math.round(TT.years / 1e5))} times a Commander's chance.${humans >= 2 ? ` On its own, your mission shuffles <b>${fmt(Math.round(humans))}×</b> more than all of humankind has on this site so far.` : ''} Still astronomically unlikely, and we'll never pretend otherwise. Your most likely best shuffle: <b>${best}/52</b>${best > top && top ? `, higher than anyone on the leaderboard has ever managed` : ''}.</p>
+      ${url ? `<a class="shuffle-btn tt-buy" href="${url}" target="_blank" rel="noopener" data-imp="traveller">Board the time machine · ${cur}${TT.price}</a>`
+        : '<a class="shuffle-btn tt-buy" role="link" aria-disabled="true">Launch window opening soon</a>'}
+      <p class="imp-why">Why ${cur}${TT.price}? Eight of the fastest chips on Earth, one deck, no mercy. About ${cur}${(Number(TT.price) / (TT.years / 1e6)).toFixed(2)} per million years of shuffling. A bargain, historically.</p>
+      <p class="text-[11px] text-[#9fb5a8]">*Target speed. Your mission runs until all ${fmt(TT.N)} shuffles are done, however long the GPUs need, and your live panel shows the real speed. Every shuffle counts toward humankind's total. No prize, just glory.</p>
+    </div>
+  </div>`;
+  const buy = box.querySelector('[data-imp="traveller"]');
+  if (buy) buy.addEventListener('click', () => track('impatient-traveller'));
+}
+async function ttFetch(query) {
+  const r = await fetch(`${LIVE_COUNTER.url}/rest/v1/travellers?${query}`, { headers: liveHeaders(), cache: 'no-store' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+async function ttLoadBoard() {
+  if (!live.on) return;
+  try { TT.rows = await ttFetch('select=name,status,attempts,target,best,best_round,best_rand,best_seat,best_n,created_at&status=neq.failed&order=best.desc,attempts.desc,created_at.asc&limit=60'); }
+  catch (e) { TT.rows = []; }
+  renderTTBoard();
+}
+function renderTTBoard() {
+  const sec = $('#ttSection');
+  sec.hidden = !TT.rows.length && !(SITE.fund.traveller && !MISSION.row);
+  if (sec.hidden) return;
+  $('#ttBoard').innerHTML = TT.rows.length ? TT.rows.map((t, i) => {
+    const rec = { r: t.best_round, R: t.best_rand, s: t.best_seat, n: t.best_n };
+    const years = handYears(t.attempts), when = new Date(t.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const live_ = t.status === 'running' || t.status === 'boarding';
+    return `<div class="tt-row${i === 0 ? ' first' : ''}">
+      <svg class="tt-ava" viewBox="0 0 64 64" aria-hidden="true"><use href="#ttAstro"/></svg>
+      <div class="min-w-0 grow"><p class="nm">${escapeHtml(t.name)}</p>
+        <p class="meta">${live_ ? '<span class="tt-live"><span class="live-dot" aria-hidden="true" style="width:7px;height:7px"></span>IN FLIGHT</span> · ' : ''}${bigEnglish(t.attempts)} shuffles · ${years >= 1e6 ? (years / 1e6).toFixed(1) + 'M' : fmt(Math.round(years))} years · ${when}</p></div>
+      <div class="text-right"><p class="rk">${i < 3 ? ['🥇', '🥈', '🥉'][i] : '#' + (i + 1)}</p><p class="best">${t.best ? t.best + '/52' : '–'}${t.best && validRec(rec) ? ` <button type="button" class="pf-tick" data-verify='${recAttr(rec)}' title="Provably fair: replay this shuffle" aria-label="Replay ${escapeHtml(t.name)}'s best shuffle">✓</button>` : ''}</p></div>
+    </div>`;
+  }).join('') : `<p class="tt-empty">The launch pad is empty. Be the first Time Traveller: your name goes right here, golden helmet and all. <a class="underline text-[#ffe68a]" href="#ttCard">Board the time machine ↓</a></p>`;
+}
+/* Deep time, for a Time Traveller's 66 million years (years ago; approximate, as deep time tends to be). */
+const DEEP = [
+  { ago: 66e6, ic: '☄️', t: 'The asteroid hits. The dinosaurs are out; your eight GPUs are in. Shuffling begins.' },
+  { ago: 65e6, ic: '🐀', t: 'Small furry mammals inherit the Earth. None of them can hold a deck.' },
+  { ago: 56e6, ic: '🌡️', t: 'Earth runs a fever (the Paleocene–Eocene Thermal Maximum). Your GPUs know the feeling.' },
+  { ago: 50e6, ic: '🐋', t: "Whales' ancestors still walk on land. They'll go back to the sea, deckless." },
+  { ago: 34e6, ic: '🧊', t: 'Antarctica freezes over. Still no matches.' },
+  { ago: 23e6, ic: '🦈', t: 'Megalodon shows up. Not a card player. Not a good loser either.' },
+  { ago: 7e6, ic: '🐒', t: "Roughly where our lineage and the chimpanzees' part ways. Neither side takes the cards." },
+  { ago: 5.3e6, ic: '🌊', t: 'The Atlantic pours back into the dried-out Mediterranean (the Zanclean flood).' },
+  { ago: 3.2e6, ic: '🦴', t: 'Lucy walks across what is now Ethiopia.' },
+  { ago: 1e6, ic: '🔥', t: 'People use fire. The first card table is still a million years away.' },
+  { ago: 300000, ic: '🧑', t: 'Homo sapiens. Finally, someone with thumbs worth shuffling with.' },
+  { ago: 12000, ic: '🌾', t: 'Farming begins. Long evenings ahead.' },
+  { ago: 1150, ic: '🃏', t: 'Playing cards appear in Tang dynasty China. The real mission starts here, technically.' },
+  { ago: 57, ic: '🌕', t: 'People walk on the Moon. Your GPUs keep shuffling.' },
+  { ago: 34, ic: '📐', t: 'Bayer and Diaconis prove seven riffles mix a deck. Your GPUs nod politely.' },
+  { ago: 0, ic: '🏁', t: 'Today. 66 million years, shuffled.' }
+];
+const deepLabel = ago => (ago >= 1e6 ? `${(ago / 1e6).toFixed(ago >= 1e7 ? 0 : 1)} million years ago` : ago >= 1e4 ? `${fmt(Math.round(ago / 1000) * 1000)} years ago` : ago >= 1 ? `${fmt(Math.round(ago))} years ago` : 'today');
+let ttTicket = null;
+async function ttTicketOf(sessionId) {
+  const h = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(sessionId)));
+  return bytesHex(h);
+}
+async function ttMissionInit() {
+  const id = params.get('traveller');
+  if (id && /^cs_[A-Za-z0-9_]{8,200}$/.test(id) && !store.tt.includes(id)) { store.tt.push(id); store.tt = store.tt.slice(-5); saveStore(true); track('traveller-return'); }
+  const mine = id && /^cs_[A-Za-z0-9_]{8,200}$/.test(id) ? id : store.tt[store.tt.length - 1];
+  if (!mine || !live.on) return;
+  try { ttTicket = await ttTicketOf(mine); } catch (e) { return; }
+  $('#ttMission').hidden = false;
+  TT.boardingSince = Date.now();
+  if (id) setTimeout(() => $('#ttMission').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }), 400);
+  ttPoll();
+}
+async function ttPoll() {
+  clearTimeout(TT.timer);
+  let row = null;
+  try { row = (await ttFetch(`select=name,status,attempts,target,rate,best,best_round,best_rand,best_seat,best_n,started_at,finished_at&ticket=eq.${ttTicket}`))[0] || null; }
+  catch (e) { row = null; }
+  renderTTMission(row);
+  const busy = !row || row.status === 'boarding' || row.status === 'running';
+  if (busy && !(row === null && Date.now() - TT.boardingSince > 30 * 60000)) TT.timer = setTimeout(ttPoll, document.visibilityState === 'visible' ? 3000 : 15000);
+}
+function renderTTMission(t) {
+  if (!t) {
+    $('#ttmTitle').textContent = 'Boarding…';
+    $('#ttmStatus').textContent = 'Payment received? Stripe is telling Mission Control right now. Your mission appears here within a minute or two.';
+    return;
+  }
+  if (!owned().traveller) { store.purchases.traveller = 1; saveStore(true); applyCosmetics(); renderExtras(); }   // the server has the mission, so this browser gets the extras
+  const target = t.target || TT.N, frac = Math.min(1, t.attempts / target), ago = TT.years * (1 - frac);
+  const done = t.status === 'done';
+  $('#ttmTitle').textContent = done ? `Mission complete, ${t.name}.` : t.status === 'running' ? `${t.name}, you're in flight.` : `Warming up eight H100s for ${t.name}…`;
+  $('#ttmStatus').textContent = done ? `${fmt(t.attempts)} shuffles, 66 million years, one deck. Best: ${t.best}/52. Matches: 0. You are now part of humanity's most unnecessary space program.`
+    : t.status === 'running' ? 'Eight GPUs are shuffling for humanity. Every shuffle counts toward the total.' : 'The GPUs are spinning up. This takes a minute.';
+  $('#ttmFill').style.width = (frac * 100).toFixed(2) + '%';
+  $('#ttmYear').textContent = done ? 'TODAY' : deepLabel(ago);
+  const passed = DEEP.filter(e => e.ago >= ago - 0.5);
+  const ev = done ? DEEP[DEEP.length - 1] : passed[passed.length - 1] || DEEP[0];
+  $('#ttmEvent').innerHTML = `<span class="ic" aria-hidden="true">${ev.ic}</span><div><span class="when">${deepLabel(ev.ago).toUpperCase()}</span><p>${ev.t}</p></div>`;
+  const short = v => (v >= 1e12 ? `${(v / 1e12).toFixed(1)} trillion` : v >= 1e9 ? `${(v / 1e9).toFixed(1)} billion` : fmt(v));
+  $('#ttmDone').textContent = short(t.attempts);
+  $('#ttmDone').title = fmt(t.attempts);
+  $('#ttmDoneSub').textContent = `of ${short(target)} · ${(frac * 100).toFixed(1)}%`;
+  $('#ttmSpeed').textContent = t.rate && !done ? `${bigEnglish(t.rate)}/sec` : '–';
+  $('#ttmSpeedSub').textContent = t.rate && !done ? `≈ ${fmt(Math.round(handYears(t.rate)))} years of hand shuffling per second` : '';
+  const p = t.attempts / F52_NUM;
+  $('#ttmOdds').textContent = p > 0 ? `1 in ${sci(1 / p, 1)}` : '–';
+  $('#ttmOddsSub').textContent = p > 0 ? `${fmt(Math.round(t.attempts))}× one shuffle` : '';
+  const rec = { r: t.best_round, R: t.best_rand, s: t.best_seat, n: t.best_n };
+  $('#ttmBest').innerHTML = t.best ? `${t.best}/52${validRec(rec) ? ` <button type="button" class="pf-tick" data-verify='${recAttr(rec)}' aria-label="Replay your best shuffle">✓</button>` : ''}` : '–';
+  $('#ttmBestSub').textContent = t.best ? `1 in ${oneIn(t.best)} shuffles gets this lucky` : '';
+  if (done && !TT.cheered) { TT.cheered = true; track('traveller-done'); }
+  ttLoadBoard();
+}
+
+function initHonors() {
+  $('#verifyForm').addEventListener('submit', e => { e.preventDefault(); verifyRun(); track('verify-run'); });
+  $('#vMine').addEventListener('click', () => {
+    if (!lastRec) { $('#verifyOut').innerHTML = '<p class="text-[#9fb5a8]">Shuffle once first (the big button up top), then come back.</p>'; return; }
+    verifyFill(lastRec); verifyRun();
+  });
+  document.addEventListener('click', e => {
+    const v = e.target.closest('[data-verify]');
+    if (v) { try { const rec = JSON.parse(v.dataset.verify); if (validRec(rec)) { if (winOpen) restoreSpacetime(); openVerify(rec); } } catch (err) { /* bad data */ } return; }
+    if (e.target.closest('[data-cert="won"]')) downloadCertificate(null, true);
+  });
+  document.addEventListener('submit', e => {
+    const f = e.target.closest('form[data-claim]');
+    if (!f) return;
+    e.preventDefault();
+    submitMissionName(f);
+  });
+  renderTTCard();
+  missionLoad().then(() => { if (store.claim && !MISSION.row) missionClaim(); });
+  ttLoadBoard();
+  ttMissionInit();
+  setInterval(() => { if (document.visibilityState === 'visible') { missionLoad(); ttLoadBoard(); } }, 300000);
+}
+
 function boot() {
   loadAnalytics();
   setupSupportLinks();
@@ -3630,8 +4344,10 @@ function boot() {
   layoutBulbs();
   initImpatient();
   lbInit();
+  pfInit();
+  initHonors();
   try { selfTest(); } catch (e) { console.error(e); }
-  window.ImpossibleShuffle = { selfTest, renderShuffleSound, verifyComparisons: () => verifyComparisons(F52), shuffleInto, countMatches };
+  window.ImpossibleShuffle = { selfTest, renderShuffleSound, verifyComparisons: () => verifyComparisons(F52), shuffleInto, countMatches, pfReplay, pf: () => ({ ready: PF.ready, round: PF.b && PF.b.r, seat: PF.Shex, n: PF.n }) };
 }
 boot();
 })();
