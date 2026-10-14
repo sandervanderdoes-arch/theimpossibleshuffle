@@ -359,7 +359,7 @@
     .imp-years .n { font-size:min(1.9rem, 11cqi); }
   }
   .imp-story { font-size:.9rem; font-style:italic; color:#cfe3d7; }
-  .imp-surprise { margin-top:.45rem; font-size:.82rem; line-height:1.4; color:#ffe68a; }
+  .imp-surprise { margin-top:.15rem; line-height:1.4; color:#ffe68a; }
   .imp-stats { margin-top:.6rem; padding:.55rem .7rem; border-radius:12px; background:rgba(34,243,255,.07); border:1px solid rgba(34,243,255,.25); display:grid; gap:.2rem; font-size:.85rem; color:#cfe3d7; }
   .imp-stats b { color:#a5fbff; }
   .imp-stats span { color:#9fb5a8; font-size:.78rem; }
@@ -2913,12 +2913,11 @@ function renderImpatient() {
       <p class="imp-name"><span class="gold-star">${t.icon}</span> ${t.name}</p>
       <p class="imp-years"><span class="n">${fmt(t.years)} years</span><span class="of">of shuffling</span></p>
       <p class="imp-story">${t.story}</p>
-      <p class="imp-surprise">🎁 Plus a little surprise to keep you entertained through all ${fmt(t.years)} years.</p>
       <div class="imp-stats">
         <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, <i style="font-style:normal" data-like="${N}">${shiftLike(N / hyperRateGuess())}</i><br><span>Ludicrous would need ${shortDuration(N / LUDICROUS_RATE)}</span></p>
         <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
       </div>
-      <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}</ul>
+      <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🎁 Plus a little surprise to keep you entertained through all ${fmt(t.years)} years.</li></ul>
       <p class="imp-cmp">${t.cmp(N / F52_NUM)}</p>
       <span class="imp-deal">${t.deal}</span>
       <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}">Become a ${t.name} · ${cur}${t.price}</a>
