@@ -570,11 +570,11 @@
             <p id="apLabel" class="text-xs font-bold text-[#9fb5a8] mb-1">AUTOPILOT</p>
             <div class="seg" role="group" aria-labelledby="apLabel">
               <button type="button" data-ap="0" aria-pressed="true">Off</button>
-              <button type="button" data-ap="5" aria-pressed="false">5/sec</button>
+              <button type="button" data-ap="1" aria-pressed="false" title="One shuffle per second: watch every deck">1/sec</button>
               <button type="button" data-ap="10" aria-pressed="false">10/sec</button>
               <button type="button" data-ap="L" aria-pressed="false" title="50 shuffles per second">Ludicrous</button>
             </div>
-            <p id="apRate" class="mono text-xs text-[#9fb5a8] mt-1 h-4"></p>
+            <p id="apRate" class="mono text-xs text-[#9fb5a8] mt-1 h-4 whitespace-nowrap"></p>
             <a id="apSponsor" class="ap-sponsor" href="#impatient" hidden>🛰️ Faster than Ludicrous? Sponsor a mission ↓</a>
           </div>
           <button type="button" id="soundBtn" class="chip-btn w-full" aria-pressed="false">🔇 Sound: off</button>
@@ -1847,11 +1847,11 @@ function apLoop(t) {
     reveal(res, false);
     return;
   }
-  // The screen updates twice a second so it doesn't strobe; every shuffle still lands in the log.
-  if (t - ap.lastFlush >= 500) { ap.lastFlush = t; flushAutopilot(); }
+  // 1/sec shows every deck; faster speeds update the screen twice a second so it doesn't strobe.
+  if (t - ap.lastFlush >= (ap.mode === 1 ? 100 : 500)) { ap.lastFlush = t; flushAutopilot(); }
   ap.raf = requestAnimationFrame(apLoop);
 }
-/** Called at most every 500 ms: pushes the latest attempt to the grids, meter, log and stats. */
+/** Called at most every 100 ms (1/sec) or 500 ms (faster): pushes the latest attempt to the grids, meter and stats. */
 function flushAutopilot() {
   const ap = autopilot;
   if (!ap.sinceFlush) return;
@@ -1864,7 +1864,8 @@ function flushAutopilot() {
   ap.sinceFlush = 0;
   profAuto(last.m);
   const r = currentRate();
-  el.apRate.textContent = `≈ ${fmt(Math.round(r))} shuffle${Math.round(r) === 1 ? '' : 's'}/sec`;
+  const people = (ap.mode === 'L' ? LUDICROUS_RATE : ap.mode) * HAND_SECONDS;   // hand shufflers it takes to keep up
+  el.apRate.textContent = `≈ ${fmt(Math.round(r))}/sec · like ${fmt(people)} hand shufflers`;
   saveStore();
 }
 
