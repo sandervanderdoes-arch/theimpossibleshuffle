@@ -576,8 +576,8 @@
             <p id="apLabel" class="text-xs font-bold text-[#9fb5a8] mb-1">AUTOPILOT</p>
             <div class="seg" role="group" aria-labelledby="apLabel">
               <button type="button" data-ap="0" aria-pressed="true">Off</button>
+              <button type="button" data-ap="1" aria-pressed="false" title="One shuffle per second: watch every deck">1/sec</button>
               <button type="button" data-ap="10" aria-pressed="false">10/sec</button>
-              <button type="button" data-ap="100" aria-pressed="false">100/sec</button>
               <button type="button" data-ap="L" aria-pressed="false" title="1,000 shuffles per second">Ludicrous</button>
             </div>
             <p id="apRate" class="mono text-xs text-[#9fb5a8] mt-1 h-4"></p>
@@ -1853,10 +1853,11 @@ function apLoop(t) {
     reveal(res, false);
     return;
   }
-  if (t - ap.lastFlush >= 100) { ap.lastFlush = t; flushAutopilot(); }
+  // 1/sec shows every deck; faster speeds update the screen twice a second so it doesn't strobe.
+  if (t - ap.lastFlush >= (ap.mode === 1 ? 100 : 500)) { ap.lastFlush = t; flushAutopilot(); }
   ap.raf = requestAnimationFrame(apLoop);
 }
-/** Called at most every 100 ms: pushes the latest attempt to the grids, meter, log and stats. */
+/** Called at most every 100 ms (1/sec) or 500 ms (faster): pushes the latest attempt to the grids, meter, log and stats. */
 function flushAutopilot() {
   const ap = autopilot;
   if (!ap.sinceFlush) return;
@@ -1872,7 +1873,7 @@ function flushAutopilot() {
   ap.sinceFlush = 0;
   profAuto(last.m);
   const r = currentRate();
-  el.apRate.textContent = `≈ ${fmt(Math.round(r))} shuffles/sec`;
+  el.apRate.textContent = `≈ ${fmt(Math.round(r))} shuffle${Math.round(r) === 1 ? '' : 's'}/sec`;
   saveStore();
 }
 
