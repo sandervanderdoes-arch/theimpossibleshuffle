@@ -572,7 +572,7 @@
               <button type="button" data-ap="0" aria-pressed="true">Off</button>
               <button type="button" data-ap="5" aria-pressed="false">5/sec</button>
               <button type="button" data-ap="10" aria-pressed="false">10/sec</button>
-              <button type="button" data-ap="L" aria-pressed="false" title="20 shuffles per second">Ludicrous</button>
+              <button type="button" data-ap="L" aria-pressed="false" title="50 shuffles per second">Ludicrous</button>
             </div>
             <p id="apRate" class="mono text-xs text-[#9fb5a8] mt-1 h-4"></p>
             <a id="apSponsor" class="ap-sponsor" href="#impatient" hidden>🛰️ Faster than Ludicrous? Sponsor a mission ↓</a>
@@ -1000,7 +1000,7 @@ const UNIVERSE_AGE_YEARS = 1.38e10;
 /* Hand-shuffle years: a proper hand shuffle takes about 20 seconds (seven riffles, Bayer & Diaconis 1992). */
 const HAND_SECONDS = 20;
 const HAND_YEAR = Math.round(SECONDS_PER_YEAR / HAND_SECONDS);   // 1,577,880 shuffles
-const LUDICROUS_RATE = 20;                                        // free Ludicrous autopilot, shuffles/sec
+const LUDICROUS_RATE = 50;                                        // free Ludicrous autopilot, shuffles/sec
 const handYears = n => n / HAND_YEAR;
 /** 20,000 shuffles → "4.6 days"; human-sized wording for an amount of hand shuffling. */
 function handTime(n) {
@@ -1251,7 +1251,7 @@ const LINES = {
   idle: ['The heat death of the universe won\'t wait for you.'],
   flick: ['Ah-ah. Back in the deck, you.', 'No escaping. Rules are rules.'],
   autopilot: ['Autopilot engaged. I shall supervise from my armchair.', 'Wake me when something improbable happens.'],
-  ludicrous: ['Ludicrous speed. My monocle is fogging up.', 'At this rate we finish in only 10⁵⁹ years. Bravo.'],
+  ludicrous: ['Ludicrous speed. My monocle is fogging up.', 'At this rate we finish in only 5 × 10⁵⁸ years. Bravo.'],
   faint: ['I… I need to lie down.'],
   recover: ['Ahem. A clerical error, surely. As I was saying: impossible.'],
 };
@@ -2834,9 +2834,9 @@ function fmtDuration(sec) {
   if (sec < 3600) return `about ${Math.round(sec / 60)} minutes`;
   if (sec < 48 * 3600) { const h = Math.round(sec / 1800) / 2; return `about ${h} hour${h === 1 ? '' : 's'}`; }
   const d = sec / 86400;
-  if (d < 365) return `about ${Math.round(d)} days`;
-  const y = d / 365.25;
-  return `about ${y < 10 ? y.toFixed(1).replace(/\.0$/, '') : fmt(Math.round(y))} years`;
+  if (d < 365) { const n = Math.round(d); return `about ${n} day${n === 1 ? '' : 's'}`; }
+  const y = d / 365.25, v = y < 10 ? y.toFixed(1).replace(/\.0$/, '') : fmt(Math.round(y));
+  return `about ${v} year${v === '1' ? '' : 's'}`;
 }
 const POWERBALL = 292201338, ROYAL_FLUSH = 649740, LIGHTNING_YEAR = 1222000;
 /** The largest k for which (1/oneIn)^k is still MORE likely than p. */
