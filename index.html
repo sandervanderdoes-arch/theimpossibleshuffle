@@ -2846,17 +2846,17 @@ const NUM_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'
 const numWord = n => NUM_WORDS[n] || fmt(n);
 const IMP_TIERS = [
   { id: 'tea', icon: '★', name: 'Rookie', years: 1000, price: '1.92',
-    story: 'Basic training: nonstop since the Vikings.', shift: 'a coffee break', deal: 'Cheaper than a coffee',
+    story: 'Basic training: nonstop since the Vikings.', deal: 'Cheaper than a coffee',
     cmp: p => `Your odds: still worse than being dealt <b>${timesInARow(ROYAL_FLUSH, p)} royal flushes in a row</b>.`,
     why: 'Why $1.92? One card is 1.92% of a deck.',
     perks: ['<span class="gold-star">★</span> Gold Mission Sponsor badge', '🃏 Fancy card backs'] },
   { id: 'odds', icon: '★★', name: 'Captain', years: 10000, price: '8.07', featured: true,
-    story: 'A full shift: nonstop since the last Ice Age.', shift: 'about one movie', deal: '10× the years for 4× the price',
+    story: 'A full shift: nonstop since the last Ice Age.', deal: '10× the years for 4× the price',
     cmp: p => `Your odds: still worse than getting <b>struck by lightning ${timesInARow(LIGHTNING_YEAR, p)} times in one year</b>.`,
     why: 'Why $8.07? 52! is 8.07 × 10⁶⁷. We waived the 67 zeros.',
     perks: ['📜 Certificate of Trying Anyway (PDF)', '🎩 Professor outfits', '<span class="gold-star">★</span> Badge and card backs included'] },
   { id: 'patron', icon: '★★★', name: 'Commander', years: 100000, price: '52',
-    story: 'Night watch: nonstop since humans left Africa.', shift: 'the overnight shift', deal: 'Report back at dawn',
+    story: 'Night watch: nonstop since humans left Africa.', deal: 'For the truly committed',
     cmp: p => `Your odds: still worse than winning <b>${timesInARow(POWERBALL, p)} Powerball jackpots in a row</b>.`,
     why: 'Why $52? One dollar per card. The deck salutes you.',
     perks: ['🏛️ Your name on the Wall of Hopeless Heroes', '👑 The Royal Professor', '✨ Every other extra included'] }
@@ -2880,6 +2880,20 @@ const hyperRateGuess = () => store.hyper.rate || cores() * 500000;
 /* ---------- Tier cards ---------- */
 const bigShort = n => n >= 1e11 ? `${Math.round(n / 1e9)} billion` : n >= 1e9 ? `${(n / 1e9).toFixed(1)} billion` : `${Math.round(n / 1e6)} million`;
 const shortDuration = sec => fmtDuration(sec).replace('about ', '');
+/** Something everyone knows that takes about as long as the station's shift on this device. */
+function shiftLike(sec) {
+  const h = sec / 3600;
+  if (h <= 5 / 60) return 'about one song';
+  if (h <= 20 / 60) return 'a coffee break';
+  if (h <= 40 / 60) return 'one sitcom episode';
+  if (h <= 1.25) return 'a lunch hour';
+  if (h <= 2.75) return 'one movie';
+  if (h <= 4.75) return 'a Lord of the Rings movie';
+  if (h <= 9.75) return 'a working day';
+  if (h <= 15) return 'the overnight shift';
+  if (h <= 30) return 'a full day and night';
+  return h <= 80 ? 'a long weekend' : 'a proper holiday';
+}
 function renderImpatient() {
   const F = SITE.fund, cur = F.currency || '$';
   let any = false;
@@ -2894,7 +2908,7 @@ function renderImpatient() {
       <p class="imp-story">${t.story}</p>
       <p class="imp-surprise">🎁 Plus a little surprise to keep you entertained through all ${fmt(t.years)} years.</p>
       <div class="imp-stats">
-        <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, ${t.shift}<br><span>Ludicrous would need ${shortDuration(N / LUDICROUS_RATE)}</span></p>
+        <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, <i style="font-style:normal" data-like="${N}">${shiftLike(N / hyperRateGuess())}</i><br><span>Ludicrous would need ${shortDuration(N / LUDICROUS_RATE)}</span></p>
         <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
       </div>
       <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}</ul>
@@ -2910,6 +2924,7 @@ function renderImpatient() {
 }
 function refreshEtas() {
   $$('#impTiers [data-eta]').forEach(b => { b.textContent = shortDuration(Number(b.dataset.eta) / hyperRateGuess()); });
+  $$('#impTiers [data-like]').forEach(b => { b.textContent = shiftLike(Number(b.dataset.like) / hyperRateGuess()); });
 }
 
 /* ---------- Thank-you return from Stripe ---------- */
