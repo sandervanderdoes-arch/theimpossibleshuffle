@@ -22,6 +22,9 @@ Print-ready T-shirt designs for The Impossible Shuffle.
 | `professor-pink.png` | Professor Factorial on a black playing card in pink, gold and black: "52!" corners, "Professor Factorial · Delightful. Again?" | T-shirts, hoodies, stickers, shop logo |
 | `professor-chest.png` | Just the professor in his gold circle with a pink ring, no text (3000 × 3000) | Small chest print on T-shirts and hoodies (about 3.5–4 in wide) |
 | `professor-cap.png` | The same logo without the finest details (steam, monocle chain, shine lines) | Embroidered caps and small embroidered chest logos |
+| `professor-chest-horizontal.png` | The professor logo with "THE IMPOSSIBLE SHUFFLE" in one line underneath (Bungee, the site's font) | Chest print, hoodies |
+| `professor-chest-round.png` | The professor logo with "THE IMPOSSIBLE SHUFFLE" curved along the bottom of the circle | Chest print, stickers |
+| `professor-cap-horizontal.png` / `professor-cap-round.png` | The same two, simplified for embroidery | Caps, embroidered chest logos |
 | `cap-0-52.png` | "0/52 · Still shuffling" with an ace | Cap front (embroidery) |
 | `cap-one-more.png` | "Just one more shuffle" | Cap front (embroidery) |
 | `preview-2.png` | All six on dark tiles and a cap shape | |
