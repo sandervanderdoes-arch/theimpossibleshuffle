@@ -35,3 +35,15 @@ Print-ready T-shirt designs for The Impossible Shuffle.
   gradients, so they print cleanly with direct-to-garment printing.
 - Fonts: Bungee and JetBrains Mono, both SIL Open Font License, which allows commercial use
   on merch.
+
+### Shop welcome sign
+
+A parody of the classic "Welcome to Fabulous Las Vegas" sign: "Welcome to the Impossible Shuffle Gift Shop".
+
+| File | Size | Use |
+|---|---|---|
+| `shop-banner-wide.png` | 3000 × 1000 | Shop header or hero banner on desktop. Sign in the middle, "Open 24/7" and "Matches so far: 0" on the sides, tagline "Everything in this shop is more likely than matching the deck." |
+| `shop-banner-square.png` | 1800 × 1800 | Mobile header, shop logo area, Instagram post |
+| `welcome-sign.png` | 4500 × 5400, transparent | The sign on its own with "Odds of a match: 1 in 8 × 10⁶⁷ · Refunds: also impossible". For T-shirts, hoodie backs and stickers |
+
+The sign sits in the middle of both banners, so it survives the shop cropping the edges.
