@@ -576,9 +576,9 @@
             <p id="apLabel" class="text-xs font-bold text-[#9fb5a8] mb-1">AUTOPILOT</p>
             <div class="seg" role="group" aria-labelledby="apLabel">
               <button type="button" data-ap="0" aria-pressed="true">Off</button>
-              <button type="button" data-ap="1" aria-pressed="false" title="One shuffle per second: watch every deck">1/sec</button>
+              <button type="button" data-ap="5" aria-pressed="false">5/sec</button>
               <button type="button" data-ap="10" aria-pressed="false">10/sec</button>
-              <button type="button" data-ap="L" aria-pressed="false" title="1,000 shuffles per second">Ludicrous</button>
+              <button type="button" data-ap="L" aria-pressed="false" title="20 shuffles per second">Ludicrous</button>
             </div>
             <p id="apRate" class="mono text-xs text-[#9fb5a8] mt-1 h-4"></p>
             <a id="apSponsor" class="ap-sponsor" href="#impatient" hidden>🛰️ Faster than Ludicrous? Sponsor a mission ↓</a>
@@ -1008,7 +1008,7 @@ const UNIVERSE_AGE_YEARS = 1.38e10;
 /* Hand-shuffle years: a proper hand shuffle takes about 20 seconds (seven riffles, Bayer & Diaconis 1992). */
 const HAND_SECONDS = 20;
 const HAND_YEAR = Math.round(SECONDS_PER_YEAR / HAND_SECONDS);   // 1,577,880 shuffles
-const LUDICROUS_RATE = 1000;                                      // free Ludicrous autopilot, shuffles/sec
+const LUDICROUS_RATE = 20;                                        // free Ludicrous autopilot, shuffles/sec
 const handYears = n => n / HAND_YEAR;
 /** 20,000 shuffles → "4.6 days"; human-sized wording for an amount of hand shuffling. */
 function handTime(n) {
@@ -1258,7 +1258,7 @@ const LINES = {
   idle: ['The heat death of the universe won\'t wait for you.'],
   flick: ['Ah-ah. Back in the deck, you.', 'No escaping. Rules are rules.'],
   autopilot: ['Autopilot engaged. I shall supervise from my armchair.', 'Wake me when something improbable happens.'],
-  ludicrous: ['Ludicrous speed. My monocle is fogging up.', 'At this rate we finish in only 10⁵⁰ years. Bravo.'],
+  ludicrous: ['Ludicrous speed. My monocle is fogging up.', 'At this rate we finish in only 10⁵⁹ years. Bravo.'],
   faint: ['I… I need to lie down.'],
   recover: ['Ahem. A clerical error, surely. As I was saying: impossible.'],
 };
@@ -1853,11 +1853,11 @@ function apLoop(t) {
     reveal(res, false);
     return;
   }
-  // 1/sec shows every deck; faster speeds update the screen twice a second so it doesn't strobe.
-  if (t - ap.lastFlush >= (ap.mode === 1 ? 100 : 500)) { ap.lastFlush = t; flushAutopilot(); }
+  // The screen updates twice a second so it doesn't strobe; every shuffle still lands in the log.
+  if (t - ap.lastFlush >= 500) { ap.lastFlush = t; flushAutopilot(); }
   ap.raf = requestAnimationFrame(apLoop);
 }
-/** Called at most every 100 ms (1/sec) or 500 ms (faster): pushes the latest attempt to the grids, meter, log and stats. */
+/** Called at most every 500 ms: pushes the latest attempt to the grids, meter, log and stats. */
 function flushAutopilot() {
   const ap = autopilot;
   if (!ap.sinceFlush) return;
