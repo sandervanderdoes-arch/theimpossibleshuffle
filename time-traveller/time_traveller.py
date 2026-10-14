@@ -51,7 +51,9 @@ gpu_image = (
 def _sb(path, body, prefer=None):
     import requests
     key = os.environ['SUPABASE_SERVICE_ROLE_KEY']
-    headers = {'apikey': key, 'Authorization': f'Bearer {key}', 'Content-Type': 'application/json'}
+    headers = {'apikey': key, 'Content-Type': 'application/json'}
+    if key.startswith('eyJ'):                      # legacy service_role key (a JWT); new sb_secret_… keys go in apikey only
+        headers['Authorization'] = f'Bearer {key}'
     if prefer:
         headers['Prefer'] = prefer
     for attempt in range(5):
