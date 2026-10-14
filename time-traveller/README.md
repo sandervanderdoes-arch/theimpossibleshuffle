@@ -25,9 +25,9 @@ Files:
 
 ## Honest numbers
 
-Measured with `benchmark` (October 2026): **1.2 billion shuffles a second per H100**, so
-9.6 billion a second on eight. A mission takes **about 3 hours** and about **$95** of GPU time
-at Modal's ~$3.95 per H100-hour. The card says exactly that (`TT.rate = 9.57e9` in
+Measured with `benchmark` (October 2026): **2.6 billion shuffles a second per H100**, so
+21 billion a second on eight. A mission takes **about 1 hour 23 minutes** and about **$43** of
+GPU time at Modal's ~$3.95 per H100-hour. The card says exactly that (`TT.rate = 2.1e10` in
 `index.html`). The mission always does the full 104 trillion shuffles, however long that takes
 (capped at `TT_MAX_SECONDS`, 5 hours per GPU by default), so a slower GPU costs you more, never
 the buyer. Run the benchmark again after changing the kernel and update `TT.rate`.

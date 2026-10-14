@@ -4145,7 +4145,7 @@ async function submitMissionName(form) {
 }
 
 /* ---------- Time Travellers ---------- */
-const TT = { years: 66e6, gpus: 8, price: '500', rate: 9.57e9, rows: [], timer: 0 };
+const TT = { years: 66e6, gpus: 8, price: '500', rate: 2.1e10, rows: [], timer: 0 };
 TT.N = TT.years * HAND_YEAR;                       // 104 trillion shuffles: from the asteroid to today
 /** The most likely best match among N shuffles (the mode of the maximum). */
 function likelyBest(N) {
@@ -4174,7 +4174,7 @@ function renderTTCard() {
       <div class="flex items-center gap-3"><svg class="tt-ava tt-ava-lg" viewBox="0 0 64 64" aria-hidden="true"><use href="#ttAstro"/></svg>
         <div class="min-w-0"><p class="imp-name"><span class="gold-star">★★★★</span> Time Traveller</p><p class="mono text-xs text-[#ffe68a]">8 × NVIDIA H100 · 66 MILLION YEARS · ONE DECK</p></div></div>
       <h3 class="tt-gold mt-4">Eight GPUs. One deeply questionable use of human ingenuity.</h3>
-      <p class="mt-3 text-sm sm:text-base text-[#cfe3d7]">We rent eight NVIDIA H100s, the chips the world uses to train artificial intelligence, and point every one of them at a single deck of cards. Your mission starts the day the asteroid wiped out the dinosaurs and shuffles all the way to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in about three hours*</b>, roughly one Lord of the Rings movie. You watch it live, from the first tiny mammals to the moon landing.</p>
+      <p class="mt-3 text-sm sm:text-base text-[#cfe3d7]">We rent eight NVIDIA H100s, the chips the world uses to train artificial intelligence, and point every one of them at a single deck of cards. Your mission starts the day the asteroid wiped out the dinosaurs and shuffles all the way to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in under an hour and a half*</b>, shorter than most movies. You watch it live, from the first tiny mammals to the moon landing.</p>
       <ul class="imp-perks mt-3">
         <li>🚀 Your name on the <a class="underline" href="#ttSection">Time Travellers board</a>, golden helmet and all</li>
         <li>📡 Your own live mission control: 66 million years of history, shuffled past at full throttle</li>
@@ -4194,7 +4194,7 @@ function renderTTCard() {
       ${url ? `<a class="shuffle-btn tt-buy" href="${url}" target="_blank" rel="noopener" data-imp="traveller">Board the time machine · ${cur}${TT.price}</a>`
         : '<a class="shuffle-btn tt-buy" role="link" aria-disabled="true">Launch window opening soon</a>'}
       <p class="imp-why">Why ${cur}${TT.price}? Eight of the fastest chips on Earth, one deck, no mercy. About ${cur}${(Number(TT.price) / (TT.years / 1e6)).toFixed(2)} per million years of shuffling. A bargain, historically.</p>
-      <p class="text-[11px] text-[#9fb5a8]">*Measured on eight H100s: about 1.2 billion shuffles a second each. Your mission runs until all ${fmt(TT.N)} shuffles are done, however long the GPUs need, and your live panel shows the real speed. Every shuffle counts toward humankind's total. No prize, just glory.</p>
+      <p class="text-[11px] text-[#9fb5a8]">*Measured on eight H100s: about 2.6 billion shuffles a second each. Your mission runs until all ${fmt(TT.N)} shuffles are done, however long the GPUs need, and your live panel shows the real speed. Every shuffle counts toward humankind's total. No prize, just glory.</p>
     </div>
   </div>`;
   const buy = box.querySelector('[data-imp="traveller"]');
