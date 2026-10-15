@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Impossible Shuffle</title>
-<meta name="description" content="The most pointless mission on the internet: everyone shuffling one deck until it matches twice. Odds: 1 in 52!.">
+<meta name="description" content="The most pointless mission on the internet: everyone shuffling one deck until it lands in one exact order. Odds: 1 in 52!.">
 <link rel="canonical" href="https://theimpossibleshuffle.com/">
 <meta name="theme-color" content="#03110a">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://theimpossibleshuffle.com/">
 <meta property="og:title" content="The Impossible Shuffle">
-<meta property="og:description" content="Humanity is shuffling one deck until it matches twice. The odds are 1 in 52!, about 8 × 10⁶⁷. We're trying anyway.">
+<meta property="og:description" content="Humanity is shuffling one deck until it lands in the exact order of the Holy Grail. The odds are 1 in 52!, about 8 × 10⁶⁷. We're trying anyway.">
 <meta property="og:image" content="https://theimpossibleshuffle.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -18,7 +18,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://theimpossibleshuffle.com/og-image.png">
 <meta name="twitter:title" content="The Impossible Shuffle">
-<meta name="twitter:description" content="Humanity is shuffling one deck until it matches twice. The odds are 1 in 52!. We're trying anyway.">
+<meta name="twitter:description" content="Humanity is shuffling one deck until it lands in the exact order of the Holy Grail. The odds are 1 in 52!. We're trying anyway.">
 <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
@@ -842,7 +842,7 @@
       </ol>
       <div class="honors-final mt-5">
         <p class="font-display text-base sm:text-xl tt-gold">Humankind: Mission Accomplished.</p>
-        <p class="mt-2 text-sm text-[#cfe3d7]">There is no reset. No new target. No Season 2. The sponsorships close, the station goes quiet and this site becomes a monument. Every shuffle anyone ever made becomes part of the story of how humanity got there. Mission Control's database refuses to change or delete the winning record, even for us.</p>
+        <p class="mt-2 text-sm text-[#cfe3d7]">There is no reset. No new target. No Season 2. The <a class="underline" href="#impatient">mission sponsorships</a> close, the station goes quiet and this site becomes a monument. Every shuffle anyone ever made becomes part of the story of how humanity got there. Mission Control's database refuses to change or delete the winning record, even for us.</p>
         <p class="mt-2 text-xs text-[#9fb5a8]">No money, no prizes: the honor is the prize. Mathematics isn't a lottery, and neither are we.</p>
       </div>
 
@@ -850,6 +850,8 @@
         <summary class="font-bold text-sm">✓ Provably fair: check any shuffle yourself</summary>
         <div class="mt-3 text-sm text-[#cfe3d7]">
           <p>Each shuffle is cooked from three ingredients: the <b>randomness of a public drand round</b> (published every 30 seconds by the <a class="underline" href="https://www.drand.love/" target="_blank" rel="noopener">League of Entropy</a>, so nobody could know it in advance), a <b>seat</b> (your browser's id, so nobody can hand in your shuffles) and a <b>number</b> (1st, 2nd, 3rd shuffle with that round). Those go through SHA-256, and the 256-bit result picks the order of all 52 cards (Fisher–Yates). Same recipe, same deck, on any computer. Faking a winning shuffle means trying recipes until one works, which is just shuffling the long way round.</p>
+          <p class="mt-2"><b>Is every order equally likely?</b> As good as. SHA-256 gives 2<sup>256</sup> possible results and there are 52! possible decks, so every deck can come up. But 2<sup>256</sup> doesn't divide evenly by 52!: each deck gets about 1,435,590,242 of the results, and some get one more. So some decks are about 1 in 1.4 billion more likely than others. Over the lifetime of the universe, nobody could ever notice.</p>
+          <p class="mt-2"><b>Can't I just run the recipe on my own computer?</b> Yes. That's called shuffling. Welcome aboard. It's literally what Time Travellers pay us to do. You can't work ahead (nobody knows a drand round before it's published), you can't hand in someone else's shuffles, and the database rebuilds every claimed shuffle before it believes it. A fast graphics card might win you a spot on the Luckiest Shufflers board. The Holy Grail stays 1 in 8 × 10<sup>67</sup>.</p>
           <form id="verifyForm" class="verify-form mt-3">
             <label>drand round <input id="vRound" class="imp-input" inputmode="numeric" placeholder="0 = local randomness" autocomplete="off"></label>
             <label>Randomness (64 hex) <input id="vRand" class="imp-input mono" maxlength="64" spellcheck="false" autocomplete="off"></label>
