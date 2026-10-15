@@ -18,7 +18,7 @@ Served by GitHub Pages from the `main` branch root. `CNAME` holds the custom dom
 - Three Stripe Payment Links (`SITE.fund.tea`, `odds`, `patron` in `index.html`) sell the ranks Rookie, Captain and Commander: 1,000 / 10,000 / 100,000 years of shuffling for $1.92 / $8.07 / $52. Each link's "After payment" redirect goes to `https://theimpossibleshuffle.com/?thanks=tea` (or `odds`, `patron`), which assigns the years to that browser's station and unlocks the extras.
 - The station (internally "Hyperdrive") really performs every shuffle: the same provably fair recipe in Web Workers on every processor core (roughly 0.4–0.8 million shuffles per second per core). Every shuffle counts toward stats, badges and the humankind counter. The credit only goes down as shuffles are done, so pausing or closing the tab loses nothing. No prize.
 - The Certificate of Trying Anyway is drawn on a canvas and saved as an A4 PDF with jsPDF (loaded from cdnjs only when needed; falls back to a PNG).
-- The Wall of Hopeless Heroes uses the `sponsors` table from `supabase/sponsors.sql`. Names arrive unapproved; approve them in the Supabase Table Editor.
+- The Wall of Hopeless Heroes uses the `sponsors` table from `supabase/sponsors.sql`. Names arrive unapproved; approve them in the Supabase Table Editor. `supabase/wall-notify.sql` (optional) sends you a push notification through ntfy (and optionally an email) for every new name.
 
 ## Leaderboard ("Luckiest Shufflers")
 

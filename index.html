@@ -538,6 +538,8 @@
   .tt-stats div { padding:.6rem .7rem; border-radius:12px; background:rgba(0,0,0,.45); border:1px solid rgba(255,210,63,.25); min-width:0; }
   .tt-stats b { display:block; font:800 clamp(1rem, 3vw, 1.35rem) "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; overflow-wrap:anywhere; }
   .tt-stats span { font-size:.75rem; color:#cfe3d7; }
+  @media (max-width: 640px) { .tt-panel .tl-log li, .tt-panel .tl-all li { flex-wrap:wrap; column-gap:.4rem; row-gap:0; } .tt-panel .tl-log li .when, .tt-panel .tl-all li .when { flex-basis:100%; min-width:0; } .tt-panel .tl-log li > span:last-child, .tt-panel .tl-all li > span:last-child { flex:1 1 0; min-width:0; } }
+  .tt-first { padding:.6rem .8rem; border-radius:12px; border:1px dashed rgba(255,210,63,.6); background:rgba(255,210,63,.08); color:#ffe68a; font-size:.85rem; font-weight:700; }
   .tt-odds { padding:.8rem .9rem; border-radius:12px; background:rgba(34,243,255,.07); border:1px solid rgba(34,243,255,.3); font-size:.88rem; color:#cfe3d7; }
   .tt-odds b { color:#a5fbff; }
   .tt-buy { display:block; text-align:center; background:linear-gradient(180deg, #fff7c9, #ffd23f 45%, #c98a0b) !important; color:#1d1300 !important; border-color:#6e4500 !important; text-shadow:none !important; }
@@ -610,10 +612,15 @@
           <p id="ttmStatus" class="mono text-xs sm:text-sm text-[#cfe3d7] mt-1" aria-live="polite"></p>
         </div>
       </div>
-      <div class="tt-track mt-4" aria-hidden="true"><div id="ttmFill"></div></div>
+      <div class="hyper-track mt-4" aria-hidden="true"><div class="tt-track"><div id="ttmFill"></div></div><div id="ttmTicks" class="tl-ticks"></div></div>
       <div class="tl-ends" aria-hidden="true"><span>66 MILLION YEARS AGO</span><span>TODAY</span></div>
-      <p class="tl-now mt-3"><span class="lbl">🕰️ YOUR GPUs HAVE REACHED</span> <b id="ttmYear">66 million years ago</b></p>
-      <div id="ttmEvent" class="tl-event" aria-live="polite"></div>
+      <div class="tl">
+        <p class="tl-now mt-3"><span class="lbl">🕰️ YOUR GPUs HAVE REACHED</span> <b id="ttmYear">66 million years ago</b></p>
+        <div id="ttmEvent" class="tl-event" aria-live="polite"></div>
+        <ol id="ttmLog" class="tl-log" aria-label="Earlier stops"></ol>
+        <p id="ttmNext" class="tl-next"></p>
+        <details class="tl-all"><summary id="ttmAllSum">Your route</summary><ol id="ttmAll"></ol></details>
+      </div>
       <dl class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
         <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SHUFFLES DONE</dt><dd id="ttmDone" class="mono text-sm sm:text-base font-extrabold" style="overflow-wrap:anywhere">0</dd><dd id="ttmDoneSub" class="text-[11px] text-[#9fb5a8]"></dd></div>
         <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SPEED</dt><dd id="ttmSpeed" class="mono text-sm sm:text-base font-extrabold">–</dd><dd id="ttmSpeedSub" class="text-[11px] text-[#9fb5a8]"></dd></div>
@@ -4177,7 +4184,7 @@ function renderTTCard() {
       <h3 class="tt-gold mt-4">Eight GPUs. One deeply questionable use of human ingenuity.</h3>
       <p class="mt-3 text-sm sm:text-base text-[#cfe3d7]">We rent eight NVIDIA H100s, the chips the world uses to train artificial intelligence, and point every one of them at a single deck of cards. Your mission starts the day the asteroid wiped out the dinosaurs and shuffles all the way to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in under an hour and a half*</b>, shorter than most movies. You watch it live, from the first tiny mammals to the moon landing.</p>
       <ul class="imp-perks mt-3">
-        <li>🚀 Your name on the <a class="underline" href="#ttSection">Time Travellers board</a>, golden helmet and all</li>
+        <li>🚀 Your name on the Time Travellers board, golden helmet and all</li>
         <li>📡 Your own live mission control: 66 million years of history, shuffled past at full throttle</li>
         <li>✓ Your best shuffle, provably fair, rebuilt and checked by the database</li>
         <li>✨ Every Commander extra included</li>
@@ -4191,6 +4198,7 @@ function renderTTCard() {
         <div><b>${fmt(Math.round(TT.years / 1e5))}×</b><span>a Commander's entire mission</span></div>
         <div><b>${fmt(Math.round(TT.years / 80 / 1e3) * 1e3)}×</b><span>a lifetime of shuffling by hand</span></div>
       </div>
+      <p id="ttFirst" class="tt-first"${TT.rows.length ? ' hidden' : ''}>🚀 The Time Travellers board is still empty. Whoever boards first is first on it forever.</p>
       <p class="tt-odds">Your chance of ending the mission: <b>1 in ${mant} × 10${sup(exp)}</b>. That's ${bigEnglish(TT.N)} times one shuffle, and ${fmt(Math.round(TT.years / 1e5))} times a Commander's chance.${humans >= 2 ? ` On its own, your mission shuffles <b>${fmt(Math.round(humans))}×</b> more than all of humankind has on this site so far.` : ''} Still astronomically unlikely, and we'll never pretend otherwise. Your most likely best shuffle: <b>${best}/52</b>${best > top && top ? `, higher than anyone on the leaderboard has ever managed` : ''}.</p>
       ${url ? `<a class="shuffle-btn tt-buy" href="${url}" target="_blank" rel="noopener" data-imp="traveller">Board the time machine · ${cur}${TT.price}</a>`
         : '<a class="shuffle-btn tt-buy" role="link" aria-disabled="true">Launch window opening soon</a>'}
@@ -4213,8 +4221,9 @@ async function ttLoadBoard() {
   renderTTBoard();
 }
 function renderTTBoard() {
-  const sec = $('#ttSection');
-  sec.hidden = !TT.rows.length && !(SITE.fund.traveller && !MISSION.row);
+  const sec = $('#ttSection'), first = $('#ttFirst');
+  if (first) first.hidden = !!TT.rows.length;
+  sec.hidden = !TT.rows.length;                     // the board appears with its first Time Traveller; until then the card says so
   if (sec.hidden) return;
   $('#ttBoard').innerHTML = TT.rows.length ? TT.rows.map((t, i) => {
     const rec = { r: t.best_round, R: t.best_rand, s: t.best_seat, n: t.best_n };
@@ -4231,23 +4240,93 @@ function renderTTBoard() {
 /* Deep time, for a Time Traveller's 66 million years (years ago; approximate, as deep time tends to be). */
 const DEEP = [
   { ago: 66e6, ic: '☄️', t: 'The asteroid hits. The dinosaurs are out; your eight GPUs are in. Shuffling begins.' },
+  { ago: 65.9e6, ic: '🌑', t: 'Dust blots out the Sun and three quarters of all species vanish. Your GPUs: unbothered.' },
   { ago: 65e6, ic: '🐀', t: 'Small furry mammals inherit the Earth. None of them can hold a deck.' },
+  { ago: 61e6, ic: '🐧', t: 'The first penguins. Already dressed for a casino.' },
   { ago: 56e6, ic: '🌡️', t: 'Earth runs a fever (the Paleocene–Eocene Thermal Maximum). Your GPUs know the feeling.' },
+  { ago: 55e6, ic: '🐒', t: 'Among the earliest primates: palm-sized tree climbers. Distant relatives of every card player.' },
+  { ago: 52e6, ic: '🦇', t: 'The first bats take to the air. Still no matches.' },
   { ago: 50e6, ic: '🐋', t: "Whales' ancestors still walk on land. They'll go back to the sea, deckless." },
-  { ago: 34e6, ic: '🧊', t: 'Antarctica freezes over. Still no matches.' },
+  { ago: 48e6, ic: '🐎', t: 'Horses are the size of a fox. Betting on them comes much later.' },
+  { ago: 40e6, ic: '🌊', t: 'Whales are fully back in the ocean. Smart move: no cards there either.' },
+  { ago: 34e6, ic: '🧊', t: 'Antarctica freezes over. Ice caps: on. Matches: off.' },
+  { ago: 25e6, ic: '🦍', t: 'Apes branch off from the other monkeys. Opposable thumbs: promising.' },
   { ago: 23e6, ic: '🦈', t: 'Megalodon shows up. Not a card player. Not a good loser either.' },
-  { ago: 7e6, ic: '🐒', t: "Roughly where our lineage and the chimpanzees' part ways. Neither side takes the cards." },
+  { ago: 20e6, ic: '🌾', t: 'Grasslands spread across the continents. Plenty of room for a very large card table.' },
+  { ago: 15e6, ic: '🏔️', t: 'The Himalayas keep rising. They still are. So are your GPU temperatures.' },
+  { ago: 10e6, ic: '🐘', t: "Elephants' ancestors roam three continents. They never forget. They never shuffle." },
+  { ago: 7e6, ic: '🧍', t: "Roughly where our lineage and the chimpanzees' part ways. Neither side takes the cards." },
   { ago: 5.3e6, ic: '🌊', t: 'The Atlantic pours back into the dried-out Mediterranean (the Zanclean flood).' },
+  { ago: 3.3e6, ic: '🪨', t: 'The oldest known stone tools (Kenya). Card-making tools: pending.' },
   { ago: 3.2e6, ic: '🦴', t: 'Lucy walks across what is now Ethiopia.' },
+  { ago: 2.6e6, ic: '❄️', t: 'The Ice Ages begin. Mammoths, woolly rhinos, and still no deck of cards on Earth.' },
+  { ago: 1.8e6, ic: '🚶', t: 'Homo erectus walks out of Africa. Packing light: no cards.' },
   { ago: 1e6, ic: '🔥', t: 'People use fire. The first card table is still a million years away.' },
-  { ago: 300000, ic: '🧑', t: 'Homo sapiens. Finally, someone with thumbs worth shuffling with.' },
+  { ago: 300000, ic: '🧑', t: 'Homo sapiens. Finally, someone with thumbs worth shuffling with. Hold on: all of human history is now one sliver of your mission.' },
+  { ago: 45500, ic: '🎨', t: 'The oldest known animal painting: a wild pig on a cave wall in Sulawesi.' },
+  { ago: 20000, ic: '🦣', t: 'The peak of the last Ice Age. Mammoths everywhere. Cards nowhere.' },
   { ago: 12000, ic: '🌾', t: 'Farming begins. Long evenings ahead.' },
+  { ago: 5200, ic: '✍️', t: 'Writing is invented in Mesopotamia. The rules of card games can finally be argued about in writing.' },
+  { ago: 4500, ic: '🔺', t: 'The Great Pyramid of Giza goes up. Your GPUs have shuffled far longer than it has stood.' },
+  { ago: 2000, ic: '🏛️', t: 'The Roman Empire. Dice, yes. Cards, not yet.' },
   { ago: 1150, ic: '🃏', t: 'Playing cards appear in Tang dynasty China. The real mission starts here, technically.' },
+  { ago: 575, ic: '🖨️', t: "Gutenberg's printing press. Decks become cheap. The doomed quest becomes possible." },
+  { ago: 123, ic: '✈️', t: 'The Wright brothers fly. Your GPUs have been flying for over an hour.' },
   { ago: 57, ic: '🌕', t: 'People walk on the Moon. Your GPUs keep shuffling.' },
   { ago: 34, ic: '📐', t: 'Bayer and Diaconis prove seven riffles mix a deck. Your GPUs nod politely.' },
   { ago: 0, ic: '🏁', t: 'Today. 66 million years, shuffled.' }
 ];
-const deepLabel = ago => (ago >= 1e6 ? `${(ago / 1e6).toFixed(ago >= 1e7 ? 0 : 1)} million years ago` : ago >= 1e4 ? `${fmt(Math.round(ago / 1000) * 1000)} years ago` : ago >= 1 ? `${fmt(Math.round(ago))} years ago` : 'today');
+const deepLabel = ago => (ago >= 1e6 ? `${(ago / 1e6).toFixed(ago >= 1e7 ? 0 : 1)} million years ago` : ago >= 1e4 ? `${fmt(Math.round(ago / 1000) * 1000)} years ago` : ago >= 1.5 ? `${fmt(Math.round(ago))} years ago` : ago > 0 ? 'this year' : 'today');
+/* The deep-time timeline on a Time Traveller's panel. True to scale, so all of human history fits in the
+   last half percent of the bar (roughly the final 22 seconds of a mission). Between database updates the year
+   keeps counting at the GPUs' measured speed, so history flows instead of jumping every 3 seconds. */
+const deepItem = (e, cls = '') => `<li${cls ? ` class="${cls}"` : ''}><span class="when">${deepLabel(e.ago)}</span><span class="ic" aria-hidden="true">${e.ic}</span><span>${e.t}</span></li>`;
+function ttTimeline(attempts) {
+  const L = TT.live;
+  if (!TT.ticks) {
+    $('#ttmTicks').innerHTML = DEEP.slice(1, -1).map(e => `<span class="tl-tick" style="left:${((1 - e.ago / TT.years) * 100).toFixed(3)}%"></span>`).join('');
+    TT.ticks = true; TT.passed = -1;
+  }
+  const full = L.done && attempts >= L.target * 0.999;
+  if (!L.done) attempts = Math.max(attempts, TT.shown || 0);      // the bar never runs backwards between reports
+  TT.shown = attempts;
+  const frac = full ? 1 : Math.min(L.done ? 1 : 1 - 1e-9, attempts / L.target), ago = TT.years * (1 - frac);   // "today" only once it's done
+  $('#ttmFill').style.width = (frac * 100).toFixed(3) + '%';
+  $('#ttmYear').textContent = full ? 'TODAY' : deepLabel(ago);
+  const passed = full ? DEEP.length : Math.min(DEEP.length - 1, DEEP.filter(e => e.ago >= ago).length);
+  const next = DEEP[passed], tn = $('#ttmNext');
+  tn.hidden = full || L.done || !next;
+  if (!tn.hidden) {
+    const sec = L.rate ? (1 - next.ago / TT.years - frac) * L.target / L.rate : 0;
+    const human = L.rate ? 300000 / TT.years * L.target / L.rate : 0;
+    tn.innerHTML = (L.rate ? `Next stop in ${sec < 1 ? 'a moment' : sec < 90 ? Math.round(sec) + ' seconds' : shortDuration(sec)}: ` : 'Next stop: ')
+      + `<b>${next.ic} ${deepLabel(next.ago)}</b>`
+      + (L.rate && ago > 300000 && ago < 3e6 ? ` · Hold on: all of human history flies by in the last ${Math.max(1, Math.round(human))} seconds.` : '');
+  }
+  if (passed === TT.passed) return;
+  const first = TT.passed < 0;
+  TT.passed = passed;
+  $$('#ttmTicks .tl-tick').forEach((tk, i) => {
+    const on = i + 1 < passed;
+    if (on && !tk.classList.contains('on') && !first) tk.classList.add('fresh');
+    tk.classList.toggle('on', on);
+  });
+  const ev = $('#ttmEvent'), last = full ? DEEP[DEEP.length - 1] : DEEP[Math.max(0, passed - 1)];
+  ev.innerHTML = `<span class="ic" aria-hidden="true">${last.ic}</span><div><span class="when">${(full ? 'TODAY' : deepLabel(last.ago)).toUpperCase()}</span><p>${last.t}</p></div>`;
+  if (!first && !reduceMotion) { ev.classList.remove('pop'); void ev.offsetWidth; ev.classList.add('pop'); }
+  const upto = full ? DEEP.length : passed;
+  $('#ttmLog').innerHTML = DEEP.slice(Math.max(0, upto - 4), Math.max(0, upto - 1)).reverse().map(e => deepItem(e)).join('');
+  $('#ttmAllSum').textContent = `Your route: ${upto} of ${DEEP.length} stops reached`;
+  $('#ttmAll').innerHTML = DEEP.map((e, i) => i < upto ? deepItem(e)
+    : `<li class="later"><span class="when">${deepLabel(e.ago)}</span><span aria-hidden="true">🔒</span><span>Still ahead</span></li>`).join('');
+}
+function ttAnimate() {
+  const L = TT.live;
+  if (!L || !L.rate || L.done || document.hidden) { TT.raf = 0; return; }
+  const ahead = Math.min(6, (performance.now() - L.at) / 1000);   // never run more than 6 s ahead of the last report
+  ttTimeline(Math.min(L.target, L.attempts + L.rate * ahead));
+  TT.raf = requestAnimationFrame(ttAnimate);
+}
 let ttTicket = null;
 async function ttTicketOf(sessionId) {
   const h = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(sessionId)));
@@ -4300,16 +4379,14 @@ function renderTTMission(t) {
     return;
   }
   if (!owned().traveller) { store.purchases.traveller = 1; saveStore(true); applyCosmetics(); renderExtras(); }   // the server has the mission, so this browser gets the extras
-  const target = t.target || TT.N, frac = Math.min(1, t.attempts / target), ago = TT.years * (1 - frac);
+  const target = t.target || TT.N, frac = Math.min(1, t.attempts / target);
   const done = t.status === 'done';
   $('#ttmTitle').textContent = done ? `Mission complete, ${t.name}.` : t.status === 'running' ? `${t.name}, you're in flight.` : `Warming up eight H100s for ${t.name}…`;
   $('#ttmStatus').textContent = done ? `${fmt(t.attempts)} shuffles, 66 million years, one deck. Best: ${t.best}/52. Matches: 0. You are now part of humanity's most unnecessary space program.`
     : t.status === 'running' ? 'Eight GPUs are shuffling for humanity. Every shuffle counts toward the total.' : 'The GPUs are spinning up. This takes a minute.';
-  $('#ttmFill').style.width = (frac * 100).toFixed(2) + '%';
-  $('#ttmYear').textContent = done ? 'TODAY' : deepLabel(ago);
-  const passed = DEEP.filter(e => e.ago >= ago - 0.5);
-  const ev = done ? DEEP[DEEP.length - 1] : passed[passed.length - 1] || DEEP[0];
-  $('#ttmEvent').innerHTML = `<span class="ic" aria-hidden="true">${ev.ic}</span><div><span class="when">${deepLabel(ev.ago).toUpperCase()}</span><p>${ev.t}</p></div>`;
+  TT.live = { attempts: t.attempts, rate: t.status === 'running' ? t.rate || 0 : 0, target, done, at: performance.now() };
+  ttTimeline(t.attempts);
+  if (TT.live.rate && !reduceMotion && !TT.raf) TT.raf = requestAnimationFrame(ttAnimate);
   const short = v => (v >= 1e12 ? `${(v / 1e12).toFixed(1)} trillion` : v >= 1e9 ? `${(v / 1e9).toFixed(1)} billion` : fmt(v));
   $('#ttmDone').textContent = short(t.attempts);
   $('#ttmDone').title = fmt(t.attempts);
