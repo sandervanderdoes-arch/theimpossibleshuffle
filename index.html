@@ -103,6 +103,8 @@
   .deck-grid { display:grid; grid-template-columns:repeat(9, minmax(0,1fr)); gap:4px; perspective:900px; }
   @media (max-width:379px) { .deck-grid { grid-template-columns:repeat(8, minmax(0,1fr)); gap:3px; } }
   @media (min-width:640px) { .deck-grid { grid-template-columns:repeat(13, minmax(0,1fr)); gap:5px; } }
+  /* Laptops: both decks and the shuffle button fit in one screen, also on short screens (cards shrink a little). */
+  @media (min-width:1024px) { .deck-grid { max-width:max(540px, calc(112vh - 225px)); margin-inline:auto; } }
   .pcard {
     position:relative; aspect-ratio:5/7; border-radius:6px; container-type:inline-size;
     background:linear-gradient(160deg,#fffdf5,#ece4d0); color:#121212;
@@ -280,12 +282,12 @@
   .badge.got .prog { color:var(--gold); }
 
   /* Toasts */
-  #toasts { position:fixed; top:.75rem; right:.75rem; z-index:120; display:flex; flex-direction:column; gap:.5rem; max-width:min(22rem, calc(100vw - 1.5rem)); }
+  #toasts { position:fixed; bottom:calc(3.1rem + env(safe-area-inset-bottom, 0px)); right:.75rem; z-index:120; display:flex; flex-direction:column; gap:.5rem; max-width:min(22rem, calc(100vw - 1.5rem)); }
   .toast { background:#14051a; border:1px solid var(--pink); color:#ffe0fa; border-radius:12px; padding:.7rem .9rem; box-shadow:0 0 22px rgba(255,47,214,.45); font-size:.88rem; animation: toastIn .35s ease-out; transition: opacity .35s, transform .35s; }
   .toast.out { opacity:0; transform:translateY(-8px); }
   .toast b { color:#ffe68a; }
   @media (max-width: 640px) {
-    #toasts { left:.75rem; right:.75rem; top:calc(.5rem + env(safe-area-inset-top, 0px)); max-width:none; }
+    #toasts { left:.75rem; right:.75rem; top:calc(.5rem + env(safe-area-inset-top, 0px)); bottom:auto; max-width:none; }
     .toast { font-size:.8rem; padding:.5rem .7rem; line-height:1.35; }
   }
   @keyframes toastIn { from { opacity:0; transform:translateY(-10px); } }
@@ -3893,7 +3895,12 @@ function initImpatient() {
   // The hero's button: straight to the game, and the first shuffle happens on arrival.
   $('#heroShuffle').addEventListener('click', () => {
     track('hero-shuffle');
-    $('#chalTitle').closest('section').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    // Both decks and the shuffle button when they fit on the screen (laptops); otherwise your deck and the button (phones).
+    const y = el => el.getBoundingClientRect().top + scrollY, yb = el => el.getBoundingClientRect().bottom + scrollY;
+    const both = y($('#game')) - 8, usable = innerHeight - ($('#ticker').offsetHeight || 0) - 8;
+    const fits = yb($('#chalGrid')) + 16 - both <= usable;   // +16: the first shuffle adds a "Replay my best" button
+    const top = fits ? both : Math.max(y($('#chalTitle').closest('section')) - 8, yb($('#shuffleBtn')) + 40 - usable);
+    scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' });
     setTimeout(() => $('#shuffleBtn').click(), reduceMotion ? 0 : 500);
   });
   $('#tickerClose').addEventListener('click', () => {
