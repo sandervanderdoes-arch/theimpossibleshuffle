@@ -840,42 +840,6 @@
     </div>
   </section>
 
-  <!-- ===================== WHAT IF SOMEBODY ACTUALLY DOES IT? ===================== -->
-  <section id="honors" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="honorsTitle">
-    <div class="panel honors-panel p-4 sm:p-6">
-      <h2 id="honorsTitle" class="font-display text-lg sm:text-2xl neon-gold">What If Somebody Actually Does It?</h2>
-      <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">Then it's over. Forever. <b class="text-[#ffe68a]">One mission, one winner, eternal glory.</b></p>
-      <ol class="honors-steps mt-5">
-        <li><span class="ic" aria-hidden="true">🔍</span><b>The universe checks.</b><span>Every shuffle on this site has a public recipe. Mission Control's database rebuilds the winning shuffle from scratch before it believes a thing. No screenshots, no "trust me".</span></li>
-        <li><span class="ic" aria-hidden="true">🏛️</span><b>The Grail takes your name.</b><span>The Holy Grail Sequence becomes <i>The <span class="honors-name">Your Name</span> Sequence</i>. On every page, every certificate, every brag card. Forever.</span></li>
-        <li><span class="ic" aria-hidden="true">🗿</span><b>A monument.</b><span>Your name goes on the plaque at the top of this site, with the date, the exact shuffle and how many shuffles humanity needed to get there. The Professor faints. Permanently.</span></li>
-        <li><span class="ic" aria-hidden="true">📜</span><b>The certificate.</b><span>The one and only Certificate of Doing the Impossible. Edition of one.</span></li>
-      </ol>
-      <div class="honors-final mt-5">
-        <p class="font-display text-base sm:text-xl tt-gold">Humankind: Mission Accomplished.</p>
-        <p class="mt-2 text-sm text-[#cfe3d7]">There is no reset. No new target. No Season 2. The <a class="underline" href="#impatient">mission sponsorships</a> close, the station goes quiet and this site becomes a monument. Every shuffle anyone ever made becomes part of the story of how humanity got there. Mission Control's database refuses to change or delete the winning record, even for us.</p>
-        <p class="mt-2 text-xs text-[#9fb5a8]">No money, no prizes: the honor is the prize. Mathematics isn't a lottery, and neither are we.</p>
-      </div>
-
-      <details id="verifyBox" class="verify mt-5">
-        <summary class="font-bold text-sm">✓ Provably fair: check any shuffle yourself</summary>
-        <div class="mt-3 text-sm text-[#cfe3d7]">
-          <p>Each shuffle is cooked from three ingredients: the <b>randomness of a public drand round</b> (published every 30 seconds by the <a class="underline" href="https://www.drand.love/" target="_blank" rel="noopener">League of Entropy</a>, so nobody could know it in advance), a <b>seat</b> (your browser's id, so nobody can hand in your shuffles) and a <b>number</b> (1st, 2nd, 3rd shuffle with that round). Those go through SHA-256, and the 256-bit result picks the order of all 52 cards (Fisher–Yates). Same recipe, same deck, on any computer. Faking a winning shuffle means trying recipes until one works, which is just shuffling the long way round.</p>
-          <p class="mt-2"><b>Is every order equally likely?</b> As good as. SHA-256 gives 2<sup>256</sup> possible results and there are 52! possible decks, so every deck can come up. But 2<sup>256</sup> doesn't divide evenly by 52!: each deck gets about 1,435,590,242 of the results, and some get one more. So some decks are about 1 in 1.4 billion more likely than others. Over the lifetime of the universe, nobody could ever notice.</p>
-          <p class="mt-2"><b>Can't I just run the recipe on my own computer?</b> Yes. That's called shuffling. Welcome aboard. It's literally what Time Travellers pay us to do. You can't work ahead (nobody knows a drand round before it's published), you can't hand in someone else's shuffles, and the database rebuilds every claimed shuffle before it believes it. A fast graphics card might win you a spot on the Luckiest Shufflers board. The Holy Grail stays 1 in 8 × 10<sup>67</sup>.</p>
-          <form id="verifyForm" class="verify-form mt-3">
-            <label>drand round <input id="vRound" class="imp-input" inputmode="numeric" placeholder="0 = local randomness" autocomplete="off"></label>
-            <label>Randomness (64 hex) <input id="vRand" class="imp-input mono" maxlength="64" spellcheck="false" autocomplete="off"></label>
-            <label>Seat (32 hex) <input id="vSeat" class="imp-input mono" maxlength="32" spellcheck="false" autocomplete="off"></label>
-            <label>Number <input id="vN" class="imp-input" inputmode="numeric" autocomplete="off"></label>
-            <div class="flex flex-wrap gap-2 items-end"><button type="submit" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Replay shuffle</button><button type="button" id="vMine" class="chip-btn !text-xs">Use my last shuffle</button></div>
-          </form>
-          <div id="verifyOut" class="verify-out mt-3" aria-live="polite"></div>
-        </div>
-      </details>
-    </div>
-  </section>
-
   <!-- ===================== BECOME A MISSION SPONSOR ===================== -->
   <section id="impatient" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="impTitle" hidden>
     <div class="panel imp-panel p-4 sm:p-6">
@@ -950,6 +914,42 @@
         <p class="text-xs text-[#9fb5a8] mt-1">Commanders and Time Travellers who shuffled for humanity and still matched nothing.</p>
         <div id="wallList" class="mt-3 flex flex-wrap gap-2"></div>
       </div>
+    </div>
+  </section>
+
+  <!-- ===================== WHAT IF SOMEBODY ACTUALLY DOES IT? ===================== -->
+  <section id="honors" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="honorsTitle">
+    <div class="panel honors-panel p-4 sm:p-6">
+      <h2 id="honorsTitle" class="font-display text-lg sm:text-2xl neon-gold">What If Somebody Actually Does It?</h2>
+      <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">Then it's over. Forever. <b class="text-[#ffe68a]">One mission, one winner, eternal glory.</b></p>
+      <ol class="honors-steps mt-5">
+        <li><span class="ic" aria-hidden="true">🔍</span><b>The universe checks.</b><span>Every shuffle on this site has a public recipe. Mission Control's database rebuilds the winning shuffle from scratch before it believes a thing. No screenshots, no "trust me".</span></li>
+        <li><span class="ic" aria-hidden="true">🏛️</span><b>The Grail takes your name.</b><span>The Holy Grail Sequence becomes <i>The <span class="honors-name">Your Name</span> Sequence</i>. On every page, every certificate, every brag card. Forever.</span></li>
+        <li><span class="ic" aria-hidden="true">🗿</span><b>A monument.</b><span>Your name goes on the plaque at the top of this site, with the date, the exact shuffle and how many shuffles humanity needed to get there. The Professor faints. Permanently.</span></li>
+        <li><span class="ic" aria-hidden="true">📜</span><b>The certificate.</b><span>The one and only Certificate of Doing the Impossible. Edition of one.</span></li>
+      </ol>
+      <div class="honors-final mt-5">
+        <p class="font-display text-base sm:text-xl tt-gold">Humankind: Mission Accomplished.</p>
+        <p class="mt-2 text-sm text-[#cfe3d7]">There is no reset. No new target. No Season 2. The <a class="underline" href="#impatient">mission sponsorships</a> close, the station goes quiet and this site becomes a monument. Every shuffle anyone ever made becomes part of the story of how humanity got there. Mission Control's database refuses to change or delete the winning record, even for us.</p>
+        <p class="mt-2 text-xs text-[#9fb5a8]">No money, no prizes: the honor is the prize. Mathematics isn't a lottery, and neither are we.</p>
+      </div>
+
+      <details id="verifyBox" class="verify mt-5">
+        <summary class="font-bold text-sm">✓ Provably fair: check any shuffle yourself</summary>
+        <div class="mt-3 text-sm text-[#cfe3d7]">
+          <p>Each shuffle is cooked from three ingredients: the <b>randomness of a public drand round</b> (published every 30 seconds by the <a class="underline" href="https://www.drand.love/" target="_blank" rel="noopener">League of Entropy</a>, so nobody could know it in advance), a <b>seat</b> (your browser's id, so nobody can hand in your shuffles) and a <b>number</b> (1st, 2nd, 3rd shuffle with that round). Those go through SHA-256, and the 256-bit result picks the order of all 52 cards (Fisher–Yates). Same recipe, same deck, on any computer. Faking a winning shuffle means trying recipes until one works, which is just shuffling the long way round.</p>
+          <p class="mt-2"><b>Is every order equally likely?</b> As good as. SHA-256 gives 2<sup>256</sup> possible results and there are 52! possible decks, so every deck can come up. But 2<sup>256</sup> doesn't divide evenly by 52!: each deck gets about 1,435,590,242 of the results, and some get one more. So some decks are about 1 in 1.4 billion more likely than others. Over the lifetime of the universe, nobody could ever notice.</p>
+          <p class="mt-2"><b>Can't I just run the recipe on my own computer?</b> Yes. That's called shuffling. Welcome aboard. It's literally what Time Travellers pay us to do. You can't work ahead (nobody knows a drand round before it's published), you can't hand in someone else's shuffles, and the database rebuilds every claimed shuffle before it believes it. A fast graphics card might win you a spot on the Luckiest Shufflers board. The Holy Grail stays 1 in 8 × 10<sup>67</sup>.</p>
+          <form id="verifyForm" class="verify-form mt-3">
+            <label>drand round <input id="vRound" class="imp-input" inputmode="numeric" placeholder="0 = local randomness" autocomplete="off"></label>
+            <label>Randomness (64 hex) <input id="vRand" class="imp-input mono" maxlength="64" spellcheck="false" autocomplete="off"></label>
+            <label>Seat (32 hex) <input id="vSeat" class="imp-input mono" maxlength="32" spellcheck="false" autocomplete="off"></label>
+            <label>Number <input id="vN" class="imp-input" inputmode="numeric" autocomplete="off"></label>
+            <div class="flex flex-wrap gap-2 items-end"><button type="submit" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Replay shuffle</button><button type="button" id="vMine" class="chip-btn !text-xs">Use my last shuffle</button></div>
+          </form>
+          <div id="verifyOut" class="verify-out mt-3" aria-live="polite"></div>
+        </div>
+      </details>
     </div>
   </section>
 
