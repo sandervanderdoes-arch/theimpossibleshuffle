@@ -534,6 +534,16 @@
   @media (min-width: 900px) { .tt-card { grid-template-columns:minmax(0, 1.25fr) minmax(0, 1fr); padding:1.8rem; } }
   .tt-card .flag { position:absolute; top:-.75rem; left:1.2rem; white-space:nowrap; font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; color:#1d1300; background:linear-gradient(90deg, #fff7c9, #ffd23f); border-radius:999px; padding:.2rem .7rem; }
   .tt-card h3 { font-family:Bungee, Impact, system-ui, sans-serif; font-weight:400; font-size:clamp(1.25rem, 3.6vw, 1.9rem); line-height:1.15; }
+  .tt-hero { grid-column:1 / -1; display:flex; align-items:center; gap:clamp(.8rem, 3vw, 2rem); padding-bottom:1.1rem; border-bottom:1px solid rgba(255,210,63,.35); }
+  .tt-ava-hero { width:clamp(5.2rem, 15vw, 9rem); height:clamp(5.2rem, 15vw, 9rem); filter:drop-shadow(0 0 18px rgba(255,210,63,.6)); }
+  .tt-kicker { font:800 clamp(.7rem, 1.7vw, .95rem) "JetBrains Mono", ui-monospace, monospace; letter-spacing:.14em; color:#ffe68a; }
+  .tt-title { font-family:Bungee, Impact, system-ui, sans-serif; font-size:clamp(2.1rem, 8vw, 4.4rem); line-height:1; margin-top:.2rem; text-transform:uppercase; }
+  .tt-card .tt-tagline { margin-top:.45rem; color:#fff7c9; font-size:clamp(1.05rem, 2.8vw, 1.6rem); line-height:1.2; }
+  @media (prefers-reduced-motion: no-preference) {
+    .tt-title.tt-gold { background:linear-gradient(100deg, #c98a0b 0%, #ffd23f 30%, #fff7c9 45%, #ffd23f 60%, #c98a0b 100%); background-size:250% 100%; -webkit-background-clip:text; background-clip:text; animation:ttShine 5s ease-in-out infinite; }
+    @keyframes ttShine { 0%, 100% { background-position:100% 0; } 50% { background-position:0 0; } }
+  }
+  @media (max-width: 520px) { .tt-hero { flex-direction:column; text-align:center; } .tt-card .flag { left:50%; transform:translateX(-50%); font-size:.58rem; letter-spacing:.02em; padding:.2rem .55rem; } }
   .tt-stats { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:.6rem; }
   .tt-stats div { padding:.6rem .7rem; border-radius:12px; background:rgba(0,0,0,.45); border:1px solid rgba(255,210,63,.25); min-width:0; }
   .tt-stats b { display:block; font:800 clamp(1rem, 3vw, 1.35rem) "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; overflow-wrap:anywhere; }
@@ -4163,12 +4173,17 @@ function renderTTCard() {
   if (MISSION.row) { box.hidden = true; return; }
   box.hidden = false;
   box.innerHTML = `<div class="tt-card">
-    <span class="flag">★★★★ BEYOND COMMANDER</span>
+    <span class="flag">★★★★ THE HIGHEST RANK · ETERNAL STATUS</span>
+    <div class="tt-hero">
+      <svg class="tt-ava tt-ava-hero" viewBox="0 0 64 64" aria-hidden="true"><use href="#ttAstro"/></svg>
+      <div class="min-w-0">
+        <p class="tt-kicker">★★★★ · 8 × NVIDIA H100 · 66 MILLION YEARS · ONE DECK</p>
+        <p class="tt-title tt-gold">Time Traveller</p>
+        <h3 class="tt-tagline">Go back 66 million years. Shuffle all the way home. Become a legend.</h3>
+      </div>
+    </div>
     <div class="min-w-0">
-      <div class="flex items-center gap-3"><svg class="tt-ava tt-ava-lg" viewBox="0 0 64 64" aria-hidden="true"><use href="#ttAstro"/></svg>
-        <div class="min-w-0"><p class="imp-name"><span class="gold-star">★★★★</span> Time Traveller</p><p class="mono text-xs text-[#ffe68a]">8 × NVIDIA H100 · 66 MILLION YEARS · ONE DECK</p></div></div>
-      <h3 class="tt-gold mt-4">Eight GPUs. One deeply questionable use of human ingenuity.</h3>
-      <p class="mt-3 text-sm sm:text-base text-[#cfe3d7]">We rent eight NVIDIA H100s, the chips the world uses to train artificial intelligence, and point every one of them at a single deck of cards. Your mission starts the day the asteroid wiped out the dinosaurs and shuffles all the way to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in under an hour and a half*</b>, shorter than most movies. You watch it live, from the first tiny mammals to the moon landing.</p>
+      <p class="text-sm sm:text-base text-[#cfe3d7]">Only a few will ever hold this rank. Eight of the fastest chips on Earth, the ones that train artificial intelligence, carry you back to the day the asteroid wiped out the dinosaurs. From there you shuffle every single year back to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in under an hour and a half*</b>. You watch history fly past live, from the first tiny mammals to the moon landing, and your name goes up in gold on the Time Travellers board. Forever.</p>
       <p class="tt-get mt-4">What you get</p>
       <ul class="imp-perks mt-1">
         <li>🚀 Your name on the Time Travellers board, golden helmet and all</li>
