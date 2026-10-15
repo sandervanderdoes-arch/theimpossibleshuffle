@@ -37,6 +37,9 @@ What's in the ZIP (every image 822 × 1122 px: poker size 2.5 × 3.5 in plus 1/8
 | `box-front.png`, `box-back.png` | Tuck box panels |
 | `ORDER.txt` | The order as text, plus the recipe (use it to check the printed deck) |
 
+With `supabase/traveller-notify.sql` installed, the "Mission complete" notification links to
+`designer.html?t=<ticket>`, which opens with that Time Traveller picked and scrolled to the deck.
+
 **Order one (MakePlayingCards.com):**
 
 1. Custom game cards → **Poker size (63 × 88 mm)**, 54 cards, **"Different images" for the

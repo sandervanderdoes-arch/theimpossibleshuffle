@@ -72,6 +72,10 @@ database rebuilds it a third time before it believes it.
    runs a small mission without Stripe and prints the page to watch it on. Hide the test
    row afterwards (Table Editor → travellers → `hidden` = true). Then buy one yourself
    with a Stripe test-mode link.
+8. **Notifications** (optional, recommended): put your ntfy topic in
+   `supabase/traveller-notify.sql` and run it in the SQL editor. Your phone then pings when someone
+   boards, when their mission is done (tap it: the deck designer opens with them picked) and if a
+   mission fails (refund them in Stripe).
 
 ## Notes
 

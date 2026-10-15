@@ -461,6 +461,14 @@ async function load() {
   $('#who').innerHTML = '<option value="">Sample (no real traveller)</option>' + travellers.map((t, i) => `<option value="${t.ticket}">No. ${String(i + 1).padStart(3, '0')} · ${esc(t.name)} (${t.status})</option>`).join('');
   $('#status').textContent = travellers.length ? `${travellers.length} Time Traveller${travellers.length === 1 ? '' : 's'} found. Numbers follow the order they boarded.` : 'No Time Travellers yet: showing a sample.';
   render();
+  const want = new URLSearchParams(location.search).get('t');   // from the "Mission complete" notification
+  if (want) {
+    if (travellers.some(x => x.ticket === want)) {
+      $('#who').value = want; $('#who').dispatchEvent(new Event('change'));
+      $('#status').textContent = `${$('#name').value}'s mission is done: their deck is ready below.`;
+      setTimeout(() => $('#deckTiles').scrollIntoView({ block: 'start' }), 300);
+    } else $('#status').textContent = 'That Time Traveller is not on the list (hidden, failed, or not boarded yet). Pick one above.';
+  }
 }
 const CARDNAME = c => RANKS[c % 13] + SUITS[Math.floor(c / 13)];
 async function svgToBlob(svg, w, h) {
