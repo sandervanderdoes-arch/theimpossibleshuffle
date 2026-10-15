@@ -1,4 +1,6 @@
--- A push notification (and optionally an email) for every new name on the Wall of Hopeless Heroes.
+-- A push notification for every new name on the Wall of Hopeless Heroes.
+-- (ntfy.sh only forwards to email for signed-in ntfy accounts; adding an 'email' field without one
+-- makes ntfy reject the whole message, push included.)
 -- Run once in the Supabase SQL editor, after sponsors.sql. Safe to run again.
 --
 -- Uses ntfy (https://ntfy.sh): free, no account. Install the ntfy app (iPhone or Android),
@@ -20,7 +22,6 @@ begin
     url := 'https://ntfy.sh',
     body := jsonb_build_object(
       'topic', 'CHANGE-ME-to-a-long-random-topic',            -- ← your ntfy topic
-      -- 'email', 'you@example.com',                         -- ← optional: also send it by email (remove the -- )
       'title', 'New name for the Wall of Hopeless Heroes',
       'message', new.name || coalesce(' · ' || new.dedication, '')
                  || E'\nApprove it in Supabase: Table Editor → sponsors → approved = true.',
