@@ -68,7 +68,7 @@ database rebuilds it a third time before it believes it.
    - Put the Payment Link's `plink_…` id in `TT_PAYMENT_LINK_ID` (other links are ignored).
 6. **Site.** Put the Payment Link URL in `SITE.fund.traveller` in `index.html`. While it's
    empty, the card says "Launch window opening soon".
-7. **Rehearsal:** `modal run time_traveller.py::dry_run --name "Test" --shuffles 1e11`
+7. **Rehearsal** (runs partly on your computer: `pip install requests` first): `modal run time_traveller.py::dry_run --name "Test" --shuffles 1e11`
    runs a small mission without Stripe and prints the page to watch it on. Hide the test
    row afterwards (Table Editor → travellers → `hidden` = true). Then buy one yourself
    with a Stripe test-mode link.
