@@ -28,5 +28,5 @@ create policy "Anyone can submit an unapproved name"
   with check (approved = false);
 -- No update or delete policies: only you (in the dashboard) can approve or remove rows.
 
-grant select (name, dedication, created_at) on public.sponsors to anon, authenticated;
+grant select (name, dedication, created_at, approved) on public.sponsors to anon, authenticated;
 grant insert (name, dedication) on public.sponsors to anon, authenticated;
