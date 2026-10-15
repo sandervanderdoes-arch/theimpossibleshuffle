@@ -26,6 +26,11 @@ import time
 
 import modal
 
+try:                                  # FastAPI only exists inside the web image; deploying from a laptop doesn't need it
+    from fastapi import Request
+except ImportError:
+    Request = None
+
 APP_NAME = 'impossible-shuffle-time-traveller'
 GPUS = int(os.environ.get('TT_GPUS', '8'))
 HAND_YEAR = 1_577_880                              # shuffles in a year of nonstop hand shuffling (20 s each)
@@ -100,7 +105,7 @@ def clean_name(raw):
 # ---------------------------------------------------------------------------
 @app.function(image=web_image, secrets=[secret])
 @modal.fastapi_endpoint(method='POST')
-async def stripe_webhook(request: 'fastapi.Request'):  # noqa: F821
+async def stripe_webhook(request: Request):     # a real FastAPI Request, so Stripe's raw body and signature reach us
     import stripe
     from fastapi.responses import JSONResponse
     payload = await request.body()
