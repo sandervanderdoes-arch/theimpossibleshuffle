@@ -4157,16 +4157,6 @@ async function submitMissionName(form) {
 /* ---------- Time Travellers ---------- */
 const TT = { years: 66e6, gpus: 8, price: '500', rate: 2.1e10, rows: [], timer: 0 };
 TT.N = TT.years * HAND_YEAR;                       // 104 trillion shuffles: from the asteroid to today
-/** The most likely best match among N shuffles (the mode of the maximum). */
-function likelyBest(N) {
-  let bestK = 0, bestP = -1;
-  for (let k = 1; k <= 30; k++) {
-    const pBelow = q => Math.exp(N * Math.log1p(-tailP(q)));   // P(every shuffle has fewer than q matches)
-    const p = pBelow(k + 1) - pBelow(k);
-    if (p > bestP) { bestP = p; bestK = k; }
-  }
-  return bestK;
-}
 function bigEnglish(n) {
   const unit = (v, w) => `${v < 10 ? v.toFixed(1).replace(/\.0$/, '') : fmt(Math.round(v))} ${w}`;   // 9.6 billion, 104 trillion
   return n >= 1e12 ? unit(n / 1e12, 'trillion') : n >= 1e9 ? unit(n / 1e9, 'billion') : n >= 1e6 ? unit(n / 1e6, 'million') : fmt(Math.round(n));
@@ -4176,7 +4166,6 @@ function renderTTCard() {
   if (MISSION.row) { box.hidden = true; return; }
   const odds = F52_NUM / TT.N, exp = Math.floor(Math.log10(odds)), mant = (odds / 10 ** exp).toFixed(1);
   const f52e = Math.floor(Math.log10(F52_NUM)), f52m = (F52_NUM / 10 ** f52e).toFixed(1);
-  const best = likelyBest(TT.N), top = LB.rows[0] ? LB.rows[0].best : 0;
   const humans = live.total ? TT.N / Math.max(1, live.total) : 0;
   box.hidden = false;
   box.innerHTML = `<div class="tt-card">
@@ -4211,7 +4200,6 @@ function renderTTCard() {
           ${humans >= 2 ? `<li>Your mission alone is ${fmt(Math.round(humans))} times more shuffles than everyone on this site has done so far, combined.</li>` : ''}
         </ul>
         <p class="mt-2">Still astronomically unlikely. We'll never pretend otherwise.</p>
-        <p class="mt-2"><b>Most likely outcome:</b> your best shuffle gets ${best} of the 52 cards in exactly the right spot${best > top && top ? `, more than anyone on the leaderboard has ever managed` : ''}.</p>
       </div>
       ${url ? `<a class="shuffle-btn tt-buy" href="${url}" target="_blank" rel="noopener" data-imp="traveller">Board the time machine · ${cur}${TT.price}</a>`
         : '<a class="shuffle-btn tt-buy" role="link" aria-disabled="true">Launch window opening soon</a>'}
