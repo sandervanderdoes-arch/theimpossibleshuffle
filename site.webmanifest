@@ -1,7 +1,7 @@
 {
   "name": "The Impossible Shuffle",
   "short_name": "Impossible Shuffle",
-  "description": "Humanity is shuffling one deck until it lands in the exact order of the Holy Grail. The odds are 1 in 52!.",
+  "description": "Somebody shuffled this deck once. Now humanity has to do it again. The odds are 1 in 52!.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#020805",

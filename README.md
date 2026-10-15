@@ -50,3 +50,17 @@ The same recipe gives the same deck everywhere: in the page (`pfDeckInto`), in t
 ## Time Traveller ($500, eight H100 GPUs)
 
 See `time-traveller/README.md`: the Modal app that takes Stripe's webhook, runs 104 trillion shuffles on eight rented H100s and writes progress to the `travellers` table, the separate Time Travellers board, and the buyer's live mission panel (`?traveller={CHECKOUT_SESSION_ID}`). The card stays "Launch window opening soon" until `SITE.fund.traveller` has a Payment Link.
+
+## Share previews ("I got 6/52")
+
+`b/<score>/index.html` and `b/<score>.jpg` exist for scores 0–20 and 52. A brag shared from the
+site links to `theimpossibleshuffle.com/b/<score>/`, so the link unfurls (X, WhatsApp, iMessage,
+Slack, Facebook) with that score; people who click it land on the site. Higher scores fall back to
+the homepage. The images and pages are generated from the same design as `og-image.png`.
+
+## Launch day
+
+Run `supabase/prelaunch-reset.sql` once, just before launch: it sets the humankind counter back to
+0 and empties the leaderboard, the Time Travellers and the Wall of Hopeless Heroes, so every number
+on the site is real from day one. Then clear the site's data in the browsers you tested with.
+Never run it after launch.

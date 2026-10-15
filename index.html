@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Impossible Shuffle</title>
-<meta name="description" content="The most pointless mission on the internet: everyone shuffling one deck until it lands in one exact order. Odds: 1 in 52!.">
+<meta name="description" content="The most pointless mission on the internet: somebody shuffled this deck once, and now humanity has to do it again. Odds: 1 in 52!.">
 <link rel="canonical" href="https://theimpossibleshuffle.com/">
 <meta name="theme-color" content="#03110a">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://theimpossibleshuffle.com/">
 <meta property="og:title" content="The Impossible Shuffle">
-<meta property="og:description" content="Humanity is shuffling one deck until it lands in the exact order of the Holy Grail. The odds are 1 in 52!, about 8 × 10⁶⁷. We're trying anyway.">
+<meta property="og:description" content="Somebody shuffled this deck once. Now humanity has to do it again, card for card. The odds are 1 in 52!, about 8 × 10⁶⁷. We're trying anyway.">
 <meta property="og:image" content="https://theimpossibleshuffle.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -18,7 +18,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://theimpossibleshuffle.com/og-image.png">
 <meta name="twitter:title" content="The Impossible Shuffle">
-<meta name="twitter:description" content="Humanity is shuffling one deck until it lands in the exact order of the Holy Grail. The odds are 1 in 52!. We're trying anyway.">
+<meta name="twitter:description" content="Somebody shuffled this deck once. Now humanity has to do it again, card for card. The odds are 1 in 52!. We're trying anyway.">
 <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
@@ -291,6 +291,12 @@
   @keyframes toastIn { from { opacity:0; transform:translateY(-10px); } }
 
   /* Fellow shufflers ticker */
+  .tt-cloud { font-size:.8rem; font-weight:700; color:#a5fbff; }
+  .hero-cta { width:auto; display:inline-flex; flex-direction:column; align-items:center; padding-left:2.2rem; padding-right:2.2rem; }
+  #ticker .tk-x { flex:none; width:2.2rem; display:flex; align-items:center; justify-content:center; color:#9fb5a8; font-size:1.05rem; border-left:1px solid rgba(255,210,63,.25); background:transparent; }
+  #ticker .tk-x:hover { color:#fff; }
+  body.no-ticker { padding-bottom:env(safe-area-inset-bottom, 0px) !important; }
+  body.no-ticker #ticker { display:none; }
   #ticker { position:fixed; left:0; right:0; bottom:0; height:calc(2.4rem + env(safe-area-inset-bottom, 0px)); padding-bottom:env(safe-area-inset-bottom, 0px); z-index:60; display:flex; align-items:stretch; background:rgba(1,8,5,.94); border-top:1px solid rgba(255,210,63,.45); font-size:.82rem; }
   #ticker .lab { flex:none; display:flex; align-items:center; gap:.4rem; padding:0 .75rem 0 calc(.75rem + env(safe-area-inset-left, 0px)); background:#1b1405; color:#ffe68a; font-weight:800; font-size:.72rem; letter-spacing:.04em; border-right:1px solid rgba(255,210,63,.4); }
   #ticker .lab-text { display:flex; flex-direction:column; line-height:1.05; }
@@ -299,6 +305,10 @@
   #tickerTrack { position:absolute; top:0; bottom:0; left:0; display:flex; align-items:center; white-space:nowrap; will-change:transform; }
   #tickerTrack > span { padding:0 2.2rem 0 0; }
   #tickerTrack > span::before { content:"✦"; color:var(--pink); margin-right:.8rem; }
+  @media (max-width: 640px) {
+    #ticker { height:calc(2rem + env(safe-area-inset-bottom, 0px)); font-size:.8rem; }
+    #ticker .lab-text { display:none; }
+  }
 
   /* Win overlay */
   #win { position:fixed; inset:0; z-index:150; }
@@ -602,10 +612,11 @@
   </svg>
   <!-- ===================== HERO ===================== -->
   <header class="px-4 pt-16 max-w-6xl mx-auto">
-    <div id="hero" class="bulbs px-6 py-10 sm:px-12 sm:py-12 text-center">
+    <div id="hero" class="bulbs px-6 py-8 sm:px-12 sm:py-10 text-center">
       <p class="mono text-xs tracking-widest text-[#9fb5a8] mb-3">MISSION CONTROL · DEPARTMENT OF LOST CAUSES</p>
-      <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl lg:text-6xl">Welcome to Humankind's Most Pointless Mission</h1>
-      <p class="mt-5 max-w-4xl mx-auto text-base sm:text-lg text-[#cfe3d7]"><span class="block" style="text-wrap:balance">Together, the whole internet is shuffling one deck of cards until we match it perfectly.</span> <span class="block mt-1" style="text-wrap:balance">Mathematics says no. We say: hold my cards.</span></p>
+      <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl lg:text-[3.4rem]">Welcome to Humankind's Most Pointless Mission</h1>
+      <p class="mt-5 max-w-4xl mx-auto text-base sm:text-lg text-[#cfe3d7]"><span class="block" style="text-wrap:balance">Somebody shuffled this deck once. Now humanity has to do it again.</span> <span class="block mt-1" style="text-wrap:balance">Mathematics says no. We say: hold my cards.</span></p>
+      <button type="button" id="heroShuffle" class="shuffle-btn hero-cta mt-5"><span class="btn-main">Defy Mathematics</span><span class="btn-sub">Free · no sign-up</span></button>
 
       <div id="missionStatus" class="mt-6 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border border-red-500/50 bg-red-950/40 px-4 py-2 mono text-xs sm:text-sm">
         <span class="inline-flex items-center gap-2 font-bold text-red-400"><span class="live-dot" aria-hidden="true"></span>LIVE</span>
@@ -675,7 +686,7 @@
       <section class="panel p-3 sm:p-5" aria-labelledby="grailTitle">
         <div class="flex items-center justify-between gap-3 flex-wrap mb-3">
           <h2 id="grailTitle" class="font-display text-base sm:text-lg neon-gold">The Holy Grail Sequence</h2>
-          <p class="mono text-xs text-[#9fb5a8]">fixed forever · the same deck for every human</p>
+          <p class="mono text-xs text-[#9fb5a8]">shuffled once · fixed forever · the same deck for every human</p>
         </div>
         <div id="grailGrid" class="deck-grid" role="list" aria-label="The Holy Grail Sequence, 52 cards"></div>
       </section>
@@ -874,7 +885,7 @@
       <div id="impTiers" class="imp-tiers mt-6"></div>
       <div id="ttCard" class="mt-6" hidden></div>
       <p id="impClosed" class="mt-4 text-sm text-[#ffe68a]" hidden></p>
-      <p class="mt-4 text-xs text-[#9fb5a8]">*Estimate for this device. Your station runs while this tab is open. Stand down anytime; it picks up where it left off on your next visit. Your rank and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
+      <p class="mt-4 text-xs text-[#9fb5a8]">*Captain to Commander: estimate for this device. Your station runs in this browser while the tab is open; stand down anytime and it picks up where it left off on your next visit. A Time Traveller runs on our eight GPUs in the cloud instead: nothing runs on your computer, and you can close the tab. Your rank and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
 
       <div id="hyperBox" class="hyper-box mt-6" hidden>
         <div class="flex items-center justify-between gap-2 flex-wrap">
@@ -965,6 +976,7 @@
 <div id="ticker" aria-label="Fellow shufflers feed (jokes, not real people)">
   <div class="lab"><span class="live-dot" aria-hidden="true" style="width:7px;height:7px"></span><span class="lab-text">FELLOW SHUFFLERS<small>jokes · not real people</small></span></div>
   <div id="tickerView"><div id="tickerTrack"></div></div>
+  <button type="button" class="tk-x" id="tickerClose" aria-label="Hide the fellow shufflers feed" title="Hide">✕</button>
 </div>
 
 <dialog id="cardDlg" aria-labelledby="cardTitle">
@@ -1335,7 +1347,7 @@ const handYears = n => n / HAND_YEAR;
 /** 20,000 shuffles → "4.6 days"; human-sized wording for an amount of hand shuffling. */
 function handTime(n) {
   const s = n * HAND_SECONDS;
-  if (s < 3600) return `${Math.max(1, Math.round(s / 60))} minute${Math.round(s / 60) === 1 ? '' : 's'}`;
+  if (s < 3600) { const m = Math.max(1, Math.round(s / 60)); return `${m} minute${m === 1 ? '' : 's'}`; }
   if (s < 86400) return `${(s / 3600).toFixed(1)} hours`;
   if (s < SECONDS_PER_YEAR) return `${(s / 86400).toFixed(1)} days`;
   const y = s / SECONDS_PER_YEAR;
@@ -2871,11 +2883,13 @@ function toast(html) {
 }
 
 /* ---------- Share: a result card image plus copyable text ---------- */
+const BRAG_PAGES = m => m <= 20 || m === 52;     // b/<m>/ exists for these: the link unfurls as "I got m/52"
 function shareText() {
+  const site = /^https?:$/.test(location.protocol) ? location.origin : 'https://theimpossibleshuffle.com';
   const url = location.href.split(/[?#]/)[0];
   if (cardState.mode === 'lb') return `There's now a world ranking. Who shuffles the luckiest deck? 🃏 ${url}`;
   const best = bestEver(), rank = LB.ready && LB.rank ? ` World ranking: #${fmt(LB.rank)} of ${fmt(Math.max(LB.players, LB.rank))}.` : '';
-  return `I shuffled ${fmt(store.allTime)} times for humanity. Best: ${best}/52 (a ${pctText(chanceWithin(best, Math.max(1, store.allTime)))} chance in that many shuffles).${rank} Mathematics: 1, Humanity: 0. Your turn: ${url}`;
+  return `I shuffled ${fmt(store.allTime)} time${store.allTime === 1 ? '' : 's'} for humanity. Best: ${best}/52 (a ${pctText(chanceWithin(best, Math.max(1, store.allTime)))} chance in that many shuffles).${rank} Mathematics: 1, Humanity: 0. Your turn: ${BRAG_PAGES(best) ? `${site}/b/${best}/` : url}`;
 }
 async function copyText(text) {
   let ok = false;
@@ -3876,6 +3890,18 @@ function initImpatient() {
   renderHyper();
   loadWall();
   $('#hyperGo').addEventListener('click', () => (HYPER.running ? hyperPause() : hyperStart()));
+  // The hero's button: straight to the game, and the first shuffle happens on arrival.
+  $('#heroShuffle').addEventListener('click', () => {
+    track('hero-shuffle');
+    $('#chalTitle').closest('section').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    setTimeout(() => $('#shuffleBtn').click(), reduceMotion ? 0 : 500);
+  });
+  $('#tickerClose').addEventListener('click', () => {
+    document.body.classList.add('no-ticker');
+    try { localStorage.setItem('tis-no-ticker', '1'); } catch (e) { /* private mode */ }
+    track('ticker-hide');
+  });
+  try { if (localStorage.getItem('tis-no-ticker')) document.body.classList.add('no-ticker'); } catch (e) { /* private mode */ }
   $('#hyperNotify').addEventListener('click', async () => { try { await Notification.requestPermission(); } catch (e) { /* older Safari */ } hyperNotifyUI(); track('hyper-notify'); });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) return;
@@ -4264,6 +4290,7 @@ function renderTTCard() {
       <div id="ttFirst" class="tt-first">${ttFirstHTML()}</div>
       ${url ? `<a class="shuffle-btn tt-buy" href="${url}" target="_blank" rel="noopener" data-imp="traveller">Board the time machine · ${cur}${TT.price}</a>`
         : '<a class="shuffle-btn tt-buy" role="link" aria-disabled="true">Launch window opening soon</a>'}
+      <p class="tt-cloud">☁️ Runs on our eight GPUs in the cloud, not on your computer. Close the tab whenever you like: your mission control link keeps updating.</p>
       <p class="imp-why">Why ${cur}${TT.price}? Eight of the fastest chips on Earth, one deck, no mercy. About ${cur}${(Number(TT.price) / (TT.years / 1e6)).toFixed(2)} per million years of shuffling. A bargain, historically.</p>
       <p class="text-[11px] text-[#9fb5a8]">*Measured on eight H100s: about 2.6 billion shuffles a second each. Your mission runs until all ${fmt(TT.N)} shuffles are done, however long the GPUs need, and your live panel shows the real speed. Every shuffle counts toward humankind's total. No prize, just glory.</p>
     </div>
