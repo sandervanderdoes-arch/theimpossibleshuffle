@@ -55,3 +55,8 @@ A parody of the classic "Welcome to Fabulous Las Vegas" sign: "Welcome to the Im
 | `welcome-sign.png` | 4500 × 5400, transparent | The sign on its own with "Odds of a match: 1 in 8 × 10⁶⁷ · Refunds: also impossible". For T-shirts, hoodie backs and stickers |
 
 The sign sits in the middle of both banners, so it survives the shop cropping the edges.
+
+### Time Traveller package (one of a kind, per buyer)
+
+See `time-traveller/README.md`: a mission patch, "My best shuffle", "I shuffled through all of this" and a
+boarding pass, generated for each Time Traveller from their own mission by `time-traveller/designer.html`.

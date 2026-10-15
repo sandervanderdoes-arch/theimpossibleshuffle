@@ -539,6 +539,7 @@
   .tt-stats b { display:block; font:800 clamp(1rem, 3vw, 1.35rem) "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; overflow-wrap:anywhere; }
   .tt-stats span { font-size:.75rem; color:#cfe3d7; }
   @media (max-width: 640px) { .tt-panel .tl-log li, .tt-panel .tl-all li { flex-wrap:wrap; column-gap:.4rem; row-gap:0; } .tt-panel .tl-log li .when, .tt-panel .tl-all li .when { flex-basis:100%; min-width:0; } .tt-panel .tl-log li > span:last-child, .tt-panel .tl-all li > span:last-child { flex:1 1 0; min-width:0; } }
+  .tt-get { font:800 .75rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.12em; text-transform:uppercase; color:#ffd23f; }
   .tt-first { padding:.6rem .8rem; border-radius:12px; border:1px dashed rgba(255,210,63,.6); background:rgba(255,210,63,.08); color:#ffe68a; font-size:.85rem; font-weight:700; }
   .tt-buy { display:block; text-align:center; background:linear-gradient(180deg, #fff7c9, #ffd23f 45%, #c98a0b) !important; color:#1d1300 !important; border-color:#6e4500 !important; text-shadow:none !important; }
   .tt-buy[aria-disabled="true"] { filter:grayscale(.6); opacity:.75; cursor:not-allowed; }
@@ -4168,7 +4169,8 @@ function renderTTCard() {
         <div class="min-w-0"><p class="imp-name"><span class="gold-star">★★★★</span> Time Traveller</p><p class="mono text-xs text-[#ffe68a]">8 × NVIDIA H100 · 66 MILLION YEARS · ONE DECK</p></div></div>
       <h3 class="tt-gold mt-4">Eight GPUs. One deeply questionable use of human ingenuity.</h3>
       <p class="mt-3 text-sm sm:text-base text-[#cfe3d7]">We rent eight NVIDIA H100s, the chips the world uses to train artificial intelligence, and point every one of them at a single deck of cards. Your mission starts the day the asteroid wiped out the dinosaurs and shuffles all the way to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in under an hour and a half*</b>, shorter than most movies. You watch it live, from the first tiny mammals to the moon landing.</p>
-      <ul class="imp-perks mt-3">
+      <p class="tt-get mt-4">What you get</p>
+      <ul class="imp-perks mt-1">
         <li>🚀 Your name on the Time Travellers board, golden helmet and all</li>
         <li>📡 Your own live mission control: 66 million years of history, shuffled past at full throttle</li>
         <li>✓ Your best shuffle, provably fair, rebuilt and checked by the database</li>
