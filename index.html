@@ -542,6 +542,8 @@
   .tt-first { padding:.6rem .8rem; border-radius:12px; border:1px dashed rgba(255,210,63,.6); background:rgba(255,210,63,.08); color:#ffe68a; font-size:.85rem; font-weight:700; }
   .tt-odds { padding:.8rem .9rem; border-radius:12px; background:rgba(34,243,255,.07); border:1px solid rgba(34,243,255,.3); font-size:.88rem; color:#cfe3d7; }
   .tt-odds b { color:#a5fbff; }
+  .tt-why { margin:.5rem 0 0; padding-left:1.1rem; list-style:disc; display:grid; gap:.25rem; font-size:.85rem; }
+  .tt-small { font-size:.75rem; color:#9fb5a8; }
   .tt-buy { display:block; text-align:center; background:linear-gradient(180deg, #fff7c9, #ffd23f 45%, #c98a0b) !important; color:#1d1300 !important; border-color:#6e4500 !important; text-shadow:none !important; }
   .tt-buy[aria-disabled="true"] { filter:grayscale(.6); opacity:.75; cursor:not-allowed; }
 </style>
@@ -4173,6 +4175,7 @@ function renderTTCard() {
   const box = $('#ttCard'), url = SITE.fund.traveller, cur = SITE.fund.currency || '$';
   if (MISSION.row) { box.hidden = true; return; }
   const odds = F52_NUM / TT.N, exp = Math.floor(Math.log10(odds)), mant = (odds / 10 ** exp).toFixed(1);
+  const f52e = Math.floor(Math.log10(F52_NUM)), f52m = (F52_NUM / 10 ** f52e).toFixed(1);
   const best = likelyBest(TT.N), top = LB.rows[0] ? LB.rows[0].best : 0;
   const humans = live.total ? TT.N / Math.max(1, live.total) : 0;
   box.hidden = false;
@@ -4199,7 +4202,17 @@ function renderTTCard() {
         <div><b>${fmt(Math.round(TT.years / 80 / 1e3) * 1e3)}×</b><span>a lifetime of shuffling by hand</span></div>
       </div>
       <p id="ttFirst" class="tt-first"${TT.rows.length ? ' hidden' : ''}>🚀 The Time Travellers board is still empty. Whoever boards first is first on it forever.</p>
-      <p class="tt-odds">Your chance of ending the mission: <b>1 in ${mant} × 10${sup(exp)}</b>. That's ${bigEnglish(TT.N)} times one shuffle, and ${fmt(Math.round(TT.years / 1e5))} times a Commander's chance.${humans >= 2 ? ` On its own, your mission shuffles <b>${fmt(Math.round(humans))}×</b> more than all of humankind has on this site so far.` : ''} Still astronomically unlikely, and we'll never pretend otherwise. Your most likely best shuffle: <b>${best}/52</b>${best > top && top ? `, higher than anyone on the leaderboard has ever managed` : ''}.</p>
+      <div class="tt-odds">
+        <p><b>What you get:</b> ${bigEnglish(TT.N)} real shuffles. Every one is its own provably fair attempt at the Holy Grail.</p>
+        <p class="mt-2"><b>Your chance that one of them is the winner:</b> 1 in ${mant} × 10${sup(exp)}<br><span class="tt-small">(a number with ${exp + 1} digits)</span></p>
+        <ul class="tt-why">
+          <li>One shuffle: 1 in ${f52m} × 10${sup(f52e)}. You get ${bigEnglish(TT.N)} of them, so your chance is ${bigEnglish(TT.N)} times bigger.</li>
+          <li>That's ${fmt(Math.round(TT.years / 1e5))} times the chance of a Commander's mission.</li>
+          ${humans >= 2 ? `<li>Your mission alone is ${fmt(Math.round(humans))} times more shuffles than everyone on this site has done so far, combined.</li>` : ''}
+        </ul>
+        <p class="mt-2">Still astronomically unlikely. We'll never pretend otherwise.</p>
+        <p class="mt-2"><b>Most likely outcome:</b> your best shuffle gets ${best} of the 52 cards in exactly the right spot${best > top && top ? `, more than anyone on the leaderboard has ever managed` : ''}.</p>
+      </div>
       ${url ? `<a class="shuffle-btn tt-buy" href="${url}" target="_blank" rel="noopener" data-imp="traveller">Board the time machine · ${cur}${TT.price}</a>`
         : '<a class="shuffle-btn tt-buy" role="link" aria-disabled="true">Launch window opening soon</a>'}
       <p class="imp-why">Why ${cur}${TT.price}? Eight of the fastest chips on Earth, one deck, no mercy. About ${cur}${(Number(TT.price) / (TT.years / 1e6)).toFixed(2)} per million years of shuffling. A bargain, historically.</p>
