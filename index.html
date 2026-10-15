@@ -103,8 +103,8 @@
   .deck-grid { display:grid; grid-template-columns:repeat(9, minmax(0,1fr)); gap:4px; perspective:900px; }
   @media (max-width:379px) { .deck-grid { grid-template-columns:repeat(8, minmax(0,1fr)); gap:3px; } }
   @media (min-width:640px) { .deck-grid { grid-template-columns:repeat(13, minmax(0,1fr)); gap:5px; } }
-  /* Laptops: both decks and the shuffle button fit in one screen, also on short screens (cards shrink a little). */
-  @media (min-width:1024px) { .deck-grid { max-width:max(540px, calc(112vh - 225px)); margin-inline:auto; } }
+  /* --deck-max is set by the hero button when both decks and the shuffle button wouldn't fit on the screen. */
+  @media (min-width:640px) { .deck-grid { max-width:var(--deck-max, 100%); margin-inline:auto; } }
   .pcard {
     position:relative; aspect-ratio:5/7; border-radius:6px; container-type:inline-size;
     background:linear-gradient(160deg,#fffdf5,#ece4d0); color:#121212;
@@ -3895,10 +3895,20 @@ function initImpatient() {
   // The hero's button: straight to the game, and the first shuffle happens on arrival.
   $('#heroShuffle').addEventListener('click', () => {
     track('hero-shuffle');
-    // Both decks and the shuffle button when they fit on the screen (laptops); otherwise your deck and the button (phones).
+    // Both decks and the shuffle button on one screen (tablets and up, shrinking the cards if the window is short);
+    // on phones, your deck and the button.
     const y = el => el.getBoundingClientRect().top + scrollY, yb = el => el.getBoundingClientRect().bottom + scrollY;
-    const both = y($('#game')) - 8, usable = innerHeight - ($('#ticker').offsetHeight || 0) - 8;
-    const fits = yb($('#chalGrid')) + 16 - both <= usable;   // +16: the first shuffle adds a "Replay my best" button
+    const usable = innerHeight - ($('#ticker').offsetHeight || 0) - 8;
+    const sticky = getComputedStyle($('#shuffleBtn').closest('.lg\\:sticky') || document.body).position === 'sticky';
+    const span = () => Math.max(yb($('#chalGrid')) + 16, sticky ? 0 : yb($('#shuffleBtn')) + 8) - y($('#game')) + 8;   // +16: the first shuffle adds "Replay my best"
+    if (innerWidth >= 640 && span() > usable) {
+      const g = $('#grailGrid').getBoundingClientRect(), h = g.height, w = g.width;
+      const a = 4 * 1.4 / 13, b = h - a * w;                // a deck's height grows linearly with its width (4 rows of 5:7 cards)
+      const newH = (usable - (span() - 2 * h)) / 2;
+      const newW = Math.floor((newH - b) / a);
+      if (newW >= 400) document.documentElement.style.setProperty('--deck-max', newW + 'px');   // never shrink cards to crumbs
+    }
+    const both = y($('#game')) - 8, fits = span() <= usable;
     const top = fits ? both : Math.max(y($('#chalTitle').closest('section')) - 8, yb($('#shuffleBtn')) + 40 - usable);
     scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' });
     setTimeout(() => $('#shuffleBtn').click(), reduceMotion ? 0 : 500);
