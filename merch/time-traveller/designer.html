@@ -38,6 +38,10 @@
     <p class="status" id="status"></p>
   </div>
   <div class="grid" id="tiles"></div>
+  <h2 style="color:#ffe68a;margin-top:32px">🃏 Their own deck of cards</h2>
+  <p class="lead">54 cards (52 in the exact order of their best shuffle, plus two jokers), one back and a box front and back, at poker size for MakePlayingCards.com: 822 × 1122 px per card, 2.5 × 3.5 in plus 1/8 in bleed at 300 dpi. Every face shows its position, so the order can always be restored.</p>
+  <div class="grid" id="deckTiles"></div>
+  <p style="margin-top:12px"><button id="deckZip">Download the whole deck (ZIP)</button></p>
   <p class="lead" style="margin-top:24px">Files: transparent background and flat colours, made for dark garments (black, navy, charcoal). Patch 3000 × 3000 (10 in at 300 dpi), tee backs 4500 × 5400 (15 × 18 in), boarding pass 3600 × 1500 (12 × 5 in) on its own cream ticket. Fonts: Bungee and JetBrains Mono (SIL Open Font License, fine for merch).</p>
 </main>
 <script>
@@ -274,6 +278,108 @@ function boardingPass(d, F) {
 
 const TTMerch = { designs: { patch: [patch, 3000, 3000], 'best-shuffle': [bestShuffle, 4500, 5400], route: [route, 4500, 5400], 'boarding-pass': [boardingPass, 3600, 1500] } };
 
+/* ---------- The Time Traveller's own deck: poker size for MakePlayingCards (822 × 1122 px incl. 36 px bleed) ---------- */
+const CW = 822, CH = 1122, BLEED = 36;
+const crown = (x, y, s, fill) => `<path transform="translate(${x} ${y}) scale(${s})" d="M0 40 L8 6 L26 26 L40 0 L54 26 L72 6 L80 40 Z" fill="${fill}"/>`;
+/** Face of the card at position i (0-based) of the traveller's best shuffle. */
+function deckFace(d, F, i) {
+  const c = d.deck[i], suit = SUITS[Math.floor(c / 13)], rank = RANKS[c % 13], red = suit === 'H' || suit === 'D', col = red ? RED : INK;
+  const hit = c === d.grail[i], face = 'JQK'.includes(rank);
+  const corner = (rot) => `<g transform="${rot ? `rotate(180 ${CW / 2} ${CH / 2})` : ''}">
+      <text x="${BLEED + (rank === '10' ? 108 : 100)}" y="${BLEED + 175}" font-family="Bungee" font-size="${rank === '10' ? 76 : 116}" fill="${col}" text-anchor="middle">${rank}</text>
+      <path d="${SUIT[suit]}" transform="translate(${BLEED + 70} ${BLEED + 195}) scale(.6)" fill="${col}"/></g>`;
+  const centre = face
+    ? `${crown(CW / 2 - 90, 230, 2.25, hit ? INK : GOLD)}<text x="${CW / 2}" y="640" font-family="Bungee" font-size="360" fill="${col}" text-anchor="middle">${rank}</text>
+       <path d="${SUIT[suit]}" transform="translate(${CW / 2 - 50} 680) scale(1)" fill="${col}"/>`
+    : `<path d="${SUIT[suit]}" transform="translate(${CW / 2 - 170} ${CH / 2 - 210}) scale(3.4)" fill="${col}"/>`;
+  return svgDoc(CW, CH, F, `
+    <rect width="${CW}" height="${CH}" fill="${CREAM}"/>
+    ${hit ? `<rect x="${BLEED + 30}" y="${BLEED + 30}" width="${CW - 2 * BLEED - 60}" height="${CH - 2 * BLEED - 60}" rx="30" fill="none" stroke="${GOLD}" stroke-width="16"/>` : ''}
+    ${corner(false)}${corner(true)}
+    ${centre}
+    ${hit ? `<rect x="${BLEED + 150}" y="${CH - BLEED - 230}" width="${CW - 2 * BLEED - 300}" height="64" rx="32" fill="${GOLD}"/>
+      <text x="${CW / 2}" y="${CH - BLEED - 187}" font-family="JBM" font-weight="800" font-size="27" fill="${INK}" text-anchor="middle">★ IN ITS HOLY GRAIL SPOT</text>` : ''}
+    <text x="${CW / 2}" y="${CH - BLEED - 120}" font-family="JBM" font-weight="800" font-size="32" fill="${GREY}" text-anchor="middle">No. ${i + 1} of 52</text>`);
+}
+function deckBack(d, F) {
+  let stars = '';
+  for (let k = 0; k < 26; k++) { const x = 90 + ((k * 151) % 640), y = 120 + ((k * 263) % 880); stars += `<path d="${STAR}" transform="translate(${x} ${y}) scale(.16)" fill="${GOLD}" opacity=".35"/>`; }
+  const name = d.name.toUpperCase();
+  return svgDoc(CW, CH, F, `
+    <rect width="${CW}" height="${CH}" fill="${NAVY}"/>${stars}
+    <rect x="${BLEED + 30}" y="${BLEED + 30}" width="${CW - 2 * BLEED - 60}" height="${CH - 2 * BLEED - 60}" rx="36" fill="none" stroke="${GOLD}" stroke-width="12"/>
+    <rect x="${BLEED + 54}" y="${BLEED + 54}" width="${CW - 2 * BLEED - 108}" height="${CH - 2 * BLEED - 108}" rx="26" fill="none" stroke="${GOLD}" stroke-width="4"/>
+    <text x="${CW / 2}" y="250" font-family="Bungee" font-size="84" fill="${GOLD}" text-anchor="middle">TIME</text>
+    <text x="${CW / 2}" y="340" font-family="Bungee" font-size="84" fill="${GOLD}" text-anchor="middle">TRAVELLER</text>
+    <ellipse cx="${CW / 2}" cy="610" rx="270" ry="80" fill="none" stroke="${CYAN}" stroke-width="14" transform="rotate(-16 ${CW / 2} 610)"/>
+    ${astro(CW / 2 - 200, 400, 400)}
+    <text x="${CW / 2}" y="905" font-family="Bungee" font-size="64" fill="${CREAM}" text-anchor="middle">No. ${nr(d.number)}</text>
+    <text x="${CW / 2}" y="975" font-family="JBM" font-weight="800" font-size="${fitSize(name, 38, 560, 0.62)}" fill="${GOLD}" text-anchor="middle">${esc(name)}</text>`);
+}
+function jokerCert(d, F) {
+  const name = d.name.toUpperCase(), lines = [
+    'This deck is in the exact order', 'of the best shuffle out of', `${fmtN(d.shuffles)}`, 'shuffles by'];
+  return svgDoc(CW, CH, F, `
+    <rect width="${CW}" height="${CH}" fill="${CREAM}"/>
+    <rect x="${BLEED + 36}" y="${BLEED + 36}" width="${CW - 2 * BLEED - 72}" height="${CH - 2 * BLEED - 72}" rx="30" fill="none" stroke="${GOLD}" stroke-width="14"/>
+    ${astro(CW / 2 - 85, 110, 170)}
+    <text x="${CW / 2}" y="340" font-family="Bungee" font-size="${fitSize('THE ' + name + ' DECK', 50, 580, 0.74)}" fill="${INK}" text-anchor="middle">THE ${esc(name)} DECK</text>
+    ${lines.map((t, k) => `<text x="${CW / 2}" y="${430 + k * 52}" font-family="JBM" font-weight="${k === 2 ? 800 : 400}" font-size="${k === 2 ? 38 : 34}" fill="${INK}" text-anchor="middle">${esc(t)}</text>`).join('')}
+    <text x="${CW / 2}" y="${430 + 4 * 52 + 10}" font-family="Bungee" font-size="40" fill="${INK}" text-anchor="middle">TIME TRAVELLER No. ${nr(d.number)}</text>
+    <text x="${CW / 2}" y="${430 + 6 * 52 + 30}" font-family="Bungee" font-size="150" fill="${DGOLD}" text-anchor="middle">${d.best}/52</text>
+    <text x="${CW / 2}" y="${430 + 7 * 52 + 50}" font-family="JBM" font-weight="800" font-size="30" fill="${INK}" text-anchor="middle">CARDS IN THEIR HOLY GRAIL SPOT</text>
+    <text x="${CW / 2}" y="${430 + 8 * 52 + 40}" font-family="JBM" font-weight="400" font-size="26" fill="${GREY}" text-anchor="middle">${esc(d.date)}</text>
+    <text x="${CW / 2}" y="${430 + 8 * 52 + 80}" font-family="JBM" font-weight="400" font-size="${fitSize(`drand round ${fmtN(d.recipe.r)} · shuffle #${fmtN(d.recipe.n)}`, 26, 580, 0.6)}" fill="${GREY}" text-anchor="middle">drand round ${esc(fmtN(d.recipe.r))} · shuffle #${esc(fmtN(d.recipe.n))}</text>
+    <text x="${CW / 2}" y="${CH - BLEED - 95}" font-family="JBM" font-weight="800" font-size="28" fill="${GREY}" text-anchor="middle">Replay it at theimpossibleshuffle.com</text>`);
+}
+function jokerGrail(d, F) {
+  let list = '';
+  d.grail.forEach((c, i) => {
+    const col = Math.floor(i / 13), row = i % 13, suit = SUITS[Math.floor(c / 13)], red = suit === 'H' || suit === 'D';
+    const x = 106 + col * 158, y = 300 + row * 52, hit = d.deck[i] === c;
+    list += `<text x="${x}" y="${y}" font-family="JBM" font-weight="800" font-size="30" fill="${GREY}">${String(i + 1).padStart(2, ' ')}</text>
+      <text x="${x + 44}" y="${y}" font-family="Bungee" font-size="34" fill="${hit ? DGOLD : red ? RED : INK}">${RANKS[c % 13]}</text>
+      <path d="${SUIT[suit]}" transform="translate(${x + 104} ${y - 28}) scale(.3)" fill="${hit ? DGOLD : red ? RED : INK}"/>`;
+  });
+  return svgDoc(CW, CH, F, `
+    <rect width="${CW}" height="${CH}" fill="${CREAM}"/>
+    <rect x="${BLEED + 36}" y="${BLEED + 36}" width="${CW - 2 * BLEED - 72}" height="${CH - 2 * BLEED - 72}" rx="30" fill="none" stroke="${INK}" stroke-width="10"/>
+    <text x="${CW / 2}" y="170" font-family="Bungee" font-size="60" fill="${INK}" text-anchor="middle">THE HOLY GRAIL</text>
+    <text x="${CW / 2}" y="225" font-family="JBM" font-weight="800" font-size="28" fill="${GREY}" text-anchor="middle">THE ORDER HUMANITY IS CHASING</text>
+    ${list}
+    <text x="${CW / 2}" y="${CH - BLEED - 125}" font-family="JBM" font-weight="800" font-size="27" fill="${DGOLD}" text-anchor="middle">GOLD = WHERE YOUR DECK MATCHES</text>
+    <text x="${CW / 2}" y="${CH - BLEED - 85}" font-family="JBM" font-weight="400" font-size="26" fill="${GREY}" text-anchor="middle">Odds of a full match: 1 in 8.07 × 10⁶⁷</text>`);
+}
+function boxFront(d, F) {
+  const name = d.name.toUpperCase();
+  return svgDoc(CW, CH, F, `
+    <rect width="${CW}" height="${CH}" fill="${NAVY}"/>
+    <rect x="${BLEED + 30}" y="${BLEED + 30}" width="${CW - 2 * BLEED - 60}" height="${CH - 2 * BLEED - 60}" rx="30" fill="none" stroke="${GOLD}" stroke-width="10"/>
+    <text x="${CW / 2}" y="190" font-family="JBM" font-weight="800" font-size="30" fill="${GOLD}" text-anchor="middle" letter-spacing="3">THE IMPOSSIBLE SHUFFLE</text>
+    <text x="${CW / 2}" y="300" font-family="Bungee" font-size="${fitSize('THE ' + name, 72, 600, 0.74)}" fill="${CREAM}" text-anchor="middle">THE ${esc(name)}</text>
+    <text x="${CW / 2}" y="390" font-family="Bungee" font-size="76" fill="${GOLD}" text-anchor="middle">DECK</text>
+    ${astro(CW / 2 - 170, 440, 340)}
+    <text x="${CW / 2}" y="850" font-family="JBM" font-weight="800" font-size="30" fill="${CREAM}" text-anchor="middle">THE BEST SHUFFLE OUT OF</text>
+    <text x="${CW / 2}" y="900" font-family="JBM" font-weight="800" font-size="30" fill="${CREAM}" text-anchor="middle">${esc(fmtN(d.shuffles))}</text>
+    <text x="${CW / 2}" y="975" font-family="Bungee" font-size="42" fill="${GOLD}" text-anchor="middle">TIME TRAVELLER No. ${nr(d.number)}</text>`);
+}
+function boxBack(d, F) {
+  return svgDoc(CW, CH, F, `
+    <rect width="${CW}" height="${CH}" fill="${NAVY}"/>
+    <rect x="${BLEED + 30}" y="${BLEED + 30}" width="${CW - 2 * BLEED - 60}" height="${CH - 2 * BLEED - 60}" rx="30" fill="none" stroke="${GOLD}" stroke-width="10"/>
+    <text x="${CW / 2}" y="210" font-family="Bungee" font-size="58" fill="${GOLD}" text-anchor="middle">66,000,000 YEARS</text>
+    <text x="${CW / 2}" y="285" font-family="Bungee" font-size="58" fill="${GOLD}" text-anchor="middle">ONE DECK</text>
+    ${['Eight GPUs shuffled from the day', 'the asteroid hit all the way to today.', 'This is the luckiest order they found,', `with ${d.best} of 52 cards in their`, 'Holy Grail spot.', '', 'Keep it in order: every card is', 'numbered 1 to 52 on its face.']
+      .map((t, k) => `<text x="${CW / 2}" y="${400 + k * 50}" font-family="JBM" font-weight="400" font-size="27" fill="${CREAM}" text-anchor="middle">${esc(t)}</text>`).join('')}
+    <text x="${CW / 2}" y="850" font-family="JBM" font-weight="800" font-size="24" fill="${GOLD}" text-anchor="middle">PROVABLY FAIR</text>
+    <text x="${CW / 2}" y="885" font-family="JBM" font-weight="400" font-size="${fitSize(`drand round ${fmtN(d.recipe.r)} · shuffle #${fmtN(d.recipe.n)}`, 22, 580, 0.6)}" fill="${CREAM}" text-anchor="middle">drand round ${esc(fmtN(d.recipe.r))} · shuffle #${esc(fmtN(d.recipe.n))}</text>
+    <text x="${CW / 2}" y="920" font-family="JBM" font-weight="400" font-size="20" fill="${CREAM}" text-anchor="middle">${esc(String(d.recipe.R).slice(0, 32))}</text>
+    <text x="${CW / 2}" y="948" font-family="JBM" font-weight="400" font-size="20" fill="${CREAM}" text-anchor="middle">${esc(String(d.recipe.R).slice(32))}</text>
+    <text x="${CW / 2}" y="980" font-family="JBM" font-weight="400" font-size="20" fill="${CREAM}" text-anchor="middle">seat ${esc(d.recipe.s)}</text>
+    <text x="${CW / 2}" y="1030" font-family="JBM" font-weight="800" font-size="26" fill="${GOLD}" text-anchor="middle">theimpossibleshuffle.com</text>`);
+}
+TTMerch.deck = { face: deckFace, back: deckBack, jokerCert, jokerGrail, boxFront, boxBack, w: CW, h: CH };
+
 const $ = s => document.querySelector(s);
 const CODES = Array.from({ length: 52 }, (_, c) => RANKS[c % 13] + SUITS[Math.floor(c / 13)]);
 const GRAIL = GRAIL_CODES.map(c => CODES.indexOf(c));
@@ -322,6 +428,7 @@ const LABELS = { patch: ['Mission patch', 'Hoodie or jacket chest, cap side, sti
   route: ['I shuffled through all of this', 'Tee or hoodie back'], 'boarding-pass': ['Boarding pass', 'Printed card, framed print, sticker'] };
 function render() {
   const d = data();
+  if (typeof renderDeck === 'function' && TTMerch.deck) setTimeout(renderDeck, 0);
   $('#tiles').innerHTML = Object.keys(TTMerch.designs).map(k => `<div class="tile"><img data-k="${k}" alt="${LABELS[k][0]}"><b>${LABELS[k][0]}</b><span>${LABELS[k][1]}</span><button data-dl="${k}">Download PNG</button></div>`).join('');
   document.querySelectorAll('img[data-k]').forEach(img => { img.src = URL.createObjectURL(new Blob([svgFor(img.dataset.k, d)], { type: 'image/svg+xml' })); });
 }
@@ -354,7 +461,52 @@ async function load() {
   $('#status').textContent = travellers.length ? `${travellers.length} Time Traveller${travellers.length === 1 ? '' : 's'} found. Numbers follow the order they boarded.` : 'No Time Travellers yet: showing a sample.';
   render();
 }
-window.TTMerchPage = { toPng, data, svgFor, designs: Object.keys(TTMerch.designs) };
+const CARDNAME = c => RANKS[c % 13] + SUITS[Math.floor(c / 13)];
+async function svgToBlob(svg, w, h) {
+  const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+  const img = new Image();
+  await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
+  await new Promise(r => setTimeout(r, 60));
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+  cv.getContext('2d').drawImage(img, 0, 0, w, h); URL.revokeObjectURL(url);
+  return new Promise(res => cv.toBlob(res, 'image/png'));
+}
+function deckFiles(d = data()) {   // [file name, svg] for the whole print set
+  const D = TTMerch.deck, files = [['back.png', D.back(d, FONTS)]];
+  d.deck.forEach((c, i) => files.push([`front-${String(i + 1).padStart(2, '0')}-${CARDNAME(c)}.png`, D.face(d, FONTS, i)]));
+  files.push(['front-53-joker-certificate.png', D.jokerCert(d, FONTS)], ['front-54-joker-holy-grail.png', D.jokerGrail(d, FONTS)],
+    ['box-front.png', D.boxFront(d, FONTS)], ['box-back.png', D.boxBack(d, FONTS)]);
+  return files;
+}
+function renderDeck() {
+  const d = data(), D = TTMerch.deck, firstHit = d.deck.findIndex((c, i) => c === d.grail[i]), face = d.deck.findIndex((c, i) => c % 13 >= 10 && i !== firstHit);
+  const show = [['Back (all cards)', D.back(d, FONTS)], ['Card No. 1', D.face(d, FONTS, 0)]];
+  if (firstHit >= 0) show.push([`No. ${firstHit + 1}: in its Grail spot`, D.face(d, FONTS, firstHit)]);
+  if (face >= 0) show.push([`No. ${face + 1}: a face card`, D.face(d, FONTS, face)]);
+  show.push(['Joker: the certificate', D.jokerCert(d, FONTS)], ['Joker: the Holy Grail', D.jokerGrail(d, FONTS)], ['Box front', D.boxFront(d, FONTS)], ['Box back', D.boxBack(d, FONTS)]);
+  $('#deckTiles').innerHTML = show.map(([t]) => `<div class="tile"><img alt="${t}"><b>${t}</b></div>`).join('');
+  document.querySelectorAll('#deckTiles img').forEach((img, k) => { img.src = URL.createObjectURL(new Blob([show[k][1]], { type: 'image/svg+xml' })); });
+}
+function loadZip() {
+  if (window.JSZip) return Promise.resolve(window.JSZip);
+  return new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js'; s.onload = () => res(window.JSZip); s.onerror = rej; document.head.appendChild(s); });
+}
+async function deckZip() {
+  const btn = $('#deckZip'); btn.disabled = true;
+  try {
+    const JSZip = await loadZip(), zip = new JSZip(), d = data(), files = deckFiles(d), D = TTMerch.deck;
+    for (let k = 0; k < files.length; k++) { $('#status').textContent = `Rendering card ${k + 1} of ${files.length}…`; zip.file(files[k][0], await svgToBlob(files[k][1], D.w, D.h)); }
+    zip.file('ORDER.txt', `The ${d.name} deck · Time Traveller No. ${String(d.number).padStart(3, "0")} · ${d.date}\nBest shuffle: ${d.best}/52 (drand round ${d.recipe.r}, shuffle #${d.recipe.n})\nrandomness ${d.recipe.R}\nseat ${d.recipe.s}\n\n` +
+      d.deck.map((c, i) => `${String(i + 1).padStart(2, ' ')}. ${CARDNAME(c)}${c === d.grail[i] ? '   ★ in its Holy Grail spot' : ''}`).join('\n') + '\n53. Joker (certificate)\n54. Joker (the Holy Grail)\n');
+    const blob = await zip.generateAsync({ type: 'blob' }), a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = `time-traveller-${String(d.number).padStart(3, '0')}-deck.zip`;
+    document.body.appendChild(a); a.click(); a.remove();
+    $('#status').textContent = 'Downloaded ' + a.download;
+  } catch (err) { $('#status').textContent = 'Could not build the deck: ' + err; }
+  btn.disabled = false;
+}
+$('#deckZip').addEventListener('click', deckZip);
+window.TTMerchPage = { deckFiles, svgToBlob, renderDeck, toPng, data, svgFor, designs: Object.keys(TTMerch.designs) };
 load();
 </script>
 </body>

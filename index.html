@@ -549,6 +549,7 @@
   .tt-stats b { display:block; font:800 clamp(1rem, 3vw, 1.35rem) "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; overflow-wrap:anywhere; }
   .tt-stats span { font-size:.75rem; color:#cfe3d7; }
   @media (max-width: 640px) { .tt-panel .tl-log li, .tt-panel .tl-all li { flex-wrap:wrap; column-gap:.4rem; row-gap:0; } .tt-panel .tl-log li .when, .tt-panel .tl-all li .when { flex-basis:100%; min-width:0; } .tt-panel .tl-log li > span:last-child, .tt-panel .tl-all li > span:last-child { flex:1 1 0; min-width:0; } }
+  .tt-perks li { margin-top:.45rem; } .tt-perks b { color:#fff7c9; }
   .tt-get { font:800 .75rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.12em; text-transform:uppercase; color:#ffd23f; }
   .tt-first { padding:.6rem .8rem; border-radius:12px; border:1px dashed rgba(255,210,63,.6); background:rgba(255,210,63,.08); color:#ffe68a; font-size:.85rem; font-weight:700; }
   .tt-buy { display:block; text-align:center; background:linear-gradient(180deg, #fff7c9, #ffd23f 45%, #c98a0b) !important; color:#1d1300 !important; border-color:#6e4500 !important; text-shadow:none !important; }
@@ -4198,12 +4199,12 @@ function renderTTCard() {
     <div class="min-w-0">
       <p class="text-sm sm:text-base text-[#cfe3d7]">Only a few will ever hold this rank. Eight of the fastest chips on Earth, the ones that train artificial intelligence, carry you back to the day the asteroid wiped out the dinosaurs. From there you shuffle every single year back to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in under an hour and a half*</b>. You watch history fly past live, from the first tiny mammals to the moon landing, and your name goes up in gold on the Time Travellers board. Forever.</p>
       <p class="tt-get mt-4">What you get</p>
-      <ul class="imp-perks mt-1">
-        <li>🚀 Your name on the Time Travellers board, golden helmet and all</li>
-        <li>📡 Your own live mission control: 66 million years of history, shuffled past at full throttle</li>
-        <li>✓ Your best shuffle, provably fair, rebuilt and checked by the database</li>
-        <li>✨ Every Commander extra included</li>
-        <li class="imp-surprise">🏛️ If one of your ${bigEnglish(TT.N)} shuffles is the one, you end the mission. Forever. The Grail takes your name.</li>
+      <ul class="imp-perks tt-perks mt-1">
+        <li><b>🚀 Your name in gold, forever.</b> First-class seat on the Time Travellers board, golden helmet and all.</li>
+        <li><b>🃏 A deck that exists nowhere else.</b> A real deck of playing cards, printed in the exact order of your best shuffle out of ${bigEnglish(TT.N)}, with your name on the back. Shipped to your door.</li>
+        <li><b>📡 Your private mission control.</b> Watch 66 million years of history fly past live, from the asteroid to the moon landing.</li>
+        <li><b>👑 Everything a Commander gets.</b> The Royal Professor, the Certificate, the Wall of Hopeless Heroes and every other extra.</li>
+        <li class="imp-surprise"><b>🏛️ The only shot that really counts.</b> If one of your ${bigEnglish(TT.N)} shuffles is the one, you end the mission forever and the Holy Grail takes your name.</li>
       </ul>
     </div>
     <div class="flex flex-col gap-3 min-w-0">
