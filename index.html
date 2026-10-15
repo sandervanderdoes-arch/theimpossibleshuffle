@@ -3813,7 +3813,20 @@ function renderExtras() {
 }
 
 /* ---------- Wiring ---------- */
+/* ?reset=sponsor: forget this browser's purchases (handy after test payments). Shuffle stats,
+   badges and the leaderboard identity stay. */
+function handleSponsorReset() {
+  if (params.get('reset') !== 'sponsor') return;
+  store.purchases = {}; store.hyper = { bought: 0, done: 0, best: 0, rate: 0, from: 0 };
+  store.cardBack = 'classic'; store.outfit = 'classic'; store.wallSubmitted = false; store.tt = []; store.ttAt = {};
+  saveStore(true);
+  params.delete('reset');
+  const q = params.toString();
+  try { history.replaceState(null, '', location.pathname + (q ? '?' + q : '')); } catch (e) { /* file:// */ }
+  setTimeout(() => toast('🧹 Sponsor purchases cleared in this browser. Your shuffles, badges and leaderboard spot are untouched.'), 400);
+}
 function initImpatient() {
+  handleSponsorReset();
   renderImpatient();
   handleThanks();
   applyCosmetics();
