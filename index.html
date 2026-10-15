@@ -1379,7 +1379,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1397,6 +1397,7 @@ const store = (() => {
       claim: p.claim && validRec(p.claim) ? p.claim : null,   // a winning shuffle Mission Control hasn't confirmed yet
       missionWon: p.missionWon === true,
       tt: Array.isArray(p.tt) ? p.tt.filter(x => typeof x === 'string' && /^cs_[A-Za-z0-9_]{8,200}$/.test(x)).slice(-5) : [],
+      ttAt: p.ttAt && typeof p.ttAt === 'object' ? Object.fromEntries(Object.entries(p.ttAt).filter(([k, v]) => /^cs_[A-Za-z0-9_]{8,200}$/.test(k) && Number.isFinite(v)).slice(-5)) : {},
       hyper: p.hyper && typeof p.hyper === 'object' ? { bought: n(p.hyper.bought), done: n(p.hyper.done), best: n(p.hyper.best), rate: n(p.hyper.rate), from: Math.min(n(p.hyper.from), n(p.hyper.done)) } : { bought: 0, done: 0, best: 0, rate: 0, from: 0 },
       livePending: n(p.livePending),
       lb: p.lb && /^[0-9a-f-]{36}$/.test(p.lb.id) && /^[0-9a-f]{32,64}$/.test(p.lb.secret) ? { id: p.lb.id, secret: p.lb.secret, name: str(p.lb.name).slice(0, 20), sub: n(p.lb.sub) } : null,
@@ -4252,22 +4253,42 @@ async function ttTicketOf(sessionId) {
   const h = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(sessionId)));
   return bytesHex(h);
 }
+/* The panel shows for the buyer's own ?traveller= link (straight from Stripe), and on later visits while their
+   mission is under way or finished less than a day ago. A remembered mission that no longer exists (hidden or
+   removed) is forgotten, so nobody is left looking at "Boarding…" forever. */
 async function ttMissionInit() {
-  const id = params.get('traveller');
-  if (id && /^cs_[A-Za-z0-9_]{8,200}$/.test(id) && !store.tt.includes(id)) { store.tt.push(id); store.tt = store.tt.slice(-5); saveStore(true); track('traveller-return'); }
-  const mine = id && /^cs_[A-Za-z0-9_]{8,200}$/.test(id) ? id : store.tt[store.tt.length - 1];
+  const raw = params.get('traveller');
+  const id = raw && /^cs_[A-Za-z0-9_]{8,200}$/.test(raw) ? raw : null;
+  if (id && !store.tt.includes(id)) { store.tt.push(id); store.tt = store.tt.slice(-5); store.ttAt[id] = Date.now(); saveStore(true); track('traveller-return'); }
+  const mine = id || store.tt[store.tt.length - 1];
   if (!mine || !live.on) return;
   try { ttTicket = await ttTicketOf(mine); } catch (e) { return; }
-  $('#ttMission').hidden = false;
+  TT.session = mine;
+  TT.fromUrl = !!id;
   TT.boardingSince = Date.now();
-  if (id) setTimeout(() => $('#ttMission').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }), 400);
+  if (TT.fromUrl) {
+    $('#ttMission').hidden = false;
+    setTimeout(() => $('#ttMission').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }), 400);
+  }
   ttPoll();
+}
+function ttForget(session) {
+  store.tt = store.tt.filter(x => x !== session);
+  delete store.ttAt[session];
+  saveStore(true);
 }
 async function ttPoll() {
   clearTimeout(TT.timer);
-  let row = null;
+  let row = null, ok = true;
   try { row = (await ttFetch(`select=name,status,attempts,target,rate,best,best_round,best_rand,best_seat,best_n,started_at,finished_at&ticket=eq.${ttTicket}`))[0] || null; }
-  catch (e) { row = null; }
+  catch (e) { row = null; ok = false; }
+  if (!TT.fromUrl) {                               // a remembered mission, not a fresh return from Stripe
+    if (!ok) return;                               // offline: try again next visit
+    const bought = store.ttAt[TT.session] || 0, ended = row && (row.status === 'done' || row.status === 'failed');
+    if (!row && Date.now() - bought > 30 * 60000) { ttForget(TT.session); $('#ttMission').hidden = true; return; }   // hidden or gone
+    if (ended && Date.now() - Date.parse(row.finished_at || 0) > 864e5) { $('#ttMission').hidden = true; return; }   // finished over a day ago
+    $('#ttMission').hidden = false;
+  }
   renderTTMission(row);
   const busy = !row || row.status === 'boarding' || row.status === 'running';
   if (busy && !(row === null && Date.now() - TT.boardingSince > 30 * 60000)) TT.timer = setTimeout(ttPoll, document.visibilityState === 'visible' ? 3000 : 15000);
