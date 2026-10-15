@@ -33,7 +33,7 @@ What's in the ZIP (every image 822 × 1122 px: poker size 2.5 × 3.5 in plus 1/8
 | `front-01-…png` to `front-52-…png` | The 52 faces in best-shuffle order. Each says "No. n of 52"; cards in their Holy Grail spot get a gold frame and a "★ In its Holy Grail spot" band |
 | `front-53-joker-certificate.png` | Joker 1: "The NAME deck", their score, Time Traveller number, date and recipe |
 | `front-54-joker-holy-grail.png` | Joker 2: the full Holy Grail order, with the cards their deck matches in gold |
-| `back.png` | One back for all cards: golden astronaut, "Time Traveller", number and name |
+| `back.png` | One back for all cards: golden astronaut, "Time Traveller", number and name (plus "★ First Crew ★" for No. 001–010) |
 | `box-front.png`, `box-back.png` | Tuck box panels |
 | `ORDER.txt` | The order as text, plus the recipe (use it to check the printed deck) |
 

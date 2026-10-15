@@ -313,6 +313,7 @@ function deckBack(d, F) {
     <text x="${CW / 2}" y="340" font-family="Bungee" font-size="84" fill="${GOLD}" text-anchor="middle">TRAVELLER</text>
     <ellipse cx="${CW / 2}" cy="610" rx="270" ry="80" fill="none" stroke="${CYAN}" stroke-width="14" transform="rotate(-16 ${CW / 2} 610)"/>
     ${astro(CW / 2 - 200, 400, 400)}
+    ${d.number <= 10 ? `<text x="${CW / 2}" y="842" font-family="JBM" font-weight="800" font-size="28" fill="${GOLD}" text-anchor="middle" letter-spacing="5">★ FIRST CREW ★</text>` : ''}
     <text x="${CW / 2}" y="905" font-family="Bungee" font-size="64" fill="${CREAM}" text-anchor="middle">No. ${nr(d.number)}</text>
     <text x="${CW / 2}" y="975" font-family="JBM" font-weight="800" font-size="${fitSize(name, 38, 560, 0.62)}" fill="${GOLD}" text-anchor="middle">${esc(name)}</text>`);
 }

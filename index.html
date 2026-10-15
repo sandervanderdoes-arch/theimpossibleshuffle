@@ -551,7 +551,19 @@
   @media (max-width: 640px) { .tt-panel .tl-log li, .tt-panel .tl-all li { flex-wrap:wrap; column-gap:.4rem; row-gap:0; } .tt-panel .tl-log li .when, .tt-panel .tl-all li .when { flex-basis:100%; min-width:0; } .tt-panel .tl-log li > span:last-child, .tt-panel .tl-all li > span:last-child { flex:1 1 0; min-width:0; } }
   .tt-perks li { margin-top:.45rem; } .tt-perks b { color:#fff7c9; }
   .tt-get { font:800 .75rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.12em; text-transform:uppercase; color:#ffd23f; }
-  .tt-first { padding:.6rem .8rem; border-radius:12px; border:1px dashed rgba(255,210,63,.6); background:rgba(255,210,63,.08); color:#ffe68a; font-size:.85rem; font-weight:700; }
+  .tt-first { padding:.7rem .85rem; border-radius:12px; border:1px dashed rgba(255,210,63,.6); background:rgba(255,210,63,.08); color:#ffe68a; font-size:.85rem; font-weight:700; }
+  .tt-first .nx { font-size:.95rem; color:#fff7c9; }
+  .tt-first .nx b { color:#ffd23f; white-space:nowrap; }
+  .tt-first .sub { margin-top:.3rem; font-weight:600; color:#e8dca6; font-size:.8rem; line-height:1.45; }
+  .tt-seats { display:flex; flex-wrap:wrap; gap:.3rem; margin-top:.55rem; }
+  .tt-seats svg { width:24px; height:24px; }
+  .tt-seats .open { opacity:.22; filter:grayscale(1); }
+  .tt-first .left { margin-top:.35rem; font:800 .72rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; color:#ffd23f; text-transform:uppercase; }
+  .imp-chip-btn { padding:.4rem .8rem; border-radius:999px; border:1px solid rgba(165,251,255,.5); background:rgba(0,0,0,.3); color:#a5fbff; font-size:.78rem; font-weight:700; }
+  .imp-chip-btn:hover:not(:disabled) { background:rgba(165,251,255,.12); }
+  .imp-chip-btn:disabled { opacity:.75; cursor:default; }
+  .tt-no { font:800 .7rem "JetBrains Mono", ui-monospace, monospace; color:#ffd23f; letter-spacing:.04em; margin-left:.35rem; white-space:nowrap; }
+  .tt-crew { display:inline-block; margin-left:.35rem; padding:.05rem .4rem; border-radius:999px; background:#ffd23f; color:#1b1300; font:800 .6rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.08em; vertical-align:middle; white-space:nowrap; }
   .tt-buy { display:block; text-align:center; background:linear-gradient(180deg, #fff7c9, #ffd23f 45%, #c98a0b) !important; color:#1d1300 !important; border-color:#6e4500 !important; text-shadow:none !important; }
   .tt-buy[aria-disabled="true"] { filter:grayscale(.6); opacity:.75; cursor:not-allowed; }
 </style>
@@ -885,8 +897,9 @@
         </dl>
         <div class="mt-4 flex flex-wrap items-center gap-3">
           <button type="button" id="hyperGo" class="shuffle-btn !w-auto !text-sm !py-2 !px-5" aria-pressed="false">🛰️ Start your station</button>
-          <p class="text-xs text-[#9fb5a8]">Keep this tab open while you work, binge or sleep. Standing down or closing it keeps the years you haven't shuffled.</p>
+          <button type="button" id="hyperNotify" class="imp-chip-btn" hidden>🔔 Tell me when it's done</button>
         </div>
+        <p class="text-xs text-[#9fb5a8] mt-2">Runs in the background: keep this tab open and carry on in other tabs or apps. The tab's title shows how far your station is. Your computer has to stay awake, though. Standing down or closing the tab keeps the years you haven't shuffled.</p>
         <p id="hyperDoneNote" class="mt-3 text-sm text-[#ffe68a]" hidden></p>
       </div>
 
@@ -3341,7 +3354,7 @@ onmessage = e => {
   postMessage({ n: done, sum, dist, best, bestDeck, bestN, ones, zeroRun, royalBest, last: Array.from(d), lastM, win, winN });
 };`;
 const HYPER_CHUNK = 200000;                     // ≈ 0.3 s of work per message on one core
-const HYPER = { workers: [], running: false, assigned: 0, samples: [], uiTimer: 0, last: null, lastM: 0, failed: false };
+const HYPER = { titleAt: 0, workers: [], running: false, assigned: 0, samples: [], uiTimer: 0, last: null, lastM: 0, failed: false };
 function hyperEnsureWorkers() {
   if (HYPER.workers.length) return true;
   try {
@@ -3356,6 +3369,27 @@ function hyperEnsureWorkers() {
     }
     return true;
   } catch (e) { return false; }
+}
+/* In the background, timers slow down but the workers keep going, so the tab title is updated from their results. */
+const BASE_TITLE = document.title;
+function hyperTitle(force) {
+  const now = Date.now();
+  if (!force && now - HYPER.titleAt < 1000) return;
+  HYPER.titleAt = now;
+  const h = store.hyper, from = Math.min(h.from || 0, h.done), tour = h.bought - from;
+  if (HYPER.running && tour > 0) document.title = `🛰️ ${Math.floor(Math.min(1, (h.done - from) / tour) * 100)}% shuffled · ${BASE_TITLE}`;
+  else if (!HYPER.doneTitle) document.title = BASE_TITLE;
+}
+function hyperNotifyUI() {
+  const b = $('#hyperNotify');
+  const ok = 'Notification' in window && window.isSecureContext && Notification.permission !== 'denied' && hyperLeft() > 0;
+  b.hidden = !ok;
+  if (ok) { const on = Notification.permission === 'granted'; b.textContent = on ? "🔔 We'll tell you when it's done" : "🔔 Tell me when it's done"; b.disabled = on; }
+}
+function hyperNotifyDone(text) {
+  if (!document.hidden) return;
+  HYPER.doneTitle = true; document.title = `✅ Shift complete · ${BASE_TITLE}`;
+  try { if ('Notification' in window && Notification.permission === 'granted') new Notification('🎖️ Assignment complete', { body: text, icon: 'icon-192.png', tag: 'tis-station' }); } catch (e) { /* not on this browser */ }
 }
 function hyperStart() {
   if (HYPER.running || winOpen || hyperLeft() <= 0) return;
@@ -3375,6 +3409,7 @@ function hyperStart() {
 function hyperPause() {
   if (!HYPER.running) return;
   HYPER.running = false;                        // busy workers finish their current chunk, then stay idle
+  hyperTitle(true);
   renderHyper();
 }
 function hyperAssign(w) {
@@ -3392,6 +3427,7 @@ function hyperResult(w, r) {
   for (let i = 0; i < 6; i++) session.dist[i] += r.dist[i];
   if (!session.firstAt) session.firstAt = performance.now();
   store.allTime += r.n; live.pending += r.n; store.hyper.done += r.n;
+  hyperTitle();
   noteRate(r.n);
   if (r.best > session.best) session.best = r.best;
   if (r.best > session.fairBest) session.fairBest = r.best;
@@ -3427,6 +3463,8 @@ function hyperFinish() {
   saveStore(true);
   track('hyper-done');
   const y = handYears(store.hyper.bought);
+  hyperTitle(true);
+  hyperNotifyDone(`${fmt(Math.round(y))} years of shuffling done. Best match: ${store.hyper.best}/52. Matches: 0.`);
   toast(`🎖️ <b>Assignment complete, ${rankName()}.</b> ${fmt(Math.round(y))} years of shuffling done. Best match: ${store.hyper.best}/52. Matches: 0. Mission Control thanks you for your service.`);
   setPose('autopilot', `${fmt(Math.round(y))} years of shuffling and still nothing. I must say, I expected exactly this.`);
   sfx('land', 6);
@@ -3627,6 +3665,7 @@ function renderHyper() {
   chip.hidden = !HYPER.running || HYPER.boxVisible;
   if (!chip.hidden) chip.textContent = `🛰️ ${$('#tlYear').textContent} · ${Math.floor(frac * 100)}%`;
   if (!HYPER.running) refreshEtas();
+  hyperNotifyUI();
 }
 
 /* ---------- Cosmetics ---------- */
@@ -3835,6 +3874,12 @@ function initImpatient() {
   renderHyper();
   loadWall();
   $('#hyperGo').addEventListener('click', () => (HYPER.running ? hyperPause() : hyperStart()));
+  $('#hyperNotify').addEventListener('click', async () => { try { await Notification.requestPermission(); } catch (e) { /* older Safari */ } hyperNotifyUI(); track('hyper-notify'); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) return;
+    if (HYPER.doneTitle) { HYPER.doneTitle = false; document.title = BASE_TITLE; }
+    if (HYPER.running) hyperUI();                // catch the screen up at once
+  });
   $('#apSponsor').addEventListener('click', e => {
     e.preventDefault(); track('autopilot-sponsor-link');
     $('#impatient').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
@@ -4176,7 +4221,7 @@ async function submitMissionName(form) {
 }
 
 /* ---------- Time Travellers ---------- */
-const TT = { years: 66e6, gpus: 8, price: '500', rate: 2.1e10, rows: [], timer: 0 };
+const TT = { count: 0, years: 66e6, gpus: 8, price: '500', rate: 2.1e10, rows: [], timer: 0 };
 TT.N = TT.years * HAND_YEAR;                       // 104 trillion shuffles: from the asteroid to today
 function bigEnglish(n) {
   const unit = (v, w) => `${v < 10 ? v.toFixed(1).replace(/\.0$/, '') : fmt(Math.round(v))} ${w}`;   // 9.6 billion, 104 trillion
@@ -4200,7 +4245,7 @@ function renderTTCard() {
       <p class="text-sm sm:text-base text-[#cfe3d7]">Only a few will ever hold this rank. Eight of the fastest chips on Earth, the ones that train artificial intelligence, carry you back to the day the asteroid wiped out the dinosaurs. From there you shuffle every single year back to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in under an hour and a half*</b>. You watch history fly past live, from the first tiny mammals to the moon landing, and your name goes up in gold on the Time Travellers board. Forever.</p>
       <p class="tt-get mt-4">What you get</p>
       <ul class="imp-perks tt-perks mt-1">
-        <li><b>🚀 Your name in gold, forever.</b> First-class seat on the Time Travellers board, golden helmet and all.</li>
+        <li><b>🚀 Your number and name in gold, forever.</b> A Time Traveller number that is never issued again, and a first-class seat on the board, golden helmet and all.</li>
         <li><b>🃏 A deck that exists nowhere else.</b> A real deck of playing cards, printed in the exact order of your best shuffle out of ${bigEnglish(TT.N)}, with your name on the back. Shipped to your door.</li>
         <li><b>📡 Your private mission control.</b> Watch 66 million years of history fly past live, from the asteroid to the moon landing.</li>
         <li><b>👑 Everything a Commander gets.</b> The Royal Professor, the Certificate, the Wall of Hopeless Heroes and every other extra.</li>
@@ -4214,7 +4259,7 @@ function renderTTCard() {
         <div><b>${fmt(Math.round(TT.years / 1e5))}×</b><span>a Commander's entire mission</span></div>
         <div><b>${fmt(Math.round(TT.years / 80 / 1e3) * 1e3)}×</b><span>a lifetime of shuffling by hand</span></div>
       </div>
-      <p id="ttFirst" class="tt-first"${TT.rows.length ? ' hidden' : ''}>🚀 The Time Travellers board is still empty. Whoever boards first is first on it forever.</p>
+      <div id="ttFirst" class="tt-first">${ttFirstHTML()}</div>
       ${url ? `<a class="shuffle-btn tt-buy" href="${url}" target="_blank" rel="noopener" data-imp="traveller">Board the time machine · ${cur}${TT.price}</a>`
         : '<a class="shuffle-btn tt-buy" role="link" aria-disabled="true">Launch window opening soon</a>'}
       <p class="imp-why">Why ${cur}${TT.price}? Eight of the fastest chips on Earth, one deck, no mercy. About ${cur}${(Number(TT.price) / (TT.years / 1e6)).toFixed(2)} per million years of shuffling. A bargain, historically.</p>
@@ -4224,6 +4269,16 @@ function renderTTCard() {
   const buy = box.querySelector('[data-imp="traveller"]');
   if (buy) buy.addEventListener('click', () => track('impatient-traveller'));
 }
+/* Time Traveller numbers: handed out once, in boarding order (as on the merch). The first ten are the First Crew. */
+const TT_CREW = 10;
+const ttNo = n => 'No. ' + String(n).padStart(3, '0');
+function ttFirstHTML() {
+  const k = TT.count || 0, left = Math.max(0, TT_CREW - k);
+  const seats = Array.from({ length: TT_CREW }, (_, i) => `<svg viewBox="0 0 64 64" class="${i < k ? 'taken' : 'open'}" aria-hidden="true"><use href="#ttAstro"/></svg>`).join('');
+  return `<p class="nx">🚀 Next to board: <b>Time Traveller ${ttNo(k + 1)}</b></p>
+    <p class="sub">${k ? '' : 'No. 001 is still unclaimed. '}Every number is issued once, in boarding order, and never again. It goes next to your name on the board and on the back of your deck.${left ? ' The first ten are the First Crew, marked in gold forever.' : ''}</p>
+    ${left ? `<div class="tt-seats" role="img" aria-label="${left} of ${TT_CREW} First Crew seats open">${seats}</div><p class="left">${left} of ${TT_CREW} First Crew seats ${left === TT_CREW ? 'open' : 'left'}</p>` : ''}`;
+}
 async function ttFetch(query) {
   const r = await fetch(`${LIVE_COUNTER.url}/rest/v1/travellers?${query}`, { headers: liveHeaders(), cache: 'no-store' });
   if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -4231,13 +4286,17 @@ async function ttFetch(query) {
 }
 async function ttLoadBoard() {
   if (!live.on) return;
-  try { TT.rows = await ttFetch('select=name,status,attempts,target,best,best_round,best_rand,best_seat,best_n,created_at&status=neq.failed&order=best.desc,attempts.desc,created_at.asc&limit=60'); }
-  catch (e) { TT.rows = []; }
+  try {
+    const all = await ttFetch('select=name,status,attempts,target,best,best_round,best_rand,best_seat,best_n,created_at&status=neq.failed&order=created_at.asc&limit=1000');
+    all.forEach((t, i) => { t.no = i + 1; });    // boarding order
+    TT.count = all.length;
+    TT.rows = all.slice().sort((a, b) => (b.best || 0) - (a.best || 0) || b.attempts - a.attempts || a.no - b.no).slice(0, 60);
+  } catch (e) { TT.rows = []; }
   renderTTBoard();
 }
 function renderTTBoard() {
   const sec = $('#ttSection'), first = $('#ttFirst');
-  if (first) first.hidden = !!TT.rows.length;
+  if (first) first.innerHTML = ttFirstHTML();
   sec.hidden = !TT.rows.length;                     // the board appears with its first Time Traveller; until then the card says so
   if (sec.hidden) return;
   $('#ttBoard').innerHTML = TT.rows.length ? TT.rows.map((t, i) => {
@@ -4246,7 +4305,7 @@ function renderTTBoard() {
     const live_ = t.status === 'running' || t.status === 'boarding';
     return `<div class="tt-row${i === 0 ? ' first' : ''}">
       <svg class="tt-ava" viewBox="0 0 64 64" aria-hidden="true"><use href="#ttAstro"/></svg>
-      <div class="min-w-0 grow"><p class="nm">${escapeHtml(t.name)}</p>
+      <div class="min-w-0 grow"><p class="nm">${escapeHtml(t.name)}${t.no ? `<span class="tt-no">${ttNo(t.no)}</span>` : ''}${t.no && t.no <= TT_CREW ? '<span class="tt-crew">FIRST CREW</span>' : ''}</p>
         <p class="meta">${live_ ? '<span class="tt-live"><span class="live-dot" aria-hidden="true" style="width:7px;height:7px"></span>IN FLIGHT</span> · ' : ''}${bigEnglish(t.attempts)} shuffles · ${years >= 1e6 ? (years / 1e6).toFixed(1) + 'M' : fmt(Math.round(years))} years · ${when}</p></div>
       <div class="text-right"><p class="rk">${i < 3 ? ['🥇', '🥈', '🥉'][i] : '#' + (i + 1)}</p><p class="best">${t.best ? t.best + '/52' : '–'}${t.best && validRec(rec) ? ` <button type="button" class="pf-tick" data-verify='${recAttr(rec)}' title="Provably fair: replay this shuffle" aria-label="Replay ${escapeHtml(t.name)}'s best shuffle">✓</button>` : ''}</p></div>
     </div>`;
