@@ -560,6 +560,10 @@
   .tt-stats div { padding:.6rem .7rem; border-radius:12px; background:rgba(0,0,0,.45); border:1px solid rgba(255,210,63,.25); min-width:0; }
   .tt-stats b { display:block; font:800 clamp(1rem, 3vw, 1.35rem) "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; overflow-wrap:anywhere; }
   .tt-stats span { font-size:.75rem; color:#cfe3d7; }
+  .tt-facts { display:grid; }
+  .tt-facts p { grid-area:1/1; margin:0; transition:opacity .6s ease; }
+  .tt-facts p[aria-hidden] { opacity:0; }
+  @media (prefers-reduced-motion: reduce) { .tt-facts p { transition:none; } }
   @media (max-width: 640px) { .tt-panel .tl-log li, .tt-panel .tl-all li { flex-wrap:wrap; column-gap:.4rem; row-gap:0; } .tt-panel .tl-log li .when, .tt-panel .tl-all li .when { flex-basis:100%; min-width:0; } .tt-panel .tl-log li > span:last-child, .tt-panel .tl-all li > span:last-child { flex:1 1 0; min-width:0; } }
   .tt-perks li { margin-top:.45rem; } .tt-perks b { color:#fff7c9; }
   .tt-get { font:800 .75rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.12em; text-transform:uppercase; color:#ffd23f; }
@@ -4302,7 +4306,7 @@ function renderTTCard() {
       <div class="tt-stats">
         <div><b>${bigEnglish(TT.N)}</b><span>real shuffles for humanity</span></div>
         <div><b>≈ ${bigEnglish(TT.rate)}</b><span>shuffles every second*</span></div>
-        <div><b>Past Saturn</b><span>how high these decks would stack</span></div>
+        <div class="tt-facts">${TT_FACTS.map(([b, t], i) => `<p${i ? ' aria-hidden="true"' : ''}><b>${b}</b><span>${t}</span></p>`).join('')}</div>
         <div><b>${fmt(Math.round(TT.years / 80 / 1e3) * 1e3)}×</b><span>a lifetime of shuffling by hand</span></div>
       </div>
       <div id="ttFirst" class="tt-first">${ttFirstHTML()}</div>
@@ -4318,6 +4322,20 @@ function renderTTCard() {
 }
 /* Time Traveller numbers: handed out once, in boarding order (as on the merch). The first ten are the First Crew. */
 const TT_CREW = 10;
+// The third stats tile rotates through a few ways to picture one mission (104 trillion decks).
+const TT_FACTS = [
+  ['Past Saturn', 'how high these decks would stack'],
+  ['Light loses the race', 'light needs 1.5 h to climb this stack, our GPUs 1.4 h to shuffle it'],
+  ['12 million times around Earth', 'the cards, laid end to end'],
+  ['Covers all of Africa', 'enough cards to tile the whole continent'],
+];
+setInterval(() => {
+  const box = document.querySelector('.tt-facts');
+  if (!box || document.hidden || box.matches(':hover') || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ps = [...box.children], i = ps.findIndex(p => !p.hasAttribute('aria-hidden'));
+  ps[i].setAttribute('aria-hidden', 'true');
+  ps[(i + 1) % ps.length].removeAttribute('aria-hidden');
+}, 4500);
 const ttNo = n => 'No. ' + String(n).padStart(3, '0');
 function ttFirstHTML() {
   const k = TT.count || 0, left = Math.max(0, TT_CREW - k);
