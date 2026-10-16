@@ -4335,7 +4335,7 @@ setInterval(() => {
   const ps = [...box.children], i = ps.findIndex(p => !p.hasAttribute('aria-hidden'));
   ps[i].setAttribute('aria-hidden', 'true');
   ps[(i + 1) % ps.length].removeAttribute('aria-hidden');
-}, 4500);
+}, 8000);
 const ttNo = n => 'No. ' + String(n).padStart(3, '0');
 function ttFirstHTML() {
   const k = TT.count || 0, left = Math.max(0, TT_CREW - k);
