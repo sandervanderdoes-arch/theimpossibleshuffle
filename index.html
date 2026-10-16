@@ -848,7 +848,8 @@
       <h2 id="impTitle" class="font-display text-lg sm:text-2xl neon-gold">🎖️ Become a Mission Sponsor</h2>
       <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">A proper hand shuffle takes about 20 seconds. At that pace, humanity matches the Holy Grail in roughly <b class="text-[#ffe68a]">51 novemdecillion years</b>, give or take a Tuesday. Mission Control can't do that alone. Sponsor a stretch of the mission and your computer becomes an official <b class="text-[#a5fbff]">Mission Control station</b>: it shuffles thousands of years' worth for humanity while you get on with your life, and you watch history fly by on its timeline. Every shuffle is real and counts toward the total. The Professor calls it cheating. We call it volunteering.</p>
       <p class="mt-2 text-xs text-[#9fb5a8]">Exchange rate: 1 year of nonstop hand shuffling = 1,577,880 shuffles.</p>
-      <div id="impTiers" class="imp-tiers mt-6"></div>
+      <p class="mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Support the mission: pick your rank.</p>
+      <div id="impTiers" class="imp-tiers mt-3"></div>
       <div id="ttCard" class="mt-6" hidden></div>
       <p id="impClosed" class="mt-4 text-sm text-[#ffe68a]" hidden></p>
       <p class="mt-4 text-xs text-[#9fb5a8]">*Captain to Commander: estimate for this device. Your station runs in this browser while the tab is open; stand down anytime and it picks up where it left off on your next visit. A Time Traveller runs on our eight GPUs in the cloud instead: nothing runs on your computer, and you can close the tab. Your rank and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
@@ -3304,7 +3305,7 @@ function renderImpatient() {
       <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🎁 Plus a little surprise to keep you entertained through all ${fmt(t.years)} years.</li></ul>
       <p class="imp-cmp">${t.cmp(N / F52_NUM)}</p>
       <span class="imp-deal">${t.deal}</span>
-      <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}">Become a ${t.name} · ${cur}${t.price}</a>
+      <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}"><span class="block">Support the mission</span><span class="block text-sm opacity-90">as a ${t.name} · ${cur}${t.price}</span></a>
       <p class="imp-why">${t.why}</p>
     </div>`;
   }).join('');
