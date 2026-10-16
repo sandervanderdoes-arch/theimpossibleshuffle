@@ -4044,7 +4044,7 @@ function renderLBMe() {
     box.innerHTML = `You're on the board as <b>${escapeHtml(store.lb.name)}</b>: best <b>${best}/52</b> in ${fmt(Math.max(1, mine.attempt || 1))} tries${rankTxt ? `, rank <b>${rankTxt}</b>` : ''}. <button type="button" class="chip-btn !text-xs !min-h-0 !py-1 ml-1" data-lb="rename">Change name</button>${lbNudge()}`;
     return;
   }
-  box.innerHTML = `Your best: <b>${best}/52</b> in ${fmt(Math.max(1, mine.attempt || 1))} tries${rankTxt ? `. That would rank <b>${rankTxt}</b> worldwide` : ''}. Put your name on the board:
+  box.innerHTML = `Your best: <b>${best}/52</b> in ${fmt(Math.max(1, mine.attempt || 1))} tries${LB.rank ? `. That would put you at <b>#${fmt(LB.rank)}</b> worldwide` : ''}. Put your name on the board:
     <form class="row" data-lb="join"><label class="sr-only" for="lbName">Shuffler name</label><input id="lbName" class="imp-input" maxlength="20" placeholder="Your shuffler name" autocomplete="nickname" required><button type="submit" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Join the leaderboard</button></form>${lbNudge()}`;
 }
 function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
