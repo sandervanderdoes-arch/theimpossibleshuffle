@@ -396,6 +396,11 @@
   summary.tt-get::-webkit-details-marker { display:none; }
   summary.tt-get::after { content:" ▾"; }
   details:not([open]) > summary.tt-get::after { content:" ▸ tap to open"; text-transform:none; letter-spacing:0; font-weight:600; }
+  .stats-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:.2rem .7rem; width:100%; text-align:left; background:none; border:0; padding:0; color:inherit; font:inherit; cursor:pointer; }
+  .stats-head .stats-sum { font:600 .78rem/1.3 Inter, system-ui, sans-serif; color:#9fb5a8; text-shadow:none; letter-spacing:0; }
+  .stats-head .chev { margin-left:auto; color:#ffe68a; transition:transform .2s ease; }
+  #statsPanel.open .stats-head .chev { transform:rotate(180deg); }
+  .stats-head:focus-visible { outline:2px solid var(--gold); outline-offset:4px; border-radius:6px; }
   .next-goal { margin:.3rem 0 0; font-size:.85rem; line-height:1.45; color:#cfe3d7; }
   .next-goal b { color:#ffe68a; }
   .next-goal a { color:#a5fbff; text-decoration:underline; }
@@ -822,8 +827,46 @@
       </div>
     </aside>
 
+    <!-- Your Mission Control Centre: personal stats, folded by default, right next to the shuffling -->
+    <section id="statsPanel" class="panel p-4 sm:p-5 mt-5 lg:col-start-1 lg:col-span-2" aria-labelledby="statsTitle">
+      <h2 id="statsTitle" class="font-display text-base sm:text-lg neon-gold"><button type="button" id="statsToggle" class="stats-head" aria-expanded="false" aria-controls="statsMore"><span>📊 Your Mission Control Centre</span><span id="statsSum" class="stats-sum"></span><span class="chev" aria-hidden="true">▾</span></button> <span id="sponsorChip" class="sponsor-chip align-middle ml-1" hidden>★ MISSION SPONSOR</span></h2>
+      <div id="statsMore" hidden>
+      <dl class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
+            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SESSION</dt><dd id="stSession" class="mono text-xl font-extrabold stat-num">0</dd></div>
+            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">ALL-TIME</dt><dd id="stAll" class="mono text-xl font-extrabold stat-num">0</dd><dd id="stAllHand" class="text-[11px] text-[#9fb5a8]"></dd></div>
+            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">BEST MATCH</dt><dd id="stBest" class="mono text-xl font-extrabold">–</dd><dd id="stBestAll" class="text-[11px] text-[#9fb5a8]"></dd></div>
+            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold"><span class="tip" tabindex="0" data-tip="Converges to 1.00. Math is working as intended.">AVG MATCHES ⓘ</span></dt><dd id="stAvg" class="mono text-xl font-extrabold">–</dd></div>
+      </dl>
+      <button type="button" id="shareBtn" class="chip-btn mt-3">📤 Brag about your attempt</button>
+      <div class="grid gap-x-8 sm:grid-cols-2 mt-3">
+        <div class="min-w-0">
+          <h3 class="text-xs font-bold text-[#9fb5a8] mt-2 mb-1">ESTIMATED TIME TO SUCCESS</h3>
+          <p id="eta" class="mono text-sm text-[#ffe68a]">Shuffle at least once to calibrate the optimism.</p>
+          <p id="etaSub" class="text-xs text-[#9fb5a8] mt-1"></p>
+
+          <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-1">🏅 YOUR TOP 5 SHUFFLES</h3>
+          <p class="text-xs text-[#9fb5a8] mb-2">Attempt = which of your shuffles it was. By hand = how long that many shuffles take at 20 seconds each. Tap a deck to see all 52 cards.</p>
+          <div class="top-wrap">
+            <table class="top5">
+              <thead><tr><th scope="col"><span class="sr-only">Rank</span></th><th scope="col">Matched</th><th scope="col">Attempt</th><th scope="col"><span class="tip" tabindex="0" data-tip="The chance of at least this many matches in a single shuffle.">Chance ⓘ</span></th><th scope="col">By hand</th></tr></thead>
+              <tbody id="topBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="min-w-0">
+          <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 lg:mt-0 mb-2">MATCH DISTRIBUTION (THIS SESSION)</h3>
+          <div id="dist" class="dist" role="img" aria-label="Distribution of matches per attempt compared with theory"></div>
+          <p class="text-xs text-[#9fb5a8] mt-2"><span class="inline-block w-3 h-2 align-middle bg-[#22f3ff] rounded-sm"></span> your shuffles &nbsp; <span class="inline-block w-4 align-middle border-t-2 border-dashed border-[#ffd23f]/70"></span> what math predicts</p>
+
+          <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-2">ACHIEVEMENTS</h3>
+          <div id="badges" class="grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
+        </div>
+      </div>
+      </div>
+    </section>
+
     <!-- Recruit: right under the decks on a computer, right under the Professor on a phone -->
-    <section id="recruitPanel" class="panel recruit-panel p-4 sm:p-5 mt-5 lg:col-start-1" aria-labelledby="recruitTitle" hidden>
+    <section id="recruitPanel" class="panel recruit-panel p-4 sm:p-5 mt-5 lg:col-start-1 lg:col-span-2" aria-labelledby="recruitTitle" hidden>
       <h2 id="recruitTitle" class="font-display text-base sm:text-lg neon-pink">📣 Humanity needs backup</h2>
       <p class="mt-1 text-sm text-[#cfe3d7]">This only works if everybody shuffles. Send in a friend: every recruit shuffles for humanity, and you get the credit.</p>
       <div class="share-row mt-3" role="group" aria-label="Recruit a friend">
@@ -848,16 +891,16 @@
         <div class="flex items-center gap-3 flex-wrap"><span id="lbCount" class="mono text-xs text-[#9fb5a8]"></span><button type="button" id="lbShare" class="chip-btn !text-xs">📤 Share the top 3</button></div>
       </div>
       <p class="mt-1 text-sm text-[#cfe3d7]">The best single shuffles anyone has made, worldwide. Same score? Whoever needed the fewest tries ranks higher. Every score with a <span class="pf-tick" aria-hidden="true">✓</span> is provably fair: tap it to replay that exact shuffle yourself. Scores marked <span class="pf-early">early</span> came in before provably fair shuffles existed: checked to be plausible, but they can't be replayed.</p>
-      <div id="hof" class="hof mt-4" hidden>
-        <p class="hof-title"><b>🏛️ Hall of Firsts</b> The first human to reach each rung keeps it forever. Scores on this board count.</p>
-        <ol id="hofList" class="hof-list" aria-label="Hall of Firsts"></ol>
-      </div>
       <div id="lbMe" class="lb-me mt-4" aria-live="polite"></div>
       <div class="lb-wrap mt-4">
         <table class="lb">
           <thead><tr><th scope="col">#</th><th scope="col">Shuffler</th><th scope="col">Best</th><th scope="col">Tries</th><th scope="col">Odds</th><th scope="col">When</th></tr></thead>
           <tbody id="lbBody"></tbody>
         </table>
+      </div>
+      <div id="hof" class="hof mt-4" hidden>
+        <p class="hof-title"><b>🏛️ Hall of Firsts</b> The first human to reach each rung keeps it forever. Scores on this board count.</p>
+        <ol id="hofList" class="hof-list" aria-label="Hall of Firsts"></ol>
       </div>
     </div>
   </section>
@@ -873,28 +916,6 @@
         </div>
       </div>
       <div id="ttBoard" class="tt-board mt-4"></div>
-    </div>
-  </section>
-
-  <!-- ===================== ODDS ===================== -->
-  <section class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="oddsTitle">
-    <div class="panel p-4 sm:p-6">
-      <h2 id="oddsTitle" class="font-display text-lg sm:text-2xl neon-pink">How Impossible Is This?</h2>
-      <p class="mt-4 text-sm text-[#9fb5a8] font-bold">YOUR ODDS OF MATCHING THE HOLY GRAIL, PER SHUFFLE</p>
-      <p class="mono text-sm sm:text-base break-all mt-1"><span class="text-[#9fb5a8]">1 in </span><span id="oddsExact" class="neon-gold font-bold"></span></p>
-      <p class="mt-4 text-sm text-[#9fb5a8] font-bold">AS A PERCENTAGE</p>
-      <p id="oddsPct" class="mono text-sm break-all mt-1 neon-cyan"></p>
-      <p id="oddsZeros" class="text-xs text-[#9fb5a8] mt-1"></p>
-
-      <div class="mt-6 rounded-xl bg-black/40 border border-white/10 p-4 min-h-[7.5rem]">
-        <p id="typeOut" class="mono text-sm sm:text-base leading-relaxed" aria-hidden="true">Press the button below. Brace yourself.</p>
-        <p id="typeSr" class="sr-only" aria-live="polite"></p>
-        <button type="button" id="againBtn" class="shuffle-btn mt-4 !w-auto !text-sm !py-2 !px-4" hidden>Shuffle again</button>
-      </div>
-      <div class="mt-3 flex items-center gap-3 flex-wrap">
-        <button type="button" id="explainBtn" class="explain-btn pulse"><span class="ic" aria-hidden="true">🤯</span><span class="lbl">Explain how impossible this is</span></button>
-        <span id="explainStep" class="mono text-xs text-[#9fb5a8]"></span>
-      </div>
     </div>
   </section>
 
@@ -977,45 +998,24 @@
     </div>
   </section>
 
-  <!-- ===================== YOUR MISSION CONTROL CENTRE ===================== -->
-  <section class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="statsTitle">
+  <!-- ===================== ODDS ===================== -->
+  <section class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="oddsTitle">
     <div class="panel p-4 sm:p-6">
-      <h2 id="statsTitle" class="font-display text-lg sm:text-2xl neon-gold ">Your Mission Control Centre <span id="sponsorChip" class="sponsor-chip align-middle ml-1" hidden>★ MISSION SPONSOR</span></h2>
-      <dl class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
-            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SESSION</dt><dd id="stSession" class="mono text-xl font-extrabold stat-num">0</dd></div>
-            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">ALL-TIME</dt><dd id="stAll" class="mono text-xl font-extrabold stat-num">0</dd><dd id="stAllHand" class="text-[11px] text-[#9fb5a8]"></dd></div>
-            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">BEST MATCH</dt><dd id="stBest" class="mono text-xl font-extrabold">–</dd><dd id="stBestAll" class="text-[11px] text-[#9fb5a8]"></dd></div>
-            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold"><span class="tip" tabindex="0" data-tip="Converges to 1.00. Math is working as intended.">AVG MATCHES ⓘ</span></dt><dd id="stAvg" class="mono text-xl font-extrabold">–</dd></div>
-      </dl>
-      <div class="mt-3 flex flex-wrap gap-2">
-        <button type="button" id="statsToggle" class="chip-btn" aria-expanded="false" aria-controls="statsMore">📊 All stats &amp; achievements ▾</button>
-        <button type="button" id="shareBtn" class="chip-btn">📤 Brag about your attempt</button>
-      </div>
-      <div id="statsMore" hidden>
-      <div class="grid gap-x-8 lg:grid-cols-2 mt-3">
-        <div class="min-w-0">
-          <h3 class="text-xs font-bold text-[#9fb5a8] mt-2 mb-1">ESTIMATED TIME TO SUCCESS</h3>
-          <p id="eta" class="mono text-sm text-[#ffe68a]">Shuffle at least once to calibrate the optimism.</p>
-          <p id="etaSub" class="text-xs text-[#9fb5a8] mt-1"></p>
+      <h2 id="oddsTitle" class="font-display text-lg sm:text-2xl neon-pink">How Impossible Is This?</h2>
+      <p class="mt-4 text-sm text-[#9fb5a8] font-bold">YOUR ODDS OF MATCHING THE HOLY GRAIL, PER SHUFFLE</p>
+      <p class="mono text-sm sm:text-base break-all mt-1"><span class="text-[#9fb5a8]">1 in </span><span id="oddsExact" class="neon-gold font-bold"></span></p>
+      <p class="mt-4 text-sm text-[#9fb5a8] font-bold">AS A PERCENTAGE</p>
+      <p id="oddsPct" class="mono text-sm break-all mt-1 neon-cyan"></p>
+      <p id="oddsZeros" class="text-xs text-[#9fb5a8] mt-1"></p>
 
-          <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-1">🏅 YOUR TOP 5 SHUFFLES</h3>
-          <p class="text-xs text-[#9fb5a8] mb-2">Attempt = which of your shuffles it was. By hand = how long that many shuffles take at 20 seconds each. Tap a deck to see all 52 cards.</p>
-          <div class="top-wrap">
-            <table class="top5">
-              <thead><tr><th scope="col"><span class="sr-only">Rank</span></th><th scope="col">Matched</th><th scope="col">Attempt</th><th scope="col"><span class="tip" tabindex="0" data-tip="The chance of at least this many matches in a single shuffle.">Chance ⓘ</span></th><th scope="col">By hand</th></tr></thead>
-              <tbody id="topBody"></tbody>
-            </table>
-          </div>
-        </div>
-        <div class="min-w-0">
-          <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 lg:mt-0 mb-2">MATCH DISTRIBUTION (THIS SESSION)</h3>
-          <div id="dist" class="dist" role="img" aria-label="Distribution of matches per attempt compared with theory"></div>
-          <p class="text-xs text-[#9fb5a8] mt-2"><span class="inline-block w-3 h-2 align-middle bg-[#22f3ff] rounded-sm"></span> your shuffles &nbsp; <span class="inline-block w-4 align-middle border-t-2 border-dashed border-[#ffd23f]/70"></span> what math predicts</p>
-
-          <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-2">ACHIEVEMENTS</h3>
-          <div id="badges" class="grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
-        </div>
+      <div class="mt-6 rounded-xl bg-black/40 border border-white/10 p-4 min-h-[7.5rem]">
+        <p id="typeOut" class="mono text-sm sm:text-base leading-relaxed" aria-hidden="true">Press the button below. Brace yourself.</p>
+        <p id="typeSr" class="sr-only" aria-live="polite"></p>
+        <button type="button" id="againBtn" class="shuffle-btn mt-4 !w-auto !text-sm !py-2 !px-4" hidden>Shuffle again</button>
       </div>
+      <div class="mt-3 flex items-center gap-3 flex-wrap">
+        <button type="button" id="explainBtn" class="explain-btn pulse"><span class="ic" aria-hidden="true">🤯</span><span class="lbl">Explain how impossible this is</span></button>
+        <span id="explainStep" class="mono text-xs text-[#9fb5a8]"></span>
       </div>
     </div>
   </section>
@@ -2203,8 +2203,10 @@ function renderBadges() {
 /** Refreshes unlocked state and progress in place (keeps hover and focus intact). */
 function statsToggleLabel() {
   const open = !$('#statsMore').hidden, got = BADGES.filter(b => store.badges[b.id]).length;
-  $('#statsToggle').textContent = `📊 ${open ? 'Hide' : 'All'} stats & achievements · ${got}/${BADGES.length} ${open ? '▴' : '▾'}`;
+  const best = store.best ? store.best.matches : null;
+  $('#statsSum').textContent = store.allTime ? `${fmt(store.allTime)} shuffle${store.allTime === 1 ? '' : 's'} · best ${best === null ? '–' : best + '/52'} · ${got}/${BADGES.length} achievements` : `${got}/${BADGES.length} achievements`;
   $('#statsToggle').setAttribute('aria-expanded', String(open));
+  $('#statsPanel').classList.toggle('open', open);
 }
 function updateBadges() {
   statsToggleLabel();
@@ -2324,6 +2326,7 @@ function updateNextGoal() {
 function updateStats() {
   statsDirty = false;
   updateNextGoal();
+  statsToggleLabel();
   setStatNum($('#stSession'), fmt(session.attempts));
   setStatNum($('#stAll'), fmt(store.allTime));
   $('#stBest').textContent = session.best >= 0 ? `${session.best}/52` : '–';
