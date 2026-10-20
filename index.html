@@ -384,6 +384,23 @@
   .imp-perks { margin:.7rem 0 .2rem; padding:0; list-style:none; font-size:.9rem; display:grid; gap:.3rem; }
   .imp-cmp { margin:.5rem 0 .8rem; font-size:.78rem; line-height:1.4; color:#9fb5a8; }
   .imp-cmp b { color:#cfe3d7; font-weight:700; }
+  .imp-likely { margin:.6rem 0 0; font-size:.85rem; line-height:1.4; color:#fff7c9; }
+  .imp-likely b { color:#ffe68a; }
+  .imp-impact { margin:.25rem 0 .8rem; font-size:.8rem; line-height:1.4; color:#a5fbff; }
+  .imp-impact b { color:#fff; }
+  .imp-impact:empty { display:none; }
+  .imp-proof { font-size:.88rem; color:#cfe3d7; }
+  .imp-proof b { color:#ffe68a; }
+  .imp-pay { text-align:center; font-size:.78rem; color:#9fb5a8; }
+  .tt-likely { margin:0; font-size:.9rem; line-height:1.45; color:#fff7c9; }
+  .tt-likely b { color:#ffe68a; }
+  summary.tt-get { cursor:pointer; list-style:none; }
+  summary.tt-get::-webkit-details-marker { display:none; }
+  summary.tt-get::after { content:" ▾"; }
+  details:not([open]) > summary.tt-get::after { content:" ▸ tap to open"; text-transform:none; letter-spacing:0; font-weight:600; }
+  .next-goal { margin:.3rem 0 0; font-size:.85rem; line-height:1.45; color:#cfe3d7; }
+  .next-goal b { color:#ffe68a; }
+  .next-goal a { color:#a5fbff; text-decoration:underline; }
   .imp-deal { margin-top:auto; align-self:center; margin-bottom:.45rem; font:800 .7rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.04em; color:#ffe68a; }
   .imp-buy { text-align:center; text-decoration:none; font-size:1rem !important; }
   .imp-why { margin-top:.45rem; text-align:center; font-size:.72rem; color:#9fb5a8; font-style:italic; }
@@ -792,6 +809,7 @@
           <p id="meterNum" class="meter-num mt-2">0.00%</p>
           <p id="meterCount" class="mono text-sm mt-1">0/52 cards matched</p>
           <p id="meterSub" class="text-sm mt-2 text-[#cfe3d7] min-h-[2.6rem]">Awaiting your first act of defiance.</p>
+          <p id="nextGoal" class="next-goal" hidden></p>
 
           <div class="mt-3 flex items-start gap-3">
             <div id="profSlot" class="prof-slot w-[104px] flex-none" aria-hidden="true"></div>
@@ -858,46 +876,6 @@
     </div>
   </section>
 
-  <!-- ===================== YOUR MISSION CONTROL CENTRE ===================== -->
-  <section class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="statsTitle">
-    <div class="panel p-4 sm:p-6">
-      <h2 id="statsTitle" class="font-display text-lg sm:text-2xl neon-gold ">Your Mission Control Centre <span id="sponsorChip" class="sponsor-chip align-middle ml-1" hidden>★ MISSION SPONSOR</span></h2>
-      <div class="grid gap-x-8 lg:grid-cols-2 mt-3">
-        <div class="min-w-0">
-          <dl class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3">
-            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SESSION</dt><dd id="stSession" class="mono text-xl font-extrabold stat-num">0</dd></div>
-            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">ALL-TIME</dt><dd id="stAll" class="mono text-xl font-extrabold stat-num">0</dd><dd id="stAllHand" class="text-[11px] text-[#9fb5a8]"></dd></div>
-            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">BEST MATCH</dt><dd id="stBest" class="mono text-xl font-extrabold">–</dd><dd id="stBestAll" class="text-[11px] text-[#9fb5a8]"></dd></div>
-            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold"><span class="tip" tabindex="0" data-tip="Converges to 1.00. Math is working as intended.">AVG MATCHES ⓘ</span></dt><dd id="stAvg" class="mono text-xl font-extrabold">–</dd></div>
-          </dl>
-
-          <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-1">ESTIMATED TIME TO SUCCESS</h3>
-          <p id="eta" class="mono text-sm text-[#ffe68a]">Shuffle at least once to calibrate the optimism.</p>
-          <p id="etaSub" class="text-xs text-[#9fb5a8] mt-1"></p>
-
-          <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-1">🏅 YOUR TOP 5 SHUFFLES</h3>
-          <p class="text-xs text-[#9fb5a8] mb-2">Attempt = which of your shuffles it was. By hand = how long that many shuffles take at 20 seconds each. Tap a deck to see all 52 cards.</p>
-          <div class="top-wrap">
-            <table class="top5">
-              <thead><tr><th scope="col"><span class="sr-only">Rank</span></th><th scope="col">Matched</th><th scope="col">Attempt</th><th scope="col"><span class="tip" tabindex="0" data-tip="The chance of at least this many matches in a single shuffle.">Chance ⓘ</span></th><th scope="col">By hand</th></tr></thead>
-              <tbody id="topBody"></tbody>
-            </table>
-          </div>
-        </div>
-        <div class="min-w-0">
-          <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 lg:mt-0 mb-2">MATCH DISTRIBUTION (THIS SESSION)</h3>
-          <div id="dist" class="dist" role="img" aria-label="Distribution of matches per attempt compared with theory"></div>
-          <p class="text-xs text-[#9fb5a8] mt-2"><span class="inline-block w-3 h-2 align-middle bg-[#22f3ff] rounded-sm"></span> your shuffles &nbsp; <span class="inline-block w-4 align-middle border-t-2 border-dashed border-[#ffd23f]/70"></span> what math predicts</p>
-
-          <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-2">ACHIEVEMENTS</h3>
-          <div id="badges" class="grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
-
-          <button type="button" id="shareBtn" class="chip-btn mt-5 w-full">📤 Brag about your attempt</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ===================== ODDS ===================== -->
   <section class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="oddsTitle">
     <div class="panel p-4 sm:p-6">
@@ -924,10 +902,11 @@
   <section id="impatient" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="impTitle" hidden>
     <div class="panel imp-panel p-4 sm:p-6">
       <h2 id="impTitle" class="font-display text-lg sm:text-2xl neon-gold">🎖️ Become a Mission Sponsor</h2>
-      <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">A proper hand shuffle takes about 20 seconds. At that pace, humanity matches the Holy Grail in roughly <b class="text-[#ffe68a]">51 novemdecillion years</b>, give or take a Tuesday. Mission Control can't do that alone. Sponsor a stretch of the mission and your computer becomes an official <b class="text-[#a5fbff]">Mission Control station</b>: it shuffles thousands of years' worth for humanity while you get on with your life, and you watch history fly by on its timeline. Every shuffle is real and counts toward the total. The Professor calls it cheating. We call it volunteering.</p>
-      <p class="mt-2 text-xs text-[#9fb5a8]">Exchange rate: 1 year of nonstop hand shuffling = 1,577,880 shuffles.</p>
+      <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">By hand, humanity needs about <b class="text-[#ffe68a]">51 novemdecillion years</b>. Mission Control can't do that alone: sponsor a stretch and your computer becomes an official <b class="text-[#a5fbff]">Mission Control station</b> that shuffles thousands of years' worth for humanity while you get on with your life. The Professor calls it cheating. We call it volunteering.</p>
+      <p id="impProof" class="imp-proof mt-3" hidden></p>
       <p class="mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Support the mission: pick your rank.</p>
       <div id="impTiers" class="imp-tiers mt-3"></div>
+      <p class="imp-pay mt-3">🔒 Secure checkout by Stripe · Apple Pay · Google Pay · all major cards</p>
       <div id="ttCard" class="mt-6" hidden></div>
       <p id="impClosed" class="mt-4 text-sm text-[#ffe68a]" hidden></p>
       <p class="mt-4 text-xs text-[#9fb5a8]">*Captain to Commander: estimate for this device. Your station runs in this browser while the tab is open (on phones, while it's on screen); stand down anytime and it picks up where it left off on your next visit. A Time Traveller runs on our eight GPUs in the cloud instead: nothing runs on your computer, and you can close the tab. Your rank and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
@@ -994,6 +973,49 @@
         <h3 class="font-display text-base neon-gold">🏛️ Wall of Hopeless Heroes</h3>
         <p class="text-xs text-[#9fb5a8] mt-1">Commanders and Time Travellers who shuffled for humanity and still matched nothing.</p>
         <div id="wallList" class="mt-3 flex flex-wrap gap-2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== YOUR MISSION CONTROL CENTRE ===================== -->
+  <section class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="statsTitle">
+    <div class="panel p-4 sm:p-6">
+      <h2 id="statsTitle" class="font-display text-lg sm:text-2xl neon-gold ">Your Mission Control Centre <span id="sponsorChip" class="sponsor-chip align-middle ml-1" hidden>★ MISSION SPONSOR</span></h2>
+      <dl class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
+            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SESSION</dt><dd id="stSession" class="mono text-xl font-extrabold stat-num">0</dd></div>
+            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">ALL-TIME</dt><dd id="stAll" class="mono text-xl font-extrabold stat-num">0</dd><dd id="stAllHand" class="text-[11px] text-[#9fb5a8]"></dd></div>
+            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">BEST MATCH</dt><dd id="stBest" class="mono text-xl font-extrabold">–</dd><dd id="stBestAll" class="text-[11px] text-[#9fb5a8]"></dd></div>
+            <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold"><span class="tip" tabindex="0" data-tip="Converges to 1.00. Math is working as intended.">AVG MATCHES ⓘ</span></dt><dd id="stAvg" class="mono text-xl font-extrabold">–</dd></div>
+      </dl>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <button type="button" id="statsToggle" class="chip-btn" aria-expanded="false" aria-controls="statsMore">📊 All stats &amp; achievements ▾</button>
+        <button type="button" id="shareBtn" class="chip-btn">📤 Brag about your attempt</button>
+      </div>
+      <div id="statsMore" hidden>
+      <div class="grid gap-x-8 lg:grid-cols-2 mt-3">
+        <div class="min-w-0">
+          <h3 class="text-xs font-bold text-[#9fb5a8] mt-2 mb-1">ESTIMATED TIME TO SUCCESS</h3>
+          <p id="eta" class="mono text-sm text-[#ffe68a]">Shuffle at least once to calibrate the optimism.</p>
+          <p id="etaSub" class="text-xs text-[#9fb5a8] mt-1"></p>
+
+          <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-1">🏅 YOUR TOP 5 SHUFFLES</h3>
+          <p class="text-xs text-[#9fb5a8] mb-2">Attempt = which of your shuffles it was. By hand = how long that many shuffles take at 20 seconds each. Tap a deck to see all 52 cards.</p>
+          <div class="top-wrap">
+            <table class="top5">
+              <thead><tr><th scope="col"><span class="sr-only">Rank</span></th><th scope="col">Matched</th><th scope="col">Attempt</th><th scope="col"><span class="tip" tabindex="0" data-tip="The chance of at least this many matches in a single shuffle.">Chance ⓘ</span></th><th scope="col">By hand</th></tr></thead>
+              <tbody id="topBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="min-w-0">
+          <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 lg:mt-0 mb-2">MATCH DISTRIBUTION (THIS SESSION)</h3>
+          <div id="dist" class="dist" role="img" aria-label="Distribution of matches per attempt compared with theory"></div>
+          <p class="text-xs text-[#9fb5a8] mt-2"><span class="inline-block w-3 h-2 align-middle bg-[#22f3ff] rounded-sm"></span> your shuffles &nbsp; <span class="inline-block w-4 align-middle border-t-2 border-dashed border-[#ffd23f]/70"></span> what math predicts</p>
+
+          <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-2">ACHIEVEMENTS</h3>
+          <div id="badges" class="grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
+        </div>
+      </div>
       </div>
     </div>
   </section>
@@ -1901,7 +1923,19 @@ const LINES = {
     'Ahem. A clerical error, surely. As I was saying: impossible.',
   ],
 };
-const prof = { pose: 'intro', lastAuto: 0, lastPop: 0, idleTimer: 0, milestone: '' };
+const prof = { pose: 'intro', lastAuto: 0, lastPop: 0, idleTimer: 0, milestone: '', usedAp: false, nudged: {}, pbNudge: '' };
+// Nudges: at most once each per visit, never on the very first shuffle, never for sponsors already on board.
+function profNudge() {
+  if (store.allTime <= 1) return '';
+  if (!prof.nudged.ap && !prof.usedAp && session.attempts >= 15) { prof.nudged.ap = true; return 'Your thumb looks tired. Try Autopilot: it shuffles while I sip my tea.'; }
+  if (prof.pbNudge) { const t = prof.pbNudge; prof.pbNudge = ''; return t; }
+  return '';
+}
+function ludNudge() {
+  if (prof.nudged.lud || autopilot.mode !== 'L' || autopilot.ludMs < 120000 || hasAny()) return '';
+  prof.nudged.lud = true;
+  return `Ludicrous is adorable. A Mission Control station does about ${fmt(Math.round(hyperRateGuess() / LUDICROUS_RATE / 100) * 100)}× that.`;
+}
 // Your very first shuffle gets a welcome instead of the usual verdict.
 const PROF_FIRST = {
   0: 'Welcome to the mission, recruit. Zero, like everyone\'s first. Again?',
@@ -1982,7 +2016,7 @@ function poseFor(m) {
 }
 function profReact(m) {
   const pose = poseFor(m);
-  setPose(pose, store.allTime === 1 ? profFirstLine(m) : prof.milestone || undefined);
+  setPose(pose, store.allTime === 1 ? profFirstLine(m) : prof.milestone || profNudge() || undefined);
   prof.milestone = '';
   if (pose === 'pop') popMonocle();
   armIdle();
@@ -1990,9 +2024,10 @@ function profReact(m) {
 function profAuto(m) {
   const now = performance.now();
   if (m >= 4 && now - prof.lastAuto > 1500) { prof.lastAuto = now; profReact(m); return; }
-  if (now - prof.lastAuto > 2500 && (prof.pose !== 'autopilot' || prof.milestone)) {
+  const nudge = now - prof.lastAuto > 2500 ? ludNudge() : '';
+  if (now - prof.lastAuto > 2500 && (prof.pose !== 'autopilot' || prof.milestone || nudge)) {
     prof.lastAuto = now;
-    setPose('autopilot', prof.milestone || profLine(autopilot.mode === 'L' ? 'ludicrous' : 'autopilot'));
+    setPose('autopilot', prof.milestone || nudge || profLine(autopilot.mode === 'L' ? 'ludicrous' : 'autopilot'));
     prof.milestone = '';
   }
 }
@@ -2119,6 +2154,10 @@ function checkPB(deck, m, rigged, b, n) {
   if (store.best && m <= store.best.matches) return;
   store.best = { matches: m, attempt: store.allTime, deck: Array.from(deck, c => CODES[c]), ts: Date.now(), grail: GRAIL_ID, pf: pfRec(b, n) };
   pbDirty = true;
+  if (m >= 5 && !prof.nudged.pb && !hasAny()) {      // a new personal best: which rank would chase the next one for you
+    const t = IMP_TIERS.find(x => SITE.fund[x.id] && likelyBest(x.years * HAND_YEAR).k > m);
+    if (t) { prof.nudged.pb = true; prof.pbNudge = `New personal best! A ${t.name} station would chase ${likelyBest(t.years * HAND_YEAR).k}/52 for you.`; }
+  }
   if (typeof lbOnBest === 'function') lbOnBest();
 }
 
@@ -2162,7 +2201,13 @@ function renderBadges() {
   updateBadges();
 }
 /** Refreshes unlocked state and progress in place (keeps hover and focus intact). */
+function statsToggleLabel() {
+  const open = !$('#statsMore').hidden, got = BADGES.filter(b => store.badges[b.id]).length;
+  $('#statsToggle').textContent = `📊 ${open ? 'Hide' : 'All'} stats & achievements · ${got}/${BADGES.length} ${open ? '▴' : '▾'}`;
+  $('#statsToggle').setAttribute('aria-expanded', String(open));
+}
 function updateBadges() {
+  statsToggleLabel();
   for (const b of BADGES) {
     const node = document.getElementById('bd-' + b.id);
     if (!node) continue;
@@ -2266,8 +2311,19 @@ function setStatNum(node, text) {
   if (relen) fitStatNum(node);
 }
 window.addEventListener('resize', () => $$('.stat-num').forEach(fitStatNum));
+let lastGoal = '';
+function updateNextGoal() {
+  const el2 = $('#nextGoal');
+  if (!store.allTime) { el2.hidden = true; return; }
+  const goal = Math.min(52, bestEver() + 1), n = 1 / tailP(goal);
+  const hint = goal >= 52 ? '' : n > 5e7 ? ' · <a href="#impatient">a station helps</a>' : n > 20000 && autopilot.mode !== 'L' ? ' · try Autopilot' : '';
+  const html = `🎯 Next goal: <b>${goal}/52</b> · about 1 in ${shortOdds(goal)} shuffles${hint}`;
+  if (html !== lastGoal) { el2.innerHTML = html; lastGoal = html; }
+  el2.hidden = false;
+}
 function updateStats() {
   statsDirty = false;
+  updateNextGoal();
   setStatNum($('#stSession'), fmt(session.attempts));
   setStatNum($('#stAll'), fmt(store.allTime));
   $('#stBest').textContent = session.best >= 0 ? `${session.best}/52` : '–';
@@ -2510,6 +2566,7 @@ async function recruitProgress() {
 }
 function showHumans(h) {
   if (!(h > 0)) return;
+  recruit.humans = h; renderImpProof();
   const p = $('#liveHumans');
   p.textContent = `👥 ${fmt(h)} human${h === 1 ? ' has' : 's have'} joined the mission.`;
   p.hidden = false;
@@ -2612,6 +2669,7 @@ const autopilot = {
 };
 function setAutopilot(mode) {
   const m = mode === '0' ? 0 : mode === 'L' ? 'L' : Number(mode);
+  if (m) prof.usedAp = true;
   $$('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.ap === String(mode))));
   cancelAnimationFrame(autopilot.raf);
   if (autopilot.mode) flushAutopilot();
@@ -2736,6 +2794,7 @@ async function liveFetch() {
       const firstTotal = live.total === null;
       live.total = Number(rows[0].attempts);
       if (firstTotal && typeof renderTTCard === 'function') renderTTCard();   // "your mission alone shuffles N× humankind"
+      if (firstTotal) refreshTierLines();
     }
   } catch (e) { /* offline: keep the last known total */ }
 }
@@ -3709,6 +3768,37 @@ const IMP_TIERS = [
     why: 'Why $52? One dollar per card. The deck salutes you.',
     perks: ['🏛️ Your name on the Wall of Hopeless Heroes', '👑 The Royal Professor', '✨ Every other extra included'] }
 ];
+/* What a station of N shuffles will likely reach, and what it adds to humanity's total. */
+let hofRowsCache = null;   // filled by the Hall of Firsts loader
+function likelyBest(N) {
+  let k = 0;
+  for (let j = 1; j <= 52 && 1 - Math.exp(-N * tailP(j)) >= 0.5; j++) k = j;
+  return { k, p: 1 - Math.exp(-N * tailP(k + 1)) };
+}
+function likelyHTML(N) {
+  const { k, p } = likelyBest(N);
+  const open = hofRowsCache && k >= 12 && k <= 20 && !hofRowsCache.some(r => r.rung === k);
+  return `🎯 Likely best: <b>${k}/52</b>${open ? ', a rung nobody holds yet in the Hall of Firsts' : ''}${p >= 0.02 ? ` · a 1 in ${Math.max(2, Math.round(1 / p))} shot at ${k + 1}/52` : ''}`;
+}
+function impactHTML(N) {
+  const T = live.total;
+  if (!(T > 0)) return '';
+  const r = N / T;
+  return r >= 1 ? `🌍 <b>${r < 10 ? r.toFixed(1) : fmt(Math.round(r))}×</b> everything humanity has shuffled so far`
+    : `🌍 Adds <b>${Math.max(1, Math.round(r * 100))}%</b> to everything humanity has shuffled so far`;
+}
+function refreshTierLines() {
+  $$('[data-likely]').forEach(e => { e.innerHTML = likelyHTML(Number(e.dataset.likely)); });
+  $$('[data-impact]').forEach(e => { e.innerHTML = impactHTML(Number(e.dataset.impact)); });
+}
+function renderImpProof() {
+  const parts = [];
+  if (recruit.humans > 0) parts.push(`👥 <b>${fmt(recruit.humans)}</b> human${recruit.humans === 1 ? '' : 's'} on the mission`);
+  const wall = typeof WALL === 'object' ? WALL.rows.slice(0, 3).map(r => escapeHtml(r.name)) : [];
+  if (wall.length) parts.push(`🏛️ Latest heroes: <b>${wall.join(', ')}</b>`);
+  $('#impProof').innerHTML = parts.join(' · ');
+  $('#impProof').hidden = !parts.length;
+}
 /** The highest rank this browser has bought. */
 const rankName = () => (owned().traveller ? 'Time Traveller' : owned().patron ? 'Commander' : owned().odds ? 'Captain' : owned().tea ? 'Rookie' : 'Sponsor');
 const tierById = id => IMP_TIERS.find(t => t.id === id);
@@ -3768,7 +3858,8 @@ function renderImpatient() {
         <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
       </div>
       <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🎁 Plus a little surprise to keep you entertained through all ${fmt(t.years)} years.</li></ul>
-      <p class="imp-cmp">${t.cmp(N / F52_NUM)}</p>
+      <p class="imp-likely" data-likely="${N}">${likelyHTML(N)}</p>
+      <p class="imp-impact" data-impact="${N}">${impactHTML(N)}</p>
       <span class="imp-deal">${t.deal}</span>
       <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}"><span class="block">Support the mission</span><span class="block text-sm opacity-90">as a ${t.name} · ${cur}${t.price}</span></a>
       <p class="imp-why">${t.why}</p>
@@ -4308,6 +4399,7 @@ async function loadWall() {
     $('#wallList').appendChild(chip);
   }
   box.hidden = false;
+  renderImpProof();
 }
 async function submitWall(e) {
   e.preventDefault();
@@ -4395,6 +4487,15 @@ function initImpatient() {
     track('ticker-hide');
   });
   try { if (localStorage.getItem('tis-no-ticker')) { document.body.classList.add('no-ticker'); $('#tickerBack').hidden = false; } } catch (e) { /* private mode */ }
+  try { if (localStorage.getItem('tis-stats-open')) $('#statsMore').hidden = false; } catch (e) { /* private mode */ }
+  statsToggleLabel();
+  $('#statsToggle').addEventListener('click', () => {
+    const more = $('#statsMore');
+    more.hidden = !more.hidden;
+    try { if (more.hidden) localStorage.removeItem('tis-stats-open'); else localStorage.setItem('tis-stats-open', '1'); } catch (e) { /* private mode */ }
+    statsToggleLabel();
+    if (!more.hidden) { updateStats(); track('stats-open'); }
+  });
   $('#tickerBack').addEventListener('click', () => {
     document.body.classList.remove('no-ticker');
     $('#tickerBack').hidden = true;
@@ -4498,6 +4599,7 @@ function renderHof(rows) {
     return `<li class="${cls}"><b class="k">${k}/52</b><span class="txt"><span class="who">${r.kind === 'traveller' ? '🚀 ' : ''}${escapeHtml(r.name)}${r.verified ? '' : ' <span class="pf-early">early</span>'}</span><span class="odds">${odds} · ${when}</span></span></li>`;
   }).join('');
   $('#hof').hidden = false;
+  hofRowsCache = rows; refreshTierLines();
   // Claimed one yourself just now? Make some noise (not for the rungs you already had at page load).
   const me = store.lb && store.lb.name ? store.lb.name.toLowerCase() : '';
   const mine = rows.filter(r => me && r.kind === 'shuffler' && r.name.toLowerCase() === me).map(r => r.rung);
@@ -4802,7 +4904,7 @@ function renderTTCard() {
     </div>
     <div class="min-w-0">
       <p class="text-sm sm:text-base text-[#cfe3d7]">Only a few will ever hold this rank. Eight of the fastest chips on Earth, the ones that train artificial intelligence, carry you back to the day the asteroid wiped out the dinosaurs. From there you shuffle every single year back to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in under an hour and a half*</b>. You watch history fly past live, from the first tiny mammals to the moon landing, and your name goes up in gold on the Time Travellers board. Forever.</p>
-      <p class="tt-get mt-4">What you get</p>
+      <details class="tt-get-d mt-4" open><summary class="tt-get">What you get</summary>
       <ul class="imp-perks tt-perks mt-1">
         <li><b>🚀 Your number and name in gold, forever.</b> Your own seat on the Time Travellers board, a golden leaderboard for Time Travellers only, with a number that is never issued again. Golden helmet and all.</li>
         <li><b>🃏 A deck that exists nowhere else.</b> A real deck of playing cards, printed in the exact order of your best shuffle out of ${bigEnglish(TT.N)}, with your name on the back. Shipped to your door.</li>
@@ -4810,6 +4912,7 @@ function renderTTCard() {
         <li><b>👑 Everything a Commander gets.</b> The Royal Professor, the Certificate, the Wall of Hopeless Heroes and every other extra.</li>
         <li class="imp-surprise"><b>🏛️ The only shot that really counts.</b> If one of your ${bigEnglish(TT.N)} shuffles is the one, you end the mission forever and the Holy Grail takes your name.</li>
       </ul>
+      </details>
     </div>
     <div class="flex flex-col gap-3 min-w-0">
       <div class="tt-stats">
@@ -4819,6 +4922,7 @@ function renderTTCard() {
         <div><b>${fmt(Math.round(TT.years / 80 / 1e3) * 1e3)}×</b><span>a lifetime of shuffling by hand</span></div>
       </div>
       <div id="ttFirst" class="tt-first">${ttFirstHTML()}</div>
+      <p class="tt-likely" data-likely="${TT.N}">${likelyHTML(TT.N)}</p>
       ${url ? `<a class="shuffle-btn tt-buy" href="${url}" target="_blank" rel="noopener" data-imp="traveller">Board the time machine · ${cur}${TT.price}</a>`
         : '<a class="shuffle-btn tt-buy" role="link" aria-disabled="true">Launch window opening soon</a>'}
       <p class="tt-cloud">☁️ Runs on our eight GPUs in the cloud, not on your computer. Close the tab whenever you like: your mission control link keeps updating.</p>
@@ -4826,6 +4930,8 @@ function renderTTCard() {
       <p class="text-[11px] text-[#9fb5a8]">*Measured on eight H100s: about 2.6 billion shuffles a second each. Your mission runs until all ${fmt(TT.N)} shuffles are done, however long the GPUs need, and your live panel shows the real speed. Every shuffle counts toward humankind's total. No prize, just glory.</p>
     </div>
   </div>`;
+  const fold = box.querySelector('.tt-get-d');
+  if (fold && matchMedia('(max-width: 640px)').matches) fold.open = false;   // phones: perks fold away, the price stays in view
   const buy = box.querySelector('[data-imp="traveller"]');
   if (buy) buy.addEventListener('click', () => track('impatient-traveller'));
 }
