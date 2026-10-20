@@ -147,6 +147,16 @@
   .seg button:focus-visible { outline-offset:-3px; }
   .chip-btn { min-height:44px; border:1px solid rgba(255,210,63,.45); color:#ffe9a3; background:rgba(0,0,0,.35); border-radius:10px; padding:.5rem .8rem; font-size:.85rem; font-weight:700; }
   .chip-btn:hover { background:rgba(255,210,63,.12); }
+  .explain-btn { display:inline-flex; align-items:center; justify-content:center; gap:.6rem; min-height:52px; padding:.7rem 1.25rem; border-radius:14px; border:2px solid #3ff0ff;
+    background:linear-gradient(135deg, rgba(63,240,255,.2), rgba(255,47,214,.2)); color:#fff; font:400 1rem/1.15 Bungee, Impact, system-ui, sans-serif; letter-spacing:.02em;
+    text-shadow:0 0 8px rgba(63,240,255,.6); box-shadow:0 0 16px rgba(63,240,255,.35), inset 0 0 12px rgba(255,47,214,.15); cursor:pointer; transition:transform .15s ease, box-shadow .15s ease; }
+  .explain-btn:hover { transform:translateY(-1px) scale(1.02); box-shadow:0 0 28px rgba(63,240,255,.6), inset 0 0 14px rgba(255,47,214,.25); }
+  .explain-btn:active { transform:scale(.98); }
+  .explain-btn .ic { font-size:1.4rem; line-height:1; text-shadow:none; }
+  .explain-btn.pulse { animation:explainPulse 2.2s ease-in-out infinite; }
+  @keyframes explainPulse { 0%, 100% { box-shadow:0 0 14px rgba(63,240,255,.35), inset 0 0 12px rgba(255,47,214,.15); } 50% { box-shadow:0 0 32px rgba(255,47,214,.65), inset 0 0 16px rgba(63,240,255,.25); } }
+  @media (max-width:480px) { .explain-btn { width:100%; font-size:.92rem; } }
+  @media (prefers-reduced-motion: reduce) { .explain-btn.pulse { animation:none; } .explain-btn:hover, .explain-btn:active { transform:none; } }
 
   /* Meter */
   .meter-num { font-family: Bungee, Impact, system-ui, sans-serif; font-size: clamp(2.6rem, 9vw, 3.6rem); line-height:1; color:#8b949e; font-variant-numeric: tabular-nums; }
@@ -899,12 +909,12 @@
       <p id="oddsZeros" class="text-xs text-[#9fb5a8] mt-1"></p>
 
       <div class="mt-6 rounded-xl bg-black/40 border border-white/10 p-4 min-h-[7.5rem]">
-        <p id="typeOut" class="mono text-sm sm:text-base leading-relaxed" aria-hidden="true">Press the button. Brace yourself.</p>
+        <p id="typeOut" class="mono text-sm sm:text-base leading-relaxed" aria-hidden="true">Press the button below. Brace yourself.</p>
         <p id="typeSr" class="sr-only" aria-live="polite"></p>
         <button type="button" id="againBtn" class="shuffle-btn mt-4 !w-auto !text-sm !py-2 !px-4" hidden>Shuffle again</button>
       </div>
       <div class="mt-3 flex items-center gap-3 flex-wrap">
-        <button type="button" id="explainBtn" class="chip-btn">Explain how impossible this is</button>
+        <button type="button" id="explainBtn" class="explain-btn pulse"><span class="ic" aria-hidden="true">🤯</span><span class="lbl">Explain how impossible this is</span></button>
         <span id="explainStep" class="mono text-xs text-[#9fb5a8]"></span>
       </div>
     </div>
@@ -2964,17 +2974,22 @@ function typewrite(text, done) {
   };
   step();
 }
+function explainLabel(icon, text) {
+  const b = $('#explainBtn');
+  b.querySelector('.ic').textContent = icon; b.querySelector('.lbl').textContent = text;
+}
 $('#explainBtn').addEventListener('click', () => {
+  $('#explainBtn').classList.remove('pulse');
   oddsIdx = (oddsIdx + 1) % (COMPARISONS.length + 1);
   const again = $('#againBtn');
   again.hidden = true;
   if (oddsIdx === COMPARISONS.length) {
     $('#explainStep').textContent = '';
-    $('#explainBtn').textContent = 'Start the tour over';
+    explainLabel('🔁', 'Start the tour over');
     typewrite('…anyway, shuffle again?', () => { again.hidden = false; });
   } else {
     $('#explainStep').textContent = `${oddsIdx + 1} / ${COMPARISONS.length}`;
-    $('#explainBtn').textContent = oddsIdx === COMPARISONS.length - 1 ? 'And so?' : 'Make it worse';
+    if (oddsIdx === COMPARISONS.length - 1) explainLabel('🫠', 'And so?'); else explainLabel('😱', 'Make it worse');
     typewrite(COMPARISONS[oddsIdx]);
   }
 });
