@@ -304,6 +304,8 @@
   @keyframes toastIn { from { opacity:0; transform:translateY(-10px); } }
 
   /* Fellow shufflers ticker */
+  #tickerTrack .tk-real { color:#fff7c9; }
+  #tickerTrack .tk-real b { display:inline-block; margin-right:.2rem; padding:0 .35rem; border-radius:6px; background:#ffd23f; color:#14110a; font:800 .62rem/1.5 "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; vertical-align:middle; }
   .tt-cloud { font-size:.8rem; font-weight:700; color:#a5fbff; }
   .hero-cta { width:auto; display:inline-flex; flex-direction:column; align-items:center; padding-left:2.2rem; padding-right:2.2rem; }
   #ticker .tk-x { flex:none; width:2.2rem; display:flex; align-items:center; justify-content:center; color:#9fb5a8; font-size:1.05rem; border-left:1px solid rgba(255,210,63,.25); background:transparent; }
@@ -384,16 +386,21 @@
   .imp-perks { margin:.7rem 0 .2rem; padding:0; list-style:none; font-size:.9rem; display:grid; gap:.3rem; }
   .imp-cmp { margin:.5rem 0 .8rem; font-size:.78rem; line-height:1.4; color:#9fb5a8; }
   .imp-cmp b { color:#cfe3d7; font-weight:700; }
-  .imp-likely { margin:.6rem 0 0; font-size:.85rem; line-height:1.4; color:#fff7c9; }
-  .imp-likely b { color:#ffe68a; }
+  .imp-likely { margin:.7rem 0 0; padding:.55rem .7rem; border-radius:12px; background:rgba(255,210,63,.07); border:1px solid rgba(255,210,63,.35); display:flex; flex-direction:column; gap:.1rem; font-size:.82rem; line-height:1.35; color:#cfe3d7; }
+  .imp-likely .lk-t { font-size:.72rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#9fb5a8; }
+  .imp-likely .lk-big { font-size:1rem; font-weight:700; color:#fff7c9; }
+  .imp-likely .lk-big b { font:800 1.5rem/1 "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; margin-right:.15rem; }
+  .imp-likely .lk-sub { font-size:.72rem; color:#9fb5a8; }
+  .imp-likely .lk-luck { margin-top:.25rem; }
+  .imp-likely .lk-luck b { color:#ffe68a; }
+  .imp-likely .lk-hall { margin-top:.2rem; color:#ffe68a; font-weight:600; }
   .imp-impact { margin:.25rem 0 .8rem; font-size:.8rem; line-height:1.4; color:#a5fbff; }
   .imp-impact b { color:#fff; }
   .imp-impact:empty { display:none; }
   .imp-proof { font-size:.88rem; color:#cfe3d7; }
   .imp-proof b { color:#ffe68a; }
   .imp-pay { text-align:center; font-size:.78rem; color:#9fb5a8; }
-  .tt-likely { margin:0; font-size:.9rem; line-height:1.45; color:#fff7c9; }
-  .tt-likely b { color:#ffe68a; }
+  .tt-likely { margin:0; }
   summary.tt-get { cursor:pointer; list-style:none; }
   summary.tt-get::-webkit-details-marker { display:none; }
   summary.tt-get::after { content:" ▾"; }
@@ -584,6 +591,8 @@
   .plaque .facts { margin-top:.6rem; font-size:.85rem; color:#e9dcb0; }
   .plaque .facts b { color:#ffe68a; }
   .plaque .forever { margin-top:.7rem; font:700 .72rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.08em; color:#c9a75a; }
+  .ms-go { border-color:rgba(124,255,107,.5); background:rgba(8,40,16,.55); }
+  .live-dot.go { background:#7cff6b; box-shadow:0 0 8px #7cff6b; }
   body.mission-done #missionStatus { border-color:rgba(255,210,63,.6); background:rgba(60,42,4,.55); }
   .win-claim { padding:1rem; border-radius:14px; border:2px solid var(--gold); background:rgba(0,0,0,.55); text-align:left; }
   .win-claim form { display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; margin-top:.5rem; }
@@ -691,9 +700,9 @@
         <li><span class="n" aria-hidden="true">3</span><b>All 52 right wins. Forever.</b> One winner. One monument. No second chances. <a href="#honors">What happens then?</a></li>
       </ol>
 
-      <div id="missionStatus" class="mt-6 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border border-red-500/50 bg-red-950/40 px-4 py-2 mono text-xs sm:text-sm">
-        <span class="inline-flex items-center gap-2 font-bold text-red-400"><span class="live-dot" aria-hidden="true"></span>LIVE</span>
-        <span><b class="text-red-300">MISSION STATUS: ONGOING.</b> Humanity is shuffling as one. Mathematics is ahead. For now.</span>
+      <div id="missionStatus" class="ms-go mt-6 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border px-4 py-2 mono text-xs sm:text-sm">
+        <span class="inline-flex items-center gap-2 font-bold text-[#7cff6b]"><span class="live-dot go" aria-hidden="true"></span>LIVE</span>
+        <span><b class="text-[#b8ffb0]">MISSION STATUS: ALL SYSTEMS GO.</b> Humanity is shuffling as one. Mathematics is ahead. For now.</span>
       </div>
       <div id="plaque" class="plaque mt-8" hidden></div>
 
@@ -1077,8 +1086,8 @@
 <button type="button" id="hyperChip" class="hyper-chip" hidden aria-label="Your station's progress, go to your station"></button>
 <button type="button" id="fab" class="shuffle-btn !w-auto !py-3 !px-5 !text-sm lg:hidden" hidden aria-label="Shuffle your deck">Shuffle</button>
 
-<div id="ticker" aria-label="Fellow shufflers feed (jokes, not real people)">
-  <div class="lab"><span class="live-dot" aria-hidden="true" style="width:7px;height:7px"></span><span class="lab-text">FELLOW SHUFFLERS<small>jokes · not real people</small></span></div>
+<div id="ticker" aria-label="Fellow shufflers feed (jokes, plus real events marked REAL)">
+  <div class="lab"><span class="live-dot" aria-hidden="true" style="width:7px;height:7px"></span><span class="lab-text">FELLOW SHUFFLERS<small>jokes, except the REAL ones</small></span></div>
   <div id="tickerView"><div id="tickerTrack"></div></div>
   <button type="button" class="tk-x" id="tickerClose" aria-label="Hide the fellow shufflers feed" title="Hide">✕</button>
 </div>
@@ -2978,10 +2987,36 @@ function tickerLine() {
   if (recentLines.length > 80) recentLines.shift();
   return line;
 }
-const ticker = { x: 0, queue: [], lastT: 0, paused: false };
+const ticker = { x: 0, queue: [], lastT: 0, paused: false, n: 0, realAt: -1 };
+// Real moments from the boards, mixed in between the jokes (about one in four) and marked REAL.
+function realEvents() {
+  const ev = [], day = 864e5;
+  if (live.total > 0) ev.push(`🌍 Humanity has shuffled ${fmt(live.total)} times so far. Successful matches: 0.`);
+  if (recruit.humans > 0) ev.push(`👥 ${fmt(recruit.humans)} humans have joined the mission so far.`);
+  if (LB.rows.length) {
+    const top = LB.rows[0];
+    ev.push(`🥇 ${top.name} leads the Luckiest Shufflers with ${top.best}/52.`);
+    LB.rows.filter(r => Date.now() - new Date(r.achieved_at) < 7 * day).sort((a, b) => new Date(b.achieved_at) - new Date(a.achieved_at)).slice(0, 4)
+      .forEach(r => ev.push(`🏆 ${r.name} hit ${r.best}/52 this week.`));
+  }
+  if (hofRowsCache) {
+    hofRowsCache.forEach(r => ev.push(`🏛️ ${r.name} holds ${r.rung}/52 in the Hall of Firsts. Forever.`));
+    const open = [12, 13, 14, 15, 16, 17, 18, 19, 20].find(k => !hofRowsCache.some(r => r.rung === k));
+    if (open) ev.push(`🏛️ ${open}/52 is still unclaimed in the Hall of Firsts. First come, forever.`);
+  }
+  TT.rows.filter(t => t.status === 'running' || t.status === 'boarding').forEach(t => ev.push(`🚀 Time Traveller ${t.name} is shuffling through history right now.`));
+  TT.rows.filter(t => t.status === 'done').slice(0, 3).forEach(t => ev.push(`🚀 Time Traveller ${t.name} shuffled all the way home: best ${t.best}/52.`));
+  WALL.rows.slice(0, 3).forEach(r => ev.push(`🏛️ ${r.name} joined the Wall of Hopeless Heroes.`));
+  return ev;
+}
 const tView = $('#tickerView'), tTrack = $('#tickerTrack');
 function tickerAdd() {
-  const line = tickerLine();
+  let line = null;
+  if (++ticker.n % 4 === 0) {
+    const ev = realEvents();
+    if (ev.length) { ticker.realAt = (ticker.realAt + 1) % ev.length; line = { real: true, text: ev[ticker.realAt] }; }
+  }
+  if (!line) line = tickerLine();
   if (reduceMotion) { tTrack.innerHTML = ''; ticker.x = 0; tTrack.style.transform = 'none'; }
   ticker.queue.push(line);
   if (ticker.queue.length > 3) ticker.queue.shift();
@@ -2994,7 +3029,13 @@ function tickerLoop(t) {
     const trackRight = ticker.x + tTrack.scrollWidth;
     if (reduceMotion || trackRight < vw || !tTrack.children.length) {
       if (!tTrack.children.length && !reduceMotion) ticker.x = vw;
-      const s = document.createElement('span'); s.textContent = ticker.queue.shift(); tTrack.appendChild(s);
+      const item = ticker.queue.shift(), s = document.createElement('span');
+      if (item && item.real) {
+        s.className = 'tk-real';
+        const tag = document.createElement('b'); tag.textContent = 'REAL'; s.appendChild(tag);
+        s.appendChild(document.createTextNode(' ' + item.text));
+      } else s.textContent = item;
+      tTrack.appendChild(s);
     }
   }
   if (!reduceMotion && !ticker.paused) {
@@ -3775,10 +3816,16 @@ function likelyBest(N) {
   for (let j = 1; j <= 52 && 1 - Math.exp(-N * tailP(j)) >= 0.5; j++) k = j;
   return { k, p: 1 - Math.exp(-N * tailP(k + 1)) };
 }
-function likelyHTML(N) {
+// Plain words: "your station's best shuffle will probably get 13 of 52 cards right".
+function likelyHTML(N, who) {
   const { k, p } = likelyBest(N);
-  const open = hofRowsCache && k >= 12 && k <= 20 && !hofRowsCache.some(r => r.rung === k);
-  return `🎯 Likely best: <b>${k}/52</b>${open ? ', a rung nobody holds yet in the Hall of Firsts' : ''}${p >= 0.02 ? ` · a 1 in ${Math.max(2, Math.round(1 / p))} shot at ${k + 1}/52` : ''}`;
+  const free = r => hofRowsCache && r >= 12 && r <= 20 && !hofRowsCache.some(x => x.rung === r);
+  const hall = free(k) ? `🏛️ Nobody has ${k}/52 yet: that would put you in the Hall of Firsts`
+    : free(k + 1) && p >= 0.02 ? `🏛️ ${k + 1}/52 would put you in the Hall of Firsts` : '';
+  return `<span class="lk-t">🎯 Your station's best shuffle</span>
+    <span class="lk-big"><b>${k}</b> of 52 cards right</span><span class="lk-sub">that's what it will probably get</span>
+    ${p >= 0.02 ? `<span class="lk-luck">🍀 1 in ${Math.max(2, Math.round(1 / p))} ${who} even get <b>${k + 1}</b></span>` : ''}
+    ${hall ? `<span class="lk-hall">${hall}</span>` : ''}`;
 }
 function impactHTML(N) {
   const T = live.total;
@@ -3788,7 +3835,7 @@ function impactHTML(N) {
     : `🌍 Adds <b>${Math.max(1, Math.round(r * 100))}%</b> to everything humanity has shuffled so far`;
 }
 function refreshTierLines() {
-  $$('[data-likely]').forEach(e => { e.innerHTML = likelyHTML(Number(e.dataset.likely)); });
+  $$('[data-likely]').forEach(e => { e.innerHTML = likelyHTML(Number(e.dataset.likely), e.dataset.who); });
   $$('[data-impact]').forEach(e => { e.innerHTML = impactHTML(Number(e.dataset.impact)); });
 }
 function renderImpProof() {
@@ -3858,7 +3905,7 @@ function renderImpatient() {
         <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
       </div>
       <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🎁 Plus a little surprise to keep you entertained through all ${fmt(t.years)} years.</li></ul>
-      <p class="imp-likely" data-likely="${N}">${likelyHTML(N)}</p>
+      <p class="imp-likely" data-likely="${N}" data-who="${t.name}s">${likelyHTML(N, t.name + 's')}</p>
       <p class="imp-impact" data-impact="${N}">${impactHTML(N)}</p>
       <span class="imp-deal">${t.deal}</span>
       <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}"><span class="block">Support the mission</span><span class="block text-sm opacity-90">as a ${t.name} · ${cur}${t.price}</span></a>
@@ -4922,7 +4969,7 @@ function renderTTCard() {
         <div><b>${fmt(Math.round(TT.years / 80 / 1e3) * 1e3)}×</b><span>a lifetime of shuffling by hand</span></div>
       </div>
       <div id="ttFirst" class="tt-first">${ttFirstHTML()}</div>
-      <p class="tt-likely" data-likely="${TT.N}">${likelyHTML(TT.N)}</p>
+      <p class="imp-likely tt-likely" data-likely="${TT.N}" data-who="Time Travellers">${likelyHTML(TT.N, 'Time Travellers')}</p>
       ${url ? `<a class="shuffle-btn tt-buy" href="${url}" target="_blank" rel="noopener" data-imp="traveller">Board the time machine · ${cur}${TT.price}</a>`
         : '<a class="shuffle-btn tt-buy" role="link" aria-disabled="true">Launch window opening soon</a>'}
       <p class="tt-cloud">☁️ Runs on our eight GPUs in the cloud, not on your computer. Close the tab whenever you like: your mission control link keeps updating.</p>
