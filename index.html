@@ -459,6 +459,19 @@
   .replay-note .odds { display:block; margin-top:.3rem; color:#ffe68a; }
   .replay-note .odds b { color:#ffe68a; }
   .replay-note .tag { display:inline-block; margin-right:.35rem; padding:.05rem .45rem; border-radius:999px; background:#22f3ff; color:#03262b; font:800 .65rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; vertical-align:1px; }
+  .hof { padding:.75rem; border-radius:14px; border:1px solid rgba(255,210,63,.3); background:rgba(255,210,63,.05); }
+  .hof-title { margin:0; font-size:.85rem; line-height:1.45; color:#cfe3d7; }
+  .hof-title b { color:#ffe68a; margin-right:.3rem; }
+  .hof-list { list-style:none; margin:.6rem 0 0; padding:0; display:grid; gap:.5rem; grid-template-columns:repeat(5, minmax(0, 1fr)); }
+  @media (max-width:640px) { .hof-list { grid-template-columns:repeat(2, minmax(0, 1fr)); } .hof-rung.dream { grid-column:1 / -1; } }
+  .hof-rung { min-width:0; display:flex; flex-direction:column; gap:.1rem; padding:.55rem .65rem; border-radius:12px; background:rgba(0,0,0,.35); border:1px dashed rgba(255,255,255,.2); }
+  .hof-rung.claimed { border:1px solid rgba(255,210,63,.6); }
+  .hof-rung.dream { border-color:rgba(255,47,214,.65); }
+  .hof-rung .k { font:800 1.15rem/1.1 "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; }
+  .hof-rung .odds { font-size:.7rem; color:var(--muted); }
+  .hof-rung .who { margin-top:.2rem; font-size:.85rem; font-weight:700; color:#fff; overflow-wrap:anywhere; }
+  .hof-rung .who.open { color:#9fb5a8; font-weight:600; }
+  .hof-rung .when { font-size:.7rem; color:#9fb5a8; }
   .ph-hello { margin:0 auto 1rem; max-width:40rem; padding:.55rem .9rem; border-radius:12px; border:1px solid rgba(255,97,84,.55); background:rgba(255,97,84,.12); color:#ffd9d4; font-size:.9rem; line-height:1.45; }
   .hero-trust { margin:.75rem auto 0; max-width:40rem; font-size:.85rem; line-height:1.5; color:#cfe3d7; text-wrap:balance; }
   .hero-trust b { color:#ffe68a; font-family:"JetBrains Mono", ui-monospace, monospace; white-space:nowrap; }
@@ -807,6 +820,10 @@
         <div class="flex items-center gap-3 flex-wrap"><span id="lbCount" class="mono text-xs text-[#9fb5a8]"></span><button type="button" id="lbShare" class="chip-btn !text-xs">📤 Share the top 3</button></div>
       </div>
       <p class="mt-1 text-sm text-[#cfe3d7]">The best single shuffles anyone has made, worldwide. Same score? Whoever needed the fewest tries ranks higher. Every score with a <span class="pf-tick" aria-hidden="true">✓</span> is provably fair: tap it to replay that exact shuffle yourself. Scores marked <span class="pf-early">early</span> came in before provably fair shuffles existed: checked to be plausible, but they can't be replayed.</p>
+      <div id="hof" class="hof mt-4" hidden>
+        <p class="hof-title"><b>🏛️ Hall of Firsts</b> The first human to reach each rung keeps it forever. Scores on this board count.</p>
+        <ol id="hofList" class="hof-list" aria-label="Hall of Firsts"></ol>
+      </div>
       <div id="lbMe" class="lb-me mt-4" aria-live="polite"></div>
       <div class="lb-wrap mt-4">
         <table class="lb">
@@ -4445,6 +4462,36 @@ async function lbLoad() {
   $('#lbSection').hidden = false;
   renderLB();
   statsDirty = true;
+  hofLoad();
+}
+/* ---------- Hall of Firsts (supabase/firsts.sql): the first human to reach each rung keeps it ---------- */
+const HOF_RUNGS = [8, 10, 12, 15, 20];
+const HOF = { mine: null };
+function shortOdds(k) {
+  const n = 1 / tailP(k);
+  if (n < 1e6) return fmt(Math.round(n));
+  const [v, w] = n >= 1e18 ? [n / 1e18, 'quintillion'] : n >= 1e15 ? [n / 1e15, 'quadrillion'] : n >= 1e12 ? [n / 1e12, 'trillion'] : n >= 1e9 ? [n / 1e9, 'billion'] : [n / 1e6, 'million'];
+  return `${v.toFixed(1)} ${w}`;
+}
+function renderHof(rows) {
+  const by = Object.fromEntries(rows.map(r => [r.rung, r]));
+  $('#hofList').innerHTML = HOF_RUNGS.map(k => {
+    const r = by[k], cls = ['hof-rung', r ? 'claimed' : '', k === 20 ? 'dream' : ''].join(' ').trim();
+    const head = `<b class="k">${k}/52</b><span class="odds">1 in ${shortOdds(k)}</span>`;
+    if (!r) return `<li class="${cls}">${head}<span class="who open">Unclaimed</span><span class="when">${k === 20 ? 'The Twenty Club. Wide open.' : 'First come, forever.'}</span></li>`;
+    const when = new Date(r.at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return `<li class="${cls}">${head}<span class="who">${r.kind === 'traveller' ? '🚀 ' : ''}${escapeHtml(r.name)}${r.verified ? '' : ' <span class="pf-early">early</span>'}</span><span class="when">${when}</span></li>`;
+  }).join('');
+  $('#hof').hidden = false;
+  // Claimed one yourself just now? Make some noise (not for the rungs you already had at page load).
+  const me = store.lb && store.lb.name ? store.lb.name.toLowerCase() : '';
+  const mine = rows.filter(r => me && r.kind === 'shuffler' && r.name.toLowerCase() === me).map(r => r.rung);
+  if (HOF.mine) for (const k of mine) if (!HOF.mine.includes(k)) { toast(`🏛️ <b>Hall of Firsts!</b> You're the first human ever to reach ${k}/52. That rung is yours forever.`); track('hof-claim-' + k); }
+  HOF.mine = mine;
+}
+async function hofLoad() {
+  if (!LB.on) return;
+  try { const rows = await lbRpc('hall_of_firsts', {}); if (Array.isArray(rows)) renderHof(rows); } catch (e) { /* firsts.sql not installed yet: stay hidden */ }
 }
 function renderLB() {
   const me = store.lb && store.lb.name && store.lb.sub ? { name: store.lb.name, best: store.lb.sub } : null;
@@ -4521,6 +4568,7 @@ async function lbSubmit(quiet) {
     store.lb.sub = Math.max(store.lb.sub, mine ? mine.matches : 0, 1); saveStore(true);
     LB.rank = res.rank; LB.players = res.players;
     track('leaderboard-submit');
+    hofLoad();
     return res;
   } catch (e) {
     if (!quiet) toast(/name taken/.test(e.message) ? '🏆 That name is already taken. Pick another one.'

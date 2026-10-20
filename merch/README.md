@@ -15,7 +15,7 @@ Print-ready T-shirt designs for The Impossible Shuffle.
 
 | File | Design | Good for |
 |---|---|---|
-| `mission-patch.png` | Round patch: "Mission Control · Dept. of Lost Causes", an orbiting ace, "Matches: 0" | Hoodie chest or back, cap side, stickers |
+| `mission-patch.png` | Round patch: "Mission Control · Dept. of Impossible Things", an orbiting ace, "Matches: 0" | Hoodie chest or back, cap side, stickers |
 | `do-not-disturb.png` | "Do not disturb. My computer is shuffling for humanity", progress bar, "Station online · ETA: never" | Hoodies (lounge wear) |
 | `world-first.png` | "World first" stamp: "My deck order had never existed in the history of the universe. It still didn't match." | Hoodie back, T-shirts |
 | `this-close.png` | "I was this close": two cards 45 cards apart, "Best match: 7/52" | Hoodies, T-shirts |

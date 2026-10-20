@@ -58,6 +58,13 @@ site links to `theimpossibleshuffle.com/b/<score>/`, so the link unfurls (X, Wha
 Slack, Facebook) with that score; people who click it land on the site. Higher scores fall back to
 the homepage. The images and pages are generated from the same design as `og-image.png`.
 
+## Hall of Firsts
+
+- Run `supabase/firsts.sql` once (after `leaderboard.sql` and `honors.sql`). Until then the strip stays hidden.
+- Rungs 8, 10, 12, 15 and 20 out of 52. The first human to reach a rung on the leaderboard (or a
+  Time Traveller's mission) keeps it forever. Triggers record every crossing, so hiding an entry
+  hands the rung to the next one in line. Honorary only.
+
 ## Recruits and humans
 
 - Run `supabase/recruits.sql` once (after `live-counter.sql`). Until then the recruit panel still
