@@ -386,21 +386,12 @@
   .imp-perks { margin:.7rem 0 .2rem; padding:0; list-style:none; font-size:.9rem; display:grid; gap:.3rem; }
   .imp-cmp { margin:.5rem 0 .8rem; font-size:.78rem; line-height:1.4; color:#9fb5a8; }
   .imp-cmp b { color:#cfe3d7; font-weight:700; }
-  .imp-likely { margin:.7rem 0 0; padding:.55rem .7rem; border-radius:12px; background:rgba(255,210,63,.07); border:1px solid rgba(255,210,63,.35); display:flex; flex-direction:column; gap:.1rem; font-size:.82rem; line-height:1.35; color:#cfe3d7; }
-  .imp-likely .lk-t { font-size:.72rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#9fb5a8; }
-  .imp-likely .lk-big { font-size:1rem; font-weight:700; color:#fff7c9; }
-  .imp-likely .lk-big b { font:800 1.5rem/1 "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; margin-right:.15rem; }
-  .imp-likely .lk-sub { font-size:.72rem; color:#9fb5a8; }
-  .imp-likely .lk-luck { margin-top:.25rem; }
-  .imp-likely .lk-luck b { color:#ffe68a; }
-  .imp-likely .lk-hall { margin-top:.2rem; color:#ffe68a; font-weight:600; }
-  .imp-impact { margin:.25rem 0 .8rem; font-size:.8rem; line-height:1.4; color:#a5fbff; }
+  .imp-impact { margin:.6rem 0 .8rem; font-size:.8rem; line-height:1.4; color:#a5fbff; }
   .imp-impact b { color:#fff; }
   .imp-impact:empty { display:none; }
   .imp-proof { font-size:.88rem; color:#cfe3d7; }
   .imp-proof b { color:#ffe68a; }
   .imp-pay { text-align:center; font-size:.78rem; color:#9fb5a8; }
-  .tt-likely { margin:0; }
   summary.tt-get { cursor:pointer; list-style:none; }
   summary.tt-get::-webkit-details-marker { display:none; }
   summary.tt-get::after { content:" ▾"; }
@@ -3816,17 +3807,6 @@ function likelyBest(N) {
   for (let j = 1; j <= 52 && 1 - Math.exp(-N * tailP(j)) >= 0.5; j++) k = j;
   return { k, p: 1 - Math.exp(-N * tailP(k + 1)) };
 }
-// Plain words: "your station's best shuffle will probably get 13 of 52 cards right".
-function likelyHTML(N, who) {
-  const { k, p } = likelyBest(N);
-  const free = r => hofRowsCache && r >= 12 && r <= 20 && !hofRowsCache.some(x => x.rung === r);
-  const hall = free(k) ? `🏛️ Nobody has ${k}/52 yet: that would put you in the Hall of Firsts`
-    : free(k + 1) && p >= 0.02 ? `🏛️ ${k + 1}/52 would put you in the Hall of Firsts` : '';
-  return `<span class="lk-t">🎯 Your station's best shuffle</span>
-    <span class="lk-big"><b>${k}</b> of 52 cards right</span><span class="lk-sub">that's what it will probably get</span>
-    ${p >= 0.02 ? `<span class="lk-luck">🍀 1 in ${Math.max(2, Math.round(1 / p))} ${who} even get <b>${k + 1}</b></span>` : ''}
-    ${hall ? `<span class="lk-hall">${hall}</span>` : ''}`;
-}
 function impactHTML(N) {
   const T = live.total;
   if (!(T > 0)) return '';
@@ -3835,7 +3815,6 @@ function impactHTML(N) {
     : `🌍 Adds <b>${Math.max(1, Math.round(r * 100))}%</b> to everything humanity has shuffled so far`;
 }
 function refreshTierLines() {
-  $$('[data-likely]').forEach(e => { e.innerHTML = likelyHTML(Number(e.dataset.likely), e.dataset.who); });
   $$('[data-impact]').forEach(e => { e.innerHTML = impactHTML(Number(e.dataset.impact)); });
 }
 function renderImpProof() {
@@ -3905,7 +3884,6 @@ function renderImpatient() {
         <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
       </div>
       <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🎁 Plus a little surprise to keep you entertained through all ${fmt(t.years)} years.</li></ul>
-      <p class="imp-likely" data-likely="${N}" data-who="${t.name}s">${likelyHTML(N, t.name + 's')}</p>
       <p class="imp-impact" data-impact="${N}">${impactHTML(N)}</p>
       <span class="imp-deal">${t.deal}</span>
       <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}"><span class="block">Support the mission</span><span class="block text-sm opacity-90">as a ${t.name} · ${cur}${t.price}</span></a>
@@ -4969,7 +4947,6 @@ function renderTTCard() {
         <div><b>${fmt(Math.round(TT.years / 80 / 1e3) * 1e3)}×</b><span>a lifetime of shuffling by hand</span></div>
       </div>
       <div id="ttFirst" class="tt-first">${ttFirstHTML()}</div>
-      <p class="imp-likely tt-likely" data-likely="${TT.N}" data-who="Time Travellers">${likelyHTML(TT.N, 'Time Travellers')}</p>
       ${url ? `<a class="shuffle-btn tt-buy" href="${url}" target="_blank" rel="noopener" data-imp="traveller">Board the time machine · ${cur}${TT.price}</a>`
         : '<a class="shuffle-btn tt-buy" role="link" aria-disabled="true">Launch window opening soon</a>'}
       <p class="tt-cloud">☁️ Runs on our eight GPUs in the cloud, not on your computer. Close the tab whenever you like: your mission control link keeps updating.</p>
