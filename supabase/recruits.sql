@@ -9,7 +9,7 @@
 --   no prizes, nothing of value.
 -- Visitors can't read this table directly: only the functions below, which never return ids.
 -- Like the shuffle counter, this counts browsers, not passports: someone who clears their
--- browser can join twice. It's a group project, not an election.
+-- browser can join twice. It's a mission, not an election.
 
 create table if not exists public.humans (
   player_id    uuid primary key,

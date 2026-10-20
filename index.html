@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Impossible Shuffle</title>
-<meta name="description" content="The most impossible group project on the internet: somebody shuffled this deck once, and now humanity has to do it again, together. Odds: 1 in 52!.">
+<meta name="description" content="The most impossible mission on the internet: somebody shuffled this deck once, and now humanity has to do it again, together. Odds: 1 in 52!.">
 <link rel="canonical" href="https://theimpossibleshuffle.com/">
 <meta name="theme-color" content="#03110a">
 <meta property="og:type" content="website">
@@ -641,7 +641,7 @@
     <div id="hero" class="bulbs px-6 py-8 sm:px-12 sm:py-10 text-center">
       <p id="phHello" class="ph-hello" hidden>👋 Welcome, Product Hunters. Your mission, should you choose to accept it: one shuffle. Mathematics expects nothing from you.</p>
       <p class="mono text-xs tracking-widest text-[#9fb5a8] mb-3">MISSION CONTROL · DEPARTMENT OF IMPOSSIBLE THINGS</p>
-      <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl lg:text-[3.4rem]">Welcome to Humankind's Most Impossible Group Project</h1>
+      <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl lg:text-[3.4rem]">Welcome to Humankind's Most Impossible Mission</h1>
       <p class="mt-5 max-w-4xl mx-auto text-base sm:text-lg text-[#cfe3d7]"><span class="block" style="text-wrap:balance">Somebody shuffled this deck once. Now humanity has to do it again.</span> <span class="block mt-1" style="text-wrap:balance">Mathematics says no. We say: hold my cards.</span></p>
       <button type="button" id="heroShuffle" class="shuffle-btn hero-cta mt-5"><span class="btn-main">Defy Mathematics</span><span class="btn-sub">Free · no sign-up</span></button>
       <p class="hero-trust">Odds: <b>1 in 8 × 10⁶⁷</b> per shuffle. Every shuffle is real and anyone can replay it, so even Mission Control can't fake a win.</p>
@@ -2422,7 +2422,7 @@ function myCode() {
 const recruitUrl = () => `${siteBase()}/?r=${myCode()}`;
 function recruitText() {
   const n = store.allTime;
-  return `I just joined humankind's most impossible group project: one deck was shuffled once, and now humanity has to shuffle that exact order again. Odds: 1 in 8 × 10⁶⁷. I've done ${fmt(n)} shuffle${n === 1 ? '' : 's'} so far. We need everybody. Your shift starts now: ${recruitUrl()}`;
+  return `I just joined humankind's most impossible mission: one deck was shuffled once, and now humanity has to shuffle that exact order again. Odds: 1 in 8 × 10⁶⁷. I've done ${fmt(n)} shuffle${n === 1 ? '' : 's'} so far. We need everybody. Your shift starts now: ${recruitUrl()}`;
 }
 function shareTo(kind) {
   const text = recruitText(), url = recruitUrl(), e = encodeURIComponent;
@@ -4171,7 +4171,7 @@ function drawCertificate(cv, name, won) {
   c.strokeStyle = '#c9971a'; c.lineWidth = 3; c.beginPath(); c.moveTo(W / 2 - 700, 572); c.lineTo(W / 2 + 700, 572); c.stroke();
   c.fillStyle = '#2a2414'; c.font = '46px Georgia, "Times New Roman", serif';
   c.fillText(won ? 'has shuffled a deck of cards into the Holy Grail Sequence, all 52 cards in order,' : 'has bravely tried to shuffle a deck of cards into the Holy Grail Sequence', W / 2, 650);
-  c.fillText(won ? "and completed Humankind's Most Impossible Group Project. Forever. Edition of one." : 'at The Impossible Shuffle, and has, as predicted, not yet succeeded.', W / 2, 708);
+  c.fillText(won ? "and completed Humankind's Most Impossible Mission. Forever. Edition of one." : 'at The Impossible Shuffle, and has, as predicted, not yet succeeded.', W / 2, 708);
   const M = MISSION.row || {};
   const rows = won ? [
     ['Date', new Date(M.claimed_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })],
@@ -4626,7 +4626,7 @@ function applyMission(row) {
   const rec = { r: row.pf_round, R: row.pf_rand, s: row.pf_seat, n: row.pf_n };
   const when = new Date(row.claimed_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   const mine = store.missionWon && row.source === 'browser';
-  $('#hero h1').textContent = "Humankind's Most Impossible Group Project: Accomplished";
+  $('#hero h1').textContent = "Humankind's Most Impossible Mission: Accomplished";
   $('#hero h1').nextElementSibling.innerHTML = '<span class="block" style="text-wrap:balance">Together, the whole internet shuffled one deck of cards until we matched it perfectly.</span> <span class="block mt-1" style="text-wrap:balance">Mathematics said no. We said: hold my cards.</span>';
   $('#plaque').hidden = false;
   $('#plaque').innerHTML = `<p class="kicker">★ HUMANKIND: MISSION ACCOMPLISHED ★</p>

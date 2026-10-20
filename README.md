@@ -1,6 +1,6 @@
 # The Impossible Shuffle
 
-Humankind's most impossible group project: the whole internet shuffling one deck of cards until it matches the Holy Grail Sequence perfectly. The odds are 1 in 52! ≈ 8.07 × 10⁶⁷. We're trying anyway.
+Humankind's most impossible mission: the whole internet shuffling one deck of cards until it matches the Holy Grail Sequence perfectly. The odds are 1 in 52! ≈ 8.07 × 10⁶⁷. We're trying anyway.
 
 Live at **https://theimpossibleshuffle.com**
 
