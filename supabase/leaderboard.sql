@@ -152,7 +152,8 @@ drop function if exists public.leaderboard_rank(int, uuid);
 drop function if exists public.leaderboard_rank(int, uuid, bigint);
 
 -- Where a score ranks, in the same order as the list.
--- With p_player: that player's own position. Without: where a new score would land today.
+-- With p_player: that player's own position. Without (or when that player has no visible entry):
+-- where a new score would land today, counting it as a newcomer.
 create function public.leaderboard_rank(p_best int, p_player uuid default null, p_attempts bigint default null)
 returns json
 language plpgsql
@@ -178,7 +179,9 @@ begin
      where not hidden and (best > p_best or (best = p_best and attempts <= coalesce(p_attempts, 9223372036854775807)));
     n := n + 1;   -- counting the newcomer
   end if;
-  return json_build_object('rank', r, 'players', n);
+  -- listed: is this player's own entry visible on the board? (false when it was deleted or hidden,
+  -- so a browser that thinks it joined can find out and hand its score in again)
+  return json_build_object('rank', r, 'players', n, 'listed', me.player_id is not null);
 end;
 $$;
 

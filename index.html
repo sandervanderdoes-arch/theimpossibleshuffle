@@ -3991,8 +3991,22 @@ async function lbLoad() {
     }
     if (!r.ok) throw new Error('HTTP ' + r.status);
     LB.rows = await r.json();
-    const joined = store.lb && store.lb.name && store.lb.sub, mine = lbBest();
-    const stats = await lbRpc('leaderboard_rank', lbRankArgs(mine ? mine.matches : 99, joined ? store.lb.id : null));
+    let joined = !!(store.lb && store.lb.name && store.lb.sub);
+    const mine = lbBest();
+    let stats = await lbRpc('leaderboard_rank', lbRankArgs(mine ? mine.matches : 99, joined ? store.lb.id : null));
+    // This browser thinks it joined, but its entry isn't on the board (deleted, e.g. by the pre-launch
+    // reset, or hidden): hand the score in again, once per visit. Still not listed: show the join form.
+    if (joined && stats.listed === false) {
+      let back = null;
+      if (!LB.rejoined) { LB.rejoined = true; back = await lbSubmit(true, true); }
+      if (back && back.listed !== false) stats = back;
+      else {
+        store.lb.sub = 0; store.lb.name = ''; saveStore(true); joined = false;
+        stats = await lbRpc('leaderboard_rank', lbRankArgs(mine ? mine.matches : 99, null));
+      }
+      const again = await fetch(q(LB.v), { headers: liveHeaders(), cache: 'no-store' });
+      if (again.ok) LB.rows = await again.json();
+    }
     LB.players = mine || joined ? stats.players : Math.max(0, stats.players - 1);
     if (mine) LB.rank = stats.rank;
     LB.ready = true;
@@ -4024,12 +4038,17 @@ function lbNudge() {
   const best = lbBest().matches;
   if (LB.rank === 1) return `<p class="nudge">You're #1 in the world. Defend the crown: every shuffle counts. <a href="#impatient">Get a station</a>.</p>`;
   const above = LB.rows[LB.rank - 2];
-  const need = above ? above.best + 1 : best + 1;
+  let need = above ? above.best + 1 : best + 1;
+  // Ties go to fewer tries: while you're still under the tries of the shuffler above you,
+  // matching their score is enough.
+  const left = above && above.attempts && above.best > best ? above.attempts - 1 - (store.allTime || 0) : 0;
+  if (left > 0) need = above.best;
   const shuffles = 1 / tailP(need), lud = shuffles / LUDICROUS_RATE, station = shuffles / hyperRateGuess();
   const soon = sec => (sec < 15 ? 'a few seconds' : fmtDuration(sec));
   const how = lud < 600 ? `Ludicrous autopilot should find one in ${soon(lud)}.`
     : `Ludicrous would need ${fmtDuration(lud).replace('about ', 'about ')}; your own station ${soon(station)}. <a href="#impatient">Become a Mission Sponsor</a>`;
-  return `<p class="nudge">To climb, you need <b>${need}/52</b>: about 1 in ${fmt(Math.round(shuffles))} shuffles. ${how}</p>`;
+  const by = left > 0 ? ` within your next ${fmt(left)} shuffles (or ${need + 1}/52 any time)` : '';
+  return `<p class="nudge">To climb, you need <b>${need}/52</b>${by}: about 1 in ${fmt(Math.round(shuffles))} shuffles. ${how}</p>`;
 }
 function renderLBMe() {
   const box = $('#lbMe'), mine = lbBest(), best = mine ? mine.matches : null;
@@ -4052,9 +4071,9 @@ function renderLBMe() {
     <form class="row" data-lb="join"><label class="sr-only" for="lbName">Shuffler name</label><input id="lbName" class="imp-input" maxlength="20" placeholder="Your shuffler name" autocomplete="nickname" required><button type="submit" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Join the leaderboard</button></form>${lbNudge()}`;
 }
 function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
-async function lbSubmit(quiet) {
+async function lbSubmit(quiet, loading) {
   const mine = lbBest();
-  if (!LB.ready || !store.lb || !store.lb.name || !(mine || store.best) || LB.busy) return null;
+  if (!(LB.ready || loading) || !store.lb || !store.lb.name || !(mine || store.best) || LB.busy) return null;
   LB.busy = true;
   try {
     const at = mine ? new Date(mine.ts || Date.now()).toISOString() : null;
