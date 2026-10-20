@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Impossible Shuffle</title>
-<meta name="description" content="The most pointless mission on the internet: somebody shuffled this deck once, and now humanity has to do it again. Odds: 1 in 52!.">
+<meta name="description" content="The most impossible group project on the internet: somebody shuffled this deck once, and now humanity has to do it again, together. Odds: 1 in 52!.">
 <link rel="canonical" href="https://theimpossibleshuffle.com/">
 <meta name="theme-color" content="#03110a">
 <meta property="og:type" content="website">
@@ -468,7 +468,13 @@
   .hero-steps .n { position:absolute; left:.7rem; top:.68rem; width:1.35rem; height:1.35rem; border-radius:999px; display:grid; place-items:center; background:var(--gold); color:#14110a; font:800 .72rem/1 "JetBrains Mono", ui-monospace, monospace; }
   .hero-steps b { display:block; color:#ffe68a; }
   .hero-steps a { color:#a5fbff; text-decoration:underline; white-space:nowrap; }
-  .recruit-btn { margin-top:.5rem; }
+  .recruit-panel { border-color:rgba(255,47,214,.45); box-shadow:0 0 24px rgba(255,47,214,.12); }
+  .share-row { display:flex; flex-wrap:wrap; gap:.5rem; }
+  .share-btn { min-height:44px; padding:.45rem .85rem; border-radius:999px; border:1px solid var(--c); background:rgba(255,255,255,.04); color:#fff; font:700 .85rem/1.2 Inter, system-ui, sans-serif; cursor:pointer; position:relative; }
+  .share-btn::before { content:""; display:inline-block; width:.55rem; height:.55rem; margin-right:.45rem; border-radius:999px; background:var(--c); vertical-align:middle; }
+  .share-btn:hover { background:rgba(255,255,255,.1); }
+  .share-btn:focus-visible { outline:2px solid var(--c); outline-offset:2px; }
+  #recruitStats .dim { color:var(--muted); }
   body.pre-ticker #ticker { display:none; }
   body.pre-ticker { padding-bottom:env(safe-area-inset-bottom, 0px) !important; }
   .first-stamp { margin-top:.9rem; display:flex; align-items:center; gap:.85rem; padding:.7rem .9rem; border:1px dashed rgba(255,210,63,.5); border-radius:14px; background:rgba(255,210,63,.06); }
@@ -634,8 +640,8 @@
   <header class="px-4 pt-16 max-w-6xl mx-auto">
     <div id="hero" class="bulbs px-6 py-8 sm:px-12 sm:py-10 text-center">
       <p id="phHello" class="ph-hello" hidden>👋 Welcome, Product Hunters. Your mission, should you choose to accept it: one shuffle. Mathematics expects nothing from you.</p>
-      <p class="mono text-xs tracking-widest text-[#9fb5a8] mb-3">MISSION CONTROL · DEPARTMENT OF LOST CAUSES</p>
-      <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl lg:text-[3.4rem]">Welcome to Humankind's Most Pointless Mission</h1>
+      <p class="mono text-xs tracking-widest text-[#9fb5a8] mb-3">MISSION CONTROL · DEPARTMENT OF IMPOSSIBLE THINGS</p>
+      <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl lg:text-[3.4rem]">Welcome to Humankind's Most Impossible Group Project</h1>
       <p class="mt-5 max-w-4xl mx-auto text-base sm:text-lg text-[#cfe3d7]"><span class="block" style="text-wrap:balance">Somebody shuffled this deck once. Now humanity has to do it again.</span> <span class="block mt-1" style="text-wrap:balance">Mathematics says no. We say: hold my cards.</span></p>
       <button type="button" id="heroShuffle" class="shuffle-btn hero-cta mt-5"><span class="btn-main">Defy Mathematics</span><span class="btn-sub">Free · no sign-up</span></button>
       <p class="hero-trust">Odds: <b>1 in 8 × 10⁶⁷</b> per shuffle. Every shuffle is real and anyone can replay it, so even Mission Control can't fake a win.</p>
@@ -647,7 +653,7 @@
 
       <div id="missionStatus" class="mt-6 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border border-red-500/50 bg-red-950/40 px-4 py-2 mono text-xs sm:text-sm">
         <span class="inline-flex items-center gap-2 font-bold text-red-400"><span class="live-dot" aria-hidden="true"></span>LIVE</span>
-        <span><b class="text-red-300">MISSION STATUS: ONGOING.</b> Humanity is shuffling as one. Mathematics remains undefeated.</span>
+        <span><b class="text-red-300">MISSION STATUS: ONGOING.</b> Humanity is shuffling as one. Mathematics is ahead. For now.</span>
       </div>
       <div id="plaque" class="plaque mt-8" hidden></div>
 
@@ -655,6 +661,7 @@
         <p class="mono text-xs tracking-widest text-[#ffe68a] inline-flex items-center gap-2"><span class="live-dot" aria-hidden="true" style="width:8px;height:8px"></span>ACTUAL ATTEMPTS BY HUMANKIND</p>
         <p id="liveCount" class="mono font-extrabold neon-gold text-2xl sm:text-4xl mt-1 tabular-nums break-all">…</p>
         <p id="liveWins" class="mt-2 font-bold text-[#ffe68a]">0 successful matches in human history.</p>
+        <p id="liveHumans" class="mt-1 font-bold text-[#a5fbff]" hidden></p>
         <p id="liveYears" class="mt-1 text-xs text-[#a5fbff]"></p>
         <p class="mt-1 text-xs text-[#cfe3d7]">Every shuffle by every real visitor to this site, counted live. <span id="liveYou" class="text-[#9fb5a8]"></span></p>
       </div>
@@ -732,7 +739,6 @@
           <span class="stamp" id="firstStamp" aria-hidden="true">🌍 WORLD<br>FIRST</span>
           <div class="min-w-0">
             <p class="first-text" id="firstText">Your first shuffle will almost certainly create a deck order <b>no human has ever seen</b>.</p>
-            <button type="button" id="recruitBtn" class="chip-btn recruit-btn !text-xs !min-h-0 !py-1" hidden>📣 Recruit a friend</button>
           </div>
         </div>
       </section>
@@ -774,6 +780,23 @@
         </div>
       </div>
     </aside>
+
+    <!-- Recruit: right under the decks on a computer, right under the Professor on a phone -->
+    <section id="recruitPanel" class="panel recruit-panel p-4 sm:p-5 mt-5 lg:col-start-1" aria-labelledby="recruitTitle" hidden>
+      <h2 id="recruitTitle" class="font-display text-base sm:text-lg neon-pink">📣 Humanity needs backup</h2>
+      <p class="mt-1 text-sm text-[#cfe3d7]">This only works if everybody shuffles. Send in a friend: every recruit shuffles for humanity, and you get the credit.</p>
+      <div class="share-row mt-3" role="group" aria-label="Recruit a friend">
+        <button type="button" class="share-btn" data-share="whatsapp" style="--c:#25d366">WhatsApp</button>
+        <button type="button" class="share-btn" data-share="instagram" style="--c:#e1306c">Instagram</button>
+        <button type="button" class="share-btn" data-share="x" style="--c:#e7e9ea">X</button>
+        <button type="button" class="share-btn" data-share="facebook" style="--c:#1877f2">Facebook</button>
+        <button type="button" class="share-btn" data-share="telegram" style="--c:#229ed9">Telegram</button>
+        <button type="button" class="share-btn" data-share="email" style="--c:#9fb5a8">Email</button>
+        <button type="button" class="share-btn" data-share="copy" style="--c:#ffd23f">Copy link</button>
+        <button type="button" class="share-btn" data-share="more" style="--c:#a5fbff" hidden>More…</button>
+      </div>
+      <p id="recruitStats" class="mt-3 text-sm text-[#cfe3d7]" aria-live="polite"></p>
+    </section>
   </main>
 
   <!-- ===================== LEADERBOARD ===================== -->
@@ -822,7 +845,7 @@
           </dl>
 
           <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-1">ESTIMATED TIME TO SUCCESS</h3>
-          <p id="eta" class="mono text-sm text-[#ffe68a]">Shuffle at least once to calibrate the despair.</p>
+          <p id="eta" class="mono text-sm text-[#ffe68a]">Shuffle at least once to calibrate the optimism.</p>
           <p id="etaSub" class="text-xs text-[#9fb5a8] mt-1"></p>
 
           <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-1">🏅 YOUR TOP 5 SHUFFLES</h3>
@@ -842,7 +865,7 @@
           <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-2">ACHIEVEMENTS</h3>
           <div id="badges" class="grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
 
-          <button type="button" id="shareBtn" class="chip-btn mt-5 w-full">📤 Brag about your failure</button>
+          <button type="button" id="shareBtn" class="chip-btn mt-5 w-full">📤 Brag about your attempt</button>
         </div>
       </div>
     </div>
@@ -851,7 +874,7 @@
   <!-- ===================== ODDS ===================== -->
   <section class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="oddsTitle">
     <div class="panel p-4 sm:p-6">
-      <h2 id="oddsTitle" class="font-display text-lg sm:text-2xl neon-pink">How Hopeless Is This?</h2>
+      <h2 id="oddsTitle" class="font-display text-lg sm:text-2xl neon-pink">How Impossible Is This?</h2>
       <p class="mt-4 text-sm text-[#9fb5a8] font-bold">YOUR ODDS OF MATCHING THE HOLY GRAIL, PER SHUFFLE</p>
       <p class="mono text-sm sm:text-base break-all mt-1"><span class="text-[#9fb5a8]">1 in </span><span id="oddsExact" class="neon-gold font-bold"></span></p>
       <p class="mt-4 text-sm text-[#9fb5a8] font-bold">AS A PERCENTAGE</p>
@@ -864,7 +887,7 @@
         <button type="button" id="againBtn" class="shuffle-btn mt-4 !w-auto !text-sm !py-2 !px-4" hidden>Shuffle again</button>
       </div>
       <div class="mt-3 flex items-center gap-3 flex-wrap">
-        <button type="button" id="explainBtn" class="chip-btn">Explain how hopeless this is</button>
+        <button type="button" id="explainBtn" class="chip-btn">Explain how impossible this is</button>
         <span id="explainStep" class="mono text-xs text-[#9fb5a8]"></span>
       </div>
     </div>
@@ -997,7 +1020,7 @@
         @theimpossibleshuffle
       </a>
     </div>
-    <p class="mt-6 font-display text-sm neon-pink">Made with love, despair and Fisher–Yates.</p>
+    <p class="mt-6 font-display text-sm neon-pink">Made with love, stubborn optimism and Fisher–Yates.</p>
   </footer>
 </div>
 
@@ -1454,7 +1477,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0 };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0 };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1476,7 +1499,9 @@ const store = (() => {
       hyper: p.hyper && typeof p.hyper === 'object' ? { bought: n(p.hyper.bought), done: n(p.hyper.done), best: n(p.hyper.best), rate: n(p.hyper.rate), from: Math.min(n(p.hyper.from), n(p.hyper.done)) } : { bought: 0, done: 0, best: 0, rate: 0, from: 0 },
       livePending: n(p.livePending),
       lb: p.lb && /^[0-9a-f-]{36}$/.test(p.lb.id) && /^[0-9a-f]{32,64}$/.test(p.lb.secret) ? { id: p.lb.id, secret: p.lb.secret, name: str(p.lb.name).slice(0, 20), sub: n(p.lb.sub) } : null,
-      cardBack: str(p.cardBack) || 'classic', outfit: str(p.outfit) || 'classic', certId: str(p.certId), wallSubmitted: p.wallSubmitted === true, profMs: n(p.profMs)
+      cardBack: str(p.cardBack) || 'classic', outfit: str(p.outfit) || 'classic', certId: str(p.certId), wallSubmitted: p.wallSubmitted === true, profMs: n(p.profMs),
+      hid: /^[0-9a-f-]{36}$/.test(p.hid) ? p.hid : '', rcode: /^[a-z0-9]{8,16}$/.test(p.rcode) ? p.rcode : '', rby: /^[a-z0-9]{8,16}$/.test(p.rby) ? p.rby : '',
+      joined: p.joined === true, rtitle: n(p.rtitle)
     };
   } catch (e) { return def; }
 })();
@@ -1981,7 +2006,7 @@ const SUBTEXT = [
   { max: 0, lines: ['Splendidly terrible. Absolute zero.', 'Not one card. The universe noticed and laughed.', 'A flawless derangement. Mathematicians call that a result; we call it Tuesday.'] },
   { max: 1, lines: ['Perfectly, aggressively average. This is literally the expected result.', 'One card. Exactly what probability ordered, delivered on time.', 'The single most predictable outcome in the known universe.'] },
   { max: 3, lines: ['Mild statistical flirtation. Do not tell anyone.', 'A little above average. Try not to let it go to your head.', 'The deck winked at you. It meant nothing.'] },
-  { max: 5, lines: ['Top 1% of trying. Frame this moment.', 'Rarer than most things you\'ll do today. Still useless.', 'Screenshot it. Nobody will be impressed, but screenshot it.'] },
+  { max: 5, lines: ['Top 1% of trying. Frame this moment.', 'Rarer than most things you\'ll do today. Savor it.', 'Screenshot it. Nobody will be impressed, but screenshot it.'] },
   { max: 9, lines: ['Statisticians are nervously refreshing their spreadsheets.', 'Six or more happens about once in 1,700 shuffles. Someone check the cables.'] },
   { max: 25, lines: ['Something is wrong. Check your browser for witchcraft.', 'Ten or more? We are filing a formal complaint with the universe.'] },
   { max: 51, lines: ['This should not be possible. We are calling a physicist.', 'Reality is buffering. Please hold.'] },
@@ -2230,7 +2255,7 @@ function updateStats() {
     $('#dp' + i).textContent = session.attempts ? (p * 100).toFixed(1) + '%' : '–';
   });
   const r = currentRate();
-  if (!r) { $('#eta').textContent = 'Shuffle at least once to calibrate the despair.'; $('#etaSub').textContent = ''; }
+  if (!r) { $('#eta').textContent = 'Shuffle at least once to calibrate the optimism.'; $('#etaSub').textContent = ''; }
   else {
     const years = F52_NUM / r / SECONDS_PER_YEAR;
     const lives = years / UNIVERSE_AGE_YEARS;
@@ -2379,14 +2404,103 @@ function ordinal(n) {
   const v = n % 100, s = (v >= 11 && v <= 13) ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] || 'th');
   return fmt(n) + s;
 }
+/* ---------- Recruits and humans (supabase/recruits.sql) ----------
+   Every browser gets a random recruit code (no personal data). Links you share carry it as ?r=;
+   a newcomer who arrives through it and shuffles counts as your recruit, once. */
+const RCODE_RE = /^[a-z0-9]{8,16}$/;
+const RECRUIT_TITLES = [[1, 'Recruitment Officer'], [3, 'Recruitment Sergeant'], [10, 'Recruitment Captain'], [25, 'Recruitment Admiral'], [100, 'Minister of Recruitment']];
+const recruit = { stats: null, joining: false, lastProgress: 0, lastStats: 0, lastHumans: 0 };
+const siteBase = () => (/^https?:$/.test(location.protocol) ? location.origin : 'https://theimpossibleshuffle.com');
+function myCode() {
+  if (!store.rcode) {
+    const a = 'abcdefghijkmnpqrstuvwxyz23456789';   // 32 symbols: no 0/o or 1/l mix-ups, and 256 % 32 = 0 keeps it unbiased
+    store.rcode = Array.from(crypto.getRandomValues(new Uint8Array(10)), x => a[x % 32]).join('');
+    saveStore(true);
+  }
+  return store.rcode;
+}
+const recruitUrl = () => `${siteBase()}/?r=${myCode()}`;
 function recruitText() {
-  const site = /^https?:$/.test(location.protocol) ? location.origin : 'https://theimpossibleshuffle.com';
   const n = store.allTime;
-  return `I just joined humankind's most pointless mission: one deck was shuffled once, and now humanity has to shuffle that exact order again. Odds: 1 in 8 × 10⁶⁷. I've done ${fmt(n)} shuffle${n === 1 ? '' : 's'} for humanity. We need your help. Your shift starts now: ${site}/?ref=recruit`;
+  return `I just joined humankind's most impossible group project: one deck was shuffled once, and now humanity has to shuffle that exact order again. Odds: 1 in 8 × 10⁶⁷. I've done ${fmt(n)} shuffle${n === 1 ? '' : 's'} so far. We need everybody. Your shift starts now: ${recruitUrl()}`;
+}
+function shareTo(kind) {
+  const text = recruitText(), url = recruitUrl(), e = encodeURIComponent;
+  const open = u => window.open(u, '_blank', 'noopener');
+  track('recruit-' + kind);
+  if (kind === 'whatsapp') open(`https://wa.me/?text=${e(text)}`);
+  else if (kind === 'x') open(`https://twitter.com/intent/tweet?text=${e(text)}`);
+  else if (kind === 'facebook') open(`https://www.facebook.com/sharer/sharer.php?u=${e(url)}`);
+  else if (kind === 'telegram') open(`https://t.me/share/url?url=${e(url)}&text=${e(text.replace(url, '').trim())}`);
+  else if (kind === 'email') location.href = `mailto:?subject=${e('Humanity needs backup')}&body=${e(text)}`;
+  else if (kind === 'copy') copyText(text);
+  else if (kind === 'more') navigator.share({ title: 'The Impossible Shuffle', text }).catch(() => {});
+  else if (kind === 'instagram') instagramShare();
+}
+// Instagram has no share link: hand over the result card (share it on a phone, save it on a computer).
+async function instagramShare() {
+  const dlg = $('#cardDlg');
+  try { await openCard('result'); } catch (e) { copyText(recruitText()); return; }
+  if (typeof dlg.showModal === 'function') dlg.showModal();
+  toast('📸 <b>For Instagram:</b> share or save this card and post it to your story. "Copy text" gives you the link to go with it.');
+}
+function recruitTitle(n) { return [...RECRUIT_TITLES].reverse().find(([k]) => n >= k) || null; }
+function renderRecruits() {
+  const box = $('#recruitStats'), st = recruit.stats;
+  const n = st ? st.recruits : 0, t = recruitTitle(n), next = RECRUIT_TITLES.find(([k]) => n < k);
+  box.innerHTML = n
+    ? `👥 <b>${fmt(n)}</b> human${n === 1 ? '' : 's'} recruited · <b>${fmt(st.shuffles)}</b> shuffles by your recruits · 🎖️ <b>${t[1]}</b>${next ? ` <span class="dim">(${next[1]} at ${next[0]})</span>` : ''}`
+    : 'No recruits yet. Your first one makes you a <b>Recruitment Officer</b>, Department of Impossible Things.';
+  if (t && t[0] > store.rtitle) {
+    if (store.rtitle || n) toast(`🎖️ <b>Promoted: ${t[1]}</b><br><span style="opacity:.85">${fmt(n)} human${n === 1 ? '' : 's'} joined the mission through you.</span>`);
+    store.rtitle = t[0]; saveStore(true);
+  }
+}
+async function joinMission() {
+  if (!live.on || store.joined || !store.allTime || recruit.joining) return;
+  recruit.joining = true;
+  if (!store.hid) store.hid = crypto.randomUUID ? crypto.randomUUID() : Array.from(crypto.getRandomValues(new Uint8Array(16)), (b, i) => (i === 6 ? (b & 15 | 64) : i === 8 ? (b & 63 | 128) : b).toString(16).padStart(2, '0')).join('').replace(/^(.{8})(.{4})(.{4})(.{4})/, '$1-$2-$3-$4-');
+  try {
+    const r = await lbRpc('join_mission', { p_player: store.hid, p_code: myCode(), p_by: store.rby || null });
+    store.joined = true; saveStore(true);
+    if (store.rby) track('recruit-joined');
+    if (r && Number.isFinite(Number(r.humans))) showHumans(Number(r.humans));
+    loadRecruits(true);
+  } catch (e) { if (/code taken/.test(e.message)) { store.rcode = ''; saveStore(true); } }   // not installed yet, offline, or a code clash: try again later
+  recruit.joining = false;
+}
+async function loadRecruits(force) {
+  if (!live.on || !store.joined || (!force && Date.now() - recruit.lastStats < 120000)) return;
+  recruit.lastStats = Date.now();
+  try { const r = await lbRpc('my_recruits', { p_code: myCode() }); recruit.stats = { recruits: Number(r.recruits) || 0, shuffles: Number(r.shuffles) || 0 }; renderRecruits(); } catch (e) { /* keep the last known */ }
+}
+// Recruits report their own total now and then, so their recruiter's tally grows with them.
+async function recruitProgress() {
+  if (!live.on || !store.joined || !store.rby || Date.now() - recruit.lastProgress < 60000) return;
+  recruit.lastProgress = Date.now();
+  try { await lbRpc('recruit_progress', { p_player: store.hid, p_total: store.allTime }); } catch (e) { /* try again next time */ }
+}
+function showHumans(h) {
+  if (!(h > 0)) return;
+  const p = $('#liveHumans');
+  p.textContent = `👥 ${fmt(h)} human${h === 1 ? ' has' : 's have'} joined the mission.`;
+  p.hidden = false;
+}
+async function loadHumans() {
+  if (!live.on || Date.now() - recruit.lastHumans < 60000) return;
+  recruit.lastHumans = Date.now();
+  try {
+    const r = await fetch(`${LIVE_COUNTER.url}/rest/v1/shuffle_stats?select=humans&id=eq.1`, { headers: liveHeaders(), cache: 'no-store' });
+    if (r.ok) { const rows = await r.json(); if (rows[0]) showHumans(Number(rows[0].humans)); }   // before recruits.sql runs, the column doesn't exist: stay hidden
+  } catch (e) { /* offline */ }
 }
 function showRecruit() {
-  $('#recruitBtn').hidden = !store.allTime;
-  if (store.allTime) document.body.classList.remove('pre-ticker');
+  $('#recruitPanel').hidden = !store.allTime;
+  if (!store.allTime) return;
+  document.body.classList.remove('pre-ticker');
+  if (!$('#recruitStats').innerHTML) renderRecruits();
+  joinMission();
+  loadRecruits();
 }
 function showWorldFirst(m, animate) {
   showRecruit();
@@ -2838,7 +2952,7 @@ $('#explainBtn').addEventListener('click', () => {
   again.hidden = true;
   if (oddsIdx === COMPARISONS.length) {
     $('#explainStep').textContent = '';
-    $('#explainBtn').textContent = 'Start the despair over';
+    $('#explainBtn').textContent = 'Start the tour over';
     typewrite('…anyway, shuffle again?', () => { again.hidden = false; });
   } else {
     $('#explainStep').textContent = `${oddsIdx + 1} / ${COMPARISONS.length}`;
@@ -3209,7 +3323,8 @@ function shareText() {
   const url = location.href.split(/[?#]/)[0];
   if (cardState.mode === 'lb') return `There's now a world ranking. Who shuffles the luckiest deck? 🃏 ${url}`;
   const best = bestEver(), rank = LB.ready && LB.rank ? ` World ranking: #${fmt(LB.rank)} of ${fmt(Math.max(LB.players, LB.rank))}.` : '';
-  return `I shuffled ${fmt(store.allTime)} time${store.allTime === 1 ? '' : 's'} for humanity. Best: ${best}/52 (a ${pctText(chanceWithin(best, Math.max(1, store.allTime)))} chance in that many shuffles).${rank} Mathematics: 1, Humanity: 0. Your turn: ${BRAG_PAGES(best) ? `${site}/b/${best}/` : url}`;
+  const code = myCode();
+  return `I shuffled ${fmt(store.allTime)} time${store.allTime === 1 ? '' : 's'} for humanity. Best: ${best}/52 (a ${pctText(chanceWithin(best, Math.max(1, store.allTime)))} chance in that many shuffles).${rank} Mathematics: 1, Humanity: 0 (for now). Your turn: ${BRAG_PAGES(best) ? `${site}/b/${best}/?r=${code}` : `${url}?r=${code}`}`;
 }
 async function copyText(text) {
   let ok = false;
@@ -3221,7 +3336,7 @@ async function copyText(text) {
       document.body.appendChild(ta); ta.select(); ok = document.execCommand('copy'); ta.remove();
     } catch (e) { ok = false; }
   }
-  if (ok) toast('📋 <b>Copied.</b> Go forth and spread the hopelessness.');
+  if (ok) toast('📋 <b>Copied.</b> Go forth and recruit humanity.');
   else {
     const t = document.createElement('span');
     t.className = 'copy-text'; t.textContent = text;
@@ -3375,7 +3490,7 @@ async function makeCard() {
 }
 $('#shareBtn').addEventListener('click', async () => {
   track('share');
-  if (!store.allTime) { toast('🃏 <b>Shuffle at least once</b>, then brag about your failure.'); return; }
+  if (!store.allTime) { toast('🃏 <b>Shuffle at least once</b>, then brag about it.'); return; }
   const dlg = $('#cardDlg');
   try { await openCard('result'); } catch (e) { copyText(shareText()); return; }       // no canvas: fall back to plain text
   if (typeof dlg.showModal === 'function') dlg.showModal(); else copyText(shareText());
@@ -3455,12 +3570,12 @@ function layoutBulbs() {
 if ('ResizeObserver' in window) new ResizeObserver(layoutBulbs).observe($('#hero')); else window.addEventListener('resize', layoutBulbs);
 
 const FACTS = [
-  'Every shuffle you make is almost certainly the first time that exact deck order has ever existed in human history. You\'re a pioneer. A useless one.',
+  'Every shuffle you make is almost certainly the first time that exact deck order has ever existed in human history. You\'re a pioneer. Act like one.',
   'Two random shuffles share exactly 1 card in the same position on average, whether the deck has 52 cards or 52 million.',
   'A shuffle with zero matching positions is called a derangement. About 36.8% of shuffles are one, which is 1/e. Math is weird.',
   '52! has 68 digits. Your phone number has about 10. Plan accordingly.',
   'Seven riffle shuffles are enough to mix a deck properly (Bayer and Diaconis, 1992). We use a computer, so one is plenty.',
-  'This page never uses Math.random(). Its 128 bits of state can\'t reach most of the 52! deck orders. We take pointlessness seriously.',
+  'This page never uses Math.random(). Its 128 bits of state can\'t reach most of the 52! deck orders. We take the impossible seriously.',
   'Six or more matches happens about once in 1,700 shuffles. If it happens to you, check on the Professor\'s monocle.'
 ];
 let factIdx = RNG.below(FACTS.length);
@@ -4056,7 +4171,7 @@ function drawCertificate(cv, name, won) {
   c.strokeStyle = '#c9971a'; c.lineWidth = 3; c.beginPath(); c.moveTo(W / 2 - 700, 572); c.lineTo(W / 2 + 700, 572); c.stroke();
   c.fillStyle = '#2a2414'; c.font = '46px Georgia, "Times New Roman", serif';
   c.fillText(won ? 'has shuffled a deck of cards into the Holy Grail Sequence, all 52 cards in order,' : 'has bravely tried to shuffle a deck of cards into the Holy Grail Sequence', W / 2, 650);
-  c.fillText(won ? "and ended Humankind's Most Pointless Mission. Forever. Edition of one." : 'at The Impossible Shuffle, and has, as predicted, not yet succeeded.', W / 2, 708);
+  c.fillText(won ? "and completed Humankind's Most Impossible Group Project. Forever. Edition of one." : 'at The Impossible Shuffle, and has, as predicted, not yet succeeded.', W / 2, 708);
   const M = MISSION.row || {};
   const rows = won ? [
     ['Date', new Date(M.claimed_at || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })],
@@ -4231,12 +4346,12 @@ function initImpatient() {
     scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' });
     setTimeout(() => $('#shuffleBtn').click(), reduceMotion ? 0 : 500);
   });
-  $('#recruitBtn').addEventListener('click', async () => {
-    const text = recruitText();
-    track('recruit');
-    if (navigator.share) { try { await navigator.share({ title: 'The Impossible Shuffle', text }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
-    copyText(text);
-  });
+  document.querySelectorAll('#recruitPanel [data-share]').forEach(b => b.addEventListener('click', () => shareTo(b.dataset.share)));
+  if (navigator.share) $('#recruitPanel [data-share="more"]').hidden = false;
+  const rParam = (params.get('r') || '').toLowerCase();
+  if (RCODE_RE.test(rParam) && !store.allTime && !store.rby && rParam !== store.rcode) { store.rby = rParam; saveStore(true); track('recruit-arrival'); }
+  loadHumans();
+  setInterval(() => { if (document.hidden) return; loadHumans(); joinMission(); loadRecruits(); recruitProgress(); }, 60000);
   if (!store.allTime) document.body.classList.add('pre-ticker');
   showRecruit();
   if (/producthunt/i.test((params.get('ref') || '') + (params.get('utm_source') || ''))) { $('#phHello').hidden = false; track('producthunt-hello'); }
@@ -4511,7 +4626,7 @@ function applyMission(row) {
   const rec = { r: row.pf_round, R: row.pf_rand, s: row.pf_seat, n: row.pf_n };
   const when = new Date(row.claimed_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   const mine = store.missionWon && row.source === 'browser';
-  $('#hero h1').textContent = "Humankind's Most Pointless Mission: Accomplished";
+  $('#hero h1').textContent = "Humankind's Most Impossible Group Project: Accomplished";
   $('#hero h1').nextElementSibling.innerHTML = '<span class="block" style="text-wrap:balance">Together, the whole internet shuffled one deck of cards until we matched it perfectly.</span> <span class="block mt-1" style="text-wrap:balance">Mathematics said no. We said: hold my cards.</span>';
   $('#plaque').hidden = false;
   $('#plaque').innerHTML = `<p class="kicker">★ HUMANKIND: MISSION ACCOMPLISHED ★</p>

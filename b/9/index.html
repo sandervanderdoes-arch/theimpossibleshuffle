@@ -17,7 +17,7 @@
 <meta name="twitter:title" content="I got 9/52 on The Impossible Shuffle">
 <meta name="twitter:description" content="9 of 52 cards in their Holy Grail spot. Statisticians are nervous. Somebody shuffled this deck once. Now humanity has to do it again. Your turn.">
 <meta name="twitter:image" content="https://theimpossibleshuffle.com/b/9.jpg">
-<script>location.replace('/?ref=brag' + location.hash);</script>
+<script>var r = /[?&]r=([a-z0-9]{8,16})/.exec(location.search); location.replace('/?ref=brag' + (r ? '&r=' + r[1] : '') + location.hash);</script>
 </head><body style="background:#03110a;color:#d7eadf;font-family:system-ui;text-align:center;padding:3rem">
 <p>I got 9/52 on The Impossible Shuffle. <a style="color:#ffe68a" href="/?ref=brag">Your turn: shuffle a deck</a>.</p>
 </body></html>

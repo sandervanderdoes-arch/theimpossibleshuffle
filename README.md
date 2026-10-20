@@ -1,6 +1,6 @@
 # The Impossible Shuffle
 
-Humankind's most pointless mission: the whole internet shuffling one deck of cards until it matches the Holy Grail Sequence perfectly. The odds are 1 in 52! ≈ 8.07 × 10⁶⁷. We're trying anyway.
+Humankind's most impossible group project: the whole internet shuffling one deck of cards until it matches the Holy Grail Sequence perfectly. The odds are 1 in 52! ≈ 8.07 × 10⁶⁷. We're trying anyway.
 
 Live at **https://theimpossibleshuffle.com**
 
@@ -57,6 +57,17 @@ See `time-traveller/README.md`: the Modal app that takes Stripe's webhook, runs 
 site links to `theimpossibleshuffle.com/b/<score>/`, so the link unfurls (X, WhatsApp, iMessage,
 Slack, Facebook) with that score; people who click it land on the site. Higher scores fall back to
 the homepage. The images and pages are generated from the same design as `og-image.png`.
+
+## Recruits and humans
+
+- Run `supabase/recruits.sql` once (after `live-counter.sql`). Until then the recruit panel still
+  shares links, but nobody gets credit and the "humans have joined" line stays hidden.
+- Every browser gets a random recruit code (no personal data). Shared links carry it as `?r=code`
+  (the brag pages in `b/` pass it on). A newcomer who arrives through it and shuffles counts as that
+  code's recruit, once; their shuffles add to the recruiter's tally.
+- Titles: Recruitment Officer (1 recruit), Sergeant (3), Captain (10), Admiral (25), Minister of
+  Recruitment (100). Honorary only.
+- It counts browsers, not people, like the shuffle counter.
 
 ## Launch day
 
