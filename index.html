@@ -1021,6 +1021,7 @@
       </a>
     </div>
     <p class="mt-6 font-display text-sm neon-pink">Made with love, stubborn optimism and Fisher–Yates.</p>
+    <button type="button" id="tickerBack" class="mt-3 text-xs underline text-[#9fb5a8]" hidden>📻 Bring back the fellow shufflers feed</button>
   </footer>
 </div>
 
@@ -4357,10 +4358,17 @@ function initImpatient() {
   if (/producthunt/i.test((params.get('ref') || '') + (params.get('utm_source') || ''))) { $('#phHello').hidden = false; track('producthunt-hello'); }
   $('#tickerClose').addEventListener('click', () => {
     document.body.classList.add('no-ticker');
+    $('#tickerBack').hidden = false;
     try { localStorage.setItem('tis-no-ticker', '1'); } catch (e) { /* private mode */ }
     track('ticker-hide');
   });
-  try { if (localStorage.getItem('tis-no-ticker')) document.body.classList.add('no-ticker'); } catch (e) { /* private mode */ }
+  try { if (localStorage.getItem('tis-no-ticker')) { document.body.classList.add('no-ticker'); $('#tickerBack').hidden = false; } } catch (e) { /* private mode */ }
+  $('#tickerBack').addEventListener('click', () => {
+    document.body.classList.remove('no-ticker');
+    $('#tickerBack').hidden = true;
+    try { localStorage.removeItem('tis-no-ticker'); } catch (e) { /* private mode */ }
+    track('ticker-back');
+  });
   $('#hyperNotify').addEventListener('click', async () => { try { await Notification.requestPermission(); } catch (e) { /* older Safari */ } hyperNotifyUI(); track('hyper-notify'); });
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) return;
