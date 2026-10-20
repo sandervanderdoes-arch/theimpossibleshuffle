@@ -462,16 +462,16 @@
   .hof { padding:.75rem; border-radius:14px; border:1px solid rgba(255,210,63,.3); background:rgba(255,210,63,.05); }
   .hof-title { margin:0; font-size:.85rem; line-height:1.45; color:#cfe3d7; }
   .hof-title b { color:#ffe68a; margin-right:.3rem; }
-  .hof-list { list-style:none; margin:.6rem 0 0; padding:0; display:grid; gap:.5rem; grid-template-columns:repeat(5, minmax(0, 1fr)); }
-  @media (max-width:640px) { .hof-list { grid-template-columns:repeat(2, minmax(0, 1fr)); } .hof-rung.dream { grid-column:1 / -1; } }
-  .hof-rung { min-width:0; display:flex; flex-direction:column; gap:.1rem; padding:.55rem .65rem; border-radius:12px; background:rgba(0,0,0,.35); border:1px dashed rgba(255,255,255,.2); }
+  .hof-list { list-style:none; margin:.6rem 0 0; padding:0; display:grid; gap:.45rem; grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  @media (max-width:640px) { .hof-list { grid-template-columns:minmax(0, 1fr); gap:.35rem; } }
+  .hof-rung { min-width:0; display:flex; align-items:center; gap:.6rem; padding:.45rem .6rem; border-radius:12px; background:rgba(0,0,0,.35); border:1px dashed rgba(255,255,255,.2); }
   .hof-rung.claimed { border:1px solid rgba(255,210,63,.6); }
   .hof-rung.dream { border-color:rgba(255,47,214,.65); }
-  .hof-rung .k { font:800 1.15rem/1.1 "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; }
-  .hof-rung .odds { font-size:.7rem; color:var(--muted); }
-  .hof-rung .who { margin-top:.2rem; font-size:.85rem; font-weight:700; color:#fff; overflow-wrap:anywhere; }
+  .hof-rung .k { flex:none; font:800 1rem/1 "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; }
+  .hof-rung .txt { min-width:0; display:flex; flex-direction:column; }
+  .hof-rung .who { font-size:.82rem; font-weight:700; color:#fff; overflow-wrap:break-word; line-height:1.3; }
   .hof-rung .who.open { color:#9fb5a8; font-weight:600; }
-  .hof-rung .when { font-size:.7rem; color:#9fb5a8; }
+  .hof-rung .odds { font-size:.68rem; color:var(--muted); line-height:1.3; }
   .ph-hello { margin:0 auto 1rem; max-width:40rem; padding:.55rem .9rem; border-radius:12px; border:1px solid rgba(255,97,84,.55); background:rgba(255,97,84,.12); color:#ffd9d4; font-size:.9rem; line-height:1.45; }
   .hero-trust { margin:.75rem auto 0; max-width:40rem; font-size:.85rem; line-height:1.5; color:#cfe3d7; text-wrap:balance; }
   .hero-trust b { color:#ffe68a; font-family:"JetBrains Mono", ui-monospace, monospace; white-space:nowrap; }
@@ -4465,22 +4465,22 @@ async function lbLoad() {
   hofLoad();
 }
 /* ---------- Hall of Firsts (supabase/firsts.sql): the first human to reach each rung keeps it ---------- */
-const HOF_RUNGS = [8, 10, 12, 15, 20];
+const HOF_RUNGS = [12, 13, 14, 15, 16, 17, 18, 19, 20];
 const HOF = { mine: null };
 function shortOdds(k) {
   const n = 1 / tailP(k);
   if (n < 1e6) return fmt(Math.round(n));
   const [v, w] = n >= 1e18 ? [n / 1e18, 'quintillion'] : n >= 1e15 ? [n / 1e15, 'quadrillion'] : n >= 1e12 ? [n / 1e12, 'trillion'] : n >= 1e9 ? [n / 1e9, 'billion'] : [n / 1e6, 'million'];
-  return `${v.toFixed(1)} ${w}`;
+  return `${v < 10 ? v.toFixed(1) : Math.round(v)} ${w}`;
 }
 function renderHof(rows) {
   const by = Object.fromEntries(rows.map(r => [r.rung, r]));
   $('#hofList').innerHTML = HOF_RUNGS.map(k => {
     const r = by[k], cls = ['hof-rung', r ? 'claimed' : '', k === 20 ? 'dream' : ''].join(' ').trim();
-    const head = `<b class="k">${k}/52</b><span class="odds">1 in ${shortOdds(k)}</span>`;
-    if (!r) return `<li class="${cls}">${head}<span class="who open">Unclaimed</span><span class="when">${k === 20 ? 'The Twenty Club. Wide open.' : 'First come, forever.'}</span></li>`;
+    const odds = `1 in ${shortOdds(k)}`;
+    if (!r) return `<li class="${cls}"><b class="k">${k}/52</b><span class="txt"><span class="who open">${k === 20 ? 'The Twenty Club: unclaimed' : 'Unclaimed'}</span><span class="odds">${odds}</span></span></li>`;
     const when = new Date(r.at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    return `<li class="${cls}">${head}<span class="who">${r.kind === 'traveller' ? '🚀 ' : ''}${escapeHtml(r.name)}${r.verified ? '' : ' <span class="pf-early">early</span>'}</span><span class="when">${when}</span></li>`;
+    return `<li class="${cls}"><b class="k">${k}/52</b><span class="txt"><span class="who">${r.kind === 'traveller' ? '🚀 ' : ''}${escapeHtml(r.name)}${r.verified ? '' : ' <span class="pf-early">early</span>'}</span><span class="odds">${odds} · ${when}</span></span></li>`;
   }).join('');
   $('#hof').hidden = false;
   // Claimed one yourself just now? Make some noise (not for the rungs you already had at page load).

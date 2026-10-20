@@ -61,7 +61,7 @@ the homepage. The images and pages are generated from the same design as `og-ima
 ## Hall of Firsts
 
 - Run `supabase/firsts.sql` once (after `leaderboard.sql` and `honors.sql`). Until then the strip stays hidden.
-- Rungs 8, 10, 12, 15 and 20 out of 52. The first human to reach a rung on the leaderboard (or a
+- Every rung from 12 to 20 out of 52. The first human to reach a rung on the leaderboard (or a
   Time Traveller's mission) keeps it forever. Triggers record every crossing, so hiding an entry
   hands the rung to the next one in line. Honorary only.
 

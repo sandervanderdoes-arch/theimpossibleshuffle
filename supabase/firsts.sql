@@ -1,7 +1,7 @@
 -- Hall of Firsts for theimpossibleshuffle.com. Run once in the Supabase SQL editor, after
 -- leaderboard.sql and honors.sql. Safe to run again.
 --
--- Rungs: 8, 10, 12, 15 and 20 matching cards in one shuffle. The first human to reach a rung
+-- Rungs: every step from 12 to 20 matching cards in one shuffle. The first human to reach a rung
 -- keeps it forever, even when somebody else goes higher later. Scores count from the moment they
 -- land on the Luckiest Shufflers board or a Time Traveller's mission, so joining the board is how
 -- you claim one. Honorary only: no prizes, nothing of value.
@@ -11,12 +11,16 @@
 
 create table if not exists public.firsts (
   id           bigserial primary key,
-  rung         int not null check (rung in (8, 10, 12, 15, 20)),
+  rung         int not null,
   lb_player    uuid,                                   -- leaderboard.player_id
   tt_ticket    text,                                   -- travellers.ticket
   achieved_at  timestamptz not null default now(),
   check ((lb_player is null) <> (tt_ticket is null))
 );
+-- Rungs are 12 to 20 (an earlier version had 8, 10, 12, 15, 20: its 8 and 10 go).
+alter table public.firsts drop constraint if exists firsts_rung_check;
+delete from public.firsts where rung not between 12 and 20;
+alter table public.firsts add constraint firsts_rung_check check (rung between 12 and 20);
 create unique index if not exists firsts_lb_key on public.firsts (rung, lb_player) where lb_player is not null;
 create unique index if not exists firsts_tt_key on public.firsts (rung, tt_ticket) where tt_ticket is not null;
 
@@ -33,7 +37,7 @@ set search_path = public
 as $$
 begin
   insert into public.firsts (rung, lb_player, achieved_at)
-  select r, new.player_id, new.achieved_at from unnest(array[8, 10, 12, 15, 20]) r where new.best >= r
+  select r, new.player_id, new.achieved_at from generate_series(12, 20) r where new.best >= r
   on conflict do nothing;
   return new;
 exception when others then
@@ -54,7 +58,7 @@ set search_path = public
 as $$
 begin
   insert into public.firsts (rung, tt_ticket, achieved_at)
-  select r, new.ticket, now() from unnest(array[8, 10, 12, 15, 20]) r where new.best >= r
+  select r, new.ticket, now() from generate_series(12, 20) r where new.best >= r
   on conflict do nothing;
   return new;
 exception when others then
@@ -68,10 +72,10 @@ create trigger firsts_travellers
 
 -- Scores that are already there when this file runs.
 insert into public.firsts (rung, lb_player, achieved_at)
-select r, l.player_id, l.achieved_at from public.leaderboard l cross join unnest(array[8, 10, 12, 15, 20]) r where l.best >= r
+select r, l.player_id, l.achieved_at from public.leaderboard l cross join generate_series(12, 20) r where l.best >= r
 on conflict do nothing;
 insert into public.firsts (rung, tt_ticket, achieved_at)
-select r, t.ticket, coalesce(t.finished_at, t.updated_at, t.created_at) from public.travellers t cross join unnest(array[8, 10, 12, 15, 20]) r where t.best >= r
+select r, t.ticket, coalesce(t.finished_at, t.updated_at, t.created_at) from public.travellers t cross join generate_series(12, 20) r where t.best >= r
 on conflict do nothing;
 
 -- The hall: per rung, the earliest visible claimant (hidden entries and failed missions don't count).
