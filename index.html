@@ -1598,20 +1598,247 @@ el.profSlot.innerHTML = profSVG();
 $('#winProf').innerHTML = profSVG();
 
 const LINES = {
-  intro: ['Ah, a new challenger. Press the button. Defy me.'],
-  yawn: ['Delightful. Again?', '*sips tea* Splendid. Again?', 'Zero. As is tradition. Again?'],
-  clap: ['Perfectly average. As predicted.', 'One card. Exactly what the math ordered.', '*slow clap* Textbook mediocrity.'],
-  eyebrow: ['Hm. Curious. Most curious.', 'Don\'t get attached. It means nothing.', 'A flicker of luck. I\'ve seen it before. Briefly.'],
-  spit: ['That\'s… statistically rude.', 'PFFT. My Earl Grey! That\'s statistically rude.', 'I demand a recount. That\'s statistically rude.'],
-  pop: ['MY MONOCLE! Who authorized this?', 'Six?! Somebody fetch my monocle.', 'Impossible. Improbable. Irritating.'],
-  idle: ['The heat death of the universe won\'t wait for you.'],
-  flick: ['Ah-ah. Back in the deck, you.', 'No escaping. Rules are rules.'],
-  autopilot: ['Autopilot engaged. I shall supervise from my armchair.', 'Wake me when something improbable happens.'],
-  ludicrous: ['Ludicrous speed. My monocle is fogging up.', 'At this rate we finish in only 5 × 10⁵⁸ years. Bravo.'],
-  faint: ['I… I need to lie down.'],
-  recover: ['Ahem. A clerical error, surely. As I was saying: impossible.'],
+  intro: [
+    'Ah, a new challenger. Press the button. Defy me.',
+  ],
+  yawn: [
+    'Delightful. Again?',
+    '*sips tea* Splendid. Again?',
+    'Zero. As is tradition. Again?',
+    'Nothing. Not a single card. I adore consistency.',
+    'A perfect zero. I shall have it framed.',
+    'Zero. About 37% of shuffles do this. Welcome to the club.',
+    'A derangement. Mathematicians adore those. I do not.',
+    'Nil. Nada. Niente. Again?',
+    'Not one card where it belongs. Rather like my sock drawer.',
+    '*turns a page of his newspaper* Hm? Oh. Zero. Carry on.',
+    'The deck has politely declined your request.',
+    'Zero. The Holy Grail sends its regards. From very far away.',
+    'Splendid. Only 8 × 10⁶⁷ orders left to try.',
+    'Zero again. You are nothing if not reliable.',
+    'I have seen glaciers make more progress. Again?',
+    'Another zero for the archives. The archives are mostly zeros.',
+    'Marvellous. The cards went everywhere except where they belong.',
+    'Nought. I would say "unlucky", but this is simply normal.',
+    '*refills teacup* Do go on. Zero.',
+    'Fifty-two cards, fifty-two wrong seats. Impressive.',
+    'Zero. The universe is in no hurry, and neither, it seems, are you.',
+    'Ah, the classic. A full house of nothing.',
+    'Not even the ace of spades could be bothered.',
+    'Zero matches. You should be proud of how ordinary that was.',
+    'I predicted zero. I am rarely wrong. It is exhausting.',
+    'Every card in the wrong seat. A wedding planner\'s nightmare.',
+    'That shuffle was beautifully, magnificently pointless.',
+    'Zero. Again? Of course again. It is always again.',
+    'Splendid. The Grail remains thoroughly ungrailed.',
+    'The deck looked at the Holy Grail and chose chaos.',
+    'Nothing matched. I have already forgotten it.',
+    'Zero. I would applaud, but my tea would go cold.',
+    'A clean sheet. In football that is good. Here, less so.',
+    'Another fine specimen of absolutely nothing.',
+    'Zero. Keep this up and we finish never.',
+    'Hm. Not even close. Not even close to close.',
+    'The cards have unionized and refuse to cooperate.',
+    'Zero. Somewhere, a statistician nods quietly.',
+    'Nought out of fifty-two. Rounded up, still nought.',
+    'Zero. My cat shuffles better, and she has no thumbs.',
+  ],
+  clap: [
+    'Perfectly average. As predicted.',
+    'One card. Exactly what the math ordered.',
+    '*slow clap* Textbook mediocrity.',
+    'One match. The expected value, delivered to your door.',
+    'On average you get exactly one. Congratulations on being average.',
+    'One. Lonely, brave and entirely meaningless.',
+    'One card found its seat. Fifty-one are still wandering the halls.',
+    'One match. I shall inform absolutely no one.',
+    'Ah, one. The participation trophy of shuffles.',
+    'One card. Don\'t spend it all at once.',
+    'A solitary match. Like a single sock: technically something.',
+    'One out of fifty-two. Your teachers would call that "a start".',
+    'One. About 37% of shuffles land here. Today was no exception.',
+    '*polite golf clap* One card. Splendid.',
+    'One match. The Holy Grail is still several eternities away.',
+    'A card in the right place! Pure coincidence, I assure you.',
+    'One. Hardly worth putting down my teacup.',
+    'One card behaved. The other fifty-one clearly missed the memo.',
+    'Exactly one. The universe is nothing if not punctual.',
+    'One match. Write it on a postcard. A very small postcard.',
+    'One. Better than zero, worse than everything else.',
+    'A single hit. I have catalogued thousands. All boring.',
+    'One card home. Fifty-one still stuck in traffic.',
+    'One. Mathematically, the most likely result there is.',
+    '*makes a tick in his ledger* One. Next.',
+    'One. Precisely mediocre. I respect the precision.',
+    'A match! One. Do calm down.',
+    'One card, right where it should be. The rest are on holiday.',
+    'One match. I would raise an eyebrow, but they are expensive.',
+    'Ah, one. The bread and butter of hopelessness.',
+    'One card. You have earned a biscuit. Not a nice one.',
+    'One. A small step for a card, no step at all for humankind.',
+    'One. Even a stopped clock gets one card right.',
+    'One match. My monocle did not so much as wobble.',
+    'A lone card on the right square. Like a tourist with a good map.',
+  ],
+  eyebrow: [
+    'Hm. Curious. Most curious.',
+    'Don\'t get attached. It means nothing.',
+    'A flicker of luck. I\'ve seen it before. Briefly.',
+    'Mildly interesting. Mildly.',
+    '*adjusts monocle* Above average. Do not let it go to your head.',
+    'The deck is flirting with you. It flirts with everyone.',
+    'Ooh, a little cluster. Pure noise, of course.',
+    'Better than most. Still 8 × 10⁶⁷ orders from glory.',
+    'Interesting. I shall note it in pencil. Erasable pencil.',
+    'A modest showing. The Grail remains unmoved.',
+    'Hm. That was almost something. Almost.',
+    'Look at you, beating the average. How quaint.',
+    'A few cards found their seats. The rest are still arguing.',
+    'Respectable. If one squints. After a long day.',
+    'Do not get excited. I can hear you getting excited.',
+    'A little sparkle. It will pass.',
+    'Above average! Shall I alert the press? No.',
+    'Hmm. That one made my tea ripple. Slightly.',
+    'Not bad. Not good either. The comfortable middle.',
+    'A small win. Treasure it. They do not come in bigger sizes here.',
+    'The cards are warming up. They will cool down again.',
+    'That happens. Constantly. But well done.',
+    '*raises one eyebrow, lowers it again* Carry on.',
+    'A respectable handful. Still hopeless, but respectable.',
+    'I felt a tiny draft of luck. Close the window.',
+    'Mildly suspicious. I am watching you, deck.',
+    'Ah, the sweet taste of slightly above average.',
+    'A few cards remembered where they live. Encouraging.',
+    'You are drifting towards interesting. Turn back now.',
+    'Curious. Do it again and I might pay attention.',
+    'Not nothing! Not much, either.',
+    'A promising little flutter. I give it eight seconds.',
+    'A few cards in place. The Holy Grail yawns.',
+    'The sort of result one mentions at dinner. To polite nods.',
+    'Oh? Oh. No. Never mind. Carry on.',
+  ],
+  spit: [
+    'That\'s… statistically rude.',
+    'PFFT. My Earl Grey! That\'s statistically rude.',
+    'I demand a recount. That\'s statistically rude.',
+    'Four or more: about once in 53 shuffles. Your turn? Really?',
+    '*coughs into teacup* I beg your pardon?',
+    'Now see here. That is not how I raised these cards.',
+    'My tea went down the wrong pipe. Your fault entirely.',
+    'That was unnecessary and frankly showing off.',
+    'Somebody check the deck. I suspect witchcraft.',
+    'I spilled my tea. I never spill my tea.',
+    'Outrageous. Delightfully outrageous. But mostly outrageous.',
+    'That deck owes me a new waistcoat.',
+    'Hmph. Beginner\'s luck. Or veteran\'s luck. Either way: luck.',
+    'I am writing a strongly worded letter to probability.',
+    'This is a respectable establishment. Kindly stop being lucky.',
+    'My saucer! You startled my saucer!',
+    'Hold on. Let me clean my monocle. There. No, still true. Rude.',
+    'Top of the class. Do not expect a gold star.',
+    'I need a moment. And a fresh pot.',
+    'Fine. FINE. That was impressive. Do not tell anyone I said so.',
+    'Stop that. You are frightening the statisticians.',
+    'The kind of shuffle people talk about. Quietly, in libraries.',
+  ],
+  pop: [
+    'MY MONOCLE! Who authorized this?',
+    'Six?! Somebody fetch my monocle.',
+    'Impossible. Improbable. Irritating.',
+    'About once in 1,700 shuffles. I need to sit down. Harder.',
+    'My monocle has left the building.',
+    'Fetch the smelling salts. And the monocle. Mainly the monocle.',
+    'The rarest thing I have seen all week. I hate it.',
+    'Screenshot that before the universe notices and takes it back.',
+    '*monocle clatters across the floor* …Carry on. I\'ll find it.',
+    'You absolute statistical menace.',
+    'My tea has gone cold from shock. Bravo, you monster.',
+    'Call the newspapers. No, call my optician.',
+    'The leaderboard trembles. So do I.',
+    'Somewhere, a probability textbook just burst into flames.',
+    'I have been doing this for a very long time and I am rattled.',
+  ],
+  idle: [
+    'The heat death of the universe won\'t wait for you.',
+    'Still there? The deck is getting cold.',
+    '*taps pocket watch* Humanity is waiting. Patiently, for now.',
+    'I have had three cups of tea since your last shuffle.',
+    'The Holy Grail Sequence will not find itself. Probably.',
+    'Hello? Anyone? The button misses you.',
+    'Taking a break? Fine. Only 8 × 10⁶⁷ orders to go.',
+    'Do not mind me. I shall just sit here. Being right.',
+    'The cards are getting restless. So is my teapot.',
+    'One more shuffle never hurt anyone. Statistically.',
+    'I was about to doze off. Shuffle, or I shall.',
+    'While you rest, the odds remain exactly as hopeless.',
+    'Every second you wait, the Grail gets no closer. Just saying.',
+    'Is that a pause for dramatic effect? Bold.',
+    'The button is right there. Large. Shiny. Unpressed.',
+  ],
+  flick: [
+    'Ah-ah. Back in the deck, you.',
+    'No escaping. Rules are rules.',
+    'Nice try, card. Back you go.',
+    'Nobody leaves the deck. Nobody.',
+    'In you go. Fifty-two means fifty-two.',
+    'Runaway card detected. Returned to sender.',
+    'Tsk. The deck is not a revolving door.',
+    'Back in line, please. We are shuffling here.',
+  ],
+  autopilot: [
+    'Autopilot engaged. I shall supervise from my armchair.',
+    'Wake me when something improbable happens.',
+    'The machine shuffles, I judge. A perfect partnership.',
+    'Autopilot. A shuffler who never tires. Nor wins.',
+    'Ah, automation. Losing has never been so efficient.',
+    'Shuffle after shuffle after shuffle. How soothing.',
+    'Carry on, little robot. I shall be in the library.',
+    'Autopilot on. I have put the kettle on as well.',
+    'I do enjoy watching hope being processed in bulk.',
+    'Hands-free hopelessness. Very modern.',
+    'The engines hum. The odds do not care.',
+    'Keep it running. I am timing how long until you give up.',
+    'Autopilot: because doing nothing by hand was too slow.',
+    'Splendid. Now we can fail at industrial scale.',
+    'I shall nap. Shout if the Grail turns up. It will not.',
+  ],
+  ludicrous: [
+    'Ludicrous speed. My monocle is fogging up.',
+    'At this rate we finish in only 5 × 10⁵⁸ years. Bravo.',
+    'Ludicrous mode. The cards are a blur. So is my patience.',
+    'So fast! So futile! I love it.',
+    'My teacup is vibrating. Is that you?',
+    'Thousands of shuffles a second. Still zero Grails. Remarkable.',
+    'Ludicrous speed. My waistcoat is flapping.',
+    'The deck is shuffling itself dizzy.',
+    'Faster! Faster! It will not help, but faster!',
+    'I can no longer see the cards. I can see disappointment.',
+    'Ludicrous. The word was invented for exactly this.',
+    'Hold on to your hats. Mine has already left.',
+    'The fans are spinning. The odds are not.',
+    'Breathtaking speed. Breathtakingly pointless.',
+    'Even at this pace, the Grail sends a postcard: "Don\'t wait up."',
+  ],
+  faint: [
+    'I… I need to lie down.',
+  ],
+  recover: [
+    'Ahem. A clerical error, surely. As I was saying: impossible.',
+  ],
 };
 const prof = { pose: 'intro', lastAuto: 0, lastPop: 0, idleTimer: 0 };
+// Each pose deals its lines like a shuffled deck: every line once before any comes back, never the same twice in a row.
+const profBags = {};
+function profLine(key) {
+  const all = LINES[key];
+  let bag = profBags[key];
+  if (!bag || !bag.length) {
+    bag = profBags[key] = all.slice();
+    for (let i = bag.length - 1; i > 0; i--) { const j = RNG.below(i + 1); [bag[i], bag[j]] = [bag[j], bag[i]]; }
+    if (bag.length > 1 && bag[bag.length - 1] === profBags[key + ':last']) [bag[0], bag[bag.length - 1]] = [bag[bag.length - 1], bag[0]];
+  }
+  return (profBags[key + ':last'] = bag.pop());
+}
 const profEls = () => [el.profSlot];
 function setPose(pose, line, slots = profEls()) {
   prof.pose = pose;
@@ -1622,7 +1849,7 @@ function setPose(pose, line, slots = profEls()) {
     slot.dataset.pose = pose;
     slot.classList.toggle('fainted', pose === 'faint');
   }
-  if (slots.includes(el.profSlot)) el.bubble.textContent = line || pick(LINES[pose] || LINES.intro);
+  if (slots.includes(el.profSlot)) el.bubble.textContent = line || profLine(LINES[pose] ? pose : 'intro');
 }
 function poseFor(m) {
   if (m >= 52) return 'faint';
@@ -1643,7 +1870,7 @@ function profAuto(m) {
   if (m >= 4 && now - prof.lastAuto > 1500) { prof.lastAuto = now; profReact(m); return; }
   if (now - prof.lastAuto > 2500 && prof.pose !== 'autopilot') {
     prof.lastAuto = now;
-    setPose('autopilot', pick(autopilot.mode === 'L' ? LINES.ludicrous : LINES.autopilot));
+    setPose('autopilot', profLine(autopilot.mode === 'L' ? 'ludicrous' : 'autopilot'));
   }
 }
 function armIdle() {
@@ -2172,7 +2399,7 @@ function setAutopilot(mode) {
   const now = performance.now();
   autopilot.start = now; autopilot.done = 0; autopilot.lastT = now; autopilot.lastFlush = 0;
   prof.lastAuto = 0;
-  setPose('autopilot', pick(m === 'L' ? LINES.ludicrous : LINES.autopilot));
+  setPose('autopilot', profLine(m === 'L' ? 'ludicrous' : 'autopilot'));
   clearTimeout(prof.idleTimer);
   autopilot.raf = requestAnimationFrame(apLoop);
 }
