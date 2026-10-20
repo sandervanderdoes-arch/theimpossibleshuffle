@@ -4029,7 +4029,7 @@ function lbNudge() {
   const soon = sec => (sec < 15 ? 'a few seconds' : fmtDuration(sec));
   const how = lud < 600 ? `Ludicrous autopilot should find one in ${soon(lud)}.`
     : `Ludicrous would need ${fmtDuration(lud).replace('about ', 'about ')}; your own station ${soon(station)}. <a href="#impatient">Become a Mission Sponsor</a>`;
-  return `<p class="nudge">To climb, you need <b>${need}/52</b>: about 1 in ${fmt(Math.round(shuffles))} shuffles. ${how}</p>`;
+  return `<p class="nudge">To climb${above ? ` past ${escapeHtml(above.name)} (${above.best}/52)` : ''}, you need <b>${need}/52</b>: about 1 in ${fmt(Math.round(shuffles))} shuffles. ${how}</p>`;
 }
 function renderLBMe() {
   const box = $('#lbMe'), mine = lbBest(), best = mine ? mine.matches : null;
