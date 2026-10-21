@@ -821,7 +821,7 @@
               <button type="button" data-ap="L" aria-pressed="false" title="50 shuffles per second">Ludicrous</button>
             </div>
             <p id="apRate" class="mono text-xs text-[#9fb5a8] mt-1 h-4 whitespace-nowrap"></p>
-            <a id="apSponsor" class="ap-sponsor" href="#tfBox" hidden>🔥 Faster than Ludicrous? Test-fire a station ↓</a>
+            <a id="apSponsor" class="ap-sponsor" href="#impatient" hidden>🛰️ Faster than Ludicrous? Sponsor a mission ↓</a>
           </div>
           <button type="button" id="soundBtn" class="chip-btn w-full" aria-pressed="false">🔇 Sound: off</button>
         </div>
@@ -952,9 +952,9 @@
         <div class="tf-head">
           <div class="min-w-0">
             <p class="tf-title">🔥 Test-fire a station</p>
-            <p class="tf-sub">Ten seconds at full station power, free. Every shuffle counts for humanity.</p>
+            <p class="tf-sub">Ten seconds at full station power. One free try per browser, and every shuffle counts for humanity.</p>
           </div>
-          <button type="button" id="tfGo" class="shuffle-btn tf-go">🔥 Test-fire · 10 s free</button>
+          <button type="button" id="tfGo" class="shuffle-btn tf-go">🔥 Test-fire · one free try</button>
         </div>
         <div id="tfLive" class="tf-live" hidden aria-live="off">
           <p class="tf-count"><b id="tfCount">0</b> <span>real shuffles</span></p>
@@ -1565,7 +1565,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, tfAt: 0 };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, tfAt: 0, tf: null };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1589,7 +1589,8 @@ const store = (() => {
       lb: p.lb && /^[0-9a-f-]{36}$/.test(p.lb.id) && /^[0-9a-f]{32,64}$/.test(p.lb.secret) ? { id: p.lb.id, secret: p.lb.secret, name: str(p.lb.name).slice(0, 20), sub: n(p.lb.sub) } : null,
       cardBack: str(p.cardBack) || 'classic', outfit: str(p.outfit) || 'classic', certId: str(p.certId), wallSubmitted: p.wallSubmitted === true, profMs: n(p.profMs),
       hid: /^[0-9a-f-]{36}$/.test(p.hid) ? p.hid : '', rcode: /^[a-z0-9]{8,16}$/.test(p.rcode) ? p.rcode : '', rby: /^[a-z0-9]{8,16}$/.test(p.rby) ? p.rby : '',
-      joined: p.joined === true, rtitle: n(p.rtitle), acesBest: n(p.acesBest), runBest: n(p.runBest), tfAt: n(p.tfAt)
+      joined: p.joined === true, rtitle: n(p.rtitle), acesBest: n(p.acesBest), runBest: n(p.runBest), tfAt: n(p.tfAt),
+      tf: p.tf && typeof p.tf === 'object' ? { n: n(p.tf.n), best: n(p.tf.best), secs: n(p.tf.secs) } : null
     };
   } catch (e) { return def; }
 })();
@@ -4179,14 +4180,20 @@ function hyperUI() {
 }
 /* ---------- Test-fire: ten free seconds of station power ----------
    The same workers and the same provably fair recipe as a paid station. Every shuffle counts for
-   humanity and your stats, none come off paid years. Once a day per browser. */
-const TF_MS = 10000, TF_CHUNK = 50000, TF_DAY = 864e5;
+   humanity and your stats, none come off paid years. One try per browser: a test drive, not a free station. */
+const TF_MS = 10000, TF_CHUNK = 50000;
 const TF = { on: false, end: 0, t0: 0, n: 0, best: 0, timer: 0 };
-const tfReady = () => !store.tfAt || Date.now() - store.tfAt > TF_DAY;
+const tfReady = () => !store.tfAt;
 function tfRender() {
   const b = $('#tfGo');
   b.disabled = TF.on || !tfReady();
-  b.textContent = TF.on ? '🔥 Firing…' : tfReady() ? '🔥 Test-fire · 10 s free' : '🔋 Recharging · back tomorrow';
+  b.textContent = TF.on ? '🔥 Firing…' : tfReady() ? '🔥 Test-fire · one free try' : '✓ Test-fire complete';
+  if (!TF.on && !tfReady() && store.tf && $('#tfResult').hidden) tfShowResult(store.tf);   // the result stays, visit after visit
+}
+function tfShowResult(t) {
+  const rate = t.n / Math.max(1, t.secs), captain = tierById('odds').years * HAND_YEAR;
+  $('#tfResult').innerHTML = `💥 <b>Your test-fire: ${fmt(t.n)} real shuffles in ${Math.round(t.secs)} seconds</b>: ${handTime(t.n)} of nonstop hand shuffling, ${fmt(Math.round(rate / LUDICROUS_RATE))}× Ludicrous. Free autopilot would need ${shortDuration(t.n / LUDICROUS_RATE)} for that. Best match: ${t.best}/52. Every one of them counts for humanity.<br>A Captain's station keeps this up for <b>${shortDuration(captain / rate)}</b>: 10,000 years of shuffling.`;
+  $('#tfResult').hidden = false;
 }
 function tfStart() {
   if (TF.on || HYPER.running || winOpen || !tfReady()) return;
@@ -4226,10 +4233,9 @@ function tfFinish() {
   const secs = Math.max(1, (performance.now() - TF.t0) / 1000), rate = TF.n / secs;
   tfUI(); $('#tfRate').textContent = `${fmt(Math.round(rate))} shuffles a second on this device`;
   if (!store.hyper.rate && rate > 0) { store.hyper.rate = Math.round(rate); refreshEtas(); }   // tier estimates now use this device's real speed
+  store.tf = { n: TF.n, best: TF.best, secs };
   saveStore(true);
-  const captain = tierById('odds').years * HAND_YEAR;
-  $('#tfResult').innerHTML = `💥 <b>${fmt(TF.n)} real shuffles in ${Math.round(secs)} seconds</b>: ${handTime(TF.n)} of nonstop hand shuffling, ${fmt(Math.round(rate / LUDICROUS_RATE))}× Ludicrous. Free autopilot would need ${shortDuration(TF.n / LUDICROUS_RATE)} for that. Best match: ${TF.best}/52. Every one of them now counts for humanity.<br>A Captain's station keeps this up for <b>${shortDuration(captain / rate)}</b>: 10,000 years of shuffling.`;
-  $('#tfResult').hidden = false;
+  tfShowResult(store.tf);
   setPose('autopilot', `${fmt(TF.n)} shuffles in ten seconds. Matches: 0. I have seen enough.`);
   track('testfire-done');
   sfx('land', 4);
@@ -4695,7 +4701,7 @@ function initImpatient() {
   });
   $('#apSponsor').addEventListener('click', e => {
     e.preventDefault(); track('autopilot-sponsor-link');
-    $('#tfBox').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+    $('#impatient').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
   });
   $('#tfGo').addEventListener('click', tfStart);
   tfRender();
