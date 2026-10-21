@@ -1,7 +1,7 @@
 {
   "name": "The Impossible Shuffle",
   "short_name": "Impossible Shuffle",
-  "description": "One shuffled deck. Eight billion humans. One goal: shuffle it again, card for card. The odds are 1 in 52!.",
+  "description": "A deck was shuffled once. Together, humanity is trying to shuffle that exact same order a second time. The odds are 1 in 52!.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#020805",
