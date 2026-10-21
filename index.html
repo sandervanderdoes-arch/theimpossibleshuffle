@@ -3893,7 +3893,7 @@ function renderImpatient() {
       <p class="imp-years"><span class="n">${fmt(t.years)} years</span><span class="of">of shuffling</span></p>
       <p class="imp-story">${t.story}</p>
       <div class="imp-stats">
-        <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, <i style="font-style:normal" data-like="${N}">${shiftLike(N / hyperRateGuess())}</i><br><span>Ludicrous would need ${shortDuration(N / LUDICROUS_RATE)}</span></p>
+        <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, <i style="font-style:normal" data-like="${N}">${shiftLike(N / hyperRateGuess())}</i><br><span>Free Ludicrous autopilot: ${shortDuration(N / LUDICROUS_RATE)}</span></p>
         <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
       </div>
       <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🎁 Plus a little surprise to keep you entertained through all ${fmt(t.years)} years.</li></ul>
@@ -4677,7 +4677,7 @@ function lbNudge() {
   const shuffles = 1 / tailP(need), lud = shuffles / LUDICROUS_RATE, station = shuffles / hyperRateGuess();
   const soon = sec => (sec < 15 ? 'a few seconds' : fmtDuration(sec));
   const how = lud < 600 ? `Ludicrous autopilot should find one in ${soon(lud)}.`
-    : `Ludicrous would need ${fmtDuration(lud).replace('about ', 'about ')}; your own station ${soon(station)}. <a href="#impatient">Become a Mission Sponsor</a>`;
+    : `Free Ludicrous autopilot (50/sec) would need ${fmtDuration(lud)}; your own station ${soon(station)}. <a href="#impatient">Become a Mission Sponsor</a>`;
   return `<p class="nudge">To climb${above ? ` past ${escapeHtml(above.name)} (${above.best}/52)` : ''}, you need <b>${need}/52</b>: about 1 in ${fmt(Math.round(shuffles))} shuffles. ${how}</p>`;
 }
 function renderLBMe() {
