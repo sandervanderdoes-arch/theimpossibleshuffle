@@ -1518,7 +1518,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0 };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0 };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1542,7 +1542,7 @@ const store = (() => {
       lb: p.lb && /^[0-9a-f-]{36}$/.test(p.lb.id) && /^[0-9a-f]{32,64}$/.test(p.lb.secret) ? { id: p.lb.id, secret: p.lb.secret, name: str(p.lb.name).slice(0, 20), sub: n(p.lb.sub) } : null,
       cardBack: str(p.cardBack) || 'classic', outfit: str(p.outfit) || 'classic', certId: str(p.certId), wallSubmitted: p.wallSubmitted === true, profMs: n(p.profMs),
       hid: /^[0-9a-f-]{36}$/.test(p.hid) ? p.hid : '', rcode: /^[a-z0-9]{8,16}$/.test(p.rcode) ? p.rcode : '', rby: /^[a-z0-9]{8,16}$/.test(p.rby) ? p.rby : '',
-      joined: p.joined === true, rtitle: n(p.rtitle)
+      joined: p.joined === true, rtitle: n(p.rtitle), acesBest: n(p.acesBest), runBest: n(p.runBest)
     };
   } catch (e) { return def; }
 })();
@@ -1574,7 +1574,7 @@ const grail = new Uint8Array(52);
 const current = new Uint8Array(52);
 let hasCurrent = false;
 
-const session = { attempts: 0, sum: 0, best: -1, fairBest: 0, dist: [0, 0, 0, 0, 0, 0], streak0: 0, firstAt: 0 };
+const session = { attempts: 0, sum: 0, best: -1, fairBest: 0, dist: [0, 0, 0, 0, 0, 0], streak0: 0, firstAt: 0, last5: false };
 let statsDirty = true;
 let pbDirty = true;
 let winOpen = false;
@@ -1629,10 +1629,13 @@ function applyMatchesInstant(deck) {
   }
 }
 const ROYAL_POS = [];   // where A♠ K♠ Q♠ J♠ 10♠ sit in the Grail (for the Royal Flush badge)
+const ACE_POS = [];     // where the four aces sit (for the Four Aces badge)
 function loadGrail() {
   GRAIL.forEach((code, i) => { grail[i] = CODES.indexOf(code); });
   ROYAL_POS.length = 0;
   for (const code of ['AS', 'KS', 'QS', 'JS', '10S']) ROYAL_POS.push(GRAIL.indexOf(code));
+  ACE_POS.length = 0;
+  for (const code of ['AS', 'AH', 'AD', 'AC']) ACE_POS.push(GRAIL.indexOf(code));
   paintDeck(G, grail, null);
 }
 
@@ -2183,7 +2186,13 @@ const BADGES = [
   { id: 'heatdeath', ico: '⏳', name: 'Heat Death Rehearsal', how: 'Keep Autopilot on Ludicrous for 60 minutes straight, on this tab', hard: true,
     tip: 'The clock only runs while this tab is open and visible.', progress: () => `${Math.floor((autopilot.mode === 'L' ? Math.max(autopilot.ludMs, store.ludBestMs) : store.ludBestMs) / 60000)}/60 min` },
   { id: 'billion', ico: '💎', name: 'The Billion-Shuffle Club', how: 'Shuffle 1,000,000,000 times (all-time, autopilot counts)', hard: true,
-    tip: 'One billion attempts. Mathematics sends its regards.', progress: () => `${shortNum(Math.min(store.allTime, 1e9))}/1B` }
+    tip: 'One billion attempts. Mathematics sends its regards.', progress: () => `${shortNum(Math.min(store.allTime, 1e9))}/1B` },
+  { id: 'twice', ico: '⚡', name: 'Lightning Strikes Twice', how: 'Get 5 or more matches in two shuffles in a row (about 1 in 75,000)', hard: true,
+    tip: 'Statistically, this should not happen. Twice.', progress: () => `${session.last5 ? 1 : 0}/2 in a row` },
+  { id: 'fourrow', ico: '🐍', name: 'Four in a Row', how: 'Get 4 neighbouring cards all in their Grail spots in one shuffle (about 1 in 130,000)', hard: true,
+    tip: 'Four cards, side by side, exactly where destiny put them.', progress: () => `best run ${store.runBest}/4` },
+  { id: 'aces', ico: '🅰️', name: 'Four Aces', how: 'Land all four aces in their Grail spots in one shuffle (about 1 in 6.5 million)', hard: true,
+    tip: 'A♠ A♥ A♦ A♣, home at last. Poker players are weeping.', progress: () => `best ${store.acesBest}/4` }
 ];
 function bestEver() { return Math.max(session.fairBest, store.best ? store.best.matches : 0); }   // rigged shuffles excluded
 function shortNum(v) { return v >= 1e9 ? (v / 1e9).toFixed(1) + 'B' : v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e4 ? Math.floor(v / 1e3) + 'K' : fmt(v); }
@@ -2255,6 +2264,15 @@ function record(m, deck, manual, rigged, b, n) {
     if (!store.badges.monocle) unlock('monocle');
     if (m >= 7 && !store.badges.lucky7) unlock('lucky7');
     if (m >= 10 && !store.badges.witchcraft) unlock('witchcraft');
+  }
+  if (m >= 5 && session.last5 && !store.badges.twice) unlock('twice');
+  session.last5 = m >= 5;
+  if (m) {
+    const a = (deck[ACE_POS[0]] === grail[ACE_POS[0]]) + (deck[ACE_POS[1]] === grail[ACE_POS[1]]) + (deck[ACE_POS[2]] === grail[ACE_POS[2]]) + (deck[ACE_POS[3]] === grail[ACE_POS[3]]);
+    if (a > store.acesBest) { store.acesBest = a; if (a === 4 && !store.badges.aces) unlock('aces'); }
+    let run = 0, longest = 0;
+    if (m > store.runBest) for (let i = 0; i < 52; i++) { run = deck[i] === grail[i] ? run + 1 : 0; if (run > longest) longest = run; }
+    if (longest > store.runBest) { store.runBest = longest; if (longest >= 4 && !store.badges.fourrow) unlock('fourrow'); }
   }
   if (manual && m > store.manualBest) { store.manualBest = m; if (m >= 6 && !store.badges.barehand) unlock('barehand'); }
   if (m) {
