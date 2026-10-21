@@ -119,11 +119,10 @@ async def stripe_webhook(request: Request):     # a real FastAPI Request, so Str
     cs = event['data']['object']
     if cs.get('payment_status') != 'paid':
         return {'ok': True, 'waiting': 'payment not settled yet'}
-    link = os.environ.get('TT_PAYMENT_LINK_ID')          # plink_… of the Time Traveller link (other links are ignored)
-    if link and cs.get('payment_link') != link:
-        return {'ok': True, 'ignored': 'another payment link'}
-    if (cs.get('amount_total') or 0) < int(os.environ.get('TT_PRICE_CENTS', '50000')):
-        return {'ok': True, 'ignored': 'amount'}
+    link = os.environ.get('TT_PAYMENT_LINK_ID')          # plink_… of the Time Traveller link
+    amount = cs.get('amount_total') or 0
+    if (link and cs.get('payment_link') != link) or amount < int(os.environ.get('TT_PRICE_CENTS', '50000')):
+        return sponsor_event(cs, amount)                 # a Rookie, Captain or Commander station, not a Time Traveller
     name = next((f.get('text', {}).get('value') for f in (cs.get('custom_fields') or []) if f.get('type') == 'text'), None)
     ticket = hashlib.sha256(cs['id'].encode()).hexdigest()
     created = _sb('travellers?on_conflict=ticket', {'ticket': ticket, 'name': clean_name(name), 'target': TARGET, 'gpus': GPUS},
@@ -131,6 +130,30 @@ async def stripe_webhook(request: Request):     # a real FastAPI Request, so Str
     if created:                                          # Stripe retries webhooks: only the first one launches GPUs
         run_mission.spawn(ticket)
     return {'ok': True, 'launched': bool(created)}
+
+
+def sponsor_rank(cents):
+    """The station tier a payment is for, from its amount ($1.92, $8.07, $52), or None."""
+    if 150 <= cents < 500:
+        return 'Rookie'
+    if 500 <= cents < 2000:
+        return 'Captain'
+    if 2000 <= cents < 20000:
+        return 'Commander'
+    return None
+
+
+def sponsor_event(cs, cents):
+    """One anonymous row (rank and time only) for the REAL items in the site's jokes bar."""
+    rank = sponsor_rank(cents)
+    if not rank:
+        return {'ok': True, 'ignored': 'amount'}
+    try:
+        _sb('sponsor_events?on_conflict=ticket', {'ticket': hashlib.sha256(cs['id'].encode()).hexdigest(), 'rank': rank},
+            prefer='return=minimal,resolution=ignore-duplicates')
+    except RuntimeError as e:                            # table not created yet: never make Stripe retry over a ticker line
+        return {'ok': True, 'sponsor': rank, 'stored': False, 'why': str(e)[:200]}
+    return {'ok': True, 'sponsor': rank}
 
 
 @app.function(image=web_image, secrets=[secret], timeout=MAX_SECONDS + 1800)

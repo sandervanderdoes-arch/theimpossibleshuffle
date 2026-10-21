@@ -72,7 +72,11 @@ database rebuilds it a third time before it believes it.
    runs a small mission without Stripe and prints the page to watch it on. Hide the test
    row afterwards (Table Editor → travellers → `hidden` = true). Then buy one yourself
    with a Stripe test-mode link.
-8. **Notifications** (optional, recommended): put your ntfy topic in
+8. **Sponsor moments** (optional): run `supabase/sponsor-events.sql`. The same webhook then also
+   records every Rookie, Captain and Commander purchase (rank and time only) for the REAL lines
+   in the site's jokes bar. Stripe already sends those checkouts to this webhook; redeploy after
+   pulling (`modal deploy time_traveller.py`).
+9. **Notifications** (optional, recommended): put your ntfy topic in
    `supabase/traveller-notify.sql` and run it in the SQL editor. Your phone then pings when someone
    boards, when their mission is done (tap it: the deck designer opens with them picked) and if a
    mission fails (refund them in Stripe).

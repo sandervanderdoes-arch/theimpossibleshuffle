@@ -422,6 +422,19 @@
   .imp-deal { margin-top:auto; align-self:center; margin-bottom:.45rem; font:800 .7rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.04em; color:#ffe68a; }
   .imp-buy { text-align:center; text-decoration:none; font-size:1rem !important; }
   .imp-why { margin-top:.45rem; text-align:center; font-size:.72rem; color:#9fb5a8; font-style:italic; }
+  .tf-box { border-radius:16px; border:1px solid rgba(255,120,60,.5); background:rgba(40,12,0,.35); padding:.9rem 1rem; box-shadow:0 0 22px rgba(255,120,60,.12); }
+  .tf-head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.7rem 1rem; }
+  .tf-title { font:800 1rem "JetBrains Mono", ui-monospace, monospace; color:#ffb48a; }
+  .tf-sub { font-size:.85rem; color:#cfe3d7; margin-top:.15rem; }
+  .tf-go { width:auto; min-height:48px; padding:.6rem 1.2rem; font-size:.95rem; }
+  .tf-go:disabled { opacity:.6; cursor:default; filter:saturate(.4); }
+  .tf-live { margin-top:.8rem; }
+  .tf-count b { font:800 clamp(1.6rem, 6vw, 2.4rem)/1.1 "JetBrains Mono", ui-monospace, monospace; color:#fff; text-shadow:0 0 14px rgba(255,140,80,.6); }
+  .tf-count span { font-size:.85rem; color:#cfe3d7; }
+  #tfFill { height:100%; width:0; background:linear-gradient(90deg, #ff7a3c, #ffd23f); }
+  .tf-result { margin-top:.8rem; font-size:.9rem; line-height:1.5; color:#cfe3d7; }
+  .tf-result b { color:#ffe68a; }
+  @media (max-width: 639px) { .tf-go { width:100%; } }
   .hyper-box { border-radius:16px; border:1px solid rgba(34,243,255,.45); background:rgba(0,20,26,.55); padding:1rem; }
   .hyper-box.running { box-shadow:0 0 26px rgba(34,243,255,.28); }
   .hyper-bar { height:14px; border-radius:999px; background:rgba(0,0,0,.55); border:1px solid rgba(34,243,255,.4); overflow:hidden; }
@@ -808,7 +821,7 @@
               <button type="button" data-ap="L" aria-pressed="false" title="50 shuffles per second">Ludicrous</button>
             </div>
             <p id="apRate" class="mono text-xs text-[#9fb5a8] mt-1 h-4 whitespace-nowrap"></p>
-            <a id="apSponsor" class="ap-sponsor" href="#impatient" hidden>🛰️ Faster than Ludicrous? Sponsor a mission ↓</a>
+            <a id="apSponsor" class="ap-sponsor" href="#tfBox" hidden>🔥 Faster than Ludicrous? Test-fire a station ↓</a>
           </div>
           <button type="button" id="soundBtn" class="chip-btn w-full" aria-pressed="false">🔇 Sound: off</button>
         </div>
@@ -935,6 +948,21 @@
       <h2 id="impTitle" class="font-display text-lg sm:text-2xl neon-gold">🎖️ Become a Mission Sponsor</h2>
       <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">By hand, humanity needs about <b class="text-[#ffe68a]">51 novemdecillion years</b>. Mission Control can't do that alone: sponsor a stretch and your computer becomes an official <b class="text-[#a5fbff]">Mission Control station</b> that shuffles thousands of years' worth for humanity while you get on with your life. The Professor calls it cheating. We call it volunteering.</p>
       <p id="impProof" class="imp-proof mt-3" hidden></p>
+      <div id="tfBox" class="tf-box mt-4">
+        <div class="tf-head">
+          <div class="min-w-0">
+            <p class="tf-title">🔥 Test-fire a station</p>
+            <p class="tf-sub">Ten seconds at full station power, free. Every shuffle counts for humanity.</p>
+          </div>
+          <button type="button" id="tfGo" class="shuffle-btn tf-go">🔥 Test-fire · 10 s free</button>
+        </div>
+        <div id="tfLive" class="tf-live" hidden aria-live="off">
+          <p class="tf-count"><b id="tfCount">0</b> <span>real shuffles</span></p>
+          <div class="hyper-bar mt-2" aria-hidden="true"><div id="tfFill"></div></div>
+          <p id="tfRate" class="mono text-xs text-[#9fb5a8] mt-1"></p>
+        </div>
+        <p id="tfResult" class="tf-result" hidden aria-live="polite"></p>
+      </div>
       <p class="mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Support the mission: pick your rank.</p>
       <div id="impTiers" class="imp-tiers mt-3"></div>
       <p class="imp-pay mt-3">🔒 Secure checkout by Stripe · Apple Pay · Google Pay · all major cards</p>
@@ -1537,7 +1565,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0 };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, tfAt: 0 };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1561,7 +1589,7 @@ const store = (() => {
       lb: p.lb && /^[0-9a-f-]{36}$/.test(p.lb.id) && /^[0-9a-f]{32,64}$/.test(p.lb.secret) ? { id: p.lb.id, secret: p.lb.secret, name: str(p.lb.name).slice(0, 20), sub: n(p.lb.sub) } : null,
       cardBack: str(p.cardBack) || 'classic', outfit: str(p.outfit) || 'classic', certId: str(p.certId), wallSubmitted: p.wallSubmitted === true, profMs: n(p.profMs),
       hid: /^[0-9a-f-]{36}$/.test(p.hid) ? p.hid : '', rcode: /^[a-z0-9]{8,16}$/.test(p.rcode) ? p.rcode : '', rby: /^[a-z0-9]{8,16}$/.test(p.rby) ? p.rby : '',
-      joined: p.joined === true, rtitle: n(p.rtitle), acesBest: n(p.acesBest), runBest: n(p.runBest)
+      joined: p.joined === true, rtitle: n(p.rtitle), acesBest: n(p.acesBest), runBest: n(p.runBest), tfAt: n(p.tfAt)
     };
   } catch (e) { return def; }
 })();
@@ -3032,6 +3060,12 @@ function realEvents() {
   TT.rows.filter(t => t.status === 'running' || t.status === 'boarding').forEach(t => ev.push(`🚀 Time Traveller ${t.name} is shuffling through history right now.`));
   TT.rows.filter(t => t.status === 'done').slice(0, 3).forEach(t => ev.push(`🚀 Time Traveller ${t.name} shuffled all the way home: best ${t.best}/52.`));
   WALL.rows.slice(0, 3).forEach(r => ev.push(`🏛️ ${r.name} joined the Wall of Hopeless Heroes.`));
+  SPEV.rows.filter(r => sinceDays(r.created_at, 60)).slice(0, 4).forEach(r => {
+    const t = IMP_TIERS.find(x => x.name === r.rank);
+    ev.push(`🎖️ A new ${r.rank} joined the mission ${agoText(r.created_at)}: ${fmt(t.years)} years of shuffling for humanity.`);
+  });
+  const month = SPEV.rows.filter(r => sinceDays(r.created_at, 30)).length;
+  if (month >= 3) ev.push(`🛰️ ${month} new Mission Control stations went online in the last 30 days.`);
   return ev;
 }
 const tView = $('#tickerView'), tTrack = $('#tickerTrack');
@@ -3853,11 +3887,22 @@ function impactHTML(N) {
 function refreshTierLines() {
   $$('[data-impact]').forEach(e => { e.innerHTML = impactHTML(Number(e.dataset.impact)); });
 }
+/* Sponsor moments from the Stripe webhook (loaded by loadSponsorEvents). */
+const SPEV = { rows: [] };
+const sinceDays = (ts, d) => Date.now() - new Date(ts) < d * 864e5;
+function agoText(ts) {
+  const m = Math.max(1, Math.round((Date.now() - new Date(ts)) / 60000));
+  if (m < 60) return m < 2 ? 'just now' : `${m} minutes ago`;
+  const h = Math.round(m / 60); if (h < 24) return h === 1 ? 'an hour ago' : `${h} hours ago`;
+  const d = Math.round(h / 24); return d === 1 ? 'yesterday' : `${d} days ago`;
+}
 function renderImpProof() {
   const parts = [];
   if (recruit.humans > 0) parts.push(`👥 <b>${fmt(recruit.humans)}</b> human${recruit.humans === 1 ? '' : 's'} on the mission`);
   const wall = typeof WALL === 'object' ? WALL.rows.slice(0, 3).map(r => escapeHtml(r.name)) : [];
   if (wall.length) parts.push(`🏛️ Latest heroes: <b>${wall.join(', ')}</b>`);
+  const month = SPEV.rows.filter(r => sinceDays(r.created_at, 30)).length;
+  if (month >= 2) parts.push(`🎖️ <b>${month}</b> new sponsors in the last 30 days`);
   $('#impProof').innerHTML = parts.join(' · ');
   $('#impProof').hidden = !parts.length;
 }
@@ -3901,6 +3946,7 @@ function renderImpatient() {
     $('#impTiers').innerHTML = '';
     renderTTCard();
     $('#impClosed').hidden = false;
+    $('#tfBox').hidden = true;
     $('#impClosed').textContent = `🏁 The mission is accomplished, so sponsorships are closed forever. Stations with years left can still finish their shift, for old times' sake.`;
     $('#impatient').hidden = false;
     $('#apSponsor').hidden = true;
@@ -4029,6 +4075,7 @@ function hyperNotifyDone(text) {
   try { if ('Notification' in window && Notification.permission === 'granted') new Notification('🎖️ Assignment complete', { body: text, icon: 'icon-192.png', tag: 'tis-station' }); } catch (e) { /* not on this browser */ }
 }
 function hyperStart() {
+  if (TF.on) { toast('🔥 A test-fire is running. Your station takes over in a few seconds.'); return; }
   if (HYPER.running || winOpen || hyperLeft() <= 0) return;
   if (!PF.ready) { setTimeout(hyperStart, 300); return; }   // the seat is a few milliseconds away
   if (!hyperEnsureWorkers()) { toast('🛰️ Your station needs a browser with Web Workers. Your years are saved.'); return; }
@@ -4058,17 +4105,20 @@ function hyperAssign(w) {
   w.postMessage({ n, R: Array.from(w.job.b.Rw), S: Array.from(PF.S), start: w.job.start });
 }
 function hyperResult(w, r) {
-  HYPER.assigned -= w.busy; w.busy = 0;
+  const test = w.test; w.test = false;          // a free test-fire chunk: counts for humanity, not against your paid years
+  if (!test) HYPER.assigned -= w.busy;
+  w.busy = 0;
   // Same bookkeeping as record(), in bulk.
   session.attempts += r.n; session.sum += r.sum;
   for (let i = 0; i < 6; i++) session.dist[i] += r.dist[i];
   if (!session.firstAt) session.firstAt = performance.now();
-  store.allTime += r.n; live.pending += r.n; store.hyper.done += r.n;
+  store.allTime += r.n; live.pending += r.n;
+  if (test) TF.n += r.n; else store.hyper.done += r.n;
   hyperTitle();
   noteRate(r.n);
   if (r.best > session.best) session.best = r.best;
   if (r.best > session.fairBest) session.fairBest = r.best;
-  if (r.best > store.hyper.best) store.hyper.best = r.best;
+  if (test) { if (r.best > TF.best) TF.best = r.best; } else if (r.best > store.hyper.best) store.hyper.best = r.best;
   if (r.zeroRun >= 5 && !store.badges.derangement) unlock('derangement');
   if (r.ones && !store.badges.average) unlock('average');
   if (store.allTime >= 1000 && !store.badges.committed) unlock('committed');
@@ -4084,11 +4134,12 @@ function hyperResult(w, r) {
   statsDirty = true;
   saveStore();
   if (r.win) {                                  // the end of mathematics as we know it
-    hyperPause();
+    if (test) { TF.end = 0; tfAfter(w); } else hyperPause();
     const res = { n: session.attempts, m: 52, deck: Uint8Array.from(r.win), ts: Date.now(), rigged: false, pf: pfRec(jb, r.winN) };
     reveal(res, false);
     return;
   }
+  if (test) { tfAfter(w); return; }
   if (hyperLeft() <= 0) { if (!HYPER.workers.some(x => x.busy)) hyperFinish(); return; }
   if (HYPER.running) hyperAssign(w);
   else if (!HYPER.workers.some(x => x.busy)) { clearInterval(HYPER.uiTimer); hyperUI(); }
@@ -4126,6 +4177,65 @@ function hyperUI() {
   HYPER.rate = rate;
   renderHyper();
 }
+/* ---------- Test-fire: ten free seconds of station power ----------
+   The same workers and the same provably fair recipe as a paid station. Every shuffle counts for
+   humanity and your stats, none come off paid years. Once a day per browser. */
+const TF_MS = 10000, TF_CHUNK = 50000, TF_DAY = 864e5;
+const TF = { on: false, end: 0, t0: 0, n: 0, best: 0, timer: 0 };
+const tfReady = () => !store.tfAt || Date.now() - store.tfAt > TF_DAY;
+function tfRender() {
+  const b = $('#tfGo');
+  b.disabled = TF.on || !tfReady();
+  b.textContent = TF.on ? '🔥 Firing…' : tfReady() ? '🔥 Test-fire · 10 s free' : '🔋 Recharging · back tomorrow';
+}
+function tfStart() {
+  if (TF.on || HYPER.running || winOpen || !tfReady()) return;
+  if (!PF.ready) { setTimeout(tfStart, 300); return; }
+  if (!hyperEnsureWorkers()) { toast('🛰️ A station needs a browser with Web Workers.'); return; }
+  if (HYPER.workers.some(w => w.busy)) { setTimeout(tfStart, 300); return; }   // a station that just stood down finishes its chunk first
+  if (autopilot.mode) setAutopilot('0');
+  if (anim.active) finishAnimNow();
+  store.tfAt = Date.now(); saveStore(true);
+  Object.assign(TF, { on: true, t0: performance.now(), n: 0, best: 0 });
+  TF.end = TF.t0 + TF_MS;
+  HYPER.workers.forEach(tfAssign);
+  clearInterval(TF.timer); TF.timer = setInterval(tfUI, 100);
+  $('#tfLive').hidden = false; $('#tfResult').hidden = true;
+  setPose('autopilot', 'Test-firing a station. Ten seconds. Do not touch anything.');
+  track('testfire-start');
+  tfRender(); tfUI();
+}
+function tfAssign(w) {
+  if (!TF.on || performance.now() >= TF.end) return;
+  w.busy = TF_CHUNK; w.test = true; w.job = pfTake(TF_CHUNK);
+  w.postMessage({ n: TF_CHUNK, R: Array.from(w.job.b.Rw), S: Array.from(PF.S), start: w.job.start });
+}
+function tfAfter(w) {
+  if (TF.on && performance.now() < TF.end) tfAssign(w);
+  else if (!HYPER.workers.some(x => x.busy)) tfFinish();
+}
+function tfUI() {
+  const now = performance.now(), el = Math.min(TF_MS, now - TF.t0), rate = el > 300 ? TF.n / (el / 1000) : 0;
+  $('#tfCount').textContent = fmt(TF.n);
+  $('#tfFill').style.width = (el / TF_MS * 100).toFixed(1) + '%';
+  $('#tfRate').textContent = `${rate ? fmt(Math.round(rate)) + '/sec · ' : ''}${Math.max(0, Math.ceil((TF.end - now) / 1000))} s left`;
+}
+function tfFinish() {
+  if (!TF.on) return;
+  TF.on = false; clearInterval(TF.timer);
+  const secs = Math.max(1, (performance.now() - TF.t0) / 1000), rate = TF.n / secs;
+  tfUI(); $('#tfRate').textContent = `${fmt(Math.round(rate))} shuffles a second on this device`;
+  if (!store.hyper.rate && rate > 0) { store.hyper.rate = Math.round(rate); refreshEtas(); }   // tier estimates now use this device's real speed
+  saveStore(true);
+  const captain = tierById('odds').years * HAND_YEAR;
+  $('#tfResult').innerHTML = `💥 <b>${fmt(TF.n)} real shuffles in ${Math.round(secs)} seconds</b>: ${handTime(TF.n)} of nonstop hand shuffling, ${fmt(Math.round(rate / LUDICROUS_RATE))}× Ludicrous. Free autopilot would need ${shortDuration(TF.n / LUDICROUS_RATE)} for that. Best match: ${TF.best}/52. Every one of them now counts for humanity.<br>A Captain's station keeps this up for <b>${shortDuration(captain / rate)}</b>: 10,000 years of shuffling.`;
+  $('#tfResult').hidden = false;
+  setPose('autopilot', `${fmt(TF.n)} shuffles in ten seconds. Matches: 0. I have seen enough.`);
+  track('testfire-done');
+  sfx('land', 4);
+  tfRender();
+}
+
 /* ---------- Your station's trip through history ----------
    The years you sponsor end today, so a Captain (10,000 years) starts around 8000 BCE and
    shuffles its way to the present. Stops appear as the station reaches them.
@@ -4442,6 +4552,17 @@ async function downloadCertificate(e, won) {
   }
 }
 
+/* ---------- Sponsor moments (rank and time only; written by the Stripe webhook, never by a browser) ---------- */
+async function loadSponsorEvents() {
+  if (!live.on) return;
+  try {
+    const r = await fetch(`${LIVE_COUNTER.url}/rest/v1/sponsor_events?select=rank,created_at&order=created_at.desc&limit=50`, { headers: liveHeaders(), cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);      // table not created yet: no sponsor lines, nothing breaks
+    SPEV.rows = (await r.json()).filter(x => IMP_TIERS.some(t => t.name === x.rank) && !isNaN(new Date(x.created_at)));
+  } catch (e) { SPEV.rows = []; }
+  renderImpProof();
+}
+
 /* ---------- Wall of Hopeless Heroes (Supabase, moderated) ---------- */
 const WALL = { on: live.on, rows: [] };
 async function loadWall() {
@@ -4511,6 +4632,7 @@ function initImpatient() {
   renderExtras();
   renderHyper();
   loadWall();
+  loadSponsorEvents();
   $('#hyperGo').addEventListener('click', () => (HYPER.running ? hyperPause() : hyperStart()));
   // The hero's button: straight to the game, and the first shuffle happens on arrival.
   $('#heroShuffle').addEventListener('click', () => {
@@ -4573,8 +4695,10 @@ function initImpatient() {
   });
   $('#apSponsor').addEventListener('click', e => {
     e.preventDefault(); track('autopilot-sponsor-link');
-    $('#impatient').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    $('#tfBox').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
   });
+  $('#tfGo').addEventListener('click', tfStart);
+  tfRender();
   $('#hyperChip').addEventListener('click', () => $('#hyperBox').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' }));
   if ('IntersectionObserver' in window) new IntersectionObserver(es => { HYPER.boxVisible = es[0].isIntersecting; renderHyper(); }).observe($('#hyperBox'));
   $('#myExtras').addEventListener('click', e => {
