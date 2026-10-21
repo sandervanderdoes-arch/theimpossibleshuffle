@@ -383,6 +383,8 @@
   .imp-stats b { color:#a5fbff; }
   .imp-stats span { color:#9fb5a8; font-size:.78rem; }
   .gold-star { color:#ffd23f; text-shadow:0 0 8px rgba(255,210,63,.6); }
+  .imp-get { margin-top:.8rem; font-size:.7rem; }
+  .imp-get + .imp-perks { margin-top:.35rem; }
   .imp-perks { margin:.7rem 0 .2rem; padding:0; list-style:none; font-size:.9rem; display:grid; gap:.3rem; }
   .imp-cmp { margin:.5rem 0 .8rem; font-size:.78rem; line-height:1.4; color:#9fb5a8; }
   .imp-cmp b { color:#cfe3d7; font-weight:700; }
@@ -3896,6 +3898,7 @@ function renderImpatient() {
         <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, <i style="font-style:normal" data-like="${N}">${shiftLike(N / hyperRateGuess())}</i><br><span>Free Ludicrous autopilot: ${shortDuration(N / LUDICROUS_RATE)}</span></p>
         <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
       </div>
+      <p class="tt-get imp-get">What you get</p>
       <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🎁 Plus a little surprise to keep you entertained through all ${fmt(t.years)} years.</li></ul>
       <p class="imp-impact" data-impact="${N}">${impactHTML(N)}</p>
       <span class="imp-deal">${t.deal}</span>
