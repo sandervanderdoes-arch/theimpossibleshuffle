@@ -507,12 +507,6 @@
   .ph-hello { margin:0 auto 1rem; max-width:40rem; padding:.55rem .9rem; border-radius:12px; border:1px solid rgba(255,97,84,.55); background:rgba(255,97,84,.12); color:#ffd9d4; font-size:.9rem; line-height:1.45; }
   .hero-trust { margin:.75rem auto 0; max-width:40rem; font-size:.85rem; line-height:1.5; color:#cfe3d7; text-wrap:balance; }
   .hero-trust b { color:#ffe68a; font-family:"JetBrains Mono", ui-monospace, monospace; white-space:nowrap; }
-  .hero-steps { list-style:none; margin:1.25rem auto 0; padding:0; max-width:58rem; display:grid; gap:.6rem; grid-template-columns:minmax(0, 1fr); text-align:left; }
-  @media (min-width:768px) { .hero-steps { grid-template-columns:repeat(3, minmax(0, 1fr)); } }
-  .hero-steps li { position:relative; padding:.65rem .8rem .65rem 2.55rem; border-radius:12px; background:rgba(0,0,0,.32); border:1px solid rgba(255,210,63,.25); font-size:.85rem; line-height:1.45; color:#cfe3d7; }
-  .hero-steps .n { position:absolute; left:.7rem; top:.68rem; width:1.35rem; height:1.35rem; border-radius:999px; display:grid; place-items:center; background:var(--gold); color:#14110a; font:800 .72rem/1 "JetBrains Mono", ui-monospace, monospace; }
-  .hero-steps b { display:block; color:#ffe68a; }
-  .hero-steps a { color:#a5fbff; text-decoration:underline; white-space:nowrap; }
   .recruit-panel { border-color:rgba(255,47,214,.45); box-shadow:0 0 24px rgba(255,47,214,.12); }
   .share-row { display:flex; flex-wrap:wrap; gap:.5rem; }
   .share-btn { min-height:44px; padding:.45rem .85rem; border-radius:999px; border:1px solid var(--c); background:rgba(255,255,255,.04); color:#fff; font:700 .85rem/1.2 Inter, system-ui, sans-serif; cursor:pointer; position:relative; }
@@ -692,11 +686,6 @@
       <p class="mt-5 max-w-4xl mx-auto text-base sm:text-lg text-[#cfe3d7]"><span class="block" style="text-wrap:balance">A deck was shuffled once. Together, humanity is trying to shuffle that exact same order a second time.</span> <span class="block mt-1" style="text-wrap:balance">Mathematics says no. We say: hold my cards.</span></p>
       <button type="button" id="heroShuffle" class="shuffle-btn hero-cta mt-5"><span class="btn-main">Defy Mathematics</span><span class="btn-sub">Free · no sign-up</span></button>
       <p class="hero-trust">Odds: <b>1 in 8 × 10⁶⁷</b> per shuffle. Every shuffle is real and anyone can replay it, so even Mission Control can't fake a win.</p>
-      <ol class="hero-steps" aria-label="The mission in three steps">
-        <li><span class="n" aria-hidden="true">1</span><b>One deck, shuffled once.</b> Its exact order, the Holy Grail Sequence, is humanity's target.</li>
-        <li><span class="n" aria-hidden="true">2</span><b>Everyone shuffles.</b> Every shuffle by every visitor counts for humanity, card for card.</li>
-        <li><span class="n" aria-hidden="true">3</span><b>All 52 right wins. Forever.</b> One winner. One monument. No second chances. <a href="#honors">What happens then?</a></li>
-      </ol>
 
       <div id="missionStatus" class="ms-go mt-6 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border px-4 py-2 mono text-xs sm:text-sm">
         <span class="inline-flex items-center gap-2 font-bold text-[#7cff6b]"><span class="live-dot go" aria-hidden="true"></span>LIVE</span>
