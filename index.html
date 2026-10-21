@@ -3841,12 +3841,14 @@ function likelyBest(N) {
   for (let j = 1; j <= 52 && 1 - Math.exp(-N * tailP(j)) >= 0.5; j++) k = j;
   return { k, p: 1 - Math.exp(-N * tailP(k + 1)) };
 }
+/** 12.4 → '12', 1.05 → '1.1', 0.105 → '0.11'; never rounds a small share up to 1%. */
+const pctShort = pct => pct >= 10 ? fmt(Math.round(pct)) : pct >= 0.01 ? String(Number(pct.toPrecision(2))) : '< 0.01';
 function impactHTML(N) {
   const T = live.total;
   if (!(T > 0)) return '';
   const r = N / T;
   return r >= 1 ? `🌍 <b>${r < 10 ? r.toFixed(1) : fmt(Math.round(r))}×</b> everything humanity has shuffled so far`
-    : `🌍 Adds <b>${Math.max(1, Math.round(r * 100))}%</b> to everything humanity has shuffled so far`;
+    : `🌍 Adds <b>${pctShort(r * 100)}%</b> to everything humanity has shuffled so far`;
 }
 function refreshTierLines() {
   $$('[data-impact]').forEach(e => { e.innerHTML = impactHTML(Number(e.dataset.impact)); });
