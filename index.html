@@ -398,8 +398,10 @@
   details:not([open]) > summary.tt-get::after { content:" ▸ tap to open"; text-transform:none; letter-spacing:0; font-weight:600; }
   .stats-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:.2rem .7rem; width:100%; text-align:left; background:none; border:0; padding:0; color:inherit; font:inherit; cursor:pointer; }
   .stats-head .stats-sum { font:600 .78rem/1.3 Inter, system-ui, sans-serif; color:#9fb5a8; text-shadow:none; letter-spacing:0; }
-  .stats-head .chev { margin-left:auto; color:#ffe68a; transition:transform .2s ease; }
-  #statsPanel.open .stats-head .chev { transform:rotate(180deg); }
+  .stats-pill { margin-left:auto; align-self:center; padding:.3rem .75rem; border-radius:999px; border:1px solid rgba(255,210,63,.55); background:rgba(255,210,63,.08); color:#ffe9a3; font:700 .78rem/1.2 Inter, system-ui, sans-serif; text-shadow:none; letter-spacing:0; white-space:nowrap; transition:background .15s ease; }
+  .stats-head:hover .stats-pill { background:rgba(255,210,63,.2); }
+  #statsPanel:not(.open) { cursor:pointer; }
+  #statsPanel:not(.open):hover { border-color:rgba(255,210,63,.45); }
   .stats-head:focus-visible { outline:2px solid var(--gold); outline-offset:4px; border-radius:6px; }
   .next-goal { margin:.3rem 0 0; font-size:.85rem; line-height:1.45; color:#cfe3d7; }
   .next-goal b { color:#ffe68a; }
@@ -829,7 +831,7 @@
 
     <!-- Your Mission Control Centre: personal stats, folded by default, right next to the shuffling -->
     <section id="statsPanel" class="panel p-4 sm:p-5 mt-5 lg:col-start-1 lg:col-span-2" aria-labelledby="statsTitle">
-      <h2 id="statsTitle" class="font-display text-base sm:text-lg neon-gold"><button type="button" id="statsToggle" class="stats-head" aria-expanded="false" aria-controls="statsMore"><span>📊 Your Mission Control Centre</span><span id="statsSum" class="stats-sum"></span><span class="chev" aria-hidden="true">▾</span></button> <span id="sponsorChip" class="sponsor-chip align-middle ml-1" hidden>★ MISSION SPONSOR</span></h2>
+      <h2 id="statsTitle" class="font-display text-base sm:text-lg neon-gold"><button type="button" id="statsToggle" class="stats-head" aria-expanded="false" aria-controls="statsMore"><span>📊 Your Mission Control Centre</span><span id="statsSum" class="stats-sum"></span><span id="statsPill" class="stats-pill" aria-hidden="true">Show stats ▾</span></button> <span id="sponsorChip" class="sponsor-chip align-middle ml-1" hidden>★ MISSION SPONSOR</span></h2>
       <div id="statsMore" hidden>
       <dl class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
             <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SESSION</dt><dd id="stSession" class="mono text-xl font-extrabold stat-num">0</dd></div>
@@ -2207,6 +2209,7 @@ function statsToggleLabel() {
   $('#statsSum').textContent = store.allTime ? `${fmt(store.allTime)} shuffle${store.allTime === 1 ? '' : 's'} · best ${best === null ? '–' : best + '/52'} · ${got}/${BADGES.length} achievements` : `${got}/${BADGES.length} achievements`;
   $('#statsToggle').setAttribute('aria-expanded', String(open));
   $('#statsPanel').classList.toggle('open', open);
+  $('#statsPill').textContent = open ? 'Hide stats ▴' : 'Show stats ▾';
 }
 function updateBadges() {
   statsToggleLabel();
@@ -4517,6 +4520,7 @@ function initImpatient() {
   try { if (localStorage.getItem('tis-no-ticker')) { document.body.classList.add('no-ticker'); $('#tickerBack').hidden = false; } } catch (e) { /* private mode */ }
   try { if (localStorage.getItem('tis-stats-open')) $('#statsMore').hidden = false; } catch (e) { /* private mode */ }
   statsToggleLabel();
+  $('#statsPanel').addEventListener('click', e => { if ($('#statsMore').hidden && !e.target.closest('#statsToggle')) $('#statsToggle').click(); });   // folded: the whole bar opens it
   $('#statsToggle').addEventListener('click', () => {
     const more = $('#statsMore');
     more.hidden = !more.hidden;
