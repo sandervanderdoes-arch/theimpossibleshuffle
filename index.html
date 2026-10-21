@@ -402,8 +402,19 @@
   .stats-head .stats-sum { font:600 .78rem/1.3 Inter, system-ui, sans-serif; color:#9fb5a8; text-shadow:none; letter-spacing:0; }
   .stats-pill { margin-left:auto; align-self:center; padding:.3rem .75rem; border-radius:999px; border:1px solid rgba(255,210,63,.55); background:rgba(255,210,63,.08); color:#ffe9a3; font:700 .78rem/1.2 Inter, system-ui, sans-serif; text-shadow:none; letter-spacing:0; white-space:nowrap; transition:background .15s ease; }
   .stats-head:hover .stats-pill { background:rgba(255,210,63,.2); }
-  #statsPanel:not(.open) { cursor:pointer; }
-  #statsPanel:not(.open):hover { border-color:rgba(255,210,63,.45); }
+  #statsPanel:not(.open) { cursor:pointer; border-color:rgba(255,210,63,.45); background:linear-gradient(180deg, rgba(255,210,63,.07), rgba(2,12,8,.72) 70%); box-shadow:0 0 0 1px rgba(0,0,0,.4), 0 0 24px rgba(255,210,63,.12), 0 10px 40px rgba(0,0,0,.45); transition:border-color .15s ease, box-shadow .15s ease; }
+  #statsPanel:not(.open):hover { border-color:rgba(255,210,63,.75); box-shadow:0 0 0 1px rgba(0,0,0,.4), 0 0 32px rgba(255,210,63,.22), 0 10px 40px rgba(0,0,0,.45); }
+  #statsPanel .stats-sum { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  .stats-peek { position:relative; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:.6rem; margin-top:.8rem; }
+  .stats-peek > div { min-width:0; padding:.55rem .7rem; border-radius:12px; background:rgba(0,0,0,.3); border:1px solid rgba(255,210,63,.18); }
+  .stats-peek span { display:block; font-size:.7rem; font-weight:700; color:#9fb5a8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .stats-peek b { display:block; font:800 1.15rem/1.3 "JetBrains Mono", ui-monospace, monospace; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .stats-peek .pk-more { display:none; border-style:dashed; }
+  .stats-peek .pk-more b { font:600 .82rem/1.6 Inter, system-ui, sans-serif; color:#ffe9a3; }
+  .stats-peek[hidden] { display:none; }
+  .stats-peek i { font-style:normal; }
+  @media (max-width: 639px) { .stats-peek i { display:none; } .stats-peek { gap:.45rem; } .stats-peek > div { padding:.5rem .6rem; } }
+  @media (min-width: 640px) { .stats-peek { grid-template-columns:repeat(4, minmax(0, 1fr)); } .stats-peek .pk-more { display:block; } }
   .stats-head:focus-visible { outline:2px solid var(--gold); outline-offset:4px; border-radius:6px; }
   .next-goal { margin:.3rem 0 0; font-size:.85rem; line-height:1.45; color:#cfe3d7; }
   .next-goal b { color:#ffe68a; }
@@ -823,6 +834,12 @@
     <!-- Your Mission Control Centre: personal stats, folded by default, right next to the shuffling -->
     <section id="statsPanel" class="panel p-4 sm:p-5 mt-5 lg:col-start-1 lg:col-span-2" aria-labelledby="statsTitle">
       <h2 id="statsTitle" class="font-display text-base sm:text-lg neon-gold"><button type="button" id="statsToggle" class="stats-head" aria-expanded="false" aria-controls="statsMore"><span>📊 Your Mission Control Centre</span><span id="statsSum" class="stats-sum"></span><span id="statsPill" class="stats-pill" aria-hidden="true">Show stats ▾</span></button> <span id="sponsorChip" class="sponsor-chip align-middle ml-1" hidden>★ MISSION SPONSOR</span></h2>
+      <div id="statsPeek" class="stats-peek" aria-hidden="true">
+        <div><span><i>🃏 </i>Shuffles</span><b id="pkShuf">0</b></div>
+        <div><span><i>🏆 </i>Best match</span><b id="pkBest">–</b></div>
+        <div><span><i>🏅 </i>Achievements</span><b id="pkAch">0/16</b></div>
+        <div class="pk-more"><span>Inside</span><b>Top 5 · odds · time to success</b></div>
+      </div>
       <div id="statsMore" hidden>
       <dl class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
             <div class="rounded-xl bg-black/30 p-3 min-w-0"><dt class="text-xs text-[#9fb5a8] font-bold">SESSION</dt><dd id="stSession" class="mono text-xl font-extrabold stat-num">0</dd></div>
@@ -2210,6 +2227,8 @@ function statsToggleLabel() {
   $('#statsToggle').setAttribute('aria-expanded', String(open));
   $('#statsPanel').classList.toggle('open', open);
   $('#statsPill').textContent = open ? 'Hide stats ▴' : 'Show stats ▾';
+  $('#statsPeek').hidden = open;
+  if (!open) { $('#pkShuf').textContent = shortNum(store.allTime); $('#pkBest').textContent = best === null ? '–' : best + '/52'; $('#pkAch').textContent = `${got}/${BADGES.length}`; }
 }
 function updateBadges() {
   statsToggleLabel();
