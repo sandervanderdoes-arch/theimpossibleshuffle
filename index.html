@@ -136,8 +136,13 @@
   .shuffle-btn:active { transform: translateY(2px) scale(.99); }
   .shuffle-btn .btn-main { display:block; }
   .shuffle-btn .btn-sub { display:block; margin-top:.2rem; font:800 .72rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.12em; text-transform:uppercase; opacity:.85; }
-  .ap-sponsor { display:inline-flex; align-items:center; min-height:32px; margin-top:.35rem; font-size:.8rem; font-weight:700; color:#ffe68a; text-decoration:underline; text-underline-offset:3px; }
-  .ap-sponsor:hover { color:#fff3c4; }
+  /* Links to the sponsor missions: a small glowing gold pill, the same everywhere */
+  a.go-sponsor, .lb-me .nudge a.go-sponsor, .next-goal a.go-sponsor { display:inline-flex; align-items:center; gap:.35rem; padding:.28rem .75rem; border-radius:999px; border:1px solid rgba(255,210,63,.6); background:rgba(255,210,63,.1); color:#ffe9a3; font-weight:800; font-size:.8rem; line-height:1.3; text-decoration:none; white-space:nowrap; box-shadow:0 0 12px rgba(255,210,63,.18); transition:background .15s ease, box-shadow .15s ease, color .15s ease; vertical-align:middle; }
+  a.go-sponsor:hover, a.go-sponsor:focus-visible { background:rgba(255,210,63,.22); color:#fff; box-shadow:0 0 18px rgba(255,210,63,.4); }
+  a.go-sponsor .gs-arrow { display:inline-block; color:#ffd23f; transition:transform .15s ease; }
+  a.go-sponsor:hover .gs-arrow { transform:translateY(2px); }
+  .next-goal a.go-sponsor { padding:.12rem .55rem; font-size:.76rem; }
+  a.go-sponsor.ap-sponsor { display:block; width:100%; margin-top:.55rem; padding:.4rem .6rem; border-radius:12px; white-space:normal; text-align:center; text-wrap:balance; }
   .ap-sponsor[hidden] { display:none; }
   @keyframes glow { 50% { box-shadow: 0 0 0 2px #ffd9f7, 0 0 32px rgba(255,47,214,.95), 0 0 80px rgba(255,47,214,.5), inset 0 -4px 0 rgba(0,0,0,.25); } }
   .seg { display:flex; border:1px solid rgba(34,243,255,.35); border-radius:12px; overflow:hidden; }
@@ -885,7 +890,7 @@
               <button type="button" data-ap="L" aria-pressed="false" title="50 shuffles per second">Ludicrous</button>
             </div>
             <p id="apRate" class="mono text-xs text-[#9fb5a8] mt-1 h-4 whitespace-nowrap"></p>
-            <a id="apSponsor" class="ap-sponsor" href="#impatient" hidden>🛰️ Faster than Ludicrous? Sponsor a mission ↓</a>
+            <a id="apSponsor" class="go-sponsor ap-sponsor" href="#impatient" hidden>🛰️ Faster than Ludicrous? Sponsor a mission <span class="gs-arrow" aria-hidden="true">↓</span></a>
           </div>
           <button type="button" id="soundBtn" class="chip-btn w-full" aria-pressed="false">🔇 Sound: off</button>
         </div>
@@ -2452,7 +2457,7 @@ function updateNextGoal() {
   const el2 = $('#nextGoal');
   if (!store.allTime) { el2.hidden = true; return; }
   const goal = Math.min(52, bestEver() + 1), n = 1 / tailP(goal);
-  const hint = goal >= 52 ? '' : n > 5e7 ? ' · <a href="#impatient">a station helps</a>' : n > 20000 && autopilot.mode !== 'L' ? ' · try Autopilot' : '';
+  const hint = goal >= 52 ? '' : n > 5e7 ? ' <a class="go-sponsor" href="#impatient">🛰️ a station helps</a>' : n > 20000 && autopilot.mode !== 'L' ? ' · try Autopilot' : '';
   const html = `🎯 Next goal: <b>${goal}/52</b> · about 1 in ${shortOdds(goal)} shuffles${hint}`;
   if (html !== lastGoal) { el2.innerHTML = html; lastGoal = html; }
   el2.hidden = false;
@@ -4939,7 +4944,7 @@ function renderLB() {
 function lbNudge() {
   if (!lbBest() || !LB.rank) return '';
   const best = lbBest().matches;
-  if (LB.rank === 1) return `<p class="nudge">You're #1 in the world. Defend the crown: every shuffle counts. <a href="#impatient">Get a station</a>.</p>`;
+  if (LB.rank === 1) return `<p class="nudge">You're #1 in the world. Defend the crown: every shuffle counts. <a class="go-sponsor" href="#impatient">🛰️ Get a station <span class="gs-arrow" aria-hidden="true">↓</span></a></p>`;
   const above = LB.rows[LB.rank - 2];
   const need = above ? above.best + 1 : best + 1;
   const p = tailP(need), shuffles = 1 / p, lud = shuffles / LUDICROUS_RATE;
@@ -4951,7 +4956,7 @@ function lbNudge() {
     : TT.N * p >= 1 ? `A Time Traveller would statistically land ${need}/52 ${times(TT.N * p)} on the way home.`
     : `Even a Time Traveller would only have about a 1 in ${fmt(Math.round(1 / (TT.N * p)))} shot.`;
   const how = lud < 600 ? `Ludicrous autopilot should find one in ${soon(lud)}.`
-    : `Free Ludicrous autopilot: ${fmtDuration(lud)}. ${ranks} <a href="#impatient">See the missions ↓</a>`;
+    : `Free Ludicrous autopilot: ${fmtDuration(lud)}. ${ranks} <a class="go-sponsor" href="#impatient">🛰️ See the missions <span class="gs-arrow" aria-hidden="true">↓</span></a>`;
   return `<p class="nudge">To climb${above ? ` past ${escapeHtml(above.name)} (${above.best}/52)` : ''}, you need <b>${need}/52</b>: about 1 in ${fmt(Math.round(shuffles))} shuffles. ${how}</p>`;
 }
 function renderLBMe() {
