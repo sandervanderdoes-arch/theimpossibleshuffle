@@ -540,6 +540,18 @@
   .hof-rung .who.open { color:#9fb5a8; font-weight:600; }
   .hof-rung .odds { font-size:.68rem; color:var(--muted); line-height:1.3; }
   .ph-hello { margin:0 auto 1rem; max-width:40rem; padding:.55rem .9rem; border-radius:12px; border:1px solid rgba(255,97,84,.55); background:rgba(255,97,84,.12); color:#ffd9d4; font-size:.9rem; line-height:1.45; }
+  @media (min-width: 1024px) {
+    #liveBox.live-box:not([hidden]) { display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); align-items:center; gap:1.4rem; max-width:60rem; padding:.85rem 1.5rem; text-align:left; }
+    .live-box .live-side p { font-size:.95rem; }
+    .live-box .live-side p.text-xs { font-size:.75rem; }
+    .live-box #liveCount { font-size:2rem; }
+    .live-box .live-side { padding-left:1.4rem; border-left:1px solid rgba(255,210,63,.25); }
+    .live-box .live-side > p:first-child { margin-top:0; }
+  }
+  @media (min-width: 1024px) and (max-height: 860px) {     /* laptop screens: the whole hero fits above the fold */
+    #hero { padding-top:1.6rem; padding-bottom:1.6rem; }
+    #hero h1 { font-size:3rem; }
+  }
   .hero-trust { margin:.75rem auto 0; max-width:48rem; font-size:.85rem; line-height:1.5; color:#cfe3d7; text-wrap:balance; }
   .hero-trust b { color:#ffe68a; font-family:"JetBrains Mono", ui-monospace, monospace; white-space:nowrap; }
   .recruit-panel { border-color:rgba(255,47,214,.45); box-shadow:0 0 24px rgba(255,47,214,.12); }
@@ -565,8 +577,8 @@
   #cardDlg::backdrop { background:rgba(0,0,0,.7); }
   #cardDlg img { display:block; width:100%; height:auto; border-radius:14px; background:#06180f; aspect-ratio:1 / 1; }
   #rigged { position:fixed; left:.75rem; top:.75rem; z-index:110; }
-  .merch-top { position:absolute; top:.75rem; right:calc(.75rem + env(safe-area-inset-right, 0px)); z-index:20; }
-  .merch-top[hidden] { display:none; }
+  .imp-merch { text-align:center; font-size:.85rem; color:#cfe3d7; }
+  .imp-merch a { color:#ffe9a3; font-weight:700; text-decoration:underline; text-underline-offset:3px; }
   #fab { position:fixed; right:calc(1rem + env(safe-area-inset-right, 0px)); bottom:calc(3.3rem + env(safe-area-inset-bottom, 0px)); z-index:55; }
   #fab[hidden] { display:none; }
   .fade { transition: opacity .4s; }
@@ -686,7 +698,6 @@
 <div id="rigged" hidden>
   <button type="button" id="riggedBtn" class="chip-btn" style="background:#2a0a24;border-color:#ff2fd6;color:#ffd0f6">🃏 RIGGED MODE</button>
 </div>
-<a id="merchTop" class="chip-btn merch-btn merch-top" target="_blank" rel="noopener" hidden>👕 Merch</a>
 <div id="toasts" aria-live="polite"></div>
 <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
@@ -713,28 +724,32 @@
     </defs>
   </svg>
   <!-- ===================== HERO ===================== -->
-  <header class="px-4 pt-16 max-w-6xl mx-auto">
-    <div id="hero" class="bulbs px-6 py-8 sm:px-12 sm:py-10 text-center">
+  <header class="px-4 pt-4 sm:pt-6 max-w-6xl mx-auto">
+    <div id="hero" class="bulbs px-6 py-7 sm:px-12 sm:py-8 text-center">
       <p id="phHello" class="ph-hello" hidden>👋 Welcome, Product Hunters. Your mission, should you choose to accept it: one shuffle. Mathematics expects nothing from you.</p>
       <p class="mono text-xs tracking-widest text-[#9fb5a8] mb-3">MISSION CONTROL · DEPARTMENT OF IMPOSSIBLE THINGS</p>
-      <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl lg:text-[3.4rem]">Welcome to Humankind's Most Impossible Mission</h1>
-      <p class="mt-5 max-w-4xl mx-auto text-base sm:text-lg text-[#cfe3d7]"><span class="block" style="text-wrap:balance">A deck was shuffled once. Together, humanity is trying to shuffle that exact same order a second time.</span> <span class="block mt-1" style="text-wrap:balance">Mathematics says no. We say: hold my cards.</span></p>
-      <button type="button" id="heroShuffle" class="shuffle-btn hero-cta mt-5"><span class="btn-main">Defy Mathematics</span><span class="btn-sub">Free · no sign-up</span></button>
+      <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl lg:text-[3.4rem]" style="text-wrap:balance">Welcome to Humankind's Most Impossible Mission</h1>
+      <p class="mt-4 max-w-4xl mx-auto text-base sm:text-lg text-[#cfe3d7]"><span class="block" style="text-wrap:balance">A deck was shuffled once. Together, humanity is trying to shuffle that exact same order a second time.</span> <span class="block mt-1" style="text-wrap:balance">Mathematics says no. We say: hold my cards.</span></p>
+      <button type="button" id="heroShuffle" class="shuffle-btn hero-cta mt-4"><span class="btn-main">Defy Mathematics</span><span class="btn-sub">Free · no sign-up</span></button>
       <p class="hero-trust"><span class="block">Odds: <b>1 in 8 × 10⁶⁷</b> per shuffle.</span><span class="block">Every shuffle is real and anyone can replay it, so even Mission Control can't fake a win.</span></p>
 
-      <div id="missionStatus" class="ms-go mt-6 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border px-4 py-2 mono text-xs sm:text-sm">
+      <div id="missionStatus" class="ms-go mt-5 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border px-4 py-2 mono text-xs sm:text-sm">
         <span class="inline-flex items-center gap-2 font-bold text-[#7cff6b]"><span class="live-dot go" aria-hidden="true"></span>LIVE</span>
         <span><b class="text-[#b8ffb0]">MISSION STATUS: ALL SYSTEMS GO.</b> Humanity is shuffling as one. Mathematics is ahead. For now.</span>
       </div>
       <div id="plaque" class="plaque mt-8" hidden></div>
 
-      <div id="liveBox" class="mt-8 mx-auto max-w-xl rounded-2xl border border-[#ffd23f]/40 bg-black/30 px-4 py-4" hidden>
-        <p class="mono text-xs tracking-widest text-[#ffe68a] inline-flex items-center gap-2"><span class="live-dot" aria-hidden="true" style="width:8px;height:8px"></span>ACTUAL ATTEMPTS BY HUMANKIND</p>
-        <p id="liveCount" class="mono font-extrabold neon-gold text-2xl sm:text-4xl mt-1 tabular-nums break-all">…</p>
-        <p id="liveYears" class="mt-1 text-sm sm:text-base font-semibold text-[#a5fbff]"></p>
-        <p id="liveWins" class="mt-2 font-bold text-[#ffe68a]">0 successful matches in human history.</p>
-        <p id="liveHumans" class="mt-1 font-bold text-[#a5fbff]" hidden></p>
-        <p class="mt-1 text-xs text-[#cfe3d7]">Every shuffle by every real visitor to this site, counted live. <span id="liveYou" class="text-[#9fb5a8]"></span></p>
+      <div id="liveBox" class="live-box mt-6 mx-auto max-w-xl rounded-2xl border border-[#ffd23f]/40 bg-black/30 px-4 py-4" hidden>
+        <div class="live-main">
+          <p class="mono text-xs tracking-widest text-[#ffe68a] inline-flex items-center gap-2"><span class="live-dot" aria-hidden="true" style="width:8px;height:8px"></span>ACTUAL ATTEMPTS BY HUMANKIND</p>
+          <p id="liveCount" class="mono font-extrabold neon-gold text-2xl sm:text-4xl mt-1 tabular-nums break-all">…</p>
+          <p id="liveYears" class="mt-1 text-sm sm:text-base font-semibold text-[#a5fbff]"></p>
+        </div>
+        <div class="live-side">
+          <p id="liveWins" class="mt-2 font-bold text-[#ffe68a]">0 successful matches in human history.</p>
+          <p id="liveHumans" class="mt-1 font-bold text-[#a5fbff]" hidden></p>
+          <p class="mt-1 text-xs text-[#cfe3d7]">Every shuffle by every real visitor to this site, counted live. <span id="liveYou" class="text-[#9fb5a8]"></span></p>
+        </div>
       </div>
     </div>
   </header>
@@ -980,6 +995,7 @@
       <p class="mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Support the mission: pick your rank.</p>
       <div id="impTiers" class="imp-tiers mt-3"></div>
       <p class="imp-pay mt-3">🔒 Secure checkout by Stripe · Apple Pay · Google Pay · all major cards</p>
+      <p id="merchSponsor" class="imp-merch mt-3" hidden>👕 Rather wear the mission than fund it? <a id="merchSponsorLink" target="_blank" rel="noopener">Visit the mission merch shop ↗</a></p>
       <div id="ttCard" class="mt-6" hidden></div>
       <p id="impClosed" class="mt-4 text-sm text-[#ffe68a]" hidden></p>
       <p class="mt-4 text-xs text-[#9fb5a8]">*Captain to Commander: estimate for this device. Your station runs in this browser while the tab is open (on phones, while it's on screen); stand down anytime and it picks up where it left off on your next visit. A Time Traveller runs on our eight GPUs in the cloud instead: nothing runs on your computer, and you can close the tab. Your rank and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
@@ -1280,9 +1296,9 @@ function setupSupportLinks() {
     $('#merchLink').href = SITE.merchUrl;
     $('#merchLink').addEventListener('click', () => track('merch'));
     $('#merchBox').hidden = false;
-    $('#merchTop').href = SITE.merchUrl;
-    $('#merchTop').addEventListener('click', () => track('merch-top'));
-    $('#merchTop').hidden = false;
+    $('#merchSponsorLink').href = SITE.merchUrl;
+    $('#merchSponsorLink').addEventListener('click', () => track('merch-sponsor'));
+    $('#merchSponsor').hidden = false;
   }
 }
 
