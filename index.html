@@ -4197,7 +4197,7 @@ function hyperUI() {
    humanity and your stats, none come off paid years. One try per browser: a test drive, not a free station. */
 const TF_MS = 10000, TF_CHUNK = 50000;
 const TF = { on: false, end: 0, t0: 0, n: 0, best: 0, timer: 0 };
-const tfReady = () => !store.tfAt;
+const tfReady = () => !store.tf;   // no saved result (never fired, closed mid-fire, or fired on an older version): one try
 function tfRender() {
   const b = $('#tfGo');
   b.disabled = TF.on || !tfReady();
