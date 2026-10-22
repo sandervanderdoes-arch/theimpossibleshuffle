@@ -450,15 +450,29 @@
   .tf-box.folded { border:0; background:none; box-shadow:none; padding:0; }
   .tf-box.folded .tf-head, .tf-box.folded #tfLive, .tf-box.folded #tfResult { display:none; }
   .tf-box.folded .tf-cta { margin-top:0; }
-  .tf-toggle { display:block; margin:.5rem auto 0; background:none; border:0; padding:.3rem .5rem; min-height:32px; font-size:.78rem; color:#9fb5a8; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
-  .tf-toggle[hidden] { display:none; }
-  .tf-toggle:hover { color:#cfe3d7; }
-  .tf-cta { display:block; margin-top:.9rem; padding:.8rem 1rem; border-radius:14px; text-align:center; border:1px solid rgba(255,210,63,.6); background:rgba(255,210,63,.08); box-shadow:0 0 22px rgba(255,210,63,.18); color:#cfe3d7; text-decoration:none; transition:box-shadow .15s ease, background .15s ease; }
+  .tf-cta { display:block; margin-top:.9rem; padding:.7rem 1rem .6rem; border-radius:14px; border:1px solid rgba(255,210,63,.6); background:rgba(255,210,63,.07); box-shadow:0 0 22px rgba(255,210,63,.16); color:#cfe3d7; text-decoration:none; transition:box-shadow .15s ease, background .15s ease; }
   .tf-cta[hidden] { display:none; }
-  .tf-cta:hover { background:rgba(255,210,63,.14); box-shadow:0 0 30px rgba(255,210,63,.3); }
-  .tf-cta-big { display:block; font:800 1.05rem "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; text-shadow:0 0 10px rgba(255,210,63,.45); }
-  .tf-cta-text { display:block; margin-top:.25rem; font-size:.88rem; line-height:1.45; text-wrap:balance; }
-  .tf-cta-go { display:inline-flex; align-items:center; gap:.4rem; margin-top:.5rem; font-weight:800; font-size:.9rem; color:#fff; }
+  .tf-cta:hover { background:rgba(255,210,63,.13); box-shadow:0 0 30px rgba(255,210,63,.3); }
+  .tf-cta-head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.2rem 1rem; }
+  .tf-cta-head b { font:800 .98rem "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; text-shadow:0 0 10px rgba(255,210,63,.4); }
+  .tf-cta-go { display:inline-flex; align-items:center; gap:.35rem; font-weight:800; font-size:.88rem; color:#fff; white-space:nowrap; }
+  .tf-bars { display:grid; gap:.3rem; margin-top:.55rem; }
+  .tf-row { display:grid; grid-template-columns:11.5rem minmax(0, 1fr) 6.5rem; align-items:center; gap:.7rem; font-size:.8rem; }
+  .tf-lbl { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .tf-bar { height:10px; border-radius:999px; background:rgba(0,0,0,.5); border:1px solid rgba(255,210,63,.25); overflow:hidden; }
+  .tf-bar i { display:block; height:100%; width:0; min-width:3px; border-radius:999px; background:linear-gradient(90deg, #ff7a3c, #ffd23f); }
+  .tf-row.cap .tf-bar i { background:linear-gradient(90deg, #ffd23f, #fff1a8); box-shadow:0 0 10px rgba(255,210,63,.5); }
+  .tf-cta.show .tf-row.cap .tf-bar i { width:100%; transition:width 1.6s cubic-bezier(.2,.8,.2,1) .2s; }
+  .tf-num { font:800 .8rem "JetBrains Mono", ui-monospace, monospace; color:#fff; text-align:right; white-space:nowrap; }
+  .tf-cta-foot { display:block; margin-top:.45rem; font-size:.72rem; color:#9fb5a8; }
+  @media (max-width: 639px) {
+    .tf-cta-head b { font-size:.9rem; }
+    .tf-row { grid-template-columns:minmax(0, 1fr) auto; grid-template-areas:"lbl num" "bar bar"; gap:.15rem .5rem; }
+    .tf-row .tf-lbl { grid-area:lbl; } .tf-row .tf-num { grid-area:num; } .tf-row .tf-bar { grid-area:bar; }
+    .tf-bars { gap:.45rem; }
+    .tf-shift { display:none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .tf-cta.show .tf-row.cap .tf-bar i { transition:none; } }
   .tf-arrow { display:inline-block; font-size:1.25rem; color:#ffd23f; animation:tfBounce 1.2s ease-in-out infinite; }
   @keyframes tfBounce { 0%, 100% { transform:translateY(-2px); } 50% { transform:translateY(4px); } }
   @media (prefers-reduced-motion: reduce) { .tf-arrow { animation:none; } }
@@ -1014,11 +1028,13 @@
         </div>
         <p id="tfResult" class="tf-result" hidden aria-live="polite"></p>
         <a id="tfCta" class="tf-cta" href="#impPick" hidden>
-          <span class="tf-cta-big">🚀 That was just the <span class="whitespace-nowrap">warm-up.</span></span>
-          <span class="tf-cta-text">Want that again with SIGNIFICANTLY more shuffles? Pick your mission and go for legendary status.</span>
-          <span class="tf-cta-go">Explore the missions <span class="tf-arrow" aria-hidden="true">↓</span></span>
+          <span class="tf-cta-head"><b id="tfX">🚀 Liked that? Picture it bigger.</b><span class="tf-cta-go">Choose your rank <span class="tf-arrow" aria-hidden="true">↓</span></span></span>
+          <span class="tf-bars">
+            <span class="tf-row"><span class="tf-lbl">🔥 Your 10 seconds</span><span class="tf-bar"><i id="tfBarMe"></i></span><span id="tfNumMe" class="tf-num"></span></span>
+            <span class="tf-row cap"><span class="tf-lbl">★★ A Captain's station</span><span class="tf-bar"><i></i></span><span id="tfNumCap" class="tf-num"></span></span>
+          </span>
+          <span id="tfFoot" class="tf-cta-foot"></span>
         </a>
-        <button type="button" id="tfToggle" class="tf-toggle" aria-expanded="false" hidden></button>
       </div>
       <p id="impPick" class="imp-pick mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Support the mission: pick your rank.</p>
       <div id="impTiers" class="imp-tiers mt-3"></div>
@@ -4253,16 +4269,19 @@ function tfShowResult(t) {
   // The Captain line uses the very same speed estimate as the tier cards below, so the two times always match.
   $('#tfResult').innerHTML = `💥 <b>Your test-fire: ${fmt(t.n)} real shuffles in ${Math.round(t.secs)} seconds</b>: ${handTime(t.n)} of nonstop hand shuffling, ${fmt(Math.round(rate / LUDICROUS_RATE))}× Ludicrous. Free autopilot would need ${shortDuration(t.n / LUDICROUS_RATE)} for that. Best match: ${t.best}/52. Every one of them counts for humanity.<br>A Captain's station keeps this up for <b>${shortDuration(captain / hyperRateGuess())}</b>: 10,000 years of shuffling.`;
   $('#tfResult').hidden = false;
+  // The card it folds down to: your ten seconds next to a Captain's shift, bars to scale.
+  const x = captain / t.n;
+  $('#tfX').textContent = `🚀 Liked that? Picture it ${fmt(Math.round(x))}× bigger.`;
+  $('#tfNumMe').textContent = bigShort(t.n);
+  $('#tfNumCap').textContent = bigShort(captain);
+  $('#tfBarMe').style.width = (100 / x).toFixed(3) + '%';
+  $('#tfFoot').innerHTML = `Best match ${t.best}/52 · <span class="tf-shift">a Captain's shift: ${shortDuration(captain / hyperRateGuess())} on this device · </span>bars to scale (yours rounded up, out of kindness)`;
   $('#tfCta').hidden = false;
-  $('#tfToggle').hidden = false;
+  requestAnimationFrame(() => requestAnimationFrame(() => $('#tfCta').classList.add('show')));   // the Captain bar sweeps across once
   tfFold(true);
 }
-/** Folded: only "That was just the warm-up" and a small link to unfold the result. */
-function tfFold(fold) {
-  $('#tfBox').classList.toggle('folded', fold);
-  $('#tfToggle').textContent = fold ? `🔥 Your test-fire: ${fmt(store.tf ? store.tf.n : TF.n)} shuffles · details ▾` : 'Hide details ▴';
-  $('#tfToggle').setAttribute('aria-expanded', String(!fold));
-}
+/** Folded: only the comparison card; the full result shows for a few seconds right after firing. */
+function tfFold(fold) { $('#tfBox').classList.toggle('folded', fold); }
 /** Scrolls to "Support the mission: pick your rank." so the heading and all three cards are in view. */
 function goTiers() {
   const target = $('#impTiers').children.length ? $('#impPick') : $('#impatient');   // mission over: no cards, show the notice
@@ -4310,7 +4329,7 @@ function tfFinish() {
   saveStore(true);
   tfShowResult(store.tf);
   tfFold(false);                                // the result first, then the box folds down to the next step
-  setTimeout(() => { if (!TF.touched) tfFold(true); }, 4000);
+  setTimeout(() => tfFold(true), 4000);
   setPose('autopilot', `${fmt(TF.n)} shuffles in ten seconds. Matches: 0. I have seen enough.`);
   track('testfire-done');
   sfx('land', 4);
@@ -4788,7 +4807,6 @@ function initImpatient() {
     else track('lb-show-all');
   });
   $('#tfGo').addEventListener('click', tfStart);
-  $('#tfToggle').addEventListener('click', () => { TF.touched = true; tfFold(!$('#tfBox').classList.contains('folded')); });
   $('#tfCta').addEventListener('click', e => { e.preventDefault(); track('testfire-cta'); goTiers(); });
   tfRender();
   $('#hyperChip').addEventListener('click', () => $('#hyperBox').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' }));
