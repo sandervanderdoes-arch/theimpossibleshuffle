@@ -748,7 +748,7 @@
         <div class="live-side">
           <p id="liveWins" class="mt-2 font-bold text-[#ffe68a]">0 successful matches in human history.</p>
           <p id="liveHumans" class="mt-1 font-bold text-[#a5fbff]" hidden></p>
-          <p class="mt-1 text-xs text-[#cfe3d7]">Every shuffle by every real visitor to this site, counted live. <span id="liveYou" class="text-[#9fb5a8]"></span></p>
+          <p class="mt-1 text-xs text-[#cfe3d7]">Every shuffle by every real visitor to this site, counted live. <span id="liveYou" class="block text-[#9fb5a8]"></span></p>
         </div>
       </div>
     </div>
@@ -4863,10 +4863,16 @@ function lbNudge() {
   if (LB.rank === 1) return `<p class="nudge">You're #1 in the world. Defend the crown: every shuffle counts. <a href="#impatient">Get a station</a>.</p>`;
   const above = LB.rows[LB.rank - 2];
   const need = above ? above.best + 1 : best + 1;
-  const shuffles = 1 / tailP(need), lud = shuffles / LUDICROUS_RATE, station = shuffles / hyperRateGuess();
+  const p = tailP(need), shuffles = 1 / p, lud = shuffles / LUDICROUS_RATE;
   const soon = sec => (sec < 15 ? 'a few seconds' : fmtDuration(sec));
+  const times = k => (k >= 1.5 ? `about ${fmt(Math.round(k))} times` : 'about once');
+  // The smallest rank whose shift would statistically get there, so the comparison stays short and concrete.
+  const tier = IMP_TIERS.find(t => t.years * HAND_YEAR * p >= 1);
+  const ranks = tier ? `A ${tier.name}'s station would statistically land ${need}/52 ${times(tier.years * HAND_YEAR * p)}.`
+    : TT.N * p >= 1 ? `A Time Traveller would statistically land ${need}/52 ${times(TT.N * p)} on the way home.`
+    : `Even a Time Traveller would only have about a 1 in ${fmt(Math.round(1 / (TT.N * p)))} shot.`;
   const how = lud < 600 ? `Ludicrous autopilot should find one in ${soon(lud)}.`
-    : `Free Ludicrous autopilot (50/sec) would need ${fmtDuration(lud)}; your own station ${soon(station)}. <a href="#impatient">Become a Mission Sponsor</a>`;
+    : `Free Ludicrous autopilot: ${fmtDuration(lud)}. ${ranks} <a href="#impatient">See the missions ↓</a>`;
   return `<p class="nudge">To climb${above ? ` past ${escapeHtml(above.name)} (${above.best}/52)` : ''}, you need <b>${need}/52</b>: about 1 in ${fmt(Math.round(shuffles))} shuffles. ${how}</p>`;
 }
 function renderLBMe() {
