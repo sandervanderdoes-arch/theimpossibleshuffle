@@ -388,7 +388,8 @@
   .imp-perks { margin:.7rem 0 .2rem; padding:0; list-style:none; font-size:.9rem; display:grid; gap:.3rem; }
   .imp-cmp { margin:.5rem 0 .8rem; font-size:.78rem; line-height:1.4; color:#9fb5a8; }
   .imp-cmp b { color:#cfe3d7; font-weight:700; }
-  .imp-impact { margin:.6rem 0 .8rem; font-size:.8rem; line-height:1.4; color:#a5fbff; }
+  .imp-impact { font-size:.8rem; line-height:1.4; color:#a5fbff; }
+  .imp-stats .imp-impact { font-size:.78rem; color:#a5fbff; }
   .imp-impact b { color:#fff; }
   .imp-impact:empty { display:none; }
   .imp-proof { font-size:.88rem; color:#cfe3d7; }
@@ -419,6 +420,16 @@
   .next-goal { margin:.3rem 0 0; font-size:.85rem; line-height:1.45; color:#cfe3d7; }
   .next-goal b { color:#ffe68a; }
   .next-goal a { color:#a5fbff; text-decoration:underline; }
+  .imp-pick { scroll-margin-top:1rem; }
+  @media (min-width: 1024px) and (max-height: 900px) {     /* laptop screens: heading and all three cards fit in one view */
+    .imp-card { padding:1.15rem 1rem .85rem; }
+    .imp-years .n { font-size:min(1.7rem, 11cqi); }
+    .imp-story { font-size:.85rem; }
+    .imp-stats { margin-top:.45rem; padding:.45rem .65rem; }
+    .imp-get { margin-top:.6rem; }
+    .imp-perks { font-size:.85rem; gap:.2rem; }
+    .imp-deal { margin-top:auto; padding-top:.6rem; }
+  }
   .imp-deal { margin-top:auto; align-self:center; margin-bottom:.45rem; font:800 .7rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.04em; color:#ffe68a; }
   .imp-buy { text-align:center; text-decoration:none; font-size:1rem !important; }
   .imp-why { margin-top:.45rem; text-align:center; font-size:.72rem; color:#9fb5a8; font-style:italic; }
@@ -992,14 +1003,14 @@
           <p id="tfRate" class="mono text-xs text-[#9fb5a8] mt-1"></p>
         </div>
         <p id="tfResult" class="tf-result" hidden aria-live="polite"></p>
-        <a id="tfCta" class="tf-cta" href="#impTiers" hidden>
+        <a id="tfCta" class="tf-cta" href="#impPick" hidden>
           <span class="tf-cta-big">🚀 That was just the <span class="whitespace-nowrap">warm-up.</span></span>
           <span class="tf-cta-text">Want that again with SIGNIFICANTLY more shuffles? Pick your mission and go for legendary status.</span>
           <span class="tf-cta-go">Explore the missions <span class="tf-arrow" aria-hidden="true">↓</span></span>
         </a>
         <button type="button" id="tfToggle" class="tf-toggle" aria-expanded="false" hidden></button>
       </div>
-      <p class="mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Support the mission: pick your rank.</p>
+      <p id="impPick" class="imp-pick mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Support the mission: pick your rank.</p>
       <div id="impTiers" class="imp-tiers mt-3"></div>
       <p class="imp-pay mt-3">🔒 Secure checkout by Stripe · Apple Pay · Google Pay · all major cards</p>
       <p id="merchSponsor" class="imp-merch mt-3" hidden>👕 Rather wear the mission than fund it? <a id="merchSponsorLink" target="_blank" rel="noopener">Visit the mission merch shop ↗</a></p>
@@ -4002,10 +4013,10 @@ function renderImpatient() {
       <div class="imp-stats">
         <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, <i style="font-style:normal" data-like="${N}">${shiftLike(N / hyperRateGuess())}</i><br><span>Free Ludicrous autopilot: ${shortDuration(N / LUDICROUS_RATE)}</span></p>
         <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
+        <p class="imp-impact" data-impact="${N}">${impactHTML(N)}</p>
       </div>
       <p class="tt-get imp-get">What you get</p>
       <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🎁 Plus a little surprise to keep you entertained through all ${fmt(t.years)} years.</li></ul>
-      <p class="imp-impact" data-impact="${N}">${impactHTML(N)}</p>
       <span class="imp-deal">${t.deal}</span>
       <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}"><span class="block">Support the mission</span><span class="block text-sm opacity-90">as a ${t.name} · ${cur}${t.price}</span></a>
       <p class="imp-why">${t.why}</p>
@@ -4756,7 +4767,7 @@ function initImpatient() {
   $('#tfToggle').addEventListener('click', () => { TF.touched = true; tfFold(!$('#tfBox').classList.contains('folded')); });
   $('#tfCta').addEventListener('click', e => {
     e.preventDefault(); track('testfire-cta');
-    $('#impTiers').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    $('#impPick').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });   // heading + all three cards in view
   });
   tfRender();
   $('#hyperChip').addEventListener('click', () => $('#hyperBox').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' }));
