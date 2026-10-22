@@ -245,7 +245,9 @@
   .top5 .dk:hover { color:#bffcff; text-decoration:underline; }
   .top5 td.empty { padding:1rem; color:var(--muted); font-family:Inter, system-ui, sans-serif; }
   @media (max-width: 480px) { .top5 { font-size:.72rem; } .top5 th, .top5 td { padding-left:.35rem; padding-right:.35rem; } }
-  .lb-wrap { max-height: 28rem; overflow:auto; border-radius:12px; border:1px solid rgba(255,210,63,.25); }
+  .lb-wrap { overflow-x:auto; border-radius:12px; border:1px solid rgba(255,210,63,.25); }   /* no inner vertical scroll: the page scrolls straight past */
+  .lb tr.lb-gap td { text-align:center; color:var(--muted); padding:.2rem; }
+  .lb-more { display:block; margin:.6rem auto 0; }
   .lb { width:100%; border-collapse:collapse; font-family:"JetBrains Mono", ui-monospace, monospace; font-size:.8rem; }
   .lb th, .lb td { padding:.45rem .6rem; text-align:left; border-bottom:1px solid rgba(255,255,255,.05); white-space:nowrap; }
   .lb td:nth-child(2) { white-space:normal; overflow-wrap:anywhere; font-family:Inter, system-ui, sans-serif; font-weight:700; }
@@ -969,6 +971,7 @@
           <tbody id="lbBody"></tbody>
         </table>
       </div>
+      <button type="button" id="lbMore" class="chip-btn lb-more !text-xs" aria-expanded="false" hidden></button>
       <div id="hof" class="hof mt-4" hidden>
         <p class="hof-title"><b>🏛️ Hall of Firsts</b> The first human to reach each rung keeps it forever. Scores on this board count.</p>
         <ol id="hofList" class="hof-list" aria-label="Hall of Firsts"></ol>
@@ -4779,6 +4782,11 @@ function initImpatient() {
     if (a.id === 'apSponsor') track('autopilot-sponsor-link');
     goTiers();
   });
+  $('#lbMore').addEventListener('click', () => {
+    LB.expanded = !LB.expanded; renderLB();
+    if (!LB.expanded) $('#lbSection').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });   // folding a long list: back to the board's top
+    else track('lb-show-all');
+  });
   $('#tfGo').addEventListener('click', tfStart);
   $('#tfToggle').addEventListener('click', () => { TF.touched = true; tfFold(!$('#tfBox').classList.contains('folded')); });
   $('#tfCta').addEventListener('click', e => { e.preventDefault(); track('testfire-cta'); goTiers(); });
@@ -4881,11 +4889,13 @@ async function hofLoad() {
   if (!LB.on) return;
   try { const rows = await lbRpc('hall_of_firsts', {}); if (Array.isArray(rows)) renderHof(rows); } catch (e) { /* firsts.sql not installed yet: stay hidden */ }
 }
+const LB_SHOW = 10;                              // rows shown before "Show all"; the table never scrolls on its own
 function renderLB() {
   const me = store.lb && store.lb.name && store.lb.sub ? { name: store.lb.name, best: store.lb.sub } : null;
-  let meMarked = false;
-  $('#lbBody').innerHTML = LB.rows.length ? LB.rows.map((r, i) => {
+  let meMarked = false, meAt = -1;
+  const html = LB.rows.map((r, i) => {
     const isMe = !meMarked && me && r.name.toLowerCase() === me.name.toLowerCase() && (meMarked = true);   // names are unique
+    if (isMe) meAt = i;
     const cls = [i < 3 ? `top${i + 1}` : '', isMe ? 'me' : ''].join(' ').trim();
     const medal = ['🥇', '🥈', '🥉'][i] || String(i + 1);
     const when = new Date(r.achieved_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -4895,7 +4905,15 @@ function renderLB() {
     const tick = validRec(rec) ? ` <button type="button" class="pf-tick" data-verify='${JSON.stringify(rec)}' title="Provably fair: replay this shuffle" aria-label="Replay ${name.innerHTML}'s shuffle">✓</button>`
       : ` <span class="pf-early" title="From before provably fair shuffles (October 14, 2026): checked to be plausible for its number of tries, but it can't be replayed">early</span>`;
     return `<tr class="${cls}"><td>${medal}</td><td>${name.innerHTML}${isMe ? ' <span class="text-[#22f3ff]">(you)</span>' : ''}</td><td class="best">${r.best}/52${tick}</td><td>${tries}</td><td>1 in ${oneIn(r.best)}</td><td>${when}</td></tr>`;
-  }).join('') : '<tr><td colspan="6">Nobody yet. The first spot is yours for the taking.</td></tr>';
+  });
+  const fold = !LB.expanded && html.length > LB_SHOW;
+  // Folded: the top 10, plus your own row further down if you're on the board.
+  const shown = fold ? html.slice(0, LB_SHOW).concat(meAt >= LB_SHOW ? ['<tr class="lb-gap"><td colspan="6">⋯</td></tr>', html[meAt]] : []) : html;
+  $('#lbBody').innerHTML = html.length ? shown.join('') : '<tr><td colspan="6">Nobody yet. The first spot is yours for the taking.</td></tr>';
+  const more = $('#lbMore');
+  more.hidden = html.length <= LB_SHOW;
+  more.textContent = LB.expanded ? `Show the top ${LB_SHOW} ▴` : `Show all ${html.length} ▾`;
+  more.setAttribute('aria-expanded', String(!!LB.expanded));
   $('#lbShare').hidden = !LB.rows.length;
   $('#lbCount').textContent = LB.players ? `Top ${Math.min(100, LB.rows.length)} of ${fmt(LB.players)} shufflers` : '';
   renderLBMe();
