@@ -2460,8 +2460,8 @@ function updateNextGoal() {
   if (!store.allTime) { el2.hidden = true; return; }
   const goal = Math.min(52, bestEver() + 1), n = 1 / tailP(goal);
   // Hard goals get a quiet second line: what free autopilot would need, next to a station (same estimate as the tier cards).
-  const st = n / hyperRateGuess(), stTime = st < 15 ? 'seconds' : fmtDuration(st).replace('about ', '');
-  const hint = goal >= 52 ? '' : n > 5e7 ? `<span class="ng-hint">Free autopilot: ${fmtDuration(n / LUDICROUS_RATE).replace('about ', '')} · <a href="#impatient">a station: ${stTime} →</a></span>`
+  const r = n > 5e7 ? rankReach(1 / n) : null;
+  const hint = goal >= 52 ? '' : r ? `<span class="ng-hint">Free autopilot: ${fmtDuration(n / LUDICROUS_RATE).replace('about ', '')} · <a href="#impatient">${r.odds ? `even ${r.who} (${r.shift}): a 1 in ${r.odds} shot` : `${r.who} (${r.shift}) lands it ${r.times}`} →</a></span>`
     : n > 20000 && autopilot.mode !== 'L' ? ' · try Autopilot' : '';
   const html = `🎯 Next goal: <b>${goal}/52</b> · about 1 in ${shortOdds(goal)} shuffles${hint}`;
   if (html !== lastGoal) { el2.innerHTML = html; lastGoal = html; }
@@ -4067,6 +4067,17 @@ function renderImpatient() {
 function refreshEtas() {
   $$('#impTiers [data-eta]').forEach(b => { b.textContent = shortDuration(Number(b.dataset.eta) / hyperRateGuess()); });
   $$('#impTiers [data-like]').forEach(b => { b.textContent = shiftLike(Number(b.dataset.like) / hyperRateGuess()); });
+  updateNextGoal();                                // these quote the same shift times
+  if (LB.rows.length) renderLBMe();
+}
+/** The smallest mission whose shift would statistically reach a score of probability p, with its shift time
+    exactly as its card shows it. Used by "Next goal" and the leaderboard tip, so all three always agree. */
+function rankReach(p) {
+  const times = k => (k >= 1.5 ? `about ${fmt(Math.round(k))} times` : 'about once');
+  const t = IMP_TIERS.find(x => x.years * HAND_YEAR * p >= 1);
+  if (t) { const N = t.years * HAND_YEAR; return { who: `a ${t.name}'s station`, shift: shortDuration(N / hyperRateGuess()), times: times(N * p) }; }
+  const tt = { who: 'a Time Traveller', shift: 'under 1.5 hours' };            // as its card says: "in under an hour and a half"
+  return TT.N * p >= 1 ? { ...tt, times: times(TT.N * p) } : { ...tt, odds: fmt(Math.round(1 / (TT.N * p))) };
 }
 
 /* ---------- Thank-you return from Stripe ---------- */
@@ -4954,12 +4965,10 @@ function lbNudge() {
   const need = above ? above.best + 1 : best + 1;
   const p = tailP(need), shuffles = 1 / p, lud = shuffles / LUDICROUS_RATE;
   const soon = sec => (sec < 15 ? 'a few seconds' : fmtDuration(sec));
-  const times = k => (k >= 1.5 ? `about ${fmt(Math.round(k))} times` : 'about once');
-  // The smallest rank whose shift would statistically get there, so the comparison stays short and concrete.
-  const tier = IMP_TIERS.find(t => t.years * HAND_YEAR * p >= 1);
-  const ranks = tier ? `A ${tier.name}'s station would statistically land ${need}/52 ${times(tier.years * HAND_YEAR * p)}.`
-    : TT.N * p >= 1 ? `A Time Traveller would statistically land ${need}/52 ${times(TT.N * p)} on the way home.`
-    : `Even a Time Traveller would only have about a 1 in ${fmt(Math.round(1 / (TT.N * p)))} shot.`;
+  // The smallest rank whose shift would statistically get there, with the shift time from its card.
+  const r = rankReach(p), Who = r.who[0].toUpperCase() + r.who.slice(1);
+  const ranks = r.odds ? `Even ${r.who} (${r.shift}) would only have about a 1 in ${r.odds} shot.`
+    : `${Who} (${r.shift}) would statistically land ${need}/52 ${r.times}.`;
   const how = lud < 600 ? `Ludicrous autopilot should find one in ${soon(lud)}.`
     : `Free Ludicrous autopilot: ${fmtDuration(lud)}. ${ranks} <a class="go-sponsor" href="#impatient">🛰️ See the missions <span class="gs-arrow" aria-hidden="true">↓</span></a>`;
   return `<p class="nudge">To climb${above ? ` past ${escapeHtml(above.name)} (${above.best}/52)` : ''}, you need <b>${need}/52</b>: about 1 in ${fmt(Math.round(shuffles))} shuffles. ${how}</p>`;
