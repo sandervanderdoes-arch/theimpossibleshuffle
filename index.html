@@ -1049,7 +1049,7 @@
       <p id="merchSponsor" class="imp-merch mt-3" hidden>👕 Rather wear the mission than fund it? <a id="merchSponsorLink" target="_blank" rel="noopener">Visit the mission merch shop ↗</a></p>
       <div id="ttCard" class="mt-6" hidden></div>
       <p id="impClosed" class="mt-4 text-sm text-[#ffe68a]" hidden></p>
-      <p class="mt-4 text-xs text-[#9fb5a8]">*Captain to Commander: estimate for this device. Your station runs in this browser while the tab is open (on phones, while it's on screen); stand down anytime and it picks up where it left off on your next visit. A Time Traveller runs on our eight GPUs in the cloud instead: nothing runs on your computer, and you can close the tab. Your rank and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
+      <p class="mt-4 text-xs text-[#9fb5a8]">*Your computer's time is an estimate for this device. Your station runs in this browser while the tab is open (on phones, while it's on screen); stand down anytime and it picks up where it left off on your next visit. A Time Traveller runs on our eight GPUs in the cloud instead: nothing runs on your computer, and you can close the tab. Your rank and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
 
       <div id="hyperBox" class="hyper-box mt-6" hidden>
         <div class="flex items-center justify-between gap-2 flex-wrap">
@@ -4047,7 +4047,7 @@ function renderImpatient() {
       <p class="imp-years"><span class="n">${fmt(t.years)} years</span><span class="of">of shuffling</span></p>
       <p class="imp-story">${t.story}</p>
       <div class="imp-stats">
-        <p>🛰️ Station shift: <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, <i style="font-style:normal" data-like="${N}">${shiftLike(N / hyperRateGuess())}</i><br><span>Free Ludicrous autopilot: ${shortDuration(N / LUDICROUS_RATE)}</span></p>
+        <p>🛰️ Your computer shuffles all ${fmt(t.years)} years in <b data-eta="${N}">${shortDuration(N / hyperRateGuess())}</b>*, <i style="font-style:normal" data-like="${N}">${shiftLike(N / hyperRateGuess())}</i>.<br><span>Free Ludicrous autopilot would need ${shortDuration(N / LUDICROUS_RATE)}.</span></p>
         <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
         <p class="imp-impact" data-impact="${N}">${impactHTML(N)}</p>
       </div>
