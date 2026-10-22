@@ -4253,6 +4253,11 @@ function tfFold(fold) {
   $('#tfToggle').textContent = fold ? `🔥 Your test-fire: ${fmt(store.tf ? store.tf.n : TF.n)} shuffles · details ▾` : 'Hide details ▴';
   $('#tfToggle').setAttribute('aria-expanded', String(!fold));
 }
+/** Scrolls to "Support the mission: pick your rank." so the heading and all three cards are in view. */
+function goTiers() {
+  const target = $('#impTiers').children.length ? $('#impPick') : $('#impatient');   // mission over: no cards, show the notice
+  target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+}
 function tfStart() {
   if (TF.on || HYPER.running || winOpen || !tfReady()) return;
   if (!PF.ready) { setTimeout(tfStart, 300); return; }
@@ -4759,16 +4764,17 @@ function initImpatient() {
     if (HYPER.doneTitle) { HYPER.doneTitle = false; document.title = BASE_TITLE; }
     if (HYPER.running) hyperUI();                // catch the screen up at once
   });
-  $('#apSponsor').addEventListener('click', e => {
-    e.preventDefault(); track('autopilot-sponsor-link');
-    $('#impatient').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  // Every "sponsor" link lands on "pick your rank" with the three cards in view, whatever the test-fire box looks like.
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href="#impatient"]');
+    if (!a || $('#impatient').hidden) return;
+    e.preventDefault();
+    if (a.id === 'apSponsor') track('autopilot-sponsor-link');
+    goTiers();
   });
   $('#tfGo').addEventListener('click', tfStart);
   $('#tfToggle').addEventListener('click', () => { TF.touched = true; tfFold(!$('#tfBox').classList.contains('folded')); });
-  $('#tfCta').addEventListener('click', e => {
-    e.preventDefault(); track('testfire-cta');
-    $('#impPick').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });   // heading + all three cards in view
-  });
+  $('#tfCta').addEventListener('click', e => { e.preventDefault(); track('testfire-cta'); goTiers(); });
   tfRender();
   $('#hyperChip').addEventListener('click', () => $('#hyperBox').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' }));
   if ('IntersectionObserver' in window) new IntersectionObserver(es => { HYPER.boxVisible = es[0].isIntersecting; renderHyper(); }).observe($('#hyperBox'));
