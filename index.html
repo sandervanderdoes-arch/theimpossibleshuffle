@@ -141,7 +141,9 @@
   a.go-sponsor:hover, a.go-sponsor:focus-visible { background:rgba(255,210,63,.22); color:#fff; box-shadow:0 0 18px rgba(255,210,63,.4); }
   a.go-sponsor .gs-arrow { display:inline-block; color:#ffd23f; transition:transform .15s ease; }
   a.go-sponsor:hover .gs-arrow { transform:translateY(2px); }
-  .next-goal a.go-sponsor { padding:.12rem .55rem; font-size:.76rem; }
+  .next-goal .ng-hint { display:block; margin-top:.15rem; font-size:.76rem; color:#9fb5a8; }
+  .next-goal .ng-hint a { color:#ffe68a; text-decoration:underline dotted; text-underline-offset:3px; }
+  .next-goal .ng-hint a:hover { color:#fff3c4; text-decoration-style:solid; }
   a.go-sponsor.ap-sponsor { display:block; width:100%; margin-top:.55rem; padding:.4rem .6rem; border-radius:12px; white-space:normal; text-align:center; text-wrap:balance; }
   .ap-sponsor[hidden] { display:none; }
   @keyframes glow { 50% { box-shadow: 0 0 0 2px #ffd9f7, 0 0 32px rgba(255,47,214,.95), 0 0 80px rgba(255,47,214,.5), inset 0 -4px 0 rgba(0,0,0,.25); } }
@@ -2457,7 +2459,10 @@ function updateNextGoal() {
   const el2 = $('#nextGoal');
   if (!store.allTime) { el2.hidden = true; return; }
   const goal = Math.min(52, bestEver() + 1), n = 1 / tailP(goal);
-  const hint = goal >= 52 ? '' : n > 5e7 ? ' <a class="go-sponsor" href="#impatient">🛰️ a station helps</a>' : n > 20000 && autopilot.mode !== 'L' ? ' · try Autopilot' : '';
+  // Hard goals get a quiet second line: what free autopilot would need, next to a station (same estimate as the tier cards).
+  const st = n / hyperRateGuess(), stTime = st < 15 ? 'seconds' : fmtDuration(st).replace('about ', '');
+  const hint = goal >= 52 ? '' : n > 5e7 ? `<span class="ng-hint">Free autopilot: ${fmtDuration(n / LUDICROUS_RATE).replace('about ', '')} · <a href="#impatient">a station: ${stTime} →</a></span>`
+    : n > 20000 && autopilot.mode !== 'L' ? ' · try Autopilot' : '';
   const html = `🎯 Next goal: <b>${goal}/52</b> · about 1 in ${shortOdds(goal)} shuffles${hint}`;
   if (html !== lastGoal) { el2.innerHTML = html; lastGoal = html; }
   el2.hidden = false;
