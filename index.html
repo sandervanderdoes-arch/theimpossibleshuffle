@@ -939,10 +939,10 @@
           <p id="etaSub" class="text-xs text-[#9fb5a8] mt-1"></p>
 
           <h3 class="text-xs font-bold text-[#9fb5a8] mt-5 mb-1">🏅 YOUR TOP 5 SHUFFLES</h3>
-          <p class="text-xs text-[#9fb5a8] mb-2">Attempt = which of your shuffles it was. By hand = how long that many shuffles take at 20 seconds each. Tap a deck to see all 52 cards.</p>
+          <p class="text-xs text-[#9fb5a8] mb-2">Attempt = which of your shuffles it was. By hand = how long someone shuffling by hand (20 seconds a shuffle) typically needs for a result this good. Tap a deck to see all 52 cards.</p>
           <div class="top-wrap">
             <table class="top5">
-              <thead><tr><th scope="col"><span class="sr-only">Rank</span></th><th scope="col">Matched</th><th scope="col">Attempt</th><th scope="col"><span class="tip" tabindex="0" data-tip="The chance of at least this many matches in a single shuffle.">Chance ⓘ</span></th><th scope="col">By hand</th></tr></thead>
+              <thead><tr><th scope="col"><span class="sr-only">Rank</span></th><th scope="col">Matched</th><th scope="col">Attempt</th><th scope="col"><span class="tip" tabindex="0" data-tip="The chance of at least this many matches in a single shuffle.">Chance ⓘ</span></th><th scope="col"><span class="tip" tabindex="0" data-tip="How long it typically takes to get at least this many matches, shuffling by hand at 20 seconds a shuffle.">By hand ⓘ</span></th></tr></thead>
               <tbody id="topBody"></tbody>
             </table>
           </div>
@@ -2258,7 +2258,7 @@ function renderTop() {
   el.topBody.innerHTML = t.map((e, i) => {
     const deck = Uint8Array.from(e.deck.map(code => CODES.indexOf(code))), n = Math.max(1, e.attempt || 1), cls = i === 0 ? ' first' : '';
     const day = new Date(e.ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    return `<tr class="r${cls}"><td class="rk">${['🥇', '🥈', '🥉', '4', '5'][i]}</td><td class="m">${e.matches}/52${validRec(e.pf) ? ` <button type="button" class="pf-tick" data-verify='${recAttr(e.pf)}' title="Provably fair: replay this shuffle" aria-label="Replay your number ${i + 1} shuffle">✓</button>` : ''}</td><td>#${fmt(n)}<span class="sub">${day}</span></td><td>1 in ${fmt(Math.round(1 / tailP(e.matches)))}</td><td>${handTime(n)}</td></tr>`
+    return `<tr class="r${cls}"><td class="rk">${['🥇', '🥈', '🥉', '4', '5'][i]}</td><td class="m">${e.matches}/52${validRec(e.pf) ? ` <button type="button" class="pf-tick" data-verify='${recAttr(e.pf)}' title="Provably fair: replay this shuffle" aria-label="Replay your number ${i + 1} shuffle">✓</button>` : ''}</td><td>#${fmt(n)}<span class="sub">${day}</span></td><td>1 in ${fmt(Math.round(1 / tailP(e.matches)))}</td><td>${handTime(1 / tailP(e.matches))}</td></tr>`
       + `<tr class="d${cls}"><td></td><td colspan="4"><button type="button" class="dk" aria-expanded="false" data-full="${deckFull(deck)}" data-short="${deckShort(deck)}" aria-label="Deck of your number ${i + 1} shuffle, show all 52 cards">${deckShort(deck)}</button></td></tr>`;
   }).join('');
 }
