@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+# Source files and notes, not pages
+Disallow: /supabase/
+Disallow: /time-traveller/
+Disallow: /README.md
+Disallow: /merch/README.md
+Disallow: /tailwind.config.js
+Disallow: /tw-input.css
+
+Sitemap: https://theimpossibleshuffle.com/sitemap.xml

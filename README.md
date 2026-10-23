@@ -12,6 +12,20 @@ Live at **https://theimpossibleshuffle.com**
 
 Served by GitHub Pages from the `main` branch root. `CNAME` holds the custom domain and `.nojekyll` skips Jekyll processing.
 
+### Styles (Tailwind)
+
+The Tailwind utilities are prebuilt into `tw.css` (about 14 KB) instead of being generated in the browser by the Tailwind CDN script (about 260 KB of JavaScript), which makes the page load much faster. **After adding or changing Tailwind classes in `index.html`, rebuild it:**
+
+```
+npx tailwindcss@3.4.17 -c tailwind.config.js -i tw-input.css -o tw.css --minify
+```
+
+### Search engines
+
+- `<title>`, meta description, Open Graph/Twitter tags and JSON-LD structured data (`WebSite` + `WebApplication`) live in the `<head>` of `index.html`.
+- `robots.txt` allows the site and keeps source folders out; `sitemap.xml` lists the home page. The brag pages under `b/` are `noindex` (they exist for share previews).
+- After a big change, submit `https://theimpossibleshuffle.com/sitemap.xml` in Google Search Console (and Bing Webmaster Tools).
+
 ## Mission sponsors ("Become a Mission Sponsor")
 
 - The unit is the hand-shuffle year: a proper hand shuffle takes about 20 seconds (seven riffles, Bayer & Diaconis 1992), so one year of nonstop hand shuffling is 1,577,880 shuffles.
