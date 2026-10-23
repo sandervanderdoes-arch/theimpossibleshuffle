@@ -462,48 +462,6 @@
   .imp-deal { margin-top:auto; align-self:center; margin-bottom:.45rem; font:800 .7rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.04em; color:#ffe68a; }
   .imp-buy { text-align:center; text-decoration:none; font-size:1rem !important; }
   .imp-why { margin-top:.45rem; text-align:center; font-size:.72rem; color:#9fb5a8; font-style:italic; }
-  .tf-box { border-radius:16px; border:1px solid rgba(255,120,60,.5); background:rgba(40,12,0,.35); padding:.9rem 1rem; box-shadow:0 0 22px rgba(255,120,60,.12); }
-  .tf-head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.7rem 1rem; }
-  .tf-title { font:800 1rem "JetBrains Mono", ui-monospace, monospace; color:#ffb48a; }
-  .tf-sub { font-size:.85rem; color:#cfe3d7; margin-top:.15rem; }
-  .tf-go { width:auto; min-height:48px; padding:.6rem 1.2rem; font-size:.95rem; }
-  .tf-go:disabled { opacity:.6; cursor:default; filter:saturate(.4); }
-  .tf-live { margin-top:.8rem; }
-  .tf-count b { font:800 clamp(1.6rem, 6vw, 2.4rem)/1.1 "JetBrains Mono", ui-monospace, monospace; color:#fff; text-shadow:0 0 14px rgba(255,140,80,.6); }
-  .tf-count span { font-size:.85rem; color:#cfe3d7; }
-  #tfFill { height:100%; width:0; background:linear-gradient(90deg, #ff7a3c, #ffd23f); }
-  .tf-result { margin-top:.8rem; font-size:.9rem; line-height:1.5; color:#cfe3d7; }
-  .tf-result b { color:#ffe68a; }
-  .tf-box.folded { border:0; background:none; box-shadow:none; padding:0; }
-  .tf-box.folded .tf-head, .tf-box.folded #tfLive, .tf-box.folded #tfResult { display:none; }
-  .tf-box.folded .tf-cta { margin-top:0; }
-  .tf-cta { display:block; margin-top:.9rem; padding:.7rem 1rem .6rem; border-radius:14px; border:1px solid rgba(255,210,63,.6); background:rgba(255,210,63,.07); box-shadow:0 0 22px rgba(255,210,63,.16); color:#cfe3d7; text-decoration:none; transition:box-shadow .15s ease, background .15s ease; }
-  .tf-cta[hidden] { display:none; }
-  .tf-cta:hover { background:rgba(255,210,63,.13); box-shadow:0 0 30px rgba(255,210,63,.3); }
-  .tf-cta-head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.2rem 1rem; }
-  .tf-cta-head b { font:800 .98rem "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; text-shadow:0 0 10px rgba(255,210,63,.4); }
-  .tf-cta-go { display:inline-flex; align-items:center; gap:.35rem; font-weight:800; font-size:.88rem; color:#fff; white-space:nowrap; }
-  .tf-bars { display:grid; gap:.3rem; margin-top:.55rem; }
-  .tf-row { display:grid; grid-template-columns:11.5rem minmax(0, 1fr) 6.5rem; align-items:center; gap:.7rem; font-size:.8rem; }
-  .tf-lbl { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .tf-bar { height:10px; border-radius:999px; background:rgba(0,0,0,.5); border:1px solid rgba(255,210,63,.25); overflow:hidden; }
-  .tf-bar i { display:block; height:100%; width:0; min-width:3px; border-radius:999px; background:linear-gradient(90deg, #ff7a3c, #ffd23f); }
-  .tf-row.cap .tf-bar i { background:linear-gradient(90deg, #ffd23f, #fff1a8); box-shadow:0 0 10px rgba(255,210,63,.5); }
-  .tf-cta.show .tf-row.cap .tf-bar i { width:100%; transition:width 1.6s cubic-bezier(.2,.8,.2,1) .2s; }
-  .tf-num { font:800 .8rem "JetBrains Mono", ui-monospace, monospace; color:#fff; text-align:right; white-space:nowrap; }
-  .tf-cta-foot { display:block; margin-top:.45rem; font-size:.72rem; color:#9fb5a8; }
-  @media (max-width: 639px) {
-    .tf-cta-head b { font-size:.9rem; }
-    .tf-row { grid-template-columns:minmax(0, 1fr) auto; grid-template-areas:"lbl num" "bar bar"; gap:.15rem .5rem; }
-    .tf-row .tf-lbl { grid-area:lbl; } .tf-row .tf-num { grid-area:num; } .tf-row .tf-bar { grid-area:bar; }
-    .tf-bars { gap:.45rem; }
-    .tf-shift { display:none; }
-  }
-  @media (prefers-reduced-motion: reduce) { .tf-cta.show .tf-row.cap .tf-bar i { transition:none; } }
-  .tf-arrow { display:inline-block; font-size:1.25rem; color:#ffd23f; animation:tfBounce 1.2s ease-in-out infinite; }
-  @keyframes tfBounce { 0%, 100% { transform:translateY(-2px); } 50% { transform:translateY(4px); } }
-  @media (prefers-reduced-motion: reduce) { .tf-arrow { animation:none; } }
-  @media (max-width: 639px) { .tf-go { width:100%; } }
   .hyper-box { border-radius:16px; border:1px solid rgba(34,243,255,.45); background:rgba(0,20,26,.55); padding:1rem; }
   .hyper-box.running { box-shadow:0 0 26px rgba(34,243,255,.28); }
   .hyper-bar { height:14px; border-radius:999px; background:rgba(0,0,0,.55); border:1px solid rgba(34,243,255,.4); overflow:hidden; }
@@ -1041,29 +999,6 @@
       <h2 id="impTitle" class="font-display text-lg sm:text-2xl neon-gold">🎖️ Become a Mission Sponsor</h2>
       <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">By hand, humanity needs about <b class="text-[#ffe68a]">51 novemdecillion years</b>. Mission Control can't do that alone: sponsor a stretch and your computer becomes an official <b class="text-[#a5fbff]">Mission Control station</b> that shuffles thousands of years' worth for humanity while you get on with your life. The Professor calls it cheating. We call it volunteering.</p>
       <p id="impProof" class="imp-proof mt-3" hidden></p>
-      <div id="tfBox" class="tf-box mt-4">
-        <div class="tf-head">
-          <div class="min-w-0">
-            <p class="tf-title">🔥 Test-fire a station</p>
-            <p class="tf-sub">Ten seconds at full station power. One free try per browser, and every shuffle counts for humanity.</p>
-          </div>
-          <button type="button" id="tfGo" class="shuffle-btn tf-go">🔥 Test-fire · one free try</button>
-        </div>
-        <div id="tfLive" class="tf-live" hidden aria-live="off">
-          <p class="tf-count"><b id="tfCount">0</b> <span>real shuffles</span></p>
-          <div class="hyper-bar mt-2" aria-hidden="true"><div id="tfFill"></div></div>
-          <p id="tfRate" class="mono text-xs text-[#9fb5a8] mt-1"></p>
-        </div>
-        <p id="tfResult" class="tf-result" hidden aria-live="polite"></p>
-        <a id="tfCta" class="tf-cta" href="#impPick" hidden>
-          <span class="tf-cta-head"><b id="tfX">🚀 Liked that? Picture it bigger.</b><span class="tf-cta-go">Choose your rank <span class="tf-arrow" aria-hidden="true">↓</span></span></span>
-          <span class="tf-bars">
-            <span class="tf-row"><span class="tf-lbl">🔥 Your 10 seconds</span><span class="tf-bar"><i id="tfBarMe"></i></span><span id="tfNumMe" class="tf-num"></span></span>
-            <span class="tf-row cap"><span class="tf-lbl">★★ A Captain's station</span><span class="tf-bar"><i></i></span><span id="tfNumCap" class="tf-num"></span></span>
-          </span>
-          <span id="tfFoot" class="tf-cta-foot"></span>
-        </a>
-      </div>
       <p id="impPick" class="imp-pick mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Support the mission: pick your rank.</p>
       <div id="impTiers" class="imp-tiers mt-3"></div>
       <p class="imp-pay mt-3">🔒 Secure checkout by Stripe · Apple Pay · Google Pay · all major cards</p>
@@ -1667,7 +1602,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, tfAt: 0, tf: null };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0 };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1691,8 +1626,7 @@ const store = (() => {
       lb: p.lb && /^[0-9a-f-]{36}$/.test(p.lb.id) && /^[0-9a-f]{32,64}$/.test(p.lb.secret) ? { id: p.lb.id, secret: p.lb.secret, name: str(p.lb.name).slice(0, 20), sub: n(p.lb.sub) } : null,
       cardBack: str(p.cardBack) || 'classic', outfit: str(p.outfit) || 'classic', certId: str(p.certId), wallSubmitted: p.wallSubmitted === true, profMs: n(p.profMs),
       hid: /^[0-9a-f-]{36}$/.test(p.hid) ? p.hid : '', rcode: /^[a-z0-9]{8,16}$/.test(p.rcode) ? p.rcode : '', rby: /^[a-z0-9]{8,16}$/.test(p.rby) ? p.rby : '',
-      joined: p.joined === true, rtitle: n(p.rtitle), acesBest: n(p.acesBest), runBest: n(p.runBest), tfAt: n(p.tfAt),
-      tf: p.tf && typeof p.tf === 'object' ? { n: n(p.tf.n), best: n(p.tf.best), secs: n(p.tf.secs) } : null
+      joined: p.joined === true, rtitle: n(p.rtitle), acesBest: n(p.acesBest), runBest: n(p.runBest)
     };
   } catch (e) { return def; }
 })();
@@ -4052,7 +3986,6 @@ function renderImpatient() {
     $('#impTiers').innerHTML = '';
     renderTTCard();
     $('#impClosed').hidden = false;
-    $('#tfBox').hidden = true;
     $('#impClosed').textContent = `🏁 The mission is accomplished, so sponsorships are closed forever. Stations with years left can still finish their shift, for old times' sake.`;
     $('#impatient').hidden = false;
     $('#apSponsor').hidden = true;
@@ -4192,7 +4125,6 @@ function hyperNotifyDone(text) {
   try { if ('Notification' in window && Notification.permission === 'granted') new Notification('🎖️ Assignment complete', { body: text, icon: 'icon-192.png', tag: 'tis-station' }); } catch (e) { /* not on this browser */ }
 }
 function hyperStart() {
-  if (TF.on) { toast('🔥 A test-fire is running. Your station takes over in a few seconds.'); return; }
   if (HYPER.running || winOpen || hyperLeft() <= 0) return;
   if (!PF.ready) { setTimeout(hyperStart, 300); return; }   // the seat is a few milliseconds away
   if (!hyperEnsureWorkers()) { toast('🛰️ Your station needs a browser with Web Workers. Your years are saved.'); return; }
@@ -4222,20 +4154,17 @@ function hyperAssign(w) {
   w.postMessage({ n, R: Array.from(w.job.b.Rw), S: Array.from(PF.S), start: w.job.start });
 }
 function hyperResult(w, r) {
-  const test = w.test; w.test = false;          // a free test-fire chunk: counts for humanity, not against your paid years
-  if (!test) HYPER.assigned -= w.busy;
-  w.busy = 0;
+  HYPER.assigned -= w.busy; w.busy = 0;
   // Same bookkeeping as record(), in bulk.
   session.attempts += r.n; session.sum += r.sum;
   for (let i = 0; i < 6; i++) session.dist[i] += r.dist[i];
   if (!session.firstAt) session.firstAt = performance.now();
-  store.allTime += r.n; live.pending += r.n;
-  if (test) TF.n += r.n; else store.hyper.done += r.n;
+  store.allTime += r.n; live.pending += r.n; store.hyper.done += r.n;
   hyperTitle();
   noteRate(r.n);
   if (r.best > session.best) session.best = r.best;
   if (r.best > session.fairBest) session.fairBest = r.best;
-  if (test) { if (r.best > TF.best) TF.best = r.best; } else if (r.best > store.hyper.best) store.hyper.best = r.best;
+  if (r.best > store.hyper.best) store.hyper.best = r.best;
   if (r.zeroRun >= 5 && !store.badges.derangement) unlock('derangement');
   if (r.ones && !store.badges.average) unlock('average');
   if (store.allTime >= 1000 && !store.badges.committed) unlock('committed');
@@ -4251,12 +4180,11 @@ function hyperResult(w, r) {
   statsDirty = true;
   saveStore();
   if (r.win) {                                  // the end of mathematics as we know it
-    if (test) { TF.end = 0; tfAfter(w); } else hyperPause();
+    hyperPause();
     const res = { n: session.attempts, m: 52, deck: Uint8Array.from(r.win), ts: Date.now(), rigged: false, pf: pfRec(jb, r.winN) };
     reveal(res, false);
     return;
   }
-  if (test) { tfAfter(w); return; }
   if (hyperLeft() <= 0) { if (!HYPER.workers.some(x => x.busy)) hyperFinish(); return; }
   if (HYPER.running) hyperAssign(w);
   else if (!HYPER.workers.some(x => x.busy)) { clearInterval(HYPER.uiTimer); hyperUI(); }
@@ -4294,90 +4222,11 @@ function hyperUI() {
   HYPER.rate = rate;
   renderHyper();
 }
-/* ---------- Test-fire: ten free seconds of station power ----------
-   The same workers and the same provably fair recipe as a paid station. Every shuffle counts for
-   humanity and your stats, none come off paid years. One try per browser: a test drive, not a free station. */
-const TF_MS = 10000, TF_CHUNK = 50000;
-const TF = { on: false, end: 0, t0: 0, n: 0, best: 0, timer: 0 };
-const tfReady = () => !store.tf;   // no saved result (never fired, closed mid-fire, or fired on an older version): one try
-function tfRender() {
-  const b = $('#tfGo');
-  b.disabled = TF.on || !tfReady();
-  b.textContent = TF.on ? '🔥 Firing…' : tfReady() ? '🔥 Test-fire · one free try' : '✓ Test-fire complete';
-  if (!TF.on && !tfReady() && store.tf && $('#tfResult').hidden) tfShowResult(store.tf);   // the result stays, visit after visit
-}
-function tfShowResult(t) {
-  const rate = t.n / Math.max(1, t.secs), captain = tierById('odds').years * HAND_YEAR;
-  // The Captain line uses the very same speed estimate as the tier cards below, so the two times always match.
-  $('#tfResult').innerHTML = `💥 <b>Your test-fire: ${fmt(t.n)} real shuffles in ${Math.round(t.secs)} seconds</b>: ${handTime(t.n)} of nonstop hand shuffling, ${fmt(Math.round(rate / LUDICROUS_RATE))}× Ludicrous. Free autopilot would need ${shortDuration(t.n / LUDICROUS_RATE)} for that. Best match: ${t.best}/52. Every one of them counts for humanity.<br>A Captain's station keeps this up for <b>${shortDuration(captain / hyperRateGuess())}</b>: 10,000 years of shuffling.`;
-  $('#tfResult').hidden = false;
-  // The card it folds down to: your ten seconds next to a Captain's shift, bars to scale.
-  const x = captain / t.n;
-  $('#tfX').textContent = `🚀 Liked that? Picture it ${fmt(Math.round(x))}× bigger.`;
-  $('#tfNumMe').textContent = bigShort(t.n);
-  $('#tfNumCap').textContent = bigShort(captain);
-  $('#tfBarMe').style.width = (100 / x).toFixed(3) + '%';
-  $('#tfFoot').innerHTML = `Best match ${t.best}/52 · <span class="tf-shift">a Captain's shift: ${shortDuration(captain / hyperRateGuess())} on this device · </span>bars to scale (yours rounded up, out of kindness)`;
-  $('#tfCta').hidden = false;
-  requestAnimationFrame(() => requestAnimationFrame(() => $('#tfCta').classList.add('show')));   // the Captain bar sweeps across once
-  tfFold(true);
-}
-/** Folded: only the comparison card; the full result shows for a few seconds right after firing. */
-function tfFold(fold) { $('#tfBox').classList.toggle('folded', fold); }
 /** Scrolls to "Support the mission: pick your rank." so the heading and all three cards are in view. */
 function goTiers() {
   const target = $('#impTiers').children.length ? $('#impPick') : $('#impatient');   // mission over: no cards, show the notice
   target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
 }
-function tfStart() {
-  if (TF.on || HYPER.running || winOpen || !tfReady()) return;
-  if (!PF.ready) { setTimeout(tfStart, 300); return; }
-  if (!hyperEnsureWorkers()) { toast('🛰️ A station needs a browser with Web Workers.'); return; }
-  if (HYPER.workers.some(w => w.busy)) { setTimeout(tfStart, 300); return; }   // a station that just stood down finishes its chunk first
-  if (autopilot.mode) setAutopilot('0');
-  if (anim.active) finishAnimNow();
-  store.tfAt = Date.now(); saveStore(true);
-  Object.assign(TF, { on: true, t0: performance.now(), n: 0, best: 0 });
-  TF.end = TF.t0 + TF_MS;
-  HYPER.workers.forEach(tfAssign);
-  clearInterval(TF.timer); TF.timer = setInterval(tfUI, 100);
-  $('#tfLive').hidden = false; $('#tfResult').hidden = true;
-  setPose('autopilot', 'Test-firing a station. Ten seconds. Do not touch anything.');
-  track('testfire-start');
-  tfRender(); tfUI();
-}
-function tfAssign(w) {
-  if (!TF.on || performance.now() >= TF.end) return;
-  w.busy = TF_CHUNK; w.test = true; w.job = pfTake(TF_CHUNK);
-  w.postMessage({ n: TF_CHUNK, R: Array.from(w.job.b.Rw), S: Array.from(PF.S), start: w.job.start });
-}
-function tfAfter(w) {
-  if (TF.on && performance.now() < TF.end) tfAssign(w);
-  else if (!HYPER.workers.some(x => x.busy)) tfFinish();
-}
-function tfUI() {
-  const now = performance.now(), el = Math.min(TF_MS, now - TF.t0), rate = el > 300 ? TF.n / (el / 1000) : 0;
-  $('#tfCount').textContent = fmt(TF.n);
-  $('#tfFill').style.width = (el / TF_MS * 100).toFixed(1) + '%';
-  $('#tfRate').textContent = `${rate ? fmt(Math.round(rate)) + '/sec · ' : ''}${Math.max(0, Math.ceil((TF.end - now) / 1000))} s left`;
-}
-function tfFinish() {
-  if (!TF.on) return;
-  TF.on = false; clearInterval(TF.timer);
-  const secs = Math.max(1, (performance.now() - TF.t0) / 1000), rate = TF.n / secs;
-  tfUI(); $('#tfRate').textContent = `${fmt(Math.round(rate))} shuffles a second on this device`;
-  if (!store.hyper.rate && rate > 0) { store.hyper.rate = Math.round(rate); refreshEtas(); }   // tier estimates now use this device's real speed
-  store.tf = { n: TF.n, best: TF.best, secs };
-  saveStore(true);
-  tfShowResult(store.tf);
-  tfFold(false);                                // the result first, then the box folds down to the next step
-  setTimeout(() => tfFold(true), 4000);
-  setPose('autopilot', `${fmt(TF.n)} shuffles in ten seconds. Matches: 0. I have seen enough.`);
-  track('testfire-done');
-  sfx('land', 4);
-  tfRender();
-}
-
 /* ---------- Your station's trip through history ----------
    The years you sponsor end today, so a Captain (10,000 years) starts around 8000 BCE and
    shuffles its way to the present. Stops appear as the station reaches them.
@@ -4835,7 +4684,7 @@ function initImpatient() {
     if (HYPER.doneTitle) { HYPER.doneTitle = false; document.title = BASE_TITLE; }
     if (HYPER.running) hyperUI();                // catch the screen up at once
   });
-  // Every "sponsor" link lands on "pick your rank" with the three cards in view, whatever the test-fire box looks like.
+  // Every "sponsor" link lands on "pick your rank" with the three cards in view.
   document.addEventListener('click', e => {
     const a = e.target.closest('a[href="#impatient"]');
     if (!a || $('#impatient').hidden) return;
@@ -4848,9 +4697,6 @@ function initImpatient() {
     if (!LB.expanded) $('#lbSection').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });   // folding a long list: back to the board's top
     else track('lb-show-all');
   });
-  $('#tfGo').addEventListener('click', tfStart);
-  $('#tfCta').addEventListener('click', e => { e.preventDefault(); track('testfire-cta'); goTiers(); });
-  tfRender();
   $('#hyperChip').addEventListener('click', () => $('#hyperBox').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' }));
   if ('IntersectionObserver' in window) new IntersectionObserver(es => { HYPER.boxVisible = es[0].isIntersecting; renderHyper(); }).observe($('#hyperBox'));
   $('#myExtras').addEventListener('click', e => {
