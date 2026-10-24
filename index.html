@@ -450,6 +450,84 @@
   .next-goal b { color:#ffe68a; }
   .next-goal a { color:#a5fbff; text-decoration:underline; }
   .imp-pick { scroll-margin-top:1rem; }
+  /* Gift a station */
+  .gift-row { margin-top:.9rem; text-align:center; }
+  .gift-row[hidden], .gift-sent[hidden] { display:none; }
+  .gift-invite { display:inline-flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.3rem .45rem; padding:.55rem 1rem; border-radius:14px; border:1px dashed rgba(255,47,214,.6); background:rgba(255,47,214,.08); color:#ffd0f6; font-size:.9rem; cursor:pointer; transition:background .15s ease, box-shadow .15s ease; }
+  .gift-invite b { color:#fff; }
+  .gift-invite:hover { background:rgba(255,47,214,.16); box-shadow:0 0 18px rgba(255,47,214,.3); }
+  .gift-invite:hover .gs-arrow { transform:translateX(3px); }
+  .gift-invite .gs-arrow { display:inline-block; transition:transform .15s ease; color:#ff9bec; }
+  .gift-sent { margin-top:.6rem; text-align:center; font-size:.8rem; color:#9fb5a8; }
+  .gift-sent button { background:none; border:0; color:#ffe68a; text-decoration:underline; text-underline-offset:3px; cursor:pointer; font-size:.8rem; padding:.2rem .3rem; }
+  #giftDlg { margin:auto; background:#04140d; color:var(--ink); border:1px solid var(--pink); border-radius:20px; padding:1.3rem 1.2rem 1.1rem; width:min(30rem, calc(100vw - 1.5rem)); max-height:calc(100dvh - 1.5rem); box-shadow:0 0 30px rgba(255,47,214,.35); }
+  #giftDlg::backdrop { background:rgba(0,0,0,.75); }
+  .gift-x { position:absolute; top:.6rem; right:.6rem; width:40px; height:40px; border-radius:50%; border:1px solid rgba(255,255,255,.2); background:rgba(0,0,0,.4); color:#cfe3d7; font-size:1rem; cursor:pointer; z-index:3; }
+  .gift-eyebrow { font:800 .72rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.14em; color:#ff9bec; }
+  .gift-h3 { margin-top:.3rem; font-family:Bungee, Impact, system-ui, sans-serif; font-size:1.35rem; color:#ffe68a; }
+  .gift-lead { margin-top:.4rem; font-size:.9rem; line-height:1.45; color:#cfe3d7; }
+  .gift-lead b { color:#fff; }
+  .gift-ranks { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:.5rem; margin:.9rem 0 .7rem; }
+  .gift-ranks button { padding:.55rem .3rem; border-radius:12px; border:1px solid rgba(255,210,63,.35); background:rgba(0,0,0,.35); color:#cfe3d7; font-size:.78rem; line-height:1.3; cursor:pointer; }
+  .gift-ranks button b { display:block; font:800 .85rem "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; }
+  .gift-ranks button[aria-checked="true"] { border:2px solid var(--gold); background:rgba(255,210,63,.14); color:#fff; box-shadow:0 0 14px rgba(255,210,63,.3); }
+  .gift-field { display:block; margin-top:.55rem; font-size:.78rem; font-weight:700; color:#9fb5a8; }
+  .gift-field span { font-weight:400; }
+  .gift-field .imp-input { display:block; width:100%; margin-top:.2rem; font-weight:400; resize:none; font-family:inherit; }
+  .gift-go { margin-top:.9rem; width:100%; }
+  .gift-go:disabled { opacity:.5; cursor:default; filter:saturate(.4); }
+  .gift-small { margin-top:.6rem; font-size:.74rem; line-height:1.45; color:#9fb5a8; }
+  .gift-small a, .gift-keep { color:#ffe68a; text-decoration:underline; text-underline-offset:3px; background:none; border:0; padding:0; font-size:inherit; cursor:pointer; }
+  .gift-link { display:flex; gap:.4rem; margin-top:.8rem; }
+  .gift-link .imp-input { flex:1; font-size:.75rem; }
+  .gift-share { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.6rem; }
+  .gift-ov { position:fixed; inset:0; z-index:90; background:radial-gradient(ellipse 80% 60% at 50% 30%, rgba(255,47,214,.2), transparent 70%), radial-gradient(ellipse 120% 80% at 50% 0%, #0c3321, #020805 70%); }
+  .gift-ov[hidden] { display:none; }
+  .gift-scroll { position:absolute; inset:0; overflow-y:auto; display:flex; padding:1rem; }
+  .gift-stage { position:relative; margin:auto; width:min(34rem, 100%); text-align:center; padding:2.4rem 1rem 1.5rem; }
+  .gift-ov .gift-x { position:fixed; top:calc(.75rem + env(safe-area-inset-top, 0px)); right:calc(.75rem + env(safe-area-inset-right, 0px)); }
+  .gift-preview { margin:0 auto 1rem; max-width:26rem; padding:.45rem .8rem; border-radius:10px; border:1px solid rgba(34,243,255,.5); background:rgba(34,243,255,.08); color:#bffcff; font-size:.8rem; }
+  .gift-h2 { margin-top:.5rem; font-family:Bungee, Impact, system-ui, sans-serif; font-size:clamp(1.7rem, 7vw, 2.6rem); line-height:1.1; color:#ff8bec; text-shadow:0 0 10px #ff2fd6, 0 0 30px rgba(255,47,214,.5); text-wrap:balance; }
+  .gift-from { margin-top:.6rem; color:#cfe3d7; }
+  .gift-from b { color:#ffe68a; }
+  .gift-box { position:relative; display:block; width:150px; height:140px; margin:1.8rem auto 1.2rem; background:none; border:0; padding:0; cursor:pointer; animation:giftIdle 2.6s ease-in-out infinite; }
+  .gb-body { position:absolute; left:10px; right:10px; bottom:0; height:92px; border-radius:8px; background:linear-gradient(90deg, transparent 43%, #ffd23f 43% 57%, transparent 57%), linear-gradient(135deg, #ff2fd6, #8a5bff); box-shadow:0 0 30px rgba(255,47,214,.5), inset 0 -10px 0 rgba(0,0,0,.18); }
+  .gb-lid { position:absolute; left:0; right:0; top:22px; height:30px; border-radius:7px; background:linear-gradient(90deg, transparent 43%, #ffd23f 43% 57%, transparent 57%), linear-gradient(135deg, #ff5ce0, #9d73ff); box-shadow:0 4px 0 rgba(0,0,0,.2); transform-origin:20% 100%; z-index:2; }
+  .gb-bow { position:absolute; left:50%; top:-26px; width:56px; height:30px; margin-left:-28px; }
+  .gb-bow::before, .gb-bow::after { content:""; position:absolute; top:4px; width:26px; height:22px; border:6px solid #ffd23f; border-radius:50% 50% 10% 50%; }
+  .gb-bow::before { left:0; transform:rotate(-20deg); } .gb-bow::after { right:0; transform:rotate(20deg) scaleX(-1); }
+  .gift-box.shake { animation:giftShake .55s ease-in-out; }
+  .gift-box.open .gb-lid { transition:transform .6s cubic-bezier(.2,.8,.2,1), opacity .6s ease .2s; transform:translate(30px, -160px) rotate(-35deg); opacity:0; }
+  .gift-box.open .gb-body { transition:opacity .5s ease .25s, transform .5s ease .25s; opacity:0; transform:scale(.85); }
+  .gift-open { width:auto; padding:.75rem 1.8rem; }
+  @keyframes giftIdle { 0%, 82%, 100% { transform:rotate(0); } 86% { transform:rotate(-6deg); } 90% { transform:rotate(6deg); } 94% { transform:rotate(-3deg); } }
+  @keyframes giftShake { 0%, 100% { transform:translateX(0) rotate(0); } 20% { transform:translateX(-8px) rotate(-5deg); } 40% { transform:translateX(8px) rotate(5deg); } 60% { transform:translateX(-6px) rotate(-3deg); } 80% { transform:translateX(5px) rotate(2deg); } }
+  .gift-burst { position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:91; }
+  .gift-burst span { position:absolute; left:50%; top:42%; font:800 14px "JetBrains Mono", ui-monospace, monospace; animation:giftFly 1.6s cubic-bezier(.15,.7,.3,1) forwards; }
+  .gift-burst .gcard { width:26px; height:36px; margin:-18px 0 0 -13px; border-radius:4px; background:#fffdf5; border:1px solid rgba(0,0,0,.3); display:flex; align-items:center; justify-content:center; color:#121212; }
+  .gift-burst .gcard.red { color:#d20f3c; }
+  .gift-burst .gconf { width:9px; height:6px; margin:-3px 0 0 -4px; border-radius:2px; }
+  @keyframes giftFly { 0% { transform:translate(0, 0) rotate(0); opacity:1; } 70% { opacity:1; } 100% { transform:translate(var(--dx), var(--dy)) rotate(var(--r)); opacity:0; } }
+  .gift-cert { position:relative; margin-top:.4rem; padding:1.5rem 1.2rem 1.2rem; border-radius:20px; border:2px solid var(--gold); background:linear-gradient(170deg, rgba(255,210,63,.12), rgba(4,20,13,.95) 45%); box-shadow:0 0 40px rgba(255,210,63,.3), inset 0 0 0 6px rgba(255,210,63,.08); text-align:center; animation:giftPop .6s cubic-bezier(.2,1.4,.4,1); }
+  .gift-cert[hidden] { display:none; }
+  @keyframes giftPop { from { transform:scale(.8) translateY(20px); opacity:0; } to { transform:none; opacity:1; } }
+  .gc-eyebrow { font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.14em; color:#ffe68a; }
+  .gc-to { margin-top:.8rem; font-size:1.05rem; color:#cfe3d7; }
+  .gc-to b, .gc-main b { color:#fff; }
+  .gc-main { margin-top:.4rem; font-size:1.15rem; line-height:1.45; color:#e6f2ea; text-wrap:balance; }
+  .gc-years { display:block; margin:.3rem 0; font-family:Bungee, Impact, system-ui, sans-serif; font-size:clamp(2rem, 9vw, 2.8rem); color:#ffe68a; text-shadow:0 0 14px rgba(255,210,63,.5); }
+  .gc-story { margin-top:.2rem; font-style:italic; color:#cfe3d7; }
+  .gc-msg { margin:1rem auto 0; max-width:24rem; padding:.7rem 1rem; border-radius:14px; background:#fffbea; color:#1d1606; font-weight:700; line-height:1.4; box-shadow:0 0 0 3px #ffd23f; }
+  .gc-msg cite { display:block; margin-top:.3rem; font-style:normal; font-weight:400; font-size:.85rem; color:#5c4a1a; }
+  .gc-rank { display:inline-block; margin-top:1rem; padding:.35rem .9rem; border-radius:999px; background:rgba(255,47,214,.14); border:1px solid rgba(255,47,214,.6); color:#ffd0f6; font-size:.85rem; }
+  .gc-rank b { color:#fff; font-family:"JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; }
+  .gc-stats { list-style:none; margin:1rem 0 0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:.4rem; font-size:.82rem; color:#cfe3d7; text-align:left; }
+  .gc-stats li { padding:.45rem .6rem; border-radius:10px; background:rgba(0,0,0,.35); }
+  .gc-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem; margin-top:1.1rem; }
+  .gc-start { width:100%; }
+  .gc-prof { margin-top:.9rem; font-size:.78rem; font-style:italic; color:#9fb5a8; }
+  @media (max-width: 420px) { .gc-stats { grid-template-columns:1fr; } }
+  @media (prefers-reduced-motion: reduce) { .gift-box, .gift-box.shake { animation:none; } .gift-cert { animation:none; } .gift-box.open .gb-lid, .gift-box.open .gb-body { transition:none; } }
   @media (min-width: 1024px) and (max-height: 900px) {     /* laptop screens: heading and all three cards fit in one view */
     .imp-card { padding:1.15rem 1rem .85rem; }
     .imp-years .n { font-size:min(1.7rem, 11cqi); }
@@ -1001,6 +1079,8 @@
       <p id="impProof" class="imp-proof mt-3" hidden></p>
       <p id="impPick" class="imp-pick mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Support the mission: pick your rank.</p>
       <div id="impTiers" class="imp-tiers mt-3"></div>
+      <p id="giftRow" class="gift-row" hidden><button type="button" id="giftOpenDlg" class="gift-invite">🎁 Know someone who deserves 10,000 years of futility? <b>Give a rank as a gift</b> <span class="gs-arrow" aria-hidden="true">→</span></button></p>
+      <div id="giftSent" class="gift-sent" hidden></div>
       <p class="imp-pay mt-3">🔒 Secure checkout by Stripe · Apple Pay · Google Pay · all major cards</p>
       <p id="merchSponsor" class="imp-merch mt-3" hidden>👕 Rather wear the mission than fund it? <a id="merchSponsorLink" target="_blank" rel="noopener">Visit the mission merch shop ↗</a></p>
       <div id="ttCard" class="mt-6" hidden></div>
@@ -1039,6 +1119,7 @@
       <div id="myExtras" class="imp-extras mt-6" hidden>
         <h3 class="font-display text-base neon-pink">Your sponsor extras <span class="sponsor-chip align-middle ml-1">★ MISSION SPONSOR</span></h3>
 
+        <div id="giftRxRow" class="mt-4" hidden><p class="text-xs font-bold text-[#9fb5a8]">GIFTS YOU RECEIVED</p><div id="giftRxList" class="mt-2 flex flex-wrap gap-2"></div></div>
         <div class="mt-4"><p class="text-xs font-bold text-[#9fb5a8]">CARD BACKS</p><div id="cbOptions" class="mt-2 flex flex-wrap gap-2"></div></div>
         <div id="outfitRow" class="mt-4" hidden><p class="text-xs font-bold text-[#9fb5a8]">PROFESSOR OUTFIT</p><div id="outfitOptions" class="mt-2 flex flex-wrap gap-2"></div></div>
 
@@ -1170,6 +1251,68 @@
     </div>
   </div>
 </dialog>
+
+<!-- ===================== GIFT A STATION ===================== -->
+<dialog id="giftDlg" aria-labelledby="giftTitle">
+  <button type="button" class="gift-x" id="giftClose" aria-label="Close">✕</button>
+  <div id="giftCompose">
+    <p class="gift-eyebrow">🎁 GIFT A STATION</p>
+    <h3 id="giftTitle" class="gift-h3">Shuffle for someone else</h3>
+    <p class="gift-lead">They get the years, the rank and every extra. You get the credit. Nobody gets a match.</p>
+    <div id="giftRanks" class="gift-ranks" role="radiogroup" aria-label="Rank to give"></div>
+    <label class="gift-field">For <input id="giftTo" class="imp-input" maxlength="30" placeholder="Their name" autocomplete="off"></label>
+    <label class="gift-field">From <input id="giftFrom" class="imp-input" maxlength="30" placeholder="Your name" autocomplete="given-name"></label>
+    <label class="gift-field">A message <span>(optional)</span> <textarea id="giftMsg" class="imp-input" maxlength="120" rows="2" placeholder="Happy birthday! Don't spend it all at once."></textarea></label>
+    <button type="button" id="giftGo" class="shuffle-btn gift-go" disabled>Continue to secure checkout</button>
+    <p id="giftWait" class="gift-small" hidden>✅ Checkout opened in a new tab. After paying, Stripe brings you back and your gift link appears there.</p>
+    <p class="gift-small">After paying you get a gift link to send by WhatsApp, email or anything else. Their station runs on their own computer. 🔒 Secure checkout by Stripe.</p>
+  </div>
+  <div id="giftReady" hidden>
+    <p class="gift-eyebrow">✅ PAYMENT RECEIVED</p>
+    <h3 class="gift-h3">Your gift is wrapped</h3>
+    <p class="gift-lead">Send this link to <b id="grTo"></b>. When they open it, they unwrap <b id="grYears"></b> of shuffling, with your name on it.</p>
+    <div class="gift-link"><input id="grLink" class="imp-input mono" readonly aria-label="Gift link"><button type="button" id="grCopy" class="chip-btn">📋 Copy</button></div>
+    <div class="gift-share">
+      <button type="button" class="chip-btn" data-gshare="whatsapp">💬 WhatsApp</button>
+      <button type="button" class="chip-btn" data-gshare="email">✉️ Email</button>
+      <button type="button" class="chip-btn" data-gshare="more" hidden>📤 More</button>
+    </div>
+    <p class="gift-small"><a id="grPreview" target="_blank" rel="noopener">👀 Preview what they'll see</a> · <button type="button" id="grKeep" class="gift-keep">Keep it for myself instead</button></p>
+    <p class="gift-small">The link is also saved under the tiers, in case you need it again.</p>
+  </div>
+</dialog>
+
+<div id="giftOv" class="gift-ov" hidden role="dialog" aria-modal="true" aria-labelledby="goTitle">
+  <div class="gift-scroll">
+    <div class="gift-stage">
+      <button type="button" class="gift-x" id="goClose" aria-label="Close">✕</button>
+      <p id="goPreview" class="gift-preview" hidden></p>
+      <div id="goWrap" class="gift-wrapview">
+        <p class="gift-eyebrow">📡 INCOMING DELIVERY · MISSION CONTROL</p>
+        <h2 id="goTitle" class="gift-h2"></h2>
+        <p id="goFrom" class="gift-from"></p>
+        <button type="button" id="goBox" class="gift-box" aria-label="Unwrap your gift"><span class="gb-lid"><span class="gb-bow"></span></span><span class="gb-body"></span></button>
+        <button type="button" id="goOpen" class="shuffle-btn gift-open">🎁 Unwrap it</button>
+      </div>
+      <div id="goCert" class="gift-cert" hidden>
+        <p class="gc-eyebrow">OFFICIAL NOTICE · DEPARTMENT OF IMPOSSIBLE THINGS</p>
+        <p id="gcTo" class="gc-to"></p>
+        <p id="gcMain" class="gc-main"></p>
+        <p id="gcStory" class="gc-story"></p>
+        <blockquote id="gcMsg" class="gc-msg" hidden></blockquote>
+        <p id="gcRank" class="gc-rank"></p>
+        <ul id="gcStats" class="gc-stats"></ul>
+        <div class="gc-actions">
+          <button type="button" id="gcStart" class="shuffle-btn gc-start">🛰️ Start my station</button>
+          <button type="button" id="gcThanks" class="chip-btn">💌 Say thanks</button>
+          <button type="button" id="gcSave" class="chip-btn">🖼️ Save the certificate</button>
+        </div>
+        <p class="gc-prof">🎩 Professor Factorial: “A gift of pure, magnificent futility. I am moved.”</p>
+      </div>
+    </div>
+  </div>
+  <div id="goBurst" class="gift-burst" aria-hidden="true"></div>
+</div>
 
 <!-- ===================== WIN OVERLAY ===================== -->
 <div id="win" hidden role="dialog" aria-modal="true" aria-labelledby="winTitle">
@@ -1602,7 +1745,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0 };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, giftDraft: null, giftsSent: [], giftsRx: [] };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1626,7 +1769,10 @@ const store = (() => {
       lb: p.lb && /^[0-9a-f-]{36}$/.test(p.lb.id) && /^[0-9a-f]{32,64}$/.test(p.lb.secret) ? { id: p.lb.id, secret: p.lb.secret, name: str(p.lb.name).slice(0, 20), sub: n(p.lb.sub) } : null,
       cardBack: str(p.cardBack) || 'classic', outfit: str(p.outfit) || 'classic', certId: str(p.certId), wallSubmitted: p.wallSubmitted === true, profMs: n(p.profMs),
       hid: /^[0-9a-f-]{36}$/.test(p.hid) ? p.hid : '', rcode: /^[a-z0-9]{8,16}$/.test(p.rcode) ? p.rcode : '', rby: /^[a-z0-9]{8,16}$/.test(p.rby) ? p.rby : '',
-      joined: p.joined === true, rtitle: n(p.rtitle), acesBest: n(p.acesBest), runBest: n(p.runBest)
+      joined: p.joined === true, rtitle: n(p.rtitle), acesBest: n(p.acesBest), runBest: n(p.runBest),
+      giftDraft: p.giftDraft && typeof p.giftDraft === 'object' ? p.giftDraft : null,
+      giftsSent: Array.isArray(p.giftsSent) ? p.giftsSent.filter(g => g && typeof g.url === 'string').slice(0, 5) : [],
+      giftsRx: Array.isArray(p.giftsRx) ? p.giftsRx.filter(g => g && typeof g.id === 'string').slice(0, 10) : []
     };
   } catch (e) { return def; }
 })();
@@ -3986,6 +4132,7 @@ function renderImpatient() {
     $('#impTiers').innerHTML = '';
     renderTTCard();
     $('#impClosed').hidden = false;
+    $('#giftRow').hidden = true; $('#giftSent').hidden = true;
     $('#impClosed').textContent = `🏁 The mission is accomplished, so sponsorships are closed forever. Stations with years left can still finish their shift, for old times' sake.`;
     $('#impatient').hidden = false;
     $('#apSponsor').hidden = true;
@@ -4013,6 +4160,8 @@ function renderImpatient() {
     </div>`;
   }).join('');
   $$('#impTiers [data-imp]').forEach(a => a.addEventListener('click', () => track('impatient-' + a.dataset.imp)));
+  $('#giftRow').hidden = !any;
+  renderGiftSent();
   renderTTCard();
   any = any || !!F.traveller;
   $('#impatient').hidden = !any;
@@ -4034,12 +4183,275 @@ function rankReach(p) {
   return TT.N * p >= 1 ? { ...tt, times: times(TT.N * p) } : { ...tt, odds: fmt(Math.round(1 / (TT.N * p))) };
 }
 
+/* ---------- Gift a station ----------
+   A sponsor can buy a rank for someone else. Before checkout the names go into a draft in this browser;
+   Stripe's thank-you redirect (?thanks=…) then turns that draft into a gift link instead of assigning the
+   years here. The link carries the gift in its #hash, which never reaches a server: /g/captain/#gift=…
+   unfurls with a gift preview in chat apps and forwards here, where the recipient unwraps it once per browser.
+   Like ?thanks= itself, a gift link is trusted as is: it only unlocks things in the browser that opens it. */
+const GIFT_SLUG = { tea: 'rookie', odds: 'captain', patron: 'commander' };
+const GIFT_STORY = {
+  tea: 'Nonstop since the Vikings, every shuffle of it for you.',
+  odds: 'Every year since the last Ice Age, shuffled on your behalf.',
+  patron: 'All the way back to when humans left Africa. That is commitment.'
+};
+const GIFT = { tier: 'odds', current: null, preview: false };
+const giftClean = (v, max) => (typeof v === 'string' ? v.replace(/\s+/g, ' ').trim().slice(0, max) : '');
+function giftEncode(g) {
+  let bin = '';
+  new TextEncoder().encode(JSON.stringify({ t: g.t, to: g.to, fr: g.fr, m: g.m, id: g.id })).forEach(b => { bin += String.fromCharCode(b); });
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+function giftDecode(code) {
+  try {
+    const bin = atob(code.replace(/-/g, '+').replace(/_/g, '/'));
+    const g = JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0))));
+    const to = giftClean(g.to, 30), fr = giftClean(g.fr, 30);
+    if (!tierById(g.t) || !to || !fr || !/^[a-z0-9]{6,16}$/.test(g.id)) return null;
+    return { t: g.t, to, fr, m: giftClean(g.m, 120), id: g.id };
+  } catch (e) { return null; }
+}
+const giftUrl = g => `${siteBase()}/g/${GIFT_SLUG[g.t]}/#gift=${giftEncode(g)}`;
+const giftId = () => Array.from(crypto.getRandomValues(new Uint8Array(8)), b => (b % 36).toString(36)).join('');
+
+/* The giver: pick a rank, fill in the names, off to Stripe. */
+function giftDialog(tier) {
+  const F = SITE.fund, cur = F.currency || '$';
+  GIFT.tier = tier && F[tier] ? tier : F.odds ? 'odds' : IMP_TIERS.find(t => F[t.id]).id;
+  $('#giftRanks').innerHTML = IMP_TIERS.filter(t => F[t.id]).map(t =>
+    `<button type="button" role="radio" data-gt="${t.id}" aria-checked="${t.id === GIFT.tier}"><b>${t.icon} ${t.name}</b>${fmt(t.years)} years<br>${cur}${t.price}</button>`).join('');
+  $('#giftCompose').hidden = false; $('#giftReady').hidden = true; $('#giftWait').hidden = true;
+  giftValidate();
+  const dlg = $('#giftDlg');
+  if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+  track('gift-dialog');
+  setTimeout(() => $('#giftTo').focus(), 50);
+}
+function giftValidate() {
+  const t = tierById(GIFT.tier), cur = SITE.fund.currency || '$';
+  $('#giftGo').disabled = !giftClean($('#giftTo').value, 30) || !giftClean($('#giftFrom').value, 30);
+  $('#giftGo').textContent = `Continue to secure checkout · ${cur}${t.price}`;
+}
+function giftCheckout() {
+  const to = giftClean($('#giftTo').value, 30), fr = giftClean($('#giftFrom').value, 30), url = SITE.fund[GIFT.tier];
+  if (!to || !fr || !url) return;
+  store.giftDraft = { t: GIFT.tier, to, fr, m: giftClean($('#giftMsg').value, 120), at: Date.now() };
+  saveStore(true);
+  track('gift-checkout-' + GIFT.tier);
+  window.open(url, '_blank', 'noopener');
+  $('#giftWait').hidden = false;
+}
+/* Called from handleThanks: a fresh draft turns this purchase into a gift. Returns true if it did. */
+function giftFromThanks(id) {
+  const d = store.giftDraft;
+  if (!d || !(Date.now() - d.at < 6 * 3600e3)) return false;
+  const g = { t: id, to: giftClean(d.to, 30), fr: giftClean(d.fr, 30), m: giftClean(d.m, 120), id: giftId(), at: Date.now() };
+  store.giftDraft = null;
+  if (!g.to || !g.fr) { saveStore(true); return false; }
+  g.url = giftUrl(g);
+  store.giftsSent = [g, ...(store.giftsSent || [])].slice(0, 5);
+  saveStore(true);
+  track('gift-ready-' + id);
+  setTimeout(() => giftShowReady(g), 600);
+  return true;
+}
+function giftShowReady(g) {
+  GIFT.current = g;
+  $('#grTo').textContent = g.to;
+  $('#grYears').textContent = `${fmt(tierById(g.t).years)} years`;
+  $('#grLink').value = g.url;
+  $('#grPreview').href = g.url + '&preview';
+  $('#giftCompose').hidden = true; $('#giftReady').hidden = false;
+  if (navigator.share) $('#giftReady [data-gshare="more"]').hidden = false;
+  const dlg = $('#giftDlg');
+  if (!dlg.open) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); }
+  renderGiftSent();
+  sfx('land', 6);
+  setTimeout(() => $('#grCopy').focus(), 50);
+}
+function giftShareText(g) {
+  return `🎁 ${g.to}, I got you something completely useless and magnificent: ${fmt(tierById(g.t).years)} years of card shuffling, in your name. Unwrap it here: ${g.url}`;
+}
+function giftShare(kind) {
+  const g = GIFT.current; if (!g) return;
+  const text = giftShareText(g), e = encodeURIComponent;
+  track('gift-share-' + kind);
+  if (kind === 'whatsapp') window.open(`https://wa.me/?text=${e(text)}`, '_blank', 'noopener');
+  else if (kind === 'email') location.href = `mailto:?subject=${e('A gift from Mission Control 🎁')}&body=${e(text)}`;
+  else if (kind === 'more') navigator.share({ title: 'A gift for you', text }).catch(() => {});
+}
+function renderGiftSent() {
+  const box = $('#giftSent'), list = store.giftsSent || [];
+  box.hidden = !list.length;
+  box.innerHTML = list.length ? '🎁 Gifts you sent: ' + list.map((g, i) => `${escapeHtml(tierById(g.t) ? tierById(g.t).name : '')} for ${escapeHtml(g.to)} <button type="button" data-gsent="${i}">link</button>`).join(' · ') : '';
+}
+
+/* The recipient: a wrapped box, an unwrapping, a certificate. */
+function handleGiftLink() {
+  const m = /^#gift=([A-Za-z0-9_-]+)(&preview)?/.exec(location.hash);
+  if (!m) return;
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* file:// */ }
+  const g = giftDecode(m[1]);
+  if (!g) { setTimeout(() => toast('🎁 This gift link looks damaged. Ask the sender to copy it again.'), 600); return; }
+  const done = (store.giftsRx || []).some(x => x.id === g.id);
+  giftOverlay(g, { preview: !!m[2], unwrapped: done && !m[2] });
+}
+function giftOverlay(g, { preview = false, unwrapped = false } = {}) {
+  const t = tierById(g.t);
+  GIFT.current = g; GIFT.preview = preview;
+  $('#goPreview').hidden = !preview;
+  $('#goPreview').textContent = `👀 Preview: this is what ${g.to} will see. Nothing is unwrapped here.`;
+  $('#goTitle').textContent = `${g.to}, you've got a delivery.`;
+  $('#goFrom').innerHTML = `From <b>${escapeHtml(g.fr)}</b>. Contents: classified (and slightly absurd).`;
+  $('#gcTo').innerHTML = `Dear <b>${escapeHtml(g.to)}</b>,`;
+  $('#gcMain').innerHTML = `<b>${escapeHtml(g.fr)}</b> has sponsored <span class="gc-years">${fmt(t.years)} years</span> of card shuffling in your name.`;
+  $('#gcStory').textContent = GIFT_STORY[g.t];
+  $('#gcMsg').hidden = !g.m;
+  $('#gcMsg').innerHTML = g.m ? `“${escapeHtml(g.m)}”<cite>${escapeHtml(g.fr)}</cite>` : '';
+  $('#gcRank').innerHTML = `Your new rank <b>${t.icon} ${t.name.toUpperCase()}</b>`;
+  const N = t.years * HAND_YEAR;
+  $('#gcStats').innerHTML = [`🃏 ${bigShort(N)} real shuffles`, `🛰️ your computer does them in ${shortDuration(N / hyperRateGuess())}`, '🎯 matches expected: 0', '💛 thoughtfulness: infinite']
+    .map(x => `<li>${x}</li>`).join('');
+  $('#gcStart').textContent = preview ? '🛰️ They press this to start their station' : '🛰️ Start my station';
+  $('#gcStart').disabled = preview;
+  $('#goWrap').hidden = unwrapped; $('#goCert').hidden = !unwrapped;
+  $('#goBox').classList.remove('shake', 'open');
+  $('#giftOv').hidden = false;
+  document.body.style.overflow = 'hidden';
+  track(preview ? 'gift-preview' : unwrapped ? 'gift-reopen' : 'gift-open');
+  setTimeout(() => (unwrapped ? $('#gcStart') : $('#goOpen')).focus(), 50);
+}
+function giftUnwrap() {
+  const g = GIFT.current; if (!g || !$('#goCert').hidden) return;
+  const box = $('#goBox');
+  const reveal = () => {
+    $('#goWrap').hidden = true; $('#goCert').hidden = false;
+    if (!GIFT.preview) giftRedeem(g);
+    sfx('land', 7);
+    $('#gcStart').focus();
+  };
+  if (reduceMotion) { reveal(); return; }
+  box.classList.add('shake');
+  setTimeout(() => { box.classList.remove('shake'); box.classList.add('open'); giftBurst(); }, 560);
+  setTimeout(reveal, 1050);
+}
+function giftBurst() {
+  const wrap = $('#goBurst'), suits = ['♠', '♥', '♦', '♣'], ranks = ['A', 'K', 'Q', 'J', '10', '7'];
+  wrap.innerHTML = '';
+  for (let i = 0; i < 46; i++) {
+    const sp = document.createElement('span'), a = rnd() * Math.PI * 2, d = 160 + rnd() * 340;
+    sp.style.setProperty('--dx', `${Math.cos(a) * d}px`);
+    sp.style.setProperty('--dy', `${Math.sin(a) * d * 0.8 + 140}px`);
+    sp.style.setProperty('--r', `${(rnd() - 0.5) * 720}deg`);
+    sp.style.animationDelay = `${rnd() * 0.15}s`;
+    if (i % 3 === 0) { const s4 = pick(suits); sp.className = 'gcard' + (s4 === '♥' || s4 === '♦' ? ' red' : ''); sp.textContent = pick(ranks) + s4; }
+    else { sp.className = 'gconf'; sp.style.background = pick(CONF_COLORS); }
+    wrap.appendChild(sp);
+  }
+  setTimeout(() => { wrap.innerHTML = ''; }, 2000);
+}
+function giftRedeem(g) {
+  if ((store.giftsRx || []).some(x => x.id === g.id)) return;
+  const t = tierById(g.t);
+  store.purchases = store.purchases || {};
+  store.purchases[g.t] = (store.purchases[g.t] || 0) + 1;
+  if (store.hyper.done >= store.hyper.bought) store.hyper.from = store.hyper.done;   // a fresh trip through history
+  store.hyper.bought += t.years * HAND_YEAR;
+  store.giftsRx = [{ id: g.id, t: g.t, to: g.to, fr: g.fr, m: g.m, at: Date.now() }, ...(store.giftsRx || [])].slice(0, 10);
+  saveStore(true);
+  track('gift-unwrap-' + g.t);
+  applyCosmetics(); renderExtras(); renderHyper();
+}
+function giftClose() {
+  $('#giftOv').hidden = true;
+  document.body.style.overflow = '';
+  $('#goBurst').innerHTML = '';
+}
+function giftStart() {
+  giftClose();
+  $('#hyperBox').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+  setTimeout(hyperStart, reduceMotion ? 0 : 600);
+}
+function giftThanks() {
+  const g = GIFT.current; if (!g) return;
+  const text = `Thank you for the ${fmt(tierById(g.t).years)} years of shuffling, ${g.fr}! My station is on it. Matches so far: 0. Gratitude: off the charts. 💛 ${siteBase()}`;
+  track('gift-thanks');
+  if (navigator.share) navigator.share({ text }).catch(() => {});
+  else window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+}
+/** The certificate as a 1080×1350 image (fits Instagram and WhatsApp status). */
+function giftCertificate() {
+  const g = GIFT.current; if (!g) return;
+  const t = tierById(g.t), W = 1080, H = 1350, cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const c = cv.getContext('2d');
+  const bg = c.createRadialGradient(W / 2, 0, 50, W / 2, H * 0.4, H);
+  bg.addColorStop(0, '#145236'); bg.addColorStop(0.5, '#082a1a'); bg.addColorStop(1, '#020a06');
+  c.fillStyle = bg; c.fillRect(0, 0, W, H);
+  c.strokeStyle = '#ffd23f'; c.lineWidth = 6; c.strokeRect(40, 40, W - 80, H - 80);
+  c.strokeStyle = 'rgba(255,210,63,.35)'; c.lineWidth = 2; c.strokeRect(62, 62, W - 124, H - 124);
+  c.textAlign = 'center'; c.textBaseline = 'alphabetic';
+  const line = (txt, y, font, color, max = W - 200) => { c.font = font; c.fillStyle = color; c.fillText(txt, W / 2, y, max); };
+  const wrap = (txt, y, font, color, lh, max = W - 220) => {
+    c.font = font; c.fillStyle = color;
+    const words = txt.split(' '); let row = '', yy = y;
+    for (const w of words) { const test = row ? row + ' ' + w : w; if (c.measureText(test).width > max && row) { c.fillText(row, W / 2, yy); row = w; yy += lh; } else row = test; }
+    if (row) c.fillText(row, W / 2, yy);
+    return yy;
+  };
+  line('OFFICIAL NOTICE · DEPARTMENT OF IMPOSSIBLE THINGS', 150, '800 26px "JetBrains Mono", monospace', '#ffe68a');
+  c.shadowColor = '#ff2fd6'; c.shadowBlur = 24;
+  line('A GIFT FROM', 260, '64px Bungee, Impact, sans-serif', '#ff8bec');
+  line('MISSION CONTROL', 340, '64px Bungee, Impact, sans-serif', '#ff8bec');
+  c.shadowBlur = 0;
+  line(`Dear ${g.to},`, 450, '600 40px system-ui, sans-serif', '#e6f2ea');
+  wrap(`${g.fr} has sponsored`, 530, '400 38px system-ui, sans-serif', '#cfe3d7', 48);
+  c.shadowColor = 'rgba(255,210,63,.6)'; c.shadowBlur = 20;
+  line(`${fmt(t.years)} YEARS`, 650, '96px Bungee, Impact, sans-serif', '#ffe68a');
+  c.shadowBlur = 0;
+  line('of card shuffling in your name.', 720, '400 38px system-ui, sans-serif', '#cfe3d7');
+  let y = wrap(GIFT_STORY[g.t], 800, 'italic 400 32px system-ui, sans-serif', '#a5fbff', 42);
+  if (g.m) {
+    c.font = '700 32px system-ui, sans-serif';
+    const lines = []; let row = '';
+    for (const w of `“${g.m}”`.split(' ')) { const test = row ? row + ' ' + w : w; if (c.measureText(test).width > W - 300 && row) { lines.push(row); row = w; } else row = test; }
+    lines.push(row);
+    const boxH = 92 + lines.length * 42;
+    y += 50;
+    c.fillStyle = '#fffbea'; c.strokeStyle = '#ffd23f'; c.lineWidth = 5;
+    c.beginPath(); c.roundRect ? c.roundRect(130, y, W - 260, boxH, 24) : c.rect(130, y, W - 260, boxH); c.fill(); c.stroke();
+    c.fillStyle = '#1d1606';
+    lines.forEach((l, i) => c.fillText(l, W / 2, y + 52 + i * 42, W - 300));
+    c.font = '400 26px system-ui, sans-serif'; c.fillStyle = '#5c4a1a';
+    c.fillText(`— ${g.fr}`, W / 2, y + 52 + lines.length * 42, W - 300);
+    y += boxH;
+  }
+  line(`YOUR NEW RANK: ${t.icon} ${t.name.toUpperCase()}`, Math.max(y + 90, 1060), '800 34px "JetBrains Mono", monospace', '#ffd0f6');
+  line('Matches expected: 0 · Thoughtfulness: infinite', Math.max(y + 150, 1120), '400 30px system-ui, sans-serif', '#cfe3d7');
+  line('theimpossibleshuffle.com', H - 110, '34px Bungee, Impact, sans-serif', '#a5fbff');
+  track('gift-certificate');
+  cv.toBlob(blob => {
+    if (!blob) return;
+    const name = `gift-from-mission-control.png`, file = new File([blob], name, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { navigator.share({ files: [file], title: 'A gift from Mission Control' }).catch(() => {}); return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  }, 'image/png');
+}
+
 /* ---------- Thank-you return from Stripe ---------- */
 function handleThanks() {
   const params = new URLSearchParams(location.search);
   const id = params.get('thanks');
   const t = id && tierById(id);
   if (!t) return;
+  if (giftFromThanks(id)) {                     // bought as a gift: a link for the recipient, nothing assigned here
+    params.delete('thanks');
+    const q = params.toString();
+    try { history.replaceState(null, '', location.pathname + (q ? '?' + q : '')); } catch (e) { /* file:// */ }
+    return;
+  }
   store.purchases = store.purchases || {};
   store.purchases[id] = (store.purchases[id] || 0) + 1;
   if (store.hyper.done >= store.hyper.bought) store.hyper.from = store.hyper.done;   // a fresh trip through history
@@ -4600,6 +5012,9 @@ function renderExtras() {
   $('#wallRow').hidden = !hasPatron() || !WALL.on;
   $('#wallForm').hidden = !!store.wallSubmitted;
   $('#wallDone').hidden = !store.wallSubmitted;
+  const rx = store.giftsRx || [];
+  $('#giftRxRow').hidden = !rx.length;
+  $('#giftRxList').innerHTML = rx.map((g, i) => `<button type="button" class="opt-btn" data-grx="${i}">🎁 ${escapeHtml(tierById(g.t) ? tierById(g.t).name : '')} from ${escapeHtml(g.fr)}</button>`).join('');
 }
 
 /* ---------- Wiring ---------- */
@@ -4619,12 +5034,35 @@ function initImpatient() {
   handleSponsorReset();
   renderImpatient();
   handleThanks();
+  handleGiftLink();
   applyCosmetics();
   renderExtras();
   renderHyper();
   loadWall();
   loadSponsorEvents();
   $('#hyperGo').addEventListener('click', () => (HYPER.running ? hyperPause() : hyperStart()));
+  // Gifts
+  $('#giftOpenDlg').addEventListener('click', () => giftDialog());
+  $('#giftRanks').addEventListener('click', e => { const b = e.target.closest('[data-gt]'); if (!b) return; GIFT.tier = b.dataset.gt; $$('#giftRanks [data-gt]').forEach(x => x.setAttribute('aria-checked', String(x === b))); giftValidate(); });
+  ['#giftTo', '#giftFrom'].forEach(sel => $(sel).addEventListener('input', giftValidate));
+  $('#giftGo').addEventListener('click', giftCheckout);
+  $('#giftClose').addEventListener('click', () => $('#giftDlg').close());
+  $('#grCopy').addEventListener('click', () => { copyText($('#grLink').value); track('gift-share-copy'); });
+  $$('#giftReady [data-gshare]').forEach(b => b.addEventListener('click', () => giftShare(b.dataset.gshare)));
+  $('#grKeep').addEventListener('click', () => {             // changed their mind: unwrap it right here
+    const g = GIFT.current; if (!g) return;
+    store.giftsSent = (store.giftsSent || []).filter(x => x.id !== g.id); saveStore(true); renderGiftSent();
+    $('#giftDlg').close(); giftOverlay(g);
+  });
+  $('#giftSent').addEventListener('click', e => { const b = e.target.closest('[data-gsent]'); if (b) giftShowReady(store.giftsSent[Number(b.dataset.gsent)]); });
+  $('#giftRxList').addEventListener('click', e => { const b = e.target.closest('[data-grx]'); if (b) giftOverlay(store.giftsRx[Number(b.dataset.grx)], { unwrapped: true }); });
+  $('#goBox').addEventListener('click', giftUnwrap);
+  $('#goOpen').addEventListener('click', giftUnwrap);
+  $('#goClose').addEventListener('click', giftClose);
+  $('#gcStart').addEventListener('click', giftStart);
+  $('#gcThanks').addEventListener('click', giftThanks);
+  $('#gcSave').addEventListener('click', giftCertificate);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#giftOv').hidden) giftClose(); });
   // The hero's button: straight to the game, and the first shuffle happens on arrival.
   $('#heroShuffle').addEventListener('click', () => {
     track('hero-shuffle');

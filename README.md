@@ -35,6 +35,13 @@ npx tailwindcss@3.4.17 -c tailwind.config.js -i tw-input.css -o tw.css --minify
 - **Sponsor moments in the jokes bar:** `supabase/sponsor-events.sql` creates `sponsor_events` (rank and time only, no names). Only the Modal webhook writes to it, after checking Stripe's signature, so every "REAL · A new Captain joined the mission 2 hours ago" line is a real payment. The rank comes from the amount ($1.92 / $8.07 / $52). Hide a test purchase with `hidden` = true. Without the table the site simply shows no sponsor lines.
 - The Wall of Hopeless Heroes uses the `sponsors` table from `supabase/sponsors.sql`. Names arrive unapproved; approve them in the Supabase Table Editor. `supabase/wall-notify.sql` (optional) sends you a push notification through ntfy for every new name.
 
+## Gift a station
+
+- Under the tiers, "Give a rank as a gift" opens a short form (rank, for, from, optional message). The names are kept as a draft in the buyer's browser and the normal Stripe link opens.
+- Stripe's redirect back (`?thanks=…`) sees the draft and turns the purchase into a gift link instead of assigning the years: `https://theimpossibleshuffle.com/g/captain/#gift=…`. The gift itself is in the `#hash`, so it never reaches a server. The buyer can copy it, send it by WhatsApp or email, preview it (`&preview`), or keep it after all. Sent links stay listed under the tiers.
+- `g/rookie/`, `g/captain/` and `g/commander/` are `noindex` pages with their own link preview (`g/*.jpg`) that forward to the site. The recipient sees a wrapped present, unwraps it (box, cards and confetti), and gets a certificate with the years, the rank and the message, plus "Start my station", "Say thanks" and "Save the certificate" (a 1080×1350 image). The rank and extras unlock once per browser; opening the link again shows the certificate. Received gifts are listed in the sponsor extras.
+- Like `?thanks=`, a gift link is trusted as is (it only unlocks things in the browser that opens it).
+
 ## Leaderboard ("Luckiest Shufflers")
 
 - Run `supabase/leaderboard.sql` once in the Supabase SQL editor. Until then the section stays hidden.
