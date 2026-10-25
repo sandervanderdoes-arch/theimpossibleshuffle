@@ -2691,7 +2691,7 @@ function updateNextGoal() {
   const goal = Math.min(52, bestEver() + 1), n = 1 / tailP(goal);
   // Hard goals get a quiet second line: what free autopilot would need, next to a station (same estimate as the tier cards).
   const r = n > 5e7 ? rankReach(1 / n) : null;
-  const hint = goal >= 52 ? '' : r ? `<span class="ng-hint">Free autopilot: ${fmtDuration(n / LUDICROUS_RATE).replace('about ', '')} · <a href="#impatient">${r.odds ? `even ${r.who} (${r.shift}): a 1 in ${r.odds} shot` : `${r.who} (${r.shift}) lands it ${r.times}`} →</a></span>`
+  const hint = goal >= 52 ? '' : r ? `<span class="ng-hint">Free autopilot: ${fmtDuration(n / LUDICROUS_RATE).replace('about ', '')} · <a href="#impatient">${r.odds ? `even ${r.who} (${r.shift}) has only a 1 in ${r.odds} shot` : `${r.who} lands it ${r.times} in ${r.shift}`} →</a></span>`
     : n > 20000 && autopilot.mode !== 'L' ? ' · try Autopilot' : '';
   const html = `🎯 Next goal: <b>${goal}/52</b> · about 1 in ${shortOdds(goal)} shuffles${hint}`;
   if (html !== lastGoal) { el2.innerHTML = html; lastGoal = html; }
