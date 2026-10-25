@@ -1150,7 +1150,7 @@
       <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">By hand, humanity needs about <b class="text-[#ffe68a]">51 novemdecillion years</b>. Mission Control can't do that alone: sponsor a stretch and your computer becomes an official <b class="text-[#a5fbff]">Mission Control station</b> that shuffles thousands of years' worth for humanity while you get on with your life. The Professor calls it cheating. We call it volunteering.</p>
       <p class="imp-wink">Full disclosure: this is a joke. Your money keeps the joke running: servers, GPUs and the Professor's tea.</p>
       <p id="impProof" class="imp-proof mt-3" hidden></p>
-      <p id="impPick" class="imp-pick mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Enlist: pick your rank.</p>
+      <p id="impPick" class="imp-pick mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Support the mission: pick your rank.</p>
       <div id="impTiers" class="imp-tiers mt-3"></div>
       <p class="imp-quiet">
         <span id="giftRow" hidden>🎁 <button type="button" id="giftOpenDlg" class="imp-qlink gift-q">Give a rank as a gift</button></span>
@@ -4297,7 +4297,7 @@ function renderImpatient() {
       <ul class="imp-perks">${[t.perks[0]].map(x => (x === '{grail}' ? `<li data-gcperk>${grailPerk()}</li>` : `<li>${x}</li>`)).join('')}</ul>
       <details class="imp-kit"><summary>Full kit</summary><ul class="imp-perks">${t.perks.slice(1).map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🕰️ Watch your station travel through history, live</li></ul></details>
       <span class="imp-deal">${t.deal}</span>
-      <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}"><span class="block">Enlist as ${t.name}</span><span class="block text-sm opacity-90">${cur}${t.price}</span></a>
+      <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}"><span class="block">Support the mission</span><span class="block text-sm opacity-90">as a ${t.name} · ${cur}${t.price}</span></a>
       <p class="imp-why">${t.why}</p>
     </div>`;
   }).join('');
