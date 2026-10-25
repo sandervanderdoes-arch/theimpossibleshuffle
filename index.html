@@ -183,6 +183,14 @@
   .next-goal .ng-hint a:hover { color:#fff3c4; text-decoration-style:solid; }
   a.go-sponsor.ap-sponsor { display:block; width:100%; margin-top:.55rem; padding:.4rem .6rem; border-radius:12px; white-space:normal; text-align:center; text-wrap:balance; }
   .ap-sponsor[hidden] { display:none; }
+  /* World ranking shortcut in the shuffle panel (the board itself sits further down, below the Hall of Firsts) */
+  .lb-jump { display:block; width:100%; min-height:44px; padding:.45rem .7rem; border-radius:12px; border:1px solid rgba(34,243,255,.55); background:rgba(34,243,255,.08); color:#bffcff; font-size:.85rem; font-weight:800; text-align:center; line-height:1.3; cursor:pointer; transition:background .15s ease, box-shadow .15s ease; }
+  .lb-jump[hidden] { display:none; }
+  .lb-jump:hover { background:rgba(34,243,255,.16); box-shadow:0 0 16px rgba(34,243,255,.3); }
+  .lb-jump .sub { font-weight:600; color:#a5fbff; }
+  .lb-jump.call { border-color:#22f3ff; box-shadow:0 0 14px rgba(34,243,255,.35); animation:lbCall 2.4s ease-in-out infinite; }
+  @keyframes lbCall { 0%, 100% { box-shadow:0 0 8px rgba(34,243,255,.25); } 50% { box-shadow:0 0 20px rgba(34,243,255,.55); } }
+  @media (prefers-reduced-motion: reduce) { .lb-jump.call { animation:none; } }
   @keyframes glow { 50% { box-shadow: 0 0 0 2px #ffd9f7, 0 0 32px rgba(255,47,214,.95), 0 0 80px rgba(255,47,214,.5), inset 0 -4px 0 rgba(0,0,0,.25); } }
   .seg { display:flex; border:1px solid rgba(34,243,255,.35); border-radius:12px; overflow:hidden; }
   .seg button { flex:1; background:transparent; color:var(--ink); border:0; padding:.55rem .25rem; min-height:44px; font-size:.82rem; font-weight:700; }
@@ -993,6 +1001,7 @@
             <p id="apRate" class="mono text-xs text-[#9fb5a8] mt-1 h-4 whitespace-nowrap"></p>
             <a id="apSponsor" class="go-sponsor ap-sponsor" href="#impatient" hidden>🛰️ Faster than Ludicrous? Sponsor a mission <span class="gs-arrow" aria-hidden="true">↓</span></a>
           </div>
+          <button type="button" id="lbJump" class="lb-jump" hidden></button>
           <button type="button" id="soundBtn" class="chip-btn w-full" aria-pressed="false">🔇 Sound: off</button>
         </div>
 
@@ -5281,6 +5290,12 @@ function initImpatient() {
   $('#hyperGo').addEventListener('click', () => (HYPER.running ? hyperPause() : hyperStart()));
   // Gifts
   $('#giftOpenDlg').addEventListener('click', () => giftDialog());
+  $('#lbJump').addEventListener('click', () => {
+    const join = $('#lbJump').dataset.go === 'join' && $('#lbName');
+    track('lb-jump-' + (join ? 'join' : 'board'));
+    (join ? $('#lbMe') : $('#lbSection')).scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: join ? 'center' : 'start' });
+    if (join) setTimeout(() => $('#lbName').focus({ preventScroll: true }), reduceMotion ? 0 : 600);
+  });
   $('#grailGrid').addEventListener('click', e => {
     const node = e.target.closest('.pcard.held'); if (!node) return;
     toast(`👑 ${escapeHtml(node.title)}. One of only 52 Holy Grail cards.`);
@@ -5541,7 +5556,20 @@ function lbNudge() {
     : `Free Ludicrous autopilot: ${fmtDuration(lud)}. ${ranks} <a class="go-sponsor" href="#impatient">🛰️ See the missions <span class="gs-arrow" aria-hidden="true">↓</span></a>`;
   return `<p class="nudge">To climb${above ? ` past ${escapeHtml(above.name)} (${above.best}/52)` : ''}, you need <b>${need}/52</b>: about 1 in ${fmt(Math.round(shuffles))} shuffles. ${how}</p>`;
 }
+/** The shortcut in the shuffle panel: join while you're not on the board, your rank once you are. */
+function renderLBJump() {
+  const b = $('#lbJump');
+  if (!LB.on || $('#lbSection').hidden) { b.hidden = true; return; }
+  const joined = store.lb && store.lb.name, mine = lbBest();
+  b.classList.toggle('call', !joined && !!mine);
+  b.dataset.go = !joined && mine ? 'join' : 'board';
+  b.innerHTML = joined ? (LB.rank && mine ? `🏆 You're <b>#${fmt(LB.rank)}</b> in the world <span class="sub">· see the ranking</span>` : '🏆 See the world ranking')
+    : mine ? `🏆 Join the world ranking${LB.rank ? ` <span class="sub">· you'd be #${fmt(LB.rank)}</span>` : ''}`
+    : '🏆 World ranking <span class="sub">· shuffle once to get in</span>';
+  b.hidden = false;
+}
 function renderLBMe() {
+  renderLBJump();
   const box = $('#lbMe'), mine = lbBest(), best = mine ? mine.matches : null;
   const joined = store.lb && store.lb.name;
   const rankTxt = LB.rank && best !== null ? `#${fmt(LB.rank)} of ${fmt(Math.max(LB.players, LB.rank))}` : '';
