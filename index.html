@@ -1097,7 +1097,7 @@
       <p class="hof-lead"><span class="block">The first human to reach each score keeps it <b>forever</b>.</span><span class="block">No resets, no seasons, no second place.</span> <span id="hofCount"></span></p>
       <ol id="hofList" class="hof-list" aria-label="Hall of Firsts"></ol>
       <p id="hofMe" class="hof-me" hidden></p>
-      <p class="hof-foot">Scores claimed on the Luckiest Shufflers board below count. Provably fair, so nobody can fake their way in.</p>
+      <p class="hof-foot">Scores claimed on the Luckiest Shufflers board below count.</p>
     </div>
   </section>
 
@@ -1138,7 +1138,7 @@
   <section id="impatient" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="impTitle" hidden>
     <div class="panel imp-panel p-4 sm:p-6">
       <h2 id="impTitle" class="font-display text-lg sm:text-2xl neon-gold">🎖️ Become a Mission Sponsor</h2>
-      <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">By hand, humanity needs about <b class="text-[#ffe68a]">51 novemdecillion years</b>. Mission Control can't do that alone: sponsor a stretch and your computer becomes an official <b class="text-[#a5fbff]">Mission Control station</b> that shuffles thousands of years' worth for humanity while you get on with your life. The Professor calls it cheating. We call it volunteering.</p>
+      <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">By hand, humanity needs about <b class="text-[#ffe68a]">51 novemdecillion years</b>. Sponsor a stretch and your computer becomes an official <b class="text-[#a5fbff]">Mission Control station</b> that shuffles thousands of years for humanity while you get on with your life. The Professor calls it cheating. We call it volunteering.</p>
       <p class="imp-wink">Full disclosure: this is a joke. Your money keeps the joke running: servers, GPUs and the Professor's tea.</p>
       <p id="impProof" class="imp-proof mt-3" hidden></p>
       <p id="impPick" class="imp-pick mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Support the mission: pick your rank.</p>
@@ -1151,7 +1151,7 @@
       <div id="giftSent" class="gift-sent" hidden></div>
       <div id="ttCard" class="mt-6" hidden></div>
       <p id="impClosed" class="mt-4 text-sm text-[#ffe68a]" hidden></p>
-      <p class="mt-4 text-xs text-[#9fb5a8]">*Your computer's time is an estimate for this device. Your station runs in this browser while the tab is open (on phones, while it's on screen); stand down anytime and it picks up where it left off on your next visit. A Time Traveller runs on our eight GPUs in the cloud instead: nothing runs on your computer, and you can close the tab. Your rank and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
+      <p class="mt-4 text-xs text-[#9fb5a8]">*Your computer's time is an estimate for this device. Your station runs in this browser while the tab is open (on phones, while it's on screen); stand down anytime and it picks up where it left off on your next visit. Your rank and extras unlock in the browser you pay in.</p>
 
       <div id="hyperBox" class="hyper-box mt-6" hidden>
         <div class="flex items-center justify-between gap-2 flex-wrap">
@@ -1263,7 +1263,7 @@
       </ol>
       <div class="honors-final mt-5">
         <p class="font-display text-base sm:text-xl tt-gold">Humankind: Mission Accomplished.</p>
-        <p class="mt-2 text-sm text-[#cfe3d7]">There is no reset. No new target. No Season 2. The <a class="underline" href="#impatient">mission sponsorships</a> close, the station goes quiet and this site becomes a monument. Every shuffle anyone ever made becomes part of the story of how humanity got there. Mission Control's database refuses to change or delete the winning record, even for us.</p>
+        <p class="mt-2 text-sm text-[#cfe3d7]">The <a class="underline" href="#impatient">mission sponsorships</a> close, the station goes quiet and this site becomes a monument. Every shuffle anyone ever made becomes part of the story of how humanity got there.</p>
         <p class="mt-2 text-xs text-[#9fb5a8]">No money, no prizes: the honor is the prize. Mathematics isn't a lottery, and neither are we.</p>
       </div>
 
@@ -3433,7 +3433,7 @@ const ODDS_PCT = ratioPercent(1n, F52, 90);
 const ODDS_ZEROS = leadingZeros(ODDS_PCT);
 $('#oddsExact').textContent = fmtBig(F52);
 $('#oddsPct').textContent = ODDS_PCT + '%';
-$('#oddsZeros').textContent = `That's ${ODDS_ZEROS} zeros after the decimal point before anything happens (≈ ${sci(100 / F52_NUM, 2)}%).`;
+$('#oddsZeros').textContent = `That's ${ODDS_ZEROS} zeros after the decimal point before anything happens.`;
 
 let oddsIdx = -1, typeTimer = 0;
 function typewrite(text, done) {
@@ -5837,9 +5837,9 @@ function renderTTCard() {
         <h3 class="tt-tagline">Go back 66 million years. Shuffle all the way home. Become a legend.</h3>
       </div>
     </div>
-    <div class="tt-teaser"><p>For legends only. Eight GPUs, 66 million years, one deck, a seat on the golden board.</p><button type="button" class="tt-open">▸ Open the time machine</button></div>
+    <div class="tt-teaser"><p>Plus a real deck of cards, printed in the order of your best shuffle and shipped to your door.</p><button type="button" class="tt-open">▸ Open the time machine</button></div>
     <div class="min-w-0">
-      <p class="text-sm sm:text-base text-[#cfe3d7]">Only a few will ever hold this rank. Eight of the fastest chips on Earth, the ones that train artificial intelligence, carry you back to the day the asteroid wiped out the dinosaurs. From there you shuffle every single year back to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in under an hour and a half*</b>. You watch history fly past live, from the first tiny mammals to the moon landing, and your name goes up in gold on the Time Travellers board. Forever.</p>
+      <p class="text-sm sm:text-base text-[#cfe3d7]">Only a few will ever hold this rank. Eight of the fastest chips on Earth, the ones that train artificial intelligence, carry you back to the day the asteroid wiped out the dinosaurs. From there you shuffle every single year back to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in under an hour and a half*</b>.</p>
       <details class="tt-get-d mt-4" open><summary class="tt-get">What you get</summary>
       <ul class="imp-perks tt-perks mt-1">
         <li><b>🚀 Your number and name in gold, forever.</b> Your own seat on the Time Travellers board, a golden leaderboard for Time Travellers only, with a number that is never issued again. Golden helmet and all.</li>
@@ -5861,8 +5861,8 @@ function renderTTCard() {
       ${url ? `<a class="shuffle-btn tt-buy" href="${url}" target="_blank" rel="noopener" data-imp="traveller">Board the time machine · ${cur}${TT.price}</a>`
         : '<a class="shuffle-btn tt-buy" role="link" aria-disabled="true">Launch window opening soon</a>'}
       <p class="tt-cloud">☁️ Runs on our eight GPUs in the cloud, not on your computer. Close the tab whenever you like: your mission control link keeps updating.</p>
-      <p class="imp-why">Why ${cur}${TT.price}? Eight of the fastest chips on Earth, one deck, no mercy. About ${cur}${(Number(TT.price) / (TT.years / 1e6)).toFixed(2)} per million years of shuffling. A bargain, historically.</p>
-      <p class="text-[11px] text-[#9fb5a8]">*Measured on eight H100s: about 2.6 billion shuffles a second each. Your mission runs until all ${fmt(TT.N)} shuffles are done, however long the GPUs need, and your live panel shows the real speed. Every shuffle counts toward humankind's total. No prize, just glory.</p>
+      <p class="imp-why">Why ${cur}${TT.price}? One deck, no mercy. About ${cur}${(Number(TT.price) / (TT.years / 1e6)).toFixed(2)} per million years of shuffling. A bargain, historically.</p>
+      <p class="text-[11px] text-[#9fb5a8]">*Measured on eight H100s: about 2.6 billion shuffles a second each. Your mission runs until all ${fmt(TT.N)} shuffles are done, however long the GPUs need, and your live panel shows the real speed. Every shuffle counts toward humankind's total.</p>
     </div>
     <button type="button" class="tt-close">▴ Close the time machine</button>
   </div>`;
