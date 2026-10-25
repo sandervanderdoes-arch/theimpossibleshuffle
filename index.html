@@ -436,14 +436,7 @@
   .imp-story { font-size:.9rem; font-style:italic; color:#cfe3d7; }
   .imp-surprise { margin-top:.15rem; line-height:1.4; color:#ffe68a; }
   .imp-perks b { color:#fff; }
-  .imp-kit { margin-top:.15rem; }
-  .imp-kit summary { cursor:pointer; list-style:none; display:inline-block; font-size:.78rem; font-weight:700; color:#9fb5a8; padding:.15rem 0; }
-  .imp-kit summary::-webkit-details-marker { display:none; }
-  .imp-kit summary::before { content:"▸ "; color:#ffe68a; }
-  .imp-kit[open] summary::before { content:"▾ "; }
-  .imp-kit summary:hover { color:#cfe3d7; }
-  .imp-kit .imp-perks { margin-top:.2rem; }
-  .imp-inc { color:#9fb5a8; font-style:italic; }
+  .imp-inc { color:#9fb5a8; font-size:.8rem; font-weight:700; }
   .imp-stats { margin-top:.6rem; padding:.55rem .7rem; border-radius:12px; background:rgba(34,243,255,.07); border:1px solid rgba(34,243,255,.25); display:grid; gap:.2rem; font-size:.85rem; color:#cfe3d7; }
   .imp-stats b { color:#a5fbff; }
   .imp-stats span { color:#9fb5a8; font-size:.78rem; }
@@ -4181,17 +4174,17 @@ const IMP_TIERS = [
     story: 'Basic training: nonstop since the Vikings.', deal: 'Cheaper than a coffee',
     cmp: p => `Your odds: still worse than being dealt <b>${timesInARow(ROYAL_FLUSH, p)} royal flushes in a row</b>.`,
     why: 'Why $1.92? One card is 1.92% of a deck.',
-    perks: ['🍀 <b>Your lucky card</b>: it glows gold whenever it lands in its Holy Grail spot', '🎩 <b>The Professor salutes you</b>: new lines just for your rank', '🃏 Fancy card backs + <span class="gold-star">★</span> gold sponsor badge'] },
+    perks: ['🍀 <b>A lucky card</b> that glows gold when it lands', '🎩 <b>Professor lines</b> just for your rank', '🃏 <b>Gold <span class="gold-star">★</span> badge</b> + fancy card backs', '🕰️ <b>Live view</b> of your trip through history'] },
   { id: 'odds', icon: '★★', name: 'Captain', years: 10000, price: '8.07', featured: true,
     story: 'A full shift: nonstop since the last Ice Age.', deal: '10× the years for 4× the price',
     cmp: p => `Your odds: still worse than getting <b>struck by lightning ${timesInARow(LIGHTNING_YEAR, p)} times in one year</b>.`,
     why: 'Why $8.07? 52! is 8.07 × 10⁶⁷. We waived the 67 zeros.',
-    perks: ['📱 <b>Phone wallpaper</b> of your best shuffle', '🎨 <b>Table themes & Professor outfits</b>: restyle the whole game', '📜 Certificate of Trying Anyway (PDF)', '<span class="imp-inc">Everything in Rookie</span>'] },
+    perks: ['<span class="imp-inc">Everything in Rookie, plus:</span>', '📱 <b>Phone wallpaper</b> of your best shuffle', '🎨 <b>Table themes</b> & Professor outfits', '📜 <b>Certificate</b> of Trying Anyway'] },
   { id: 'patron', icon: '★★★', name: 'Commander', years: 100000, price: '52',
     story: 'Night watch: nonstop since humans left Africa.', deal: 'For the truly committed',
     cmp: p => `Your odds: still worse than winning <b>${timesInARow(POWERBALL, p)} Powerball jackpots in a row</b>.`,
     why: 'Why $52? One dollar per card. The deck salutes you.',
-    perks: ['{grail}', '🏛️ Your name on the Wall of Hopeless Heroes', '👑 <b>Royal purple</b> Professor hat, deck & table', '<span class="imp-inc">Everything in Captain</span>'] }
+    perks: ['<span class="imp-inc">Everything in Captain, plus:</span>', '{grail}', '🏛️ <b>Your name</b> on the Wall of Hopeless Heroes', '👑 <b>Royal purple</b> hat, deck & table'] }
 ];
 /* What a station of N shuffles will likely reach, and what it adds to humanity's total. */
 let hofRowsCache = null;   // filled by the Hall of Firsts loader
@@ -4291,9 +4284,8 @@ function renderImpatient() {
         <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
         <p class="imp-impact" data-impact="${N}">${impactHTML(N)}</p>
       </div>
-      <p class="tt-get imp-get">Mission kit</p>
-      <ul class="imp-perks">${[t.perks[0]].map(x => (x === '{grail}' ? `<li data-gcperk>${grailPerk()}</li>` : `<li>${x}</li>`)).join('')}</ul>
-      <details class="imp-kit"><summary>Full kit</summary><ul class="imp-perks">${t.perks.slice(1).map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🕰️ Watch your station travel through history, live</li></ul></details>
+      <p class="tt-get imp-get">What you get</p>
+      <ul class="imp-perks">${t.perks.map(x => (x === '{grail}' ? `<li data-gcperk>${grailPerk()}</li>` : `<li>${x}</li>`)).join('')}</ul>
       <span class="imp-deal">${t.deal}</span>
       <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}"><span class="block">Support the mission</span><span class="block text-sm opacity-90">as a ${t.name} · ${cur}${t.price}</span></a>
       <p class="imp-why">${t.why}</p>
@@ -5848,7 +5840,7 @@ function renderTTCard() {
     <div class="tt-teaser"><p>For legends only. Eight GPUs, 66 million years, one deck, a seat on the golden board.</p><button type="button" class="tt-open">▸ Open the time machine</button></div>
     <div class="min-w-0">
       <p class="text-sm sm:text-base text-[#cfe3d7]">Only a few will ever hold this rank. Eight of the fastest chips on Earth, the ones that train artificial intelligence, carry you back to the day the asteroid wiped out the dinosaurs. From there you shuffle every single year back to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in under an hour and a half*</b>. You watch history fly past live, from the first tiny mammals to the moon landing, and your name goes up in gold on the Time Travellers board. Forever.</p>
-      <details class="tt-get-d mt-4" open><summary class="tt-get">Mission kit</summary>
+      <details class="tt-get-d mt-4" open><summary class="tt-get">What you get</summary>
       <ul class="imp-perks tt-perks mt-1">
         <li><b>🚀 Your number and name in gold, forever.</b> Your own seat on the Time Travellers board, a golden leaderboard for Time Travellers only, with a number that is never issued again. Golden helmet and all.</li>
         <li><b>🃏 A deck that exists nowhere else.</b> A real deck of playing cards, printed in the exact order of your best shuffle out of ${bigEnglish(TT.N)}, with your name on the back. Shipped to your door.</li>
