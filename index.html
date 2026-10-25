@@ -815,6 +815,8 @@
   .tt-teaser { grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.7rem 1.2rem; color:#e8dcb5; font-size:.95rem; }
   .tt-open { padding:.6rem 1.2rem; border-radius:12px; border:1px solid #ffd23f; background:rgba(255,210,63,.12); color:#ffe68a; font-weight:800; cursor:pointer; box-shadow:0 0 16px rgba(255,210,63,.25); }
   .tt-open:hover { background:rgba(255,210,63,.22); }
+  .tt-close { grid-column:1 / -1; justify-self:center; padding:.45rem 1rem; border-radius:10px; border:1px solid rgba(255,210,63,.45); background:none; color:#e8dcb5; font-size:.85rem; font-weight:700; cursor:pointer; }
+  .tt-close:hover { background:rgba(255,210,63,.1); color:#ffe68a; }
   .tt-card .flag { position:absolute; top:-.75rem; left:1.2rem; white-space:nowrap; font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; color:#1d1300; background:linear-gradient(90deg, #fff7c9, #ffd23f); border-radius:999px; padding:.2rem .7rem; }
   .tt-card h3 { font-family:Bungee, Impact, system-ui, sans-serif; font-weight:400; font-size:clamp(1.25rem, 3.6vw, 1.9rem); line-height:1.15; }
   .tt-hero { grid-column:1 / -1; display:flex; align-items:center; gap:clamp(.8rem, 3vw, 2rem); padding-bottom:1.1rem; border-bottom:1px solid rgba(255,210,63,.35); }
@@ -5872,8 +5874,15 @@ function renderTTCard() {
       <p class="imp-why">Why ${cur}${TT.price}? Eight of the fastest chips on Earth, one deck, no mercy. About ${cur}${(Number(TT.price) / (TT.years / 1e6)).toFixed(2)} per million years of shuffling. A bargain, historically.</p>
       <p class="text-[11px] text-[#9fb5a8]">*Measured on eight H100s: about 2.6 billion shuffles a second each. Your mission runs until all ${fmt(TT.N)} shuffles are done, however long the GPUs need, and your live panel shows the real speed. Every shuffle counts toward humankind's total. No prize, just glory.</p>
     </div>
+    <button type="button" class="tt-close">▴ Close the time machine</button>
   </div>`;
   box.querySelector('.tt-open').addEventListener('click', () => { box.querySelector('.tt-card').classList.remove('tt-fold'); track('tt-open'); });
+  box.querySelector('.tt-close').addEventListener('click', () => {
+    const card = box.querySelector('.tt-card');
+    card.classList.add('tt-fold');
+    if (card.getBoundingClientRect().top < 0) card.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });   // folded above you: bring it back into view
+    box.querySelector('.tt-open').focus({ preventScroll: true });
+  });
   const fold = box.querySelector('.tt-get-d');
   if (fold && matchMedia('(max-width: 640px)').matches) fold.open = false;   // phones: perks fold away, the price stays in view
   const buy = box.querySelector('[data-imp="traveller"]');
