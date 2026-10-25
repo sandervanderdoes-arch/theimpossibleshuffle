@@ -181,8 +181,10 @@
   .next-goal .ng-hint { display:block; margin-top:.15rem; font-size:.76rem; color:#9fb5a8; }
   .next-goal .ng-hint a { color:#ffe68a; text-decoration:underline dotted; text-underline-offset:3px; }
   .next-goal .ng-hint a:hover { color:#fff3c4; text-decoration-style:solid; }
-  a.go-sponsor.ap-sponsor { display:block; width:100%; margin-top:.55rem; padding:.4rem .6rem; border-radius:12px; white-space:normal; text-align:center; text-wrap:balance; }
-  .ap-sponsor[hidden] { display:none; }
+  a.go-sponsor.ap-sponsor { display:block; width:100%; margin-top:.45rem; padding:.2rem .3rem; border:0; background:none; box-shadow:none; border-radius:8px; white-space:normal; text-align:center; text-wrap:balance; font-size:.78rem; font-weight:700; color:#ffe68a; }
+  a.go-sponsor.ap-sponsor:hover { background:rgba(255,210,63,.08); box-shadow:none; color:#fff3c4; }
+  a.go-sponsor.ap-sponsor u { text-decoration:underline dotted; text-underline-offset:3px; }
+  .ap-sponsor[hidden], a.go-sponsor.ap-sponsor[hidden] { display:none; }
   /* World ranking shortcut in the shuffle panel (the board itself sits further down, below the Hall of Firsts) */
   .lb-jump { display:block; width:100%; min-height:44px; padding:.45rem .7rem; border-radius:12px; border:1px solid rgba(34,243,255,.55); background:rgba(34,243,255,.08); color:#bffcff; font-size:.85rem; font-weight:800; text-align:center; line-height:1.3; cursor:pointer; transition:background .15s ease, box-shadow .15s ease; }
   .lb-jump[hidden] { display:none; }
@@ -435,6 +437,13 @@
   .imp-story { font-size:.9rem; font-style:italic; color:#cfe3d7; }
   .imp-surprise { margin-top:.15rem; line-height:1.4; color:#ffe68a; }
   .imp-perks b { color:#fff; }
+  .imp-kit { margin-top:.15rem; }
+  .imp-kit summary { cursor:pointer; list-style:none; display:inline-block; font-size:.78rem; font-weight:700; color:#9fb5a8; padding:.15rem 0; }
+  .imp-kit summary::-webkit-details-marker { display:none; }
+  .imp-kit summary::before { content:"▸ "; color:#ffe68a; }
+  .imp-kit[open] summary::before { content:"▾ "; }
+  .imp-kit summary:hover { color:#cfe3d7; }
+  .imp-kit .imp-perks { margin-top:.2rem; }
   .imp-inc { color:#9fb5a8; font-style:italic; }
   .imp-stats { margin-top:.6rem; padding:.55rem .7rem; border-radius:12px; background:rgba(34,243,255,.07); border:1px solid rgba(34,243,255,.25); display:grid; gap:.2rem; font-size:.85rem; color:#cfe3d7; }
   .imp-stats b { color:#a5fbff; }
@@ -451,7 +460,6 @@
   .imp-impact:empty { display:none; }
   .imp-proof { font-size:.88rem; color:#cfe3d7; }
   .imp-proof b { color:#ffe68a; }
-  .imp-pay { text-align:center; font-size:.78rem; color:#9fb5a8; }
   summary.tt-get { cursor:pointer; list-style:none; }
   summary.tt-get::-webkit-details-marker { display:none; }
   summary.tt-get::after { content:" ▾"; }
@@ -479,13 +487,12 @@
   .next-goal a { color:#a5fbff; text-decoration:underline; }
   .imp-pick { scroll-margin-top:1rem; }
   /* Gift a station */
-  .gift-row { margin-top:.9rem; text-align:center; }
-  .gift-row[hidden], .gift-sent[hidden] { display:none; }
-  .gift-invite { display:inline-flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.3rem .45rem; padding:.55rem 1rem; border-radius:14px; border:1px dashed rgba(255,47,214,.6); background:rgba(255,47,214,.08); color:#ffd0f6; font-size:.9rem; cursor:pointer; transition:background .15s ease, box-shadow .15s ease; }
-  .gift-invite b { color:#fff; }
-  .gift-invite:hover { background:rgba(255,47,214,.16); box-shadow:0 0 18px rgba(255,47,214,.3); }
-  .gift-invite:hover .gs-arrow { transform:translateX(3px); }
-  .gift-invite .gs-arrow { display:inline-block; transition:transform .15s ease; color:#ff9bec; }
+  .imp-wink { margin-top:.5rem; font-size:.85rem; font-style:italic; color:#9fb5a8; }
+  .imp-quiet { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.3rem 1.4rem; margin-top:.9rem; font-size:.82rem; color:#9fb5a8; }
+  .imp-quiet span[hidden], .gift-sent[hidden] { display:none; }
+  .imp-qlink { background:none; border:0; padding:0; font:inherit; font-weight:700; color:#ffe9a3; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+  .imp-qlink.gift-q { color:#ffb3f0; }
+  .imp-qlink:hover { color:#fff; }
   .gift-sent { margin-top:.6rem; text-align:center; font-size:.8rem; color:#9fb5a8; }
   .gift-sent button { background:none; border:0; color:#ffe68a; text-decoration:underline; text-underline-offset:3px; cursor:pointer; font-size:.8rem; padding:.2rem .3rem; }
   #giftDlg { margin:auto; background:#04140d; color:var(--ink); border:1px solid var(--pink); border-radius:20px; padding:1.3rem 1.2rem 1.1rem; width:min(30rem, calc(100vw - 1.5rem)); max-height:calc(100dvh - 1.5rem); box-shadow:0 0 30px rgba(255,47,214,.35); }
@@ -729,8 +736,6 @@
   #cardDlg::backdrop { background:rgba(0,0,0,.7); }
   #cardDlg img { display:block; width:100%; height:auto; border-radius:14px; background:#06180f; aspect-ratio:1 / 1; }
   #rigged { position:fixed; left:.75rem; top:.75rem; z-index:110; }
-  .imp-merch { text-align:center; font-size:.85rem; color:#cfe3d7; }
-  .imp-merch a { color:#ffe9a3; font-weight:700; text-decoration:underline; text-underline-offset:3px; }
   #fab { position:fixed; right:calc(1rem + env(safe-area-inset-right, 0px)); bottom:calc(3.3rem + env(safe-area-inset-bottom, 0px)); z-index:55; }
   #fab[hidden] { display:none; }
   .fade { transition: opacity .4s; }
@@ -804,6 +809,12 @@
   .tt-empty { padding:1rem; border-radius:14px; border:1px dashed rgba(255,210,63,.5); color:#cfe3d7; font-size:.9rem; }
   .tt-card { position:relative; display:grid; gap:1.2rem; grid-template-columns:minmax(0, 1fr); padding:1.5rem 1.2rem 1.2rem; border-radius:20px; border:2px solid #ffd23f; background:radial-gradient(120% 120% at 100% 0%, rgba(255,210,63,.22), rgba(20,5,26,.85) 50%, rgba(0,0,0,.6)); box-shadow:0 0 0 1px #000, 0 0 40px rgba(255,210,63,.35); }
   @media (min-width: 900px) { .tt-card { grid-template-columns:minmax(0, 1.25fr) minmax(0, 1fr); padding:1.8rem; } }
+  /* Folded: just the hero and a teaser; the full card opens on request */
+  .tt-card.tt-fold > :not(.flag):not(.tt-hero):not(.tt-teaser) { display:none; }
+  .tt-card:not(.tt-fold) .tt-teaser { display:none; }
+  .tt-teaser { grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.7rem 1.2rem; color:#e8dcb5; font-size:.95rem; }
+  .tt-open { padding:.6rem 1.2rem; border-radius:12px; border:1px solid #ffd23f; background:rgba(255,210,63,.12); color:#ffe68a; font-weight:800; cursor:pointer; box-shadow:0 0 16px rgba(255,210,63,.25); }
+  .tt-open:hover { background:rgba(255,210,63,.22); }
   .tt-card .flag { position:absolute; top:-.75rem; left:1.2rem; white-space:nowrap; font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; color:#1d1300; background:linear-gradient(90deg, #fff7c9, #ffd23f); border-radius:999px; padding:.2rem .7rem; }
   .tt-card h3 { font-family:Bungee, Impact, system-ui, sans-serif; font-weight:400; font-size:clamp(1.25rem, 3.6vw, 1.9rem); line-height:1.15; }
   .tt-hero { grid-column:1 / -1; display:flex; align-items:center; gap:clamp(.8rem, 3vw, 2rem); padding-bottom:1.1rem; border-bottom:1px solid rgba(255,210,63,.35); }
@@ -999,7 +1010,7 @@
               <button type="button" data-ap="L" aria-pressed="false" title="50 shuffles per second">Ludicrous</button>
             </div>
             <p id="apRate" class="mono text-xs text-[#9fb5a8] mt-1 h-4 whitespace-nowrap"></p>
-            <a id="apSponsor" class="go-sponsor ap-sponsor" href="#impatient" hidden>🛰️ Faster than Ludicrous? Sponsor a mission <span class="gs-arrow" aria-hidden="true">↓</span></a>
+            <a id="apSponsor" class="go-sponsor ap-sponsor" href="#impatient" hidden>🛰️ Faster than Ludicrous? <u>Get a station</u> <span class="gs-arrow" aria-hidden="true">↓</span></a>
           </div>
           <button type="button" id="lbJump" class="lb-jump" hidden></button>
           <button type="button" id="soundBtn" class="chip-btn w-full" aria-pressed="false">🔇 Sound: off</button>
@@ -1135,13 +1146,16 @@
     <div class="panel imp-panel p-4 sm:p-6">
       <h2 id="impTitle" class="font-display text-lg sm:text-2xl neon-gold">🎖️ Become a Mission Sponsor</h2>
       <p class="mt-2 text-sm sm:text-base text-[#cfe3d7]">By hand, humanity needs about <b class="text-[#ffe68a]">51 novemdecillion years</b>. Mission Control can't do that alone: sponsor a stretch and your computer becomes an official <b class="text-[#a5fbff]">Mission Control station</b> that shuffles thousands of years' worth for humanity while you get on with your life. The Professor calls it cheating. We call it volunteering.</p>
+      <p class="imp-wink">Full disclosure: this is a joke. Your money keeps the joke running: servers, GPUs and the Professor's tea.</p>
       <p id="impProof" class="imp-proof mt-3" hidden></p>
-      <p id="impPick" class="imp-pick mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Support the mission: pick your rank.</p>
+      <p id="impPick" class="imp-pick mt-5 font-display text-sm sm:text-base text-[#ffe68a]">Enlist: pick your rank.</p>
       <div id="impTiers" class="imp-tiers mt-3"></div>
-      <p id="giftRow" class="gift-row" hidden><button type="button" id="giftOpenDlg" class="gift-invite">🎁 Know someone who deserves 10,000 years of futility? <b>Give a rank as a gift</b> <span class="gs-arrow" aria-hidden="true">→</span></button></p>
+      <p class="imp-quiet">
+        <span id="giftRow" hidden>🎁 <button type="button" id="giftOpenDlg" class="imp-qlink gift-q">Give a rank as a gift</button></span>
+        <span id="merchSponsor" hidden>👕 <a id="merchSponsorLink" class="imp-qlink" target="_blank" rel="noopener">Mission merch</a></span>
+        <span>🔒 Stripe · Apple Pay · Google Pay</span>
+      </p>
       <div id="giftSent" class="gift-sent" hidden></div>
-      <p class="imp-pay mt-3">🔒 Secure checkout by Stripe · Apple Pay · Google Pay · all major cards</p>
-      <p id="merchSponsor" class="imp-merch mt-3" hidden>👕 Rather wear the mission than fund it? <a id="merchSponsorLink" target="_blank" rel="noopener">Visit the mission merch shop ↗</a></p>
       <div id="ttCard" class="mt-6" hidden></div>
       <p id="impClosed" class="mt-4 text-sm text-[#ffe68a]" hidden></p>
       <p class="mt-4 text-xs text-[#9fb5a8]">*Your computer's time is an estimate for this device. Your station runs in this browser while the tab is open (on phones, while it's on screen); stand down anytime and it picks up where it left off on your next visit. A Time Traveller runs on our eight GPUs in the cloud instead: nothing runs on your computer, and you can close the tab. Your rank and extras unlock in the browser you pay in. Spoiler: you won't win, and there's no prize, just glory. Secure checkout by Stripe.</p>
@@ -1813,7 +1827,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, giftDraft: null, giftsSent: [], giftsRx: [], lucky: -1, luckyHits: 0, theme: 'classic', gcMine: -1 };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, giftDraft: null, giftsSent: [], giftsRx: [], lucky: -1, luckyHits: 0, theme: 'classic', gcMine: -1, apUsed: false };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1842,7 +1856,7 @@ const store = (() => {
       giftsSent: Array.isArray(p.giftsSent) ? p.giftsSent.filter(g => g && typeof g.url === 'string').slice(0, 5) : [],
       giftsRx: Array.isArray(p.giftsRx) ? p.giftsRx.filter(g => g && typeof g.id === 'string').slice(0, 10) : [],
       lucky: Number.isInteger(p.lucky) && p.lucky >= 0 && p.lucky < 52 ? p.lucky : -1, luckyHits: n(p.luckyHits), theme: str(p.theme) || 'classic',
-      gcMine: Number.isInteger(p.gcMine) && p.gcMine >= 0 && p.gcMine < 52 ? p.gcMine : -1
+      gcMine: Number.isInteger(p.gcMine) && p.gcMine >= 0 && p.gcMine < 52 ? p.gcMine : -1, apUsed: p.apUsed === true
     };
   } catch (e) { return def; }
 })();
@@ -3042,7 +3056,7 @@ const autopilot = {
 };
 function setAutopilot(mode) {
   const m = mode === '0' ? 0 : mode === 'L' ? 'L' : Number(mode);
-  if (m) prof.usedAp = true;
+  if (m) { prof.usedAp = true; if (!store.apUsed) { store.apUsed = true; saveStore(true); if (SITE.fund.tea || SITE.fund.odds || SITE.fund.patron) $('#apSponsor').hidden = !!MISSION.row; } }
   $$('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.ap === String(mode))));
   cancelAnimationFrame(autopilot.raf);
   if (autopilot.mode) flushAutopilot();
@@ -4172,7 +4186,7 @@ const IMP_TIERS = [
     story: 'A full shift: nonstop since the last Ice Age.', deal: '10× the years for 4× the price',
     cmp: p => `Your odds: still worse than getting <b>struck by lightning ${timesInARow(LIGHTNING_YEAR, p)} times in one year</b>.`,
     why: 'Why $8.07? 52! is 8.07 × 10⁶⁷. We waived the 67 zeros.',
-    perks: ['🎨 <b>Table themes & Professor outfits</b>: restyle the whole game', '📱 <b>Phone wallpaper</b> of your best shuffle', '📜 Certificate of Trying Anyway (PDF)', '<span class="imp-inc">Everything in Rookie</span>'] },
+    perks: ['📱 <b>Phone wallpaper</b> of your best shuffle', '🎨 <b>Table themes & Professor outfits</b>: restyle the whole game', '📜 Certificate of Trying Anyway (PDF)', '<span class="imp-inc">Everything in Rookie</span>'] },
   { id: 'patron', icon: '★★★', name: 'Commander', years: 100000, price: '52',
     story: 'Night watch: nonstop since humans left Africa.', deal: 'For the truly committed',
     cmp: p => `Your odds: still worse than winning <b>${timesInARow(POWERBALL, p)} Powerball jackpots in a row</b>.`,
@@ -4277,10 +4291,11 @@ function renderImpatient() {
         <p>🃏 <b>${bigShort(N)}</b> real shuffles for humanity</p>
         <p class="imp-impact" data-impact="${N}">${impactHTML(N)}</p>
       </div>
-      <p class="tt-get imp-get">What you get</p>
-      <ul class="imp-perks">${t.perks.map(x => (x === '{grail}' ? `<li data-gcperk>${grailPerk()}</li>` : `<li>${x}</li>`)).join('')}<li class="imp-surprise">🕰️ Watch your station travel through history, live</li></ul>
+      <p class="tt-get imp-get">Mission kit</p>
+      <ul class="imp-perks">${[t.perks[0]].map(x => (x === '{grail}' ? `<li data-gcperk>${grailPerk()}</li>` : `<li>${x}</li>`)).join('')}</ul>
+      <details class="imp-kit"><summary>Full kit</summary><ul class="imp-perks">${t.perks.slice(1).map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🕰️ Watch your station travel through history, live</li></ul></details>
       <span class="imp-deal">${t.deal}</span>
-      <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}"><span class="block">Support the mission</span><span class="block text-sm opacity-90">as a ${t.name} · ${cur}${t.price}</span></a>
+      <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}"><span class="block">Enlist as ${t.name}</span><span class="block text-sm opacity-90">${cur}${t.price}</span></a>
       <p class="imp-why">${t.why}</p>
     </div>`;
   }).join('');
@@ -4290,7 +4305,7 @@ function renderImpatient() {
   renderTTCard();
   any = any || !!F.traveller;
   $('#impatient').hidden = !any;
-  $('#apSponsor').hidden = !any;
+  $('#apSponsor').hidden = !any || !store.apUsed;   // the joke only lands once you've tried Autopilot
 }
 function refreshEtas() {
   $$('#impTiers [data-eta]').forEach(b => { b.textContent = shortDuration(Number(b.dataset.eta) / hyperRateGuess()); });
@@ -4639,11 +4654,11 @@ function renderGrailCards() {
     node.title = r ? `${cardLabel(r.card)} · held by ${r.name} since ${gcDate(r.created_at)}` : mine ? `${cardLabel(grail[i])} · your Holy Grail card, waiting for approval` : '';
   });
   $$('#impTiers [data-gcperk]').forEach(li => { li.innerHTML = grailPerk(); });
-  const line = $('#gcLine');
-  if (!SITE.fund.patron) { line.hidden = true; return; }
-  const n = GC.rows.length, left = GC.left === null ? 52 - n : GC.left;
-  line.innerHTML = n ? `👑 <b>${fmt(n)} of 52</b> Holy Grail cards carry a Commander's name. Tap a ♛ card to see whose. ${left ? `${fmt(left)} still free: <a href="#impatient">put your name on one</a>.` : 'All 52 are taken, forever.'}`
-    : `👑 Only 52 Holy Grail cards exist, and none has a name yet. <a href="#impatient">Commanders can put theirs on one</a>.`;
+  // In the game itself this is lore, not a sales pitch: the line only appears once cards carry names.
+  const line = $('#gcLine'), n = GC.rows.length, left = GC.left === null ? 52 - n : GC.left;
+  if (!n) { line.hidden = true; return; }
+  const latest = GC.rows.slice(-3).reverse().map((r, i) => `${i ? 'the ' : 'The '}<b>${cardLabel(r.card)}</b> ${i ? 'to' : 'belongs to'} ${escapeHtml(r.name)}`).join(', ');
+  line.innerHTML = `👑 ${latest}${n > 3 ? `, and ${fmt(n - 3)} more` : ''}. ${left ? `${fmt(left)} cards still nameless.` : 'Every card has a name, forever.'}`;
   line.hidden = false;
 }
 /* After a Commander checkout: which card did Mission Control deal you? (Stripe's redirect carries the checkout id.) */
@@ -5820,7 +5835,7 @@ function renderTTCard() {
   const box = $('#ttCard'), url = SITE.fund.traveller, cur = SITE.fund.currency || '$';
   if (MISSION.row) { box.hidden = true; return; }
   box.hidden = false;
-  box.innerHTML = `<div class="tt-card">
+  box.innerHTML = `<div class="tt-card tt-fold">
     <span class="flag">★★★★ THE HIGHEST RANK · ETERNAL STATUS</span>
     <div class="tt-hero">
       <svg class="tt-ava tt-ava-hero" viewBox="0 0 64 64" aria-hidden="true"><use href="#ttAstro"/></svg>
@@ -5830,9 +5845,10 @@ function renderTTCard() {
         <h3 class="tt-tagline">Go back 66 million years. Shuffle all the way home. Become a legend.</h3>
       </div>
     </div>
+    <div class="tt-teaser"><p>For legends only. Eight GPUs, 66 million years, one deck, a seat on the golden board.</p><button type="button" class="tt-open">▸ Open the time machine</button></div>
     <div class="min-w-0">
       <p class="text-sm sm:text-base text-[#cfe3d7]">Only a few will ever hold this rank. Eight of the fastest chips on Earth, the ones that train artificial intelligence, carry you back to the day the asteroid wiped out the dinosaurs. From there you shuffle every single year back to today: <b class="text-[#ffe68a]">66 million years of nonstop hand shuffling, in under an hour and a half*</b>. You watch history fly past live, from the first tiny mammals to the moon landing, and your name goes up in gold on the Time Travellers board. Forever.</p>
-      <details class="tt-get-d mt-4" open><summary class="tt-get">What you get</summary>
+      <details class="tt-get-d mt-4" open><summary class="tt-get">Mission kit</summary>
       <ul class="imp-perks tt-perks mt-1">
         <li><b>🚀 Your number and name in gold, forever.</b> Your own seat on the Time Travellers board, a golden leaderboard for Time Travellers only, with a number that is never issued again. Golden helmet and all.</li>
         <li><b>🃏 A deck that exists nowhere else.</b> A real deck of playing cards, printed in the exact order of your best shuffle out of ${bigEnglish(TT.N)}, with your name on the back. Shipped to your door.</li>
@@ -5857,6 +5873,7 @@ function renderTTCard() {
       <p class="text-[11px] text-[#9fb5a8]">*Measured on eight H100s: about 2.6 billion shuffles a second each. Your mission runs until all ${fmt(TT.N)} shuffles are done, however long the GPUs need, and your live panel shows the real speed. Every shuffle counts toward humankind's total. No prize, just glory.</p>
     </div>
   </div>`;
+  box.querySelector('.tt-open').addEventListener('click', () => { box.querySelector('.tt-card').classList.remove('tt-fold'); track('tt-open'); });
   const fold = box.querySelector('.tt-get-d');
   if (fold && matchMedia('(max-width: 640px)').matches) fold.open = false;   // phones: perks fold away, the price stays in view
   const buy = box.querySelector('[data-imp="traveller"]');

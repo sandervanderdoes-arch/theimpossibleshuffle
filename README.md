@@ -47,6 +47,7 @@ npx tailwindcss@3.4.17 -c tailwind.config.js -i tw-input.css -o tw.css --minify
 - The site shows a ♛ on approved cards in the Holy Grail deck (tap for "held by NAME since DATE"), a line under the deck, and "N of 52 left" on the Commander card ("sold out" at 0).
 - The Commander payment link redirects to `https://theimpossibleshuffle.com/?thanks=patron&cs={CHECKOUT_SESSION_ID}`; the page hashes the checkout id and asks `grail_card_for` which card it was dealt, then shows it (pending approval).
 - Perks unlock in the browser that paid (or unwrapped a gift), like before.
+- Tone: money stays low-key. The tier cards show one headline perk with the rest under "Full kit", the Time Traveller card opens on request, gift / merch / checkout share one quiet line, and the shuffle panel only mentions stations ("Faster than Ludicrous?") once a visitor has tried Autopilot.
 
 ## Gift a station
 
