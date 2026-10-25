@@ -148,12 +148,29 @@ def sponsor_event(cs, cents):
     rank = sponsor_rank(cents)
     if not rank:
         return {'ok': True, 'ignored': 'amount'}
+    ticket = hashlib.sha256(cs['id'].encode()).hexdigest()
+    out = {'ok': True, 'sponsor': rank}
     try:
-        _sb('sponsor_events?on_conflict=ticket', {'ticket': hashlib.sha256(cs['id'].encode()).hexdigest(), 'rank': rank},
+        _sb('sponsor_events?on_conflict=ticket', {'ticket': ticket, 'rank': rank},
             prefer='return=minimal,resolution=ignore-duplicates')
     except RuntimeError as e:                            # table not created yet: never make Stripe retry over a ticker line
-        return {'ok': True, 'sponsor': rank, 'stored': False, 'why': str(e)[:200]}
-    return {'ok': True, 'sponsor': rank}
+        out.update(stored=False, why=str(e)[:200])
+    if rank == 'Commander':
+        out['grail_card'] = grail_card(cs, ticket)
+    return out
+
+
+def grail_card(cs, ticket):
+    """A Commander who filled in "Name on your Holy Grail card" is dealt a random free card (see grail-cards.sql).
+    The field is optional: no name, no card. Names wait for approval in Supabase before they show."""
+    name = next((f.get('text', {}).get('value') for f in (cs.get('custom_fields') or []) if f.get('type') == 'text'), None)
+    name = re.sub(r'\s+', ' ', name or '').strip()[:20]
+    if not name:
+        return None
+    try:
+        return _sb('rpc/deal_grail_card', {'p_ticket': ticket, 'p_name': name})   # the same payment always gets the same card
+    except RuntimeError as e:                            # grail-cards.sql not run yet: the payment still counts
+        return {'error': str(e)[:200]}
 
 
 @app.function(image=web_image, secrets=[secret], timeout=MAX_SECONDS + 1800)

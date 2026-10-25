@@ -39,7 +39,13 @@ npx tailwindcss@3.4.17 -c tailwind.config.js -i tw-input.css -o tw.css --minify
 
 - **Rookie:** lucky card (pick one; it's marked 🍀 in the Holy Grail and both decks glow gold when it lands in its spot; hits are counted), the Professor greets you by rank (`LINES.rankTea/rankOdds/rankPatron`), card backs and the sponsor badge.
 - **Captain:** table themes (`THEMES`: casino red, midnight blue, retro sunset) and Professor outfits, a phone wallpaper of your best shuffle (1179×2556 image), the Certificate of Trying Anyway. Plus everything in Rookie.
-- **Commander:** the Wall of Hopeless Heroes, royal purple & gold (purple top hat for the Professor, purple card back, purple table). Plus everything in Captain.
+- **Commander:** a name on a Holy Grail card (see below), the Wall of Hopeless Heroes, royal purple (purple top hat for the Professor, purple card back, purple table). Plus everything in Captain.
+
+### Holy Grail cards (only 52)
+
+- `supabase/grail-cards.sql` creates `grail_cards` (one row per card, 0 = A♠ … 51 = K♣). Only the Modal webhook writes: a Commander checkout with the optional custom field "Name on your Holy Grail card" is dealt a random free card (`deal_grail_card`; Stripe retries get the same card). Names wait for approval (Table Editor → `grail_cards` → `approved` = true); deleting a row puts the card back in the deck.
+- The site shows a ♛ on approved cards in the Holy Grail deck (tap for "held by NAME since DATE"), a line under the deck, and "N of 52 left" on the Commander card ("sold out" at 0).
+- The Commander payment link redirects to `https://theimpossibleshuffle.com/?thanks=patron&cs={CHECKOUT_SESSION_ID}`; the page hashes the checkout id and asks `grail_card_for` which card it was dealt, then shows it (pending approval).
 - Perks unlock in the browser that paid (or unwrapped a gift), like before.
 
 ## Gift a station

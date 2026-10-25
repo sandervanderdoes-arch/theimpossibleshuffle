@@ -76,7 +76,10 @@ database rebuilds it a third time before it believes it.
    records every Rookie, Captain and Commander purchase (rank and time only) for the REAL lines
    in the site's jokes bar. Stripe already sends those checkouts to this webhook; redeploy after
    pulling (`modal deploy time_traveller.py`).
-9. **Notifications** (optional, recommended): put your ntfy topic in
+9. **Holy Grail cards:** run `supabase/grail-cards.sql`, redeploy, then on the Commander payment link add a
+   custom text field "Name on your Holy Grail card" (optional) and set the redirect after payment to
+   `https://theimpossibleshuffle.com/?thanks=patron&cs={CHECKOUT_SESSION_ID}`.
+10. **Notifications** (optional, recommended): put your ntfy topic in
    `supabase/traveller-notify.sql` and run it in the SQL editor. Your phone then pings when someone
    boards, when their mission is done (tap it: the deck designer opens with them picked) and if a
    mission fails (refund them in Stripe).

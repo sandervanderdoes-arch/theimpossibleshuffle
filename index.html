@@ -140,6 +140,14 @@
   .pcard.match { box-shadow: 0 0 0 2px var(--cyan), 0 0 12px var(--cyan), 0 0 26px rgba(34,243,255,.55); }
   .pcard.match .chk { display:block; }
   .imp-input.lucky-sel { flex:0 1 16rem; min-width:10rem; }
+  /* Holy Grail cards: a crown on the cards that carry a Commander's name */
+  .pcard.held::after { content:"♛"; position:absolute; right:-5px; bottom:-6px; width:16px; height:16px; border-radius:999px; background:#ffd23f; color:#3b2600; font:800 11px/16px system-ui, sans-serif; text-align:center; box-shadow:0 0 8px rgba(255,210,63,.8); z-index:2; }
+  .pcard.held { cursor:pointer; }
+  .pcard.held.mine-pending::after { background:#3b2600; color:#ffd23f; border:1px dashed #ffd23f; }
+  .gc-line { margin-top:.6rem; font-size:.78rem; line-height:1.45; color:#cfe3d7; }
+  .gc-line b { color:#ffe68a; }
+  .gc-line a { color:#ffe9a3; text-decoration:underline; text-underline-offset:3px; }
+  .imp-perks li[data-gcperk] .gc-left { color:#ffe68a; font-weight:800; }
   /* Your lucky card: a clover on its Grail spot, gold when it lands there */
   .pcard.lucky-mark::before { content:"🍀"; position:absolute; top:-7px; left:-7px; font-size:12px; line-height:1; z-index:3; filter:drop-shadow(0 0 3px rgba(0,0,0,.8)); }
   .pcard.lucky-home { box-shadow:0 0 0 2px #ffd23f, 0 0 14px #ffd23f, 0 0 30px rgba(255,210,63,.7) !important; }
@@ -541,13 +549,15 @@
   @media (max-width: 420px) { .gc-stats { grid-template-columns:1fr; } }
   @media (prefers-reduced-motion: reduce) { .gift-box, .gift-box.shake { animation:none; } .gift-cert { animation:none; } .gift-box.open .gb-lid, .gift-box.open .gb-body { transition:none; } }
   @media (min-width: 1024px) and (max-height: 900px) {     /* laptop screens: heading and all three cards fit in one view */
-    .imp-card { padding:1.15rem 1rem .85rem; }
-    .imp-years .n { font-size:min(1.7rem, 11cqi); }
-    .imp-story { font-size:.85rem; }
-    .imp-stats { margin-top:.45rem; padding:.45rem .65rem; }
-    .imp-get { margin-top:.6rem; }
-    .imp-perks { font-size:.85rem; gap:.2rem; }
-    .imp-deal { margin-top:auto; padding-top:.6rem; }
+    .imp-card { padding:1rem .95rem .75rem; gap:.15rem; }
+    .imp-years .n { font-size:min(1.6rem, 11cqi); }
+    .imp-story { font-size:.82rem; }
+    .imp-stats { margin-top:.4rem; padding:.4rem .6rem; gap:.1rem; font-size:.82rem; }
+    .imp-get { margin-top:.5rem; }
+    .imp-get + .imp-perks { margin-top:.25rem; }
+    .imp-perks { font-size:.83rem; gap:.15rem; line-height:1.35; }
+    .imp-deal { margin-top:auto; padding-top:.5rem; margin-bottom:.35rem; }
+    .imp-why { margin-top:.35rem; }
   }
   .imp-deal { margin-top:auto; align-self:center; margin-bottom:.45rem; font:800 .7rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.04em; color:#ffe68a; }
   .imp-buy { text-align:center; text-decoration:none; font-size:1rem !important; }
@@ -944,6 +954,7 @@
           <p class="mono text-xs text-[#9fb5a8]">shuffled once · fixed forever · the same deck for every human</p>
         </div>
         <div id="grailGrid" class="deck-grid" role="list" aria-label="The Holy Grail Sequence, 52 cards"></div>
+        <p id="gcLine" class="gc-line" hidden></p>
       </section>
 
       <section class="panel p-3 sm:p-5" aria-labelledby="chalTitle">
@@ -1310,6 +1321,7 @@
     <label class="gift-field">For <input id="giftTo" class="imp-input" maxlength="30" placeholder="Their name" autocomplete="off"></label>
     <label class="gift-field">From <input id="giftFrom" class="imp-input" maxlength="30" placeholder="Your name" autocomplete="given-name"></label>
     <label class="gift-field">A message <span>(optional)</span> <textarea id="giftMsg" class="imp-input" maxlength="120" rows="2" placeholder="Happy birthday! Don't spend it all at once."></textarea></label>
+    <p id="giftGcHint" class="gift-small" hidden>🂡 In the checkout you can also put their name on a Holy Grail card (only 52 exist).</p>
     <button type="button" id="giftGo" class="shuffle-btn gift-go" disabled>Continue to secure checkout</button>
     <p id="giftWait" class="gift-small" hidden>✅ Checkout opened in a new tab. After paying, Stripe brings you back and your gift link appears there.</p>
     <p class="gift-small">After paying you get a gift link to send by WhatsApp, email or anything else. Their station runs on their own computer. 🔒 Secure checkout by Stripe.</p>
@@ -1792,7 +1804,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, giftDraft: null, giftsSent: [], giftsRx: [], lucky: -1, luckyHits: 0, theme: 'classic' };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, giftDraft: null, giftsSent: [], giftsRx: [], lucky: -1, luckyHits: 0, theme: 'classic', gcMine: -1 };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1820,7 +1832,8 @@ const store = (() => {
       giftDraft: p.giftDraft && typeof p.giftDraft === 'object' ? p.giftDraft : null,
       giftsSent: Array.isArray(p.giftsSent) ? p.giftsSent.filter(g => g && typeof g.url === 'string').slice(0, 5) : [],
       giftsRx: Array.isArray(p.giftsRx) ? p.giftsRx.filter(g => g && typeof g.id === 'string').slice(0, 10) : [],
-      lucky: Number.isInteger(p.lucky) && p.lucky >= 0 && p.lucky < 52 ? p.lucky : -1, luckyHits: n(p.luckyHits), theme: str(p.theme) || 'classic'
+      lucky: Number.isInteger(p.lucky) && p.lucky >= 0 && p.lucky < 52 ? p.lucky : -1, luckyHits: n(p.luckyHits), theme: str(p.theme) || 'classic',
+      gcMine: Number.isInteger(p.gcMine) && p.gcMine >= 0 && p.gcMine < 52 ? p.gcMine : -1
     };
   } catch (e) { return def; }
 })();
@@ -4155,7 +4168,7 @@ const IMP_TIERS = [
     story: 'Night watch: nonstop since humans left Africa.', deal: 'For the truly committed',
     cmp: p => `Your odds: still worse than winning <b>${timesInARow(POWERBALL, p)} Powerball jackpots in a row</b>.`,
     why: 'Why $52? One dollar per card. The deck salutes you.',
-    perks: ['🏛️ Your name on the Wall of Hopeless Heroes', '👑 <b>Royal purple & gold</b>: a Professor in a purple top hat and a matching purple deck, for Commanders only', '<span class="imp-inc">Everything in Captain</span>'] }
+    perks: ['{grail}', '🏛️ Your name on the Wall of Hopeless Heroes', '👑 <b>Royal purple</b> Professor hat, deck & table', '<span class="imp-inc">Everything in Captain</span>'] }
 ];
 /* What a station of N shuffles will likely reach, and what it adds to humanity's total. */
 let hofRowsCache = null;   // filled by the Hall of Firsts loader
@@ -4256,7 +4269,7 @@ function renderImpatient() {
         <p class="imp-impact" data-impact="${N}">${impactHTML(N)}</p>
       </div>
       <p class="tt-get imp-get">What you get</p>
-      <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🕰️ Watch your station travel through ${fmt(t.years)} years of history, live.</li></ul>
+      <ul class="imp-perks">${t.perks.map(x => (x === '{grail}' ? `<li data-gcperk>${grailPerk()}</li>` : `<li>${x}</li>`)).join('')}<li class="imp-surprise">🕰️ Watch your station travel through history, live</li></ul>
       <span class="imp-deal">${t.deal}</span>
       <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}"><span class="block">Support the mission</span><span class="block text-sm opacity-90">as a ${t.name} · ${cur}${t.price}</span></a>
       <p class="imp-why">${t.why}</p>
@@ -4334,6 +4347,7 @@ function giftValidate() {
   const t = tierById(GIFT.tier), cur = SITE.fund.currency || '$';
   $('#giftGo').disabled = !giftClean($('#giftTo').value, 30) || !giftClean($('#giftFrom').value, 30);
   $('#giftGo').textContent = `Continue to secure checkout · ${cur}${t.price}`;
+  $('#giftGcHint').hidden = GIFT.tier !== 'patron' || GC.left === 0;
 }
 function giftCheckout() {
   const to = giftClean($('#giftTo').value, 30), fr = giftClean($('#giftFrom').value, 30), url = SITE.fund[GIFT.tier];
@@ -4585,6 +4599,65 @@ function makeWallpaper() {
   }, 'image/png');
 }
 
+/* ---------- Holy Grail cards (supabase/grail-cards.sql) ----------
+   A Commander can put their name on one card of the Holy Grail deck: only 52 exist. The Stripe webhook
+   deals a random free card; names show once approved. Claimed cards wear a crown in the Grail deck. */
+const GC = { rows: [], left: null };
+const cardLabel = c => RANKS[c % 13] + SUITS[(c / 13) | 0].sym;
+const gcDate = ts => new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+function grailPerk() {
+  if (GC.left === 0) return '🂡 <b>Holy Grail cards</b>: all 52 have a name. Sold out, forever.';
+  return `🂡 <b>Your name on a Holy Grail card</b> · <span class="gc-left">${GC.left === null ? '52' : fmt(GC.left)} of 52 left</span>`;
+}
+async function loadGrailCards() {
+  if (!live.on) return;
+  try {
+    const [rows, left] = await Promise.all([
+      fetch(`${LIVE_COUNTER.url}/rest/v1/grail_cards?select=card,name,created_at&order=created_at.asc`, { headers: liveHeaders(), cache: 'no-store' }).then(r => (r.ok ? r.json() : Promise.reject(r.status))),
+      lbRpc('grail_cards_left', {})
+    ]);
+    GC.rows = rows.filter(r => Number.isInteger(r.card) && r.card >= 0 && r.card < 52 && typeof r.name === 'string');
+    GC.left = Number.isFinite(Number(left)) ? Number(left) : null;
+  } catch (e) { return; }                      // grail-cards.sql not run yet: no crowns, the perk line says 52 left
+  renderGrailCards();
+}
+function renderGrailCards() {
+  const byCard = Object.fromEntries(GC.rows.map(r => [r.card, r]));
+  G.cards.forEach((node, i) => {
+    const r = byCard[grail[i]], mine = store.gcMine === grail[i] && !r;
+    node.classList.toggle('held', !!r || mine);
+    node.classList.toggle('mine-pending', mine);
+    node.title = r ? `${cardLabel(r.card)} · held by ${r.name} since ${gcDate(r.created_at)}` : mine ? `${cardLabel(grail[i])} · your Holy Grail card, waiting for approval` : '';
+  });
+  $$('#impTiers [data-gcperk]').forEach(li => { li.innerHTML = grailPerk(); });
+  const line = $('#gcLine');
+  if (!SITE.fund.patron) { line.hidden = true; return; }
+  const n = GC.rows.length, left = GC.left === null ? 52 - n : GC.left;
+  line.innerHTML = n ? `👑 <b>${fmt(n)} of 52</b> Holy Grail cards carry a Commander's name. Tap a ♛ card to see whose. ${left ? `${fmt(left)} still free: <a href="#impatient">put your name on one</a>.` : 'All 52 are taken, forever.'}`
+    : `👑 Only 52 Holy Grail cards exist, and none has a name yet. <a href="#impatient">Commanders can put theirs on one</a>.`;
+  line.hidden = false;
+}
+/* After a Commander checkout: which card did Mission Control deal you? (Stripe's redirect carries the checkout id.) */
+async function grailReveal(cs) {
+  if (!live.on || !/^cs_[A-Za-z0-9_]{8,200}$/.test(cs)) return;
+  const hash = bytesHex(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(cs))));
+  for (let i = 0; i < 12; i++) {                // the webhook can arrive a few seconds after you do
+    try {
+      const rows = await lbRpc('grail_card_for', { p_ticket: hash });
+      if (Array.isArray(rows) && rows.length) {
+        const c = rows[0].card;
+        store.gcMine = c; saveStore(true);
+        renderGrailCards();
+        toast(`🂡 <b>Mission Control dealt you the ${cardLabel(c)}!</b> Your name goes on the ${NAMES[c]} in the Holy Grail as soon as it's approved. One of only 52.`);
+        setPose('clap', `The ${NAMES[c]}! Guard it well, Commander.`);
+        track('grail-card-dealt');
+        return;
+      }
+    } catch (e) { return; }
+    await new Promise(r => setTimeout(r, 3000));
+  }
+}
+
 /* ---------- Thank-you return from Stripe ---------- */
 function handleThanks() {
   const params = new URLSearchParams(location.search);
@@ -4592,7 +4665,7 @@ function handleThanks() {
   const t = id && tierById(id);
   if (!t) return;
   if (giftFromThanks(id)) {                     // bought as a gift: a link for the recipient, nothing assigned here
-    params.delete('thanks');
+    params.delete('thanks'); params.delete('cs');
     const q = params.toString();
     try { history.replaceState(null, '', location.pathname + (q ? '?' + q : '')); } catch (e) { /* file:// */ }
     return;
@@ -4603,7 +4676,9 @@ function handleThanks() {
   store.hyper.bought += t.years * HAND_YEAR;
   saveStore(true);
   track('thanks-' + id);
-  params.delete('thanks');
+  const cs = params.get('cs');
+  if (id === 'patron' && cs) setTimeout(() => grailReveal(cs), 1500);   // the card you were dealt, if you gave a name
+  params.delete('thanks'); params.delete('cs');
   const q = params.toString();
   try { history.replaceState(null, '', location.pathname + (q ? '?' + q : '') + '#hyperBox'); } catch (e) { /* file:// */ }
   setTimeout(() => {
@@ -5202,9 +5277,14 @@ function initImpatient() {
   renderHyper();
   loadWall();
   loadSponsorEvents();
+  loadGrailCards();
   $('#hyperGo').addEventListener('click', () => (HYPER.running ? hyperPause() : hyperStart()));
   // Gifts
   $('#giftOpenDlg').addEventListener('click', () => giftDialog());
+  $('#grailGrid').addEventListener('click', e => {
+    const node = e.target.closest('.pcard.held'); if (!node) return;
+    toast(`👑 ${escapeHtml(node.title)}. One of only 52 Holy Grail cards.`);
+  });
   $('#giftRanks').addEventListener('click', e => { const b = e.target.closest('[data-gt]'); if (!b) return; GIFT.tier = b.dataset.gt; $$('#giftRanks [data-gt]').forEach(x => x.setAttribute('aria-checked', String(x === b))); giftValidate(); });
   ['#giftTo', '#giftFrom'].forEach(sel => $(sel).addEventListener('input', giftValidate));
   $('#giftGo').addEventListener('click', giftCheckout);
