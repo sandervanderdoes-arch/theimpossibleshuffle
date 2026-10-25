@@ -35,6 +35,13 @@ npx tailwindcss@3.4.17 -c tailwind.config.js -i tw-input.css -o tw.css --minify
 - **Sponsor moments in the jokes bar:** `supabase/sponsor-events.sql` creates `sponsor_events` (rank and time only, no names). Only the Modal webhook writes to it, after checking Stripe's signature, so every "REAL · A new Captain joined the mission 2 hours ago" line is a real payment. The rank comes from the amount ($1.92 / $8.07 / $52). Hide a test purchase with `hidden` = true. Without the table the site simply shows no sponsor lines.
 - The Wall of Hopeless Heroes uses the `sponsors` table from `supabase/sponsors.sql`. Names arrive unapproved; approve them in the Supabase Table Editor. `supabase/wall-notify.sql` (optional) sends you a push notification through ntfy for every new name.
 
+## Sponsor perks per rank
+
+- **Rookie:** lucky card (pick one; it's marked 🍀 in the Holy Grail and both decks glow gold when it lands in its spot; hits are counted), the Professor greets you by rank (`LINES.rankTea/rankOdds/rankPatron`), card backs and the sponsor badge.
+- **Captain:** table themes (`THEMES`: casino red, midnight blue, retro sunset) and Professor outfits, a phone wallpaper of your best shuffle (1179×2556 image), the Certificate of Trying Anyway. Plus everything in Rookie.
+- **Commander:** the Wall of Hopeless Heroes, royal purple & gold (purple top hat for the Professor, purple card back, purple table). Plus everything in Captain.
+- Perks unlock in the browser that paid (or unwrapped a gift), like before.
+
 ## Gift a station
 
 - Under the tiers, "Give a rank as a gift" opens a short form (rank, for, from, optional message). The names are kept as a draft in the buyer's browser and the normal Stripe link opens.

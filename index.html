@@ -139,6 +139,16 @@
   .pcard .chk { display:none; position:absolute; right:-5px; top:-6px; width:16px; height:16px; border-radius:999px; background:var(--cyan); color:#00191b; font:800 11px/16px system-ui, sans-serif; text-align:center; box-shadow:0 0 8px var(--cyan); z-index:2; }
   .pcard.match { box-shadow: 0 0 0 2px var(--cyan), 0 0 12px var(--cyan), 0 0 26px rgba(34,243,255,.55); }
   .pcard.match .chk { display:block; }
+  .imp-input.lucky-sel { flex:0 1 16rem; min-width:10rem; }
+  /* Your lucky card: a clover on its Grail spot, gold when it lands there */
+  .pcard.lucky-mark::before { content:"🍀"; position:absolute; top:-7px; left:-7px; font-size:12px; line-height:1; z-index:3; filter:drop-shadow(0 0 3px rgba(0,0,0,.8)); }
+  .pcard.lucky-home { box-shadow:0 0 0 2px #ffd23f, 0 0 14px #ffd23f, 0 0 30px rgba(255,210,63,.7) !important; }
+  .pcard.lucky-home::before { content:"🍀"; position:absolute; top:-8px; left:-8px; font-size:14px; line-height:1; z-index:3; }
+  /* Table themes (Captain and up): the felt behind everything */
+  body.th-casino { background:radial-gradient(ellipse 120% 60% at 50% -10%, #6a1622 0%, #3d0b14 35%, #1c050a 70%, #0d0205 100%) fixed; }
+  body.th-midnight { background:radial-gradient(ellipse 120% 60% at 50% -10%, #17306a 0%, #0c1a40 35%, #050b1e 70%, #02050d 100%) fixed; }
+  body.th-sunset { background:radial-gradient(ellipse 120% 60% at 50% -10%, #8a3b12 0%, #4a1d33 38%, #1d0a1f 70%, #0b0410 100%) fixed; }
+  body.th-royal { background:radial-gradient(ellipse 120% 60% at 50% -10%, #4b1784 0%, #2a0b4d 38%, #130524 70%, #08020f 100%) fixed; }
   .pcard.ding { animation: ding .5s ease-out; }
   @keyframes ding { 0% { transform:scale(1); } 35% { transform:scale(1.2); filter:brightness(1.25); } 100% { transform:scale(1); } }
 
@@ -408,6 +418,8 @@
   }
   .imp-story { font-size:.9rem; font-style:italic; color:#cfe3d7; }
   .imp-surprise { margin-top:.15rem; line-height:1.4; color:#ffe68a; }
+  .imp-perks b { color:#fff; }
+  .imp-inc { color:#9fb5a8; font-style:italic; }
   .imp-stats { margin-top:.6rem; padding:.55rem .7rem; border-radius:12px; background:rgba(34,243,255,.07); border:1px solid rgba(34,243,255,.25); display:grid; gap:.2rem; font-size:.85rem; color:#cfe3d7; }
   .imp-stats b { color:#a5fbff; }
   .imp-stats span { color:#9fb5a8; font-size:.78rem; }
@@ -622,19 +634,38 @@
   .replay-note .odds { display:block; margin-top:.3rem; color:#ffe68a; }
   .replay-note .odds b { color:#ffe68a; }
   .replay-note .tag { display:inline-block; margin-right:.35rem; padding:.05rem .45rem; border-radius:999px; background:#22f3ff; color:#03262b; font:800 .65rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; vertical-align:1px; }
-  .hof { padding:.75rem; border-radius:14px; border:1px solid rgba(255,210,63,.3); background:rgba(255,210,63,.05); }
-  .hof-title { margin:0; font-size:.85rem; line-height:1.45; color:#cfe3d7; }
-  .hof-title b { color:#ffe68a; margin-right:.3rem; }
-  .hof-list { list-style:none; margin:.6rem 0 0; padding:0; display:grid; gap:.45rem; grid-template-columns:repeat(3, minmax(0, 1fr)); }
-  @media (max-width:640px) { .hof-list { grid-template-columns:minmax(0, 1fr); gap:.35rem; } }
-  .hof-rung { min-width:0; display:flex; align-items:center; gap:.6rem; padding:.45rem .6rem; border-radius:12px; background:rgba(0,0,0,.35); border:1px dashed rgba(255,255,255,.2); }
-  .hof-rung.claimed { border:1px solid rgba(255,210,63,.6); }
-  .hof-rung.dream { border-color:rgba(255,47,214,.65); }
-  .hof-rung .k { flex:none; font:800 1rem/1 "JetBrains Mono", ui-monospace, monospace; color:#ffe68a; }
-  .hof-rung .txt { min-width:0; display:flex; flex-direction:column; }
-  .hof-rung .who { font-size:.82rem; font-weight:700; color:#fff; overflow-wrap:break-word; line-height:1.3; }
-  .hof-rung .who.open { color:#9fb5a8; font-weight:600; }
-  .hof-rung .odds { font-size:.68rem; color:var(--muted); line-height:1.3; }
+  /* Hall of Firsts: marble and gold, louder than the leaderboard */
+  .hof-panel { position:relative; padding:1.4rem 1.1rem 1.1rem; border-radius:22px; text-align:center; border:2px solid rgba(255,210,63,.75);
+    background:radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,210,63,.16), transparent 70%), repeating-linear-gradient(115deg, rgba(255,255,255,.025) 0 2px, transparent 2px 14px), linear-gradient(180deg, #17140a, #070604);
+    box-shadow:0 0 0 1px rgba(0,0,0,.5), 0 0 40px rgba(255,210,63,.18), inset 0 0 0 6px rgba(255,210,63,.07); }
+  .hof-eyebrow { font:800 .68rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.16em; color:#c9a23a; }
+  .hof-h { margin-top:.35rem; font-family:Bungee, Impact, system-ui, sans-serif; font-size:clamp(1.6rem, 6vw, 2.6rem); line-height:1.1; color:#ffe68a; text-shadow:0 0 12px rgba(255,210,63,.55), 0 0 34px rgba(255,210,63,.3); }
+  .hof-lead { margin:.5rem auto 0; max-width:40rem; font-size:.95rem; line-height:1.5; color:#e8dcb5; text-wrap:balance; }
+  .hof-lead b { color:#fff; }
+  #hofCount { display:block; margin-top:.2rem; font-weight:800; color:#ffe68a; }
+  .hof-list { list-style:none; margin:1.1rem 0 0; padding:0; display:grid; gap:.6rem; grid-template-columns:repeat(3, minmax(0, 1fr)); text-align:left; }
+  .hof-rung { position:relative; min-width:0; display:flex; align-items:center; gap:.7rem; padding:.7rem .8rem; border-radius:14px; border:1px dashed rgba(255,210,63,.35); background:rgba(0,0,0,.45); }
+  .hof-rung .k { flex:none; min-width:4.3rem; font:800 1.35rem/1 "JetBrains Mono", ui-monospace, monospace; color:#c9a23a; }
+  .hof-rung .txt { min-width:0; display:flex; flex-direction:column; gap:.1rem; }
+  .hof-rung .who { font-size:.92rem; font-weight:800; color:#fff; overflow-wrap:anywhere; line-height:1.25; }
+  .hof-rung .who.open { color:#d8c690; font-weight:700; }
+  .hof-rung .odds { font-size:.72rem; color:#a8997a; line-height:1.3; }
+  .hof-rung.claimed { border:1px solid #ffd23f; background:linear-gradient(135deg, #ffe9a0, #d9a520 55%, #a8740c); box-shadow:0 0 18px rgba(255,210,63,.35), inset 0 1px 0 rgba(255,255,255,.6); }
+  .hof-rung.claimed .k { color:#3b2600; }
+  .hof-rung.claimed .who { color:#1d1300; }
+  .hof-rung.claimed .odds { color:#5a4110; }
+  .hof-rung .forever { position:absolute; top:.35rem; right:.55rem; font:800 .58rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.12em; color:#5a4110; }
+  .hof-rung.next { border:2px solid #ff2fd6; background:rgba(255,47,214,.1); animation:hofPulse 2.2s ease-in-out infinite; }
+  .hof-rung.next .k { color:#ff8bec; }
+  .hof-rung.next .tag { position:absolute; top:-.6rem; left:.7rem; padding:.1rem .5rem; border-radius:999px; background:#ff2fd6; color:#fff; font:800 .58rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.1em; }
+  .hof-rung.dream:not(.claimed) { border-color:rgba(255,47,214,.6); }
+  .hof-rung.dream:not(.claimed) .k { color:#ff8bec; }
+  @keyframes hofPulse { 0%, 100% { box-shadow:0 0 0 rgba(255,47,214,0); } 50% { box-shadow:0 0 22px rgba(255,47,214,.45); } }
+  .hof-me { margin:1rem auto 0; max-width:36rem; padding:.55rem .9rem; border-radius:12px; background:rgba(255,210,63,.1); border:1px solid rgba(255,210,63,.35); color:#ffe9a3; font-weight:700; font-size:.92rem; }
+  .hof-me[hidden] { display:none; }
+  .hof-foot { margin-top:.8rem; font-size:.75rem; color:#a8997a; }
+  @media (max-width:640px) { .hof-list { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:.75rem .5rem; } .hof-rung { flex-direction:column; align-items:flex-start; gap:.3rem; padding:.75rem .65rem .6rem; } .hof-rung .k { font-size:1.15rem; min-width:0; } .hof-rung.dream { grid-column:1 / -1; } }
+  @media (prefers-reduced-motion: reduce) { .hof-rung.next { animation:none; box-shadow:0 0 16px rgba(255,47,214,.4); } }
   .ph-hello { margin:0 auto 1rem; max-width:40rem; padding:.55rem .9rem; border-radius:12px; border:1px solid rgba(255,97,84,.55); background:rgba(255,97,84,.12); color:#ffd9d4; font-size:.9rem; line-height:1.45; }
   @media (min-width: 1024px) {                              /* laptops: the counter stays centre stage, the facts share one line */
     #liveBox.live-box { max-width:44rem; padding:.8rem 1.5rem .7rem; }
@@ -1034,6 +1065,18 @@
     </section>
   </main>
 
+  <!-- ===================== HALL OF FIRSTS ===================== -->
+  <section id="hof" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="hofTitle" hidden>
+    <div class="hof-panel">
+      <p class="hof-eyebrow">PERMANENT RECORD · DEPARTMENT OF IMPOSSIBLE THINGS</p>
+      <h2 id="hofTitle" class="hof-h">🏛️ The Hall of Firsts</h2>
+      <p class="hof-lead">The first human to reach each score keeps it <b>forever</b>. No resets, no seasons, no second place. <span id="hofCount"></span></p>
+      <ol id="hofList" class="hof-list" aria-label="Hall of Firsts"></ol>
+      <p id="hofMe" class="hof-me" hidden></p>
+      <p class="hof-foot">Scores claimed on the Luckiest Shufflers board below count. Provably fair, so nobody can fake their way in.</p>
+    </div>
+  </section>
+
   <!-- ===================== LEADERBOARD ===================== -->
   <section id="lbSection" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="lbTitle" hidden>
     <div class="panel p-4 sm:p-6">
@@ -1050,10 +1093,6 @@
         </table>
       </div>
       <button type="button" id="lbMore" class="chip-btn lb-more !text-xs" aria-expanded="false" hidden></button>
-      <div id="hof" class="hof mt-4" hidden>
-        <p class="hof-title"><b>🏛️ Hall of Firsts</b> The first human to reach each rung keeps it forever. Scores on this board count.</p>
-        <ol id="hofList" class="hof-list" aria-label="Hall of Firsts"></ol>
-      </div>
     </div>
   </section>
 
@@ -1120,9 +1159,17 @@
         <h3 class="font-display text-base neon-pink">Your sponsor extras <span class="sponsor-chip align-middle ml-1">★ MISSION SPONSOR</span></h3>
 
         <div id="giftRxRow" class="mt-4" hidden><p class="text-xs font-bold text-[#9fb5a8]">GIFTS YOU RECEIVED</p><div id="giftRxList" class="mt-2 flex flex-wrap gap-2"></div></div>
+        <div class="mt-4"><p class="text-xs font-bold text-[#9fb5a8]">🍀 YOUR LUCKY CARD</p>
+          <div class="mt-2 flex flex-wrap items-center gap-2"><label class="sr-only" for="luckySel">Your lucky card</label><select id="luckySel" class="imp-input lucky-sel"></select><span id="luckyInfo" class="text-xs text-[#cfe3d7]"></span></div></div>
         <div class="mt-4"><p class="text-xs font-bold text-[#9fb5a8]">CARD BACKS</p><div id="cbOptions" class="mt-2 flex flex-wrap gap-2"></div></div>
+        <div id="themeRow" class="mt-4" hidden><p class="text-xs font-bold text-[#9fb5a8]">🎨 TABLE THEME</p><div id="themeOptions" class="mt-2 flex flex-wrap gap-2"></div></div>
         <div id="outfitRow" class="mt-4" hidden><p class="text-xs font-bold text-[#9fb5a8]">PROFESSOR OUTFIT</p><div id="outfitOptions" class="mt-2 flex flex-wrap gap-2"></div></div>
 
+        <div id="wallpaperRow" class="mt-5" hidden>
+          <p class="text-xs font-bold text-[#9fb5a8]">📱 PHONE WALLPAPER</p>
+          <p class="text-xs text-[#cfe3d7] mt-1">Your best shuffle as a lock screen: all 52 cards, your matches in gold, your score on top.</p>
+          <button type="button" id="wallpaperBtn" class="shuffle-btn !w-auto !text-sm !py-2 !px-4 mt-2">Make my wallpaper</button>
+        </div>
         <div id="certRow" class="mt-5" hidden>
           <p class="text-xs font-bold text-[#9fb5a8]">📜 CERTIFICATE OF TRYING ANYWAY</p>
           <p class="text-xs text-[#cfe3d7] mt-1">Your name, your shuffles, your best match and your exact chance of success so far, with every zero. Printable A4 PDF.</p>
@@ -1745,7 +1792,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, giftDraft: null, giftsSent: [], giftsRx: [] };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, giftDraft: null, giftsSent: [], giftsRx: [], lucky: -1, luckyHits: 0, theme: 'classic' };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1772,7 +1819,8 @@ const store = (() => {
       joined: p.joined === true, rtitle: n(p.rtitle), acesBest: n(p.acesBest), runBest: n(p.runBest),
       giftDraft: p.giftDraft && typeof p.giftDraft === 'object' ? p.giftDraft : null,
       giftsSent: Array.isArray(p.giftsSent) ? p.giftsSent.filter(g => g && typeof g.url === 'string').slice(0, 5) : [],
-      giftsRx: Array.isArray(p.giftsRx) ? p.giftsRx.filter(g => g && typeof g.id === 'string').slice(0, 10) : []
+      giftsRx: Array.isArray(p.giftsRx) ? p.giftsRx.filter(g => g && typeof g.id === 'string').slice(0, 10) : [],
+      lucky: Number.isInteger(p.lucky) && p.lucky >= 0 && p.lucky < 52 ? p.lucky : -1, luckyHits: n(p.luckyHits), theme: str(p.theme) || 'classic'
     };
   } catch (e) { return def; }
 })();
@@ -1857,6 +1905,24 @@ function applyMatchesInstant(deck) {
     G.cards[i].classList.toggle('match', hit);
     C.cards[i].classList.toggle('match', hit);
   }
+  markLucky(deck);
+}
+/* Your lucky card (any sponsor rank): a clover on its spot in the Grail, and both decks glow gold when it lands there. */
+function luckyPos() { return store.lucky >= 0 && hasAny() ? grail.indexOf(store.lucky) : -1; }
+function luckyInfo() {
+  const el = $('#luckyInfo'); if (!el) return;
+  el.textContent = store.lucky >= 0 ? `Came home ${fmt(store.luckyHits)} time${store.luckyHits === 1 ? '' : 's'} so far. It's marked 🍀 in the Holy Grail.` : 'It glows gold whenever it lands in its Holy Grail spot.';
+}
+function markLuckySpot() {
+  const pos = luckyPos();
+  G.cards.forEach((c, i) => c.classList.toggle('lucky-mark', i === pos));
+}
+function markLucky(deck) {
+  const pos = luckyPos();
+  for (const grid of [G, C]) grid.cards.forEach(c => c.classList.remove('lucky-home'));
+  if (pos < 0 || deck[pos] !== store.lucky) return false;
+  G.cards[pos].classList.add('lucky-home'); C.cards[pos].classList.add('lucky-home');
+  return true;
 }
 const ROYAL_POS = [];   // where A♠ K♠ Q♠ J♠ 10♠ sit in the Grail (for the Royal Flush badge)
 const ACE_POS = [];     // where the four aces sit (for the Four Aces badge)
@@ -1919,6 +1985,32 @@ el.profSlot.innerHTML = profSVG();
 $('#winProf').innerHTML = profSVG();
 
 const LINES = {
+  luckyHome: [
+    'Your lucky card came home! The other 51 did not.',
+    'The clover delivers. One card down, fifty-one to go.',
+    'Your lucky card is home. Superstition: 1, mathematics: 0.'
+  ],
+  rankTea: [
+    'Ah, a Rookie. Basic training continues. Shuffle, cadet.',
+    'Rookie on deck! Try not to scratch the Grail.',
+    'Carry on, Rookie. Mathematics has noted your rank.',
+    'Steady, Rookie. The Vikings shuffled worse.',
+    'A Rookie with a station. How wonderfully optimistic.'
+  ],
+  rankOdds: [
+    'Captain on the bridge! The Grail trembles. Slightly.',
+    'Aye aye, Captain. Still zero matches, sir.',
+    'Steady as she shuffles, Captain.',
+    'Captain, the Ice Age called. It wants its shuffles back.',
+    'A Captain! I polished my monocle in your honor.'
+  ],
+  rankPatron: [
+    'Commander on deck. Mathematics stands to attention.',
+    'At your service, Commander. Shall I fetch the Grail?',
+    'A Commander! I bow. Carefully. The hat is new.',
+    'Commander, humanity thanks you. Mathematics does not.',
+    'Commander, your plaque gleams. Your odds do not.'
+  ],
   intro: [
     'Ah, a new challenger. Press the button. Defy me.',
   ],
@@ -2196,9 +2288,14 @@ function profMilestone() {
   profNext = (PROF_MILESTONES.find(([n]) => n > store.profMs) || [Infinity])[0];
 }
 // Coming back: he remembers you.
+/** Which rank's lines the Professor uses (the highest rank this browser holds), or '' for no rank. */
+const rankKey = () => (owned().patron || owned().traveller ? 'rankPatron' : owned().odds ? 'rankOdds' : owned().tea ? 'rankTea' : '');
 function profWelcomeBack() {
   const n = store.allTime, f = fmt(n);
   if (!n) return LINES.intro[0];
+  if (rankKey() && rnd() < 0.6) return pick({ rankTea: [`Welcome back, Rookie. ${f} shuffles and counting.`, 'Rookie! You returned. Mathematics sighed.'],
+    rankOdds: [`Welcome back, Captain. ${f} shuffles, zero Grails.`, 'Captain on the bridge again! The Grail hid.'],
+    rankPatron: [`Welcome back, Commander. ${f} shuffles. Magnificent.`, 'The Commander returns! I have warmed the deck.'] }[rankKey()]);
   const tiers = n < 10 ? ['Back again? Your shuffles were noted. And ignored.', 'Oh, it\'s you. Press the button. Defy me. Again.']
     : n < 100 ? [`Oh. You. ${f} shuffles and you came back for more.`, `${f} shuffles so far. The Holy Grail is not impressed. Nor am I.`]
     : n < 1000 ? [`${f} shuffles. Most people stop at one. Most people are wise.`, `Welcome back. ${f} shuffles, zero Grails. A flawless record.`]
@@ -2228,6 +2325,7 @@ function setPose(pose, line, slots = profEls()) {
     slot.dataset.pose = pose;
     slot.classList.toggle('fainted', pose === 'faint');
   }
+  if (!line && rankKey() && ['yawn', 'clap', 'eyebrow', 'idle'].includes(pose) && rnd() < 0.2) line = profLine(rankKey());   // he knows your rank
   if (slots.includes(el.profSlot)) el.bubble.textContent = line || profLine(LINES[pose] ? pose : 'intro');
 }
 function poseFor(m) {
@@ -2365,6 +2463,7 @@ function renderTop() {
 }
 function renderPB() {
   pbDirty = false;
+  if (HOF.next) renderHofMe();                   // the Hall of Firsts line follows your best
   const b = store.best;
   if (b && (b.grail !== GRAIL_ID || !(Array.isArray(b.deck) && b.deck.length === 52 && b.deck.every(code => CODES.includes(code))))) store.best = null;
   if (store.vbest && store.vbest.grail !== GRAIL_ID) store.vbest = null;
@@ -2488,6 +2587,7 @@ function record(m, deck, manual, rigged, b, n) {
   if (store.allTime >= 1e9 && !store.badges.billion) unlock('billion');
   statsDirty = true;
   if (rigged) return;
+  if (store.lucky >= 0 && deck[luckyPos()] === store.lucky) store.luckyHits++;   // your lucky card came home (any sponsor rank)
   noteTop(deck, m, b, n);
   noteVBest(m, b, n);
   if (m > session.fairBest) session.fairBest = m;
@@ -2570,6 +2670,7 @@ function updateNextGoal() {
 }
 function updateStats() {
   statsDirty = false;
+  if (store.lucky >= 0 && hasAny()) luckyInfo();
   updateNextGoal();
   statsToggleLabel();
   setStatNum($('#stSession'), fmt(session.attempts));
@@ -2858,6 +2959,8 @@ function reveal(res, staggered) {
     const step = Math.min(90, 650 / hits.length);
     hits.forEach((i, k) => anim.matchTimers.push(setTimeout(() => { lightCard(i, true); }, k * step)));
   } else hits.forEach(i => lightCard(i, false));
+  const lucky = markLucky(res.deck);
+  if (lucky && !res.replay && res.m < 6 && rnd() < 0.35) prof.milestone = prof.milestone || pick(LINES.luckyHome);
   setMeter(res.m, true, true);
   showWorldFirst(res.m, true);
   if (res.m < 52) profReact(res.m);
@@ -4042,17 +4145,17 @@ const IMP_TIERS = [
     story: 'Basic training: nonstop since the Vikings.', deal: 'Cheaper than a coffee',
     cmp: p => `Your odds: still worse than being dealt <b>${timesInARow(ROYAL_FLUSH, p)} royal flushes in a row</b>.`,
     why: 'Why $1.92? One card is 1.92% of a deck.',
-    perks: ['<span class="gold-star">★</span> Gold Mission Sponsor badge', '🃏 Fancy card backs'] },
+    perks: ['🍀 <b>Your lucky card</b>: it glows gold whenever it lands in its Holy Grail spot', '🎩 <b>The Professor salutes you</b>: new lines just for your rank', '🃏 Fancy card backs + <span class="gold-star">★</span> gold sponsor badge'] },
   { id: 'odds', icon: '★★', name: 'Captain', years: 10000, price: '8.07', featured: true,
     story: 'A full shift: nonstop since the last Ice Age.', deal: '10× the years for 4× the price',
     cmp: p => `Your odds: still worse than getting <b>struck by lightning ${timesInARow(LIGHTNING_YEAR, p)} times in one year</b>.`,
     why: 'Why $8.07? 52! is 8.07 × 10⁶⁷. We waived the 67 zeros.',
-    perks: ['📜 Certificate of Trying Anyway (PDF)', '🎩 Professor outfits', '<span class="gold-star">★</span> Badge and card backs included'] },
+    perks: ['🎨 <b>Table themes & Professor outfits</b>: restyle the whole game', '📱 <b>Phone wallpaper</b> of your best shuffle', '📜 Certificate of Trying Anyway (PDF)', '<span class="imp-inc">Everything in Rookie</span>'] },
   { id: 'patron', icon: '★★★', name: 'Commander', years: 100000, price: '52',
     story: 'Night watch: nonstop since humans left Africa.', deal: 'For the truly committed',
     cmp: p => `Your odds: still worse than winning <b>${timesInARow(POWERBALL, p)} Powerball jackpots in a row</b>.`,
     why: 'Why $52? One dollar per card. The deck salutes you.',
-    perks: ['🏛️ Your name on the Wall of Hopeless Heroes', '👑 The Royal Professor', '✨ Every other extra included'] }
+    perks: ['🏛️ Your name on the Wall of Hopeless Heroes', '👑 <b>Royal purple & gold</b>: a Professor in a purple top hat and a matching purple deck, for Commanders only', '<span class="imp-inc">Everything in Captain</span>'] }
 ];
 /* What a station of N shuffles will likely reach, and what it adds to humanity's total. */
 let hofRowsCache = null;   // filled by the Hall of Firsts loader
@@ -4153,7 +4256,7 @@ function renderImpatient() {
         <p class="imp-impact" data-impact="${N}">${impactHTML(N)}</p>
       </div>
       <p class="tt-get imp-get">What you get</p>
-      <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🎁 Plus a little surprise to keep you entertained through all ${fmt(t.years)} years.</li></ul>
+      <ul class="imp-perks">${t.perks.map(x => `<li>${x}</li>`).join('')}<li class="imp-surprise">🕰️ Watch your station travel through ${fmt(t.years)} years of history, live.</li></ul>
       <span class="imp-deal">${t.deal}</span>
       <a class="imp-buy shuffle-btn" href="${url}" target="_blank" rel="noopener" data-imp="${t.id}"><span class="block">Support the mission</span><span class="block text-sm opacity-90">as a ${t.name} · ${cur}${t.price}</span></a>
       <p class="imp-why">${t.why}</p>
@@ -4437,6 +4540,48 @@ function giftCertificate() {
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  }, 'image/png');
+}
+
+/** Captain perk: your best shuffle as a phone lock screen (1179×2556), matches in gold, room at the top for the clock. */
+function makeWallpaper() {
+  const b = store.best; if (!b) return;
+  const deck = b.deck.map(code => CODES.indexOf(code)), W = 1179, H = 2556, cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const c = cv.getContext('2d');
+  const theme = { casino: ['#6a1622', '#1c050a'], midnight: ['#17306a', '#050b1e'], sunset: ['#8a3b12', '#1d0a1f'], royal: ['#4b1784', '#130524'] }[store.theme] || ['#145236', '#03110a'];
+  const bg = c.createRadialGradient(W / 2, 0, 80, W / 2, H * 0.45, H);
+  bg.addColorStop(0, theme[0]); bg.addColorStop(1, theme[1]);
+  c.fillStyle = bg; c.fillRect(0, 0, W, H);
+  c.textAlign = 'center';
+  const line = (txt, y, font, color, glow) => { c.font = font; c.fillStyle = color; c.shadowColor = glow || 'transparent'; c.shadowBlur = glow ? 26 : 0; c.fillText(txt, W / 2, y, W - 120); c.shadowBlur = 0; };
+  line('MY BEST SHUFFLE', 760, '800 40px "JetBrains Mono", monospace', '#ffe68a');
+  line(`${b.matches}/52`, 915, '170px Bungee, Impact, sans-serif', '#ff8bec', '#ff2fd6');
+  line(b.matches ? `1 in ${fmt(Math.round(1 / tailP(b.matches)))} shuffles get this far` : 'Not one card home. Magnificent.', 990, '400 40px system-ui, sans-serif', '#cfe3d7');
+  // 4 columns × 13 rows, like the four suits
+  const cols = 4, rows = 13, cw = 200, ch = 78, gx = 26, gy = 12, x0 = (W - (cols * cw + (cols - 1) * gx)) / 2, y0 = 1050;
+  for (let i = 0; i < 52; i++) {
+    const col = Math.floor(i / rows), row = i % rows, x = x0 + col * (cw + gx), y = y0 + row * (ch + gy), card = deck[i], hit = card === grail[i];
+    c.fillStyle = hit ? '#ffe9a0' : '#fffdf5';
+    c.shadowColor = hit ? 'rgba(255,210,63,.9)' : 'rgba(0,0,0,.5)'; c.shadowBlur = hit ? 30 : 8;
+    c.beginPath(); c.roundRect ? c.roundRect(x, y, cw, ch, 14) : c.rect(x, y, cw, ch); c.fill(); c.shadowBlur = 0;
+    if (hit) { c.strokeStyle = '#d9a520'; c.lineWidth = 5; c.stroke(); }
+    const su = SUITS[(card / 13) | 0];
+    c.fillStyle = su.red ? '#d20f3c' : '#121212';
+    c.font = '800 44px "JetBrains Mono", monospace'; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText(RANKS[card % 13] + su.sym, x + cw / 2, y + ch / 2 + 2);
+    c.textBaseline = 'alphabetic';
+  }
+  line('Matched cards in gold · the rest is history', y0 + rows * (ch + gy) + 50, '400 34px system-ui, sans-serif', '#cfe3d7');
+  line('theimpossibleshuffle.com', H - 110, '44px Bungee, Impact, sans-serif', '#a5fbff', 'rgba(34,243,255,.6)');
+  track('wallpaper');
+  cv.toBlob(blob => {
+    if (!blob) return;
+    const name = `impossible-shuffle-wallpaper-${b.matches}of52.png`, file = new File([blob], name, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { navigator.share({ files: [file], title: 'My Impossible Shuffle wallpaper' }).catch(() => {}); return; }
+    const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = name;
+    document.body.appendChild(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 4000);
   }, 'image/png');
 }
 
@@ -4827,6 +4972,10 @@ const OUTFITS = [
   { id: 'classic', name: 'Classic pink', need: 'free' }, { id: 'midnight', name: 'Midnight cyan', need: 'odds' },
   { id: 'emerald', name: 'Emerald', need: 'odds' }, { id: 'royal', name: 'Royal Professor', need: 'patron' }
 ];
+const THEMES = [
+  { id: 'classic', name: 'Green felt', need: 'free' }, { id: 'casino', name: 'Casino red', need: 'odds' },
+  { id: 'midnight', name: 'Midnight blue', need: 'odds' }, { id: 'sunset', name: 'Retro sunset', need: 'odds' }, { id: 'royal', name: 'Royal purple', need: 'patron' }
+];
 const allowed = need => need === 'free' || (need === 'any' && hasAny()) || (need === 'odds' && hasOdds()) || (need === 'patron' && hasPatron());
 function applyCosmetics() {
   const cb = CARD_BACKS.find(c => c.id === store.cardBack && allowed(c.need)) ? store.cardBack : 'classic';
@@ -4834,7 +4983,11 @@ function applyCosmetics() {
   document.body.classList.add('cb-' + cb);
   const of = OUTFITS.find(o => o.id === store.outfit && allowed(o.need)) ? store.outfit : 'classic';
   for (const slot of [el.profSlot, $('#winProf')]) { slot.classList.remove(...OUTFITS.map(o => 'outfit-' + o.id)); slot.classList.add('outfit-' + of); }
+  const th = THEMES.find(t => t.id === store.theme && allowed(t.need)) ? store.theme : 'classic';
+  document.body.classList.remove(...THEMES.map(t => 'th-' + t.id));
+  if (th !== 'classic') document.body.classList.add('th-' + th);
   $('#sponsorChip').hidden = !hasAny();
+  markLuckySpot();
 }
 function optionButtons(list, current, key) {
   return list.filter(o => allowed(o.need)).map(o => `<button type="button" class="opt-btn" data-${key}="${o.id}" aria-pressed="${o.id === current}">${o.name}</button>`).join('');
@@ -5007,6 +5160,15 @@ function renderExtras() {
   if (!hasAny()) return;
   $('#cbOptions').innerHTML = optionButtons(CARD_BACKS, store.cardBack || 'classic', 'cb');
   $('#outfitRow').hidden = !hasOdds();
+  $('#themeRow').hidden = !hasOdds();
+  $('#themeOptions').innerHTML = optionButtons(THEMES, store.theme || 'classic', 'theme');
+  $('#wallpaperRow').hidden = !hasOdds();
+  $('#wallpaperBtn').disabled = !store.best;
+  $('#wallpaperBtn').textContent = store.best ? 'Make my wallpaper' : 'Shuffle first, then make your wallpaper';
+  const sel = $('#luckySel');
+  if (!sel.options.length) sel.innerHTML = '<option value="-1">Pick a card…</option>' + SUITS.map((su, k) => `<optgroup label="${su.name[0].toUpperCase() + su.name.slice(1)}">${RANKS.map((r, i) => `<option value="${k * 13 + i}">${r}${su.sym} ${NAMES[k * 13 + i]}</option>`).join('')}</optgroup>`).join('');
+  sel.value = String(store.lucky);
+  luckyInfo();
   $('#outfitOptions').innerHTML = optionButtons(OUTFITS, store.outfit || 'classic', 'outfit');
   $('#certRow').hidden = !hasOdds();
   $('#wallRow').hidden = !hasPatron() || !WALL.on;
@@ -5139,8 +5301,15 @@ function initImpatient() {
   if ('IntersectionObserver' in window) new IntersectionObserver(es => { HYPER.boxVisible = es[0].isIntersecting; renderHyper(); }).observe($('#hyperBox'));
   $('#myExtras').addEventListener('click', e => {
     const cb = e.target.closest('[data-cb]'); if (cb) { store.cardBack = cb.dataset.cb; saveStore(true); applyCosmetics(); renderExtras(); return; }
-    const of = e.target.closest('[data-outfit]'); if (of) { store.outfit = of.dataset.outfit; saveStore(true); applyCosmetics(); renderExtras(); }
+    const of = e.target.closest('[data-outfit]'); if (of) { store.outfit = of.dataset.outfit; saveStore(true); applyCosmetics(); renderExtras(); return; }
+    const th = e.target.closest('[data-theme]'); if (th) { store.theme = th.dataset.theme; saveStore(true); applyCosmetics(); renderExtras(); track('theme-' + store.theme); }
   });
+  $('#luckySel').addEventListener('change', e => {
+    store.lucky = Number(e.target.value); store.luckyHits = 0; saveStore(true);
+    applyCosmetics(); renderExtras(); if (hasCurrent) markLucky(current);
+    if (store.lucky >= 0) { track('lucky-card'); setPose('clap', `The ${NAMES[store.lucky]}? Bold. I shall watch it closely.`); }
+  });
+  $('#wallpaperBtn').addEventListener('click', makeWallpaper);
   $('#certBtn').addEventListener('click', downloadCertificate);
   $('#wallForm').addEventListener('submit', submitWall);
 }
@@ -5214,13 +5383,17 @@ function shortOdds(k) {
 }
 function renderHof(rows) {
   const by = Object.fromEntries(rows.map(r => [r.rung, r]));
+  const open = HOF_RUNGS.filter(k => !by[k]), next = open[0];
   $('#hofList').innerHTML = HOF_RUNGS.map(k => {
-    const r = by[k], cls = ['hof-rung', r ? 'claimed' : '', k === 20 ? 'dream' : ''].join(' ').trim();
+    const r = by[k], cls = ['hof-rung', r ? 'claimed' : '', k === 20 ? 'dream' : '', k === next ? 'next' : ''].join(' ').trim();
     const odds = `1 in ${shortOdds(k)}`;
-    if (!r) return `<li class="${cls}"><b class="k">${k}/52</b><span class="txt"><span class="who open">${k === 20 ? 'The Twenty Club: unclaimed' : 'Unclaimed'}</span><span class="odds">${odds}</span></span></li>`;
+    if (!r) return `<li class="${cls}">${k === next ? '<span class="tag">NEXT IN HISTORY</span>' : ''}<b class="k">${k}/52</b><span class="txt"><span class="who open">${k === 20 ? 'The Twenty Club: your name here?' : 'Unclaimed · your name here?'}</span><span class="odds">${odds}</span></span></li>`;
     const when = new Date(r.at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    return `<li class="${cls}"><b class="k">${k}/52</b><span class="txt"><span class="who">${r.kind === 'traveller' ? '🚀 ' : ''}${escapeHtml(r.name)}${r.verified ? '' : ' <span class="pf-early">early</span>'}</span><span class="odds">${odds} · ${when}</span></span></li>`;
+    return `<li class="${cls}"><span class="forever">FOREVER</span><b class="k">${k}/52</b><span class="txt"><span class="who">${r.kind === 'traveller' ? '🚀 ' : ''}${escapeHtml(r.name)}${r.verified ? '' : ' <span class="pf-early">early</span>'}</span><span class="odds">${odds} · ${when}</span></span></li>`;
   }).join('');
+  $('#hofCount').textContent = `${HOF_RUNGS.length} places in history. ${open.length ? `${numWord(open.length)[0].toUpperCase() + numWord(open.length).slice(1)} still empty.` : 'All of them claimed.'}`;
+  HOF.next = next;
+  renderHofMe();
   $('#hof').hidden = false;
   hofRowsCache = rows; refreshTierLines();
   // Claimed one yourself just now? Make some noise (not for the rungs you already had at page load).
@@ -5228,6 +5401,16 @@ function renderHof(rows) {
   const mine = rows.filter(r => me && r.kind === 'shuffler' && r.name.toLowerCase() === me).map(r => r.rung);
   if (HOF.mine) for (const k of mine) if (!HOF.mine.includes(k)) { toast(`🏛️ <b>Hall of Firsts!</b> You're the first human ever to reach ${k}/52. That rung is yours forever.`); track('hof-claim-' + k); }
   HOF.mine = mine;
+}
+/** Your distance to the next empty place in history. */
+function renderHofMe() {
+  const box = $('#hofMe');
+  if (!HOF.next) { box.hidden = true; return; }
+  const best = store.allTime ? bestEver() : -1, need = HOF.next - best;
+  box.textContent = best < 0 ? `🃏 Your best: nothing yet. Start shuffling and chase ${HOF.next}/52.`
+    : need <= 0 ? `🏛️ Your ${best}/52 would make history. Claim your spot on the board below to take that place, forever.`
+    : `🃏 Your best: ${best}/52. ${numWord(need)[0].toUpperCase() + numWord(need).slice(1)} more card${need === 1 ? '' : 's'} and history knows your name.`;
+  box.hidden = false;
 }
 async function hofLoad() {
   if (!LB.on) return;
