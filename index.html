@@ -5501,7 +5501,7 @@ function renderHof(rows) {
     const when = new Date(r.at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     return `<li class="${cls}"><span class="forever">FOREVER</span><b class="k">${k}/52</b><span class="txt"><span class="who">${r.kind === 'traveller' ? '🚀 ' : ''}${escapeHtml(r.name)}</span><span class="odds">${odds} · ${when}</span></span></li>`;
   }).join('');
-  $('#hofCount').textContent = `${HOF_RUNGS.length} places in history. ${open.length ? `${numWord(open.length)[0].toUpperCase() + numWord(open.length).slice(1)} still empty.` : 'All of them claimed.'}`;
+  $('#hofCount').textContent = `${HOF_RUNGS.length} places in history. ${open.length ? `${open.length} still empty.` : 'All of them claimed.'}`;
   HOF.next = next;
   renderHofMe();
   $('#hof').hidden = false;
