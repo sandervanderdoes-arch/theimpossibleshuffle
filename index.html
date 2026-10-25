@@ -321,7 +321,6 @@
   @container (max-width: 560px) { .lb th:nth-child(6), .lb td:nth-child(6) { display:none; } }
   @container (max-width: 430px) { .lb th:nth-child(5), .lb td:nth-child(5) { display:none; } .lb th, .lb td { padding:.4rem .4rem; } }
   @media (max-width: 480px) { .lb th:nth-child(5), .lb td:nth-child(5) { display:none; } .lb th, .lb td { padding:.4rem .4rem; } }
-  @media (max-width: 480px) { .lb td.best .pf-early { display:table; margin:.2rem 0 0; } }
   .tip[tabindex] { display:inline-block; padding:.6rem .3rem; margin:-.6rem -.3rem; }
   @media (hover: none) { .kbd-hint { display:none; } }
 
@@ -759,7 +758,6 @@
   /* ---------- Provably fair, honors, mission accomplished, Time Travellers ---------- */
   .pf-tick { display:inline-flex; align-items:center; justify-content:center; width:1.25rem; height:1.25rem; margin-left:.3rem; vertical-align:middle; border-radius:999px; border:1px solid rgba(124,255,107,.6); background:rgba(124,255,107,.12); color:#7cff6b; font:800 .7rem/1 Inter, system-ui, sans-serif; padding:0; cursor:pointer; }
   button.pf-tick { position:relative; }
-  .pf-early { display:inline-block; margin-left:.3rem; padding:.05rem .4rem; vertical-align:middle; border-radius:999px; border:1px solid rgba(207,227,215,.35); color:#cfe3d7; font:600 .65rem/1.4 Inter, system-ui, sans-serif; letter-spacing:.03em; cursor:help; }
   button.pf-tick::after { content:""; position:absolute; inset:-.6rem; }   /* bigger touch target */
   .honors-steps { display:grid; gap:.8rem; grid-template-columns:repeat(auto-fit, minmax(13rem, 1fr)); list-style:none; padding:0; margin-left:0; margin-right:0; }
   .honors-steps li { display:flex; flex-direction:column; gap:.25rem; padding:1rem; border-radius:14px; background:rgba(0,0,0,.4); border:1px solid rgba(255,210,63,.28); }
@@ -1117,7 +1115,7 @@
         <h2 id="lbTitle" class="font-display text-lg sm:text-2xl neon-gold">🏆 Luckiest Shufflers</h2>
         <div class="flex items-center gap-3 flex-wrap"><span id="lbCount" class="mono text-xs text-[#9fb5a8]"></span><button type="button" id="lbShare" class="chip-btn !text-xs">📤 Share the top 3</button></div>
       </div>
-      <p class="mt-1 text-sm text-[#cfe3d7]">The best single shuffles anyone has made, worldwide. Same score? Whoever needed the fewest tries ranks higher. Every score with a <span class="pf-tick" aria-hidden="true">✓</span> is provably fair: tap it to replay that exact shuffle yourself. Scores marked <span class="pf-early">early</span> came in before provably fair shuffles existed: checked to be plausible, but they can't be replayed.</p>
+      <p class="mt-1 text-sm text-[#cfe3d7]">The best single shuffles anyone has made, worldwide. Same score? Whoever needed the fewest tries ranks higher. Every score with a <span class="pf-tick" aria-hidden="true">✓</span> is provably fair: tap it to replay that exact shuffle yourself.</p>
       <div id="lbMe" class="lb-me mt-4" aria-live="polite"></div>
       <div class="lb-wrap mt-4">
         <table class="lb">
@@ -5542,7 +5540,7 @@ function renderLB() {
     const tries = r.attempts ? fmt(r.attempts) : '–';
     const rec = r.verified ? { r: r.pf_round, R: r.pf_rand, s: r.pf_seat, n: r.pf_n } : null;
     const tick = validRec(rec) ? ` <button type="button" class="pf-tick" data-verify='${JSON.stringify(rec)}' title="Provably fair: replay this shuffle" aria-label="Replay ${name.innerHTML}'s shuffle">✓</button>`
-      : ` <span class="pf-early" title="From before provably fair shuffles (October 14, 2026): checked to be plausible for its number of tries, but it can't be replayed">early</span>`;
+      : '';                                       // scores from before provably fair shuffles simply have no ✓
     return `<tr class="${cls}"><td>${medal}</td><td>${name.innerHTML}${isMe ? ' <span class="text-[#22f3ff]">(you)</span>' : ''}</td><td class="best">${r.best}/52${tick}</td><td>${tries}</td><td>1 in ${oneIn(r.best)}</td><td>${when}</td></tr>`;
   });
   const fold = !LB.expanded && html.length > LB_SHOW;
