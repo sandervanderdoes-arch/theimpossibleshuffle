@@ -285,7 +285,10 @@
   .stat-num { white-space:nowrap; overflow:hidden; line-height:1.3; }
   /* Leaderboard */
   /* Your top 5 shuffles */
-  .top-wrap { border-radius:12px; border:1px solid rgba(255,210,63,.25); overflow:hidden; }
+  .top-wrap { border-radius:12px; border:1px solid rgba(255,210,63,.25); }   /* no overflow:hidden: it would clip the header tooltips */
+  .top5 thead th:first-child { border-top-left-radius:11px; } .top5 thead th:last-child { border-top-right-radius:11px; }
+  .top5 th:last-child .tip::after { left:auto; right:-.5rem; transform:none; }   /* right column: open leftwards, never past the edge */
+  .top5 tbody tr:last-child td:first-child { border-bottom-left-radius:11px; } .top5 tbody tr:last-child td:last-child { border-bottom-right-radius:11px; }
   .top5 { width:100%; border-collapse:collapse; font-family:"JetBrains Mono", ui-monospace, monospace; font-size:.78rem; }
   .top5 th { text-align:left; padding:.45rem .55rem; background:#1a1503; color:var(--muted); font-weight:700; white-space:nowrap; }
   .top5 td { padding:.4rem .55rem; vertical-align:top; }
@@ -298,7 +301,7 @@
   .top5 .dk { display:block; width:100%; min-height:28px; background:none; border:0; padding:.15rem 0; color:#9fb5a8; text-align:left; font:inherit; font-size:.7rem; word-break:break-word; cursor:pointer; }
   .top5 .dk:hover { color:#bffcff; text-decoration:underline; }
   .top5 td.empty { padding:1rem; color:var(--muted); font-family:Inter, system-ui, sans-serif; }
-  @media (max-width: 480px) { .top5 { font-size:.72rem; } .top5 th, .top5 td { padding-left:.35rem; padding-right:.35rem; } }
+  @media (max-width: 480px) { .top5 { font-size:.72rem; } .top5 th, .top5 td { padding-left:.35rem; padding-right:.35rem; } .top5 th { white-space:normal; } }   /* headers may wrap so the table fits its box */
   .lb-wrap { overflow-x:auto; border-radius:12px; border:1px solid rgba(255,210,63,.25); }   /* no inner vertical scroll: the page scrolls straight past */
   .lb tr.lb-gap td { text-align:center; color:var(--muted); padding:.2rem; }
   .lb-more { display:block; margin:.6rem auto 0; }
@@ -334,7 +337,7 @@
 
   /* Tooltips */
   .tip { position:relative; cursor:help; }
-  .tip::after { content: attr(data-tip); position:absolute; left:50%; bottom:calc(100% + 8px); transform:translateX(-50%); width:max-content; max-width:15rem; background:#0b1f17; color:#e6f2ea; border:1px solid rgba(34,243,255,.6); box-shadow:0 6px 24px rgba(0,0,0,.85); border-radius:8px; padding:.45rem .6rem; font:500 .75rem/1.35 system-ui, sans-serif; display:none; pointer-events:none; z-index:50; text-transform:none; letter-spacing:0; }
+  .tip::after { content: attr(data-tip); position:absolute; left:50%; bottom:calc(100% + 8px); transform:translateX(-50%); width:max-content; max-width:15rem; background:#0b1f17; color:#e6f2ea; border:1px solid rgba(34,243,255,.6); box-shadow:0 6px 24px rgba(0,0,0,.85); border-radius:8px; padding:.45rem .6rem; font:500 .75rem/1.35 system-ui, sans-serif; display:none; pointer-events:none; z-index:50; text-transform:none; letter-spacing:0; white-space:normal; text-align:left; }
   /* Only in layout while shown, so hidden tooltips never widen the page. */
   .tip:hover::after, .tip:focus-visible::after, .tip:focus-within::after { display:block; }
   /* Locked badges dim only their icon and name, so the how-to text and the tooltip stay fully readable. */
@@ -1054,7 +1057,7 @@
           <p class="text-xs text-[#9fb5a8] mb-2">Attempt = which of your shuffles it was. By hand = how long someone shuffling by hand (20 seconds a shuffle) typically needs for a result this good. Tap a deck to see all 52 cards.</p>
           <div class="top-wrap">
             <table class="top5">
-              <thead><tr><th scope="col"><span class="sr-only">Rank</span></th><th scope="col">Matched</th><th scope="col">Attempt</th><th scope="col"><span class="tip" tabindex="0" data-tip="The chance of at least this many matches in a single shuffle.">Chance ⓘ</span></th><th scope="col"><span class="tip" tabindex="0" data-tip="How long it typically takes to get at least this many matches, shuffling by hand at 20 seconds a shuffle.">By hand ⓘ</span></th></tr></thead>
+              <thead><tr><th scope="col"><span class="sr-only">Rank</span></th><th scope="col">Matched</th><th scope="col">Attempt</th><th scope="col"><span class="tip" tabindex="0" data-tip="How rare this score is: the odds of matching at least this many cards in one single shuffle.">Chance ⓘ</span></th><th scope="col"><span class="tip" tabindex="0" data-tip="How long one person would typically need to get this score by hand: one shuffle every 20 seconds, day and night, no breaks.">By hand ⓘ</span></th></tr></thead>
               <tbody id="topBody"></tbody>
             </table>
           </div>
