@@ -3213,7 +3213,7 @@ function renderLive() {
   el.liveCount.textContent = fmt(live.shown);
   if (live.shown) $('#liveYears').textContent = `That's ${handTime(live.shown)} of nonstop shuffling by hand.`;
   const you = live.mine + live.pending + live.inflight;
-  el.liveYou.textContent = you ? `You've added ${fmt(you)}.` : '';
+  el.liveYou.textContent = you ? `You've added ${fmt(you)} in this visit.` : '';
 }
 if (live.on) {
   // Shuffles that were still waiting to be sent when the last visit ended.
