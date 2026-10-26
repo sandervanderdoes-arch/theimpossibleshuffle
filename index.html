@@ -335,6 +335,11 @@
   .dist .pct { font-size:.72rem; text-align:center; color:var(--muted); margin-bottom:3px; font-family:"JetBrains Mono", monospace; }
   .dist .lbl { text-align:center; font-weight:800; font-size:.8rem; margin-top:4px; }
 
+  /* The shuffle button brings both decks into view and outlines them for a moment. */
+  #game [aria-labelledby="grailTitle"], #game [aria-labelledby="chalTitle"] { transition:box-shadow .5s ease, outline-color .5s ease; outline:2px solid transparent; outline-offset:3px; }
+  #game [aria-labelledby="grailTitle"].deck-glow { outline-color:rgba(255,210,63,.9); box-shadow:0 0 28px rgba(255,210,63,.35); }
+  #game [aria-labelledby="chalTitle"].deck-glow { outline-color:rgba(34,243,255,.9); box-shadow:0 0 28px rgba(34,243,255,.35); }
+  @media (prefers-reduced-motion: reduce) { #game [aria-labelledby="grailTitle"], #game [aria-labelledby="chalTitle"] { transition:none; } }
   /* Tooltips */
   .tip { position:relative; cursor:help; }
   .tip::after { content: attr(data-tip); position:absolute; left:50%; bottom:calc(100% + 8px); transform:translateX(-50%); width:max-content; max-width:15rem; background:#0b1f17; color:#e6f2ea; border:1px solid rgba(34,243,255,.6); box-shadow:0 6px 24px rgba(0,0,0,.85); border-radius:8px; padding:.45rem .6rem; font:500 .75rem/1.35 system-ui, sans-serif; display:none; pointer-events:none; z-index:50; text-transform:none; letter-spacing:0; white-space:normal; text-align:left; }
@@ -4038,7 +4043,58 @@ function updateRiggedBadge() {
 }
 $('#riggedBtn').addEventListener('click', () => { riggedArmed = true; updateRiggedBadge(); toast('🃏 <b>Rigged.</b> Your next manual shuffle is "lucky."'); });
 
-el.shuffleBtn.addEventListener('click', manualShuffle);
+/* Where the decks should be on screen, best first: both decks and the button in one view (shrinking the cards on
+   tablets and up if the window is short); else both decks (phones: the floating Shuffle button takes over);
+   else, on small phones, your deck and the button. */
+const deckUsable = () => innerHeight - ($('#ticker').offsetHeight || 38) - 8;   // before the first shuffle the ticker isn't there yet, but it will be
+function deckTarget(shrink) {
+  const y = e => e.getBoundingClientRect().top + scrollY, yb = e => e.getBoundingClientRect().bottom + scrollY;
+  const usable = deckUsable(), grail = $('#grailTitle').closest('section'), chal = $('#chalTitle').closest('section');
+  const sticky = getComputedStyle($('#shuffleBtn').closest('.lg\\:sticky') || document.body).position === 'sticky';
+  const extra = $('#replayBtn').hidden ? 16 : 0;          // the first shuffle adds "Replay my best", which makes the header taller
+  const span = () => Math.max(yb($('#chalGrid')) + extra, sticky ? 0 : yb($('#shuffleBtn')) + 8) - y($('#game')) + 8;
+  for (let i = 0; shrink && innerWidth >= 640 && span() > usable && i < 3; i++) {   // re-measure: the estimate is close, not exact
+    const g = $('#grailGrid').getBoundingClientRect(), h = g.height, w = g.width;
+    const a = 4 * 1.4 / 13, b = h - a * w;                // a deck's height grows about linearly with its width (4 rows of 5:7 cards)
+    const newH = (usable - (span() - 2 * h)) / 2;
+    const newW = Math.floor((newH - b) / a) - 4;
+    if (newW < 400 || newW >= w) break;                   // never shrink cards to crumbs
+    document.documentElement.style.setProperty('--deck-max', newW + 'px');
+  }
+  const both = yb($('#chalGrid')) + extra - usable;         // scroll position that puts the bottom of your deck at the bottom of the screen
+  if (span() <= usable) return { top: y($('#game')) - 8, first: $('#grailGrid') };
+  if (both <= y($('#grailGrid')) - 4) return { top: Math.max(y(grail) - 8, both), first: $('#grailGrid') };
+  return { top: sticky ? y(chal) - 8 : Math.max(y(chal) - 8, yb($('#shuffleBtn')) + 40 - usable), first: $('#chalTitle') };
+}
+function showDecks() { scrollTo({ top: deckTarget(true).top, behavior: reduceMotion ? 'auto' : 'smooth' }); }
+/** True when the decks are already on screen the way showDecks() would show them. */
+function decksInView() {
+  const t = deckTarget(false);
+  if (Math.abs(t.top - scrollY) < 12) return true;
+  return t.first.getBoundingClientRect().top >= -2 && $('#chalGrid').getBoundingClientRect().bottom <= deckUsable() + 2;
+}
+let deckGlowT = 0;
+function flashDecks() {
+  const panels = [$('#grailTitle').closest('section'), $('#chalTitle').closest('section')];
+  panels.forEach(p => p.classList.remove('deck-glow'));
+  void panels[0].offsetWidth;                                // restart the glow
+  panels.forEach(p => p.classList.add('deck-glow'));
+  clearTimeout(deckGlowT);
+  deckGlowT = setTimeout(() => panels.forEach(p => p.classList.remove('deck-glow')), 1800);
+}
+/** The shuffle button: if the decks are (partly) off screen, bring both into view and outline them first,
+    so you see your deck being shuffled against the Grail. */
+function shuffleFromButton(glow) {
+  const jump = !decksInView(), first = !session.attempts;
+  // The first shuffle (or a jump) can change the decks' height a little ("Replay my best" appears): settle once more.
+  // Only a small nudge, so it never fights a visitor who has scrolled away in the meantime.
+  const settle = () => { if (decksInView()) return; const t = deckTarget(true).top; if (Math.abs(t - scrollY) < 120) scrollTo({ top: t, behavior: reduceMotion ? 'auto' : 'smooth' }); };
+  const go = () => { manualShuffle(); if (jump || first) setTimeout(settle, reduceMotion ? 60 : 1100); };   // after the shuffle animation
+  if (jump) { showDecks(); flashDecks(); }
+  else if (glow || first) flashDecks();
+  if (jump && !reduceMotion) setTimeout(go, 450); else go();
+}
+el.shuffleBtn.addEventListener('click', () => shuffleFromButton(false));
 el.fab.addEventListener('click', manualShuffle);
 $$('.seg button').forEach(b => b.addEventListener('click', () => setAutopilot(b.dataset.ap)));
 document.addEventListener('keydown', e => {
@@ -5333,23 +5389,8 @@ function initImpatient() {
   // The hero's button: straight to the game, and the first shuffle happens on arrival.
   $('#heroShuffle').addEventListener('click', () => {
     track('hero-shuffle');
-    // Both decks and the shuffle button on one screen (tablets and up, shrinking the cards if the window is short);
-    // on phones, your deck and the button.
-    const y = el => el.getBoundingClientRect().top + scrollY, yb = el => el.getBoundingClientRect().bottom + scrollY;
-    const usable = innerHeight - ($('#ticker').offsetHeight || 0) - 8;
-    const sticky = getComputedStyle($('#shuffleBtn').closest('.lg\\:sticky') || document.body).position === 'sticky';
-    const span = () => Math.max(yb($('#chalGrid')) + 16, sticky ? 0 : yb($('#shuffleBtn')) + 8) - y($('#game')) + 8;   // +16: the first shuffle adds "Replay my best"
-    if (innerWidth >= 640 && span() > usable) {
-      const g = $('#grailGrid').getBoundingClientRect(), h = g.height, w = g.width;
-      const a = 4 * 1.4 / 13, b = h - a * w;                // a deck's height grows linearly with its width (4 rows of 5:7 cards)
-      const newH = (usable - (span() - 2 * h)) / 2;
-      const newW = Math.floor((newH - b) / a);
-      if (newW >= 400) document.documentElement.style.setProperty('--deck-max', newW + 'px');   // never shrink cards to crumbs
-    }
-    const both = y($('#game')) - 8, fits = span() <= usable;
-    const top = fits ? both : Math.max(y($('#chalTitle').closest('section')) - 8, yb($('#shuffleBtn')) + 40 - usable);
-    scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' });
-    setTimeout(() => $('#shuffleBtn').click(), reduceMotion ? 0 : 500);
+    showDecks();
+    setTimeout(() => shuffleFromButton(true), reduceMotion ? 0 : 500);
   });
   document.querySelectorAll('#recruitPanel [data-share]').forEach(b => b.addEventListener('click', () => shareTo(b.dataset.share)));
   if (navigator.share) $('#recruitPanel [data-share="more"]').hidden = false;
