@@ -158,7 +158,8 @@
   body.th-sunset { background:radial-gradient(ellipse 120% 60% at 50% -10%, #8a3b12 0%, #4a1d33 38%, #1d0a1f 70%, #0b0410 100%) fixed; }
   body.th-royal { background:radial-gradient(ellipse 120% 60% at 50% -10%, #4b1784 0%, #2a0b4d 38%, #130524 70%, #08020f 100%) fixed; }
   /* Halloween: the Haunted look (everyone on Oct 31; kept by whoever shuffled that day). Wins over any theme. */
-  body.hw { background:radial-gradient(ellipse 120% 60% at 50% -10%, #6b2c05 0%, #3a1240 38%, #160620 70%, #070209 100%) fixed; }
+  body.hw { background:radial-gradient(circle at 90% 13%, rgba(255,246,220,.6) 0 clamp(34px, 4.5vw, 70px), rgba(255,214,140,.14) calc(clamp(34px, 4.5vw, 70px) + 2px), transparent clamp(80px, 11vw, 170px)) fixed,
+    radial-gradient(ellipse 120% 60% at 50% -10%, #6b2c05 0%, #3a1240 38%, #160620 70%, #070209 100%) fixed; }   /* with a full moon */
   .pcard.ding { animation: ding .5s ease-out; }
   @keyframes ding { 0% { transform:scale(1); } 35% { transform:scale(1.2); filter:brightness(1.25); } 100% { transform:scale(1); } }
 
@@ -637,8 +638,25 @@
   .cb-cyan .pcard.back { background: radial-gradient(circle,#22f3ff 1.4px,transparent 1.6px) 0 0/7px 7px, #052a33; box-shadow: inset 0 0 0 2px rgba(34,243,255,.7), 0 2px 5px rgba(0,0,0,.6); }
   .cb-felt .pcard.back { background: repeating-linear-gradient(45deg,transparent 0 5px,rgba(255,255,255,.12) 5px 6px), repeating-linear-gradient(-45deg,transparent 0 5px,rgba(255,255,255,.12) 5px 6px), #0f5132; box-shadow: inset 0 0 0 2px #ffd23f, 0 2px 5px rgba(0,0,0,.6); }
   .cb-royal .pcard.back { background: repeating-linear-gradient(90deg,#3b0a6b 0 3px,#5a1aa0 3px 6px); box-shadow: inset 0 0 0 2px #ffd23f, inset 0 0 0 4px #3b0a6b, 0 2px 5px rgba(0,0,0,.6); }
-  body.hw .pcard.back { background: linear-gradient(#3c8a2e,#3c8a2e) 50% 26%/2px 18% no-repeat, radial-gradient(ellipse 36% 25% at 50% 55%, #ff7a1a 0 88%, transparent 92%), repeating-linear-gradient(45deg,#1a0a24 0 4px,#2b0f3a 4px 8px); box-shadow: inset 0 0 0 2px #ff7a1a, 0 2px 5px rgba(0,0,0,.6); }
-  body.hw.hw-gold .pcard.back { background: linear-gradient(#3c8a2e,#3c8a2e) 50% 26%/2px 18% no-repeat, radial-gradient(ellipse 36% 25% at 50% 55%, #ffd23f 0 88%, transparent 92%), repeating-linear-gradient(45deg,#1a0a24 0 4px,#2b0f3a 4px 8px); box-shadow: inset 0 0 0 2px #ffd23f, 0 2px 5px rgba(0,0,0,.6); }
+  body.hw .pcard.back { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 22'%3E%3Cpath d='M10 1C5 1 2 4.5 2 9c0 2.6 1.2 4.4 3 5.4V18h2.2v-2h1.6v2h2.4v-2h1.6v2H15v-3.6c1.8-1 3-2.8 3-5.4 0-4.5-3-8-8-8z' fill='%23f3ead2'/%3E%3Ccircle cx='6.8' cy='9.5' r='2.2' fill='%23ff7a1a'/%3E%3Ccircle cx='13.2' cy='9.5' r='2.2' fill='%23ff7a1a'/%3E%3Cpath d='M10 11.6l-1.2 2.2h2.4z' fill='%231a0a24'/%3E%3C/svg%3E") 50% 50%/64% auto no-repeat, repeating-linear-gradient(45deg,#1a0a24 0 4px,#2b0f3a 4px 8px); box-shadow: inset 0 0 0 2px #ff7a1a, 0 2px 5px rgba(0,0,0,.6); }
+  body.hw.hw-gold .pcard.back { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 22'%3E%3Cpath d='M10 1C5 1 2 4.5 2 9c0 2.6 1.2 4.4 3 5.4V18h2.2v-2h1.6v2h2.4v-2h1.6v2H15v-3.6c1.8-1 3-2.8 3-5.4 0-4.5-3-8-8-8z' fill='%23ffd23f'/%3E%3Ccircle cx='6.8' cy='9.5' r='2.2' fill='%231a0a24'/%3E%3Ccircle cx='13.2' cy='9.5' r='2.2' fill='%231a0a24'/%3E%3Cpath d='M10 11.6l-1.2 2.2h2.4z' fill='%231a0a24'/%3E%3C/svg%3E") 50% 50%/64% auto no-repeat, repeating-linear-gradient(45deg,#1a0a24 0 4px,#2b0f3a 4px 8px); box-shadow: inset 0 0 0 2px #ffd23f, 0 2px 5px rgba(0,0,0,.6); }
+  /* Halloween extras: orange bulbs and title, cobwebs and pumpkins on the hero, bats and a ghost drifting past. */
+  body.hw .bulb { background:#ffb070; box-shadow:0 0 6px 2px rgba(255,122,26,.85); }
+  body.hw .bulb.b2 { background:#c79bff; box-shadow:0 0 6px 2px rgba(150,80,255,.8); }
+  body.hw #hero h1 { color:#ffc48f; text-shadow:0 0 6px #ff7a1a, 0 0 22px rgba(255,122,26,.55); }
+  .hw-web, .hw-pumpkin, #hwFx { display:none; }
+  body.hw .hw-web { display:block; position:absolute; top:6px; width:clamp(56px, 9vw, 110px); height:auto; pointer-events:none; opacity:.85; }
+  body.hw .hw-web.l { left:6px; } body.hw .hw-web.r { right:6px; transform:scaleX(-1); }
+  body.hw .hw-pumpkin { display:block; position:absolute; bottom:-14px; font-size:clamp(22px, 3vw, 34px); line-height:1; pointer-events:none; filter:drop-shadow(0 0 10px rgba(255,122,26,.7)); }
+  body.hw .hw-pumpkin.l { left:18px; } body.hw .hw-pumpkin.r { right:18px; }
+  body.hw #hwFx { display:block; position:fixed; inset:0; pointer-events:none; z-index:5; overflow:hidden; }
+  #hwFx .bat { position:absolute; left:-80px; width:var(--w, 34px); animation:batFly var(--d, 22s) linear infinite var(--delay, 0s); }
+  #hwFx .bat svg { display:block; width:100%; height:auto; transform-origin:50% 40%; animation:batFlap .22s ease-in-out infinite alternate; filter:drop-shadow(0 0 3px rgba(255,150,70,.95)) drop-shadow(0 0 10px rgba(255,122,26,.5)); }
+  #hwFx .ghost { position:absolute; left:-70px; bottom:16%; font-size:38px; opacity:.8; animation:ghostFly 46s linear infinite 6s; }
+  @keyframes batFlap { to { transform:scaleY(.35); } }
+  @keyframes batFly { 0% { transform:translate(0, 0); } 10% { transform:translate(30vw, -5vh); } 20% { transform:translate(60vw, 3vh); } 30% { transform:translate(90vw, -4vh); } 34%, 100% { transform:translate(calc(100vw + 160px), 0); } }
+  @keyframes ghostFly { 0% { transform:translate(0, 0); } 7% { transform:translate(25vw, -3vh); } 14% { transform:translate(50vw, 1vh); } 21% { transform:translate(75vw, -3vh); } 28%, 100% { transform:translate(calc(100vw + 140px), 0); } }
+  @media (prefers-reduced-motion: reduce) { body.hw #hwFx { display:none; } }
   /* Professor outfits: hat band and bow tie. */
   .outfit-midnight .p-band, .outfit-midnight .p-bow { fill:#22f3ff; }
   .outfit-emerald .p-band, .outfit-emerald .p-bow { fill:#2bd46b; }
@@ -903,6 +921,9 @@
   <!-- ===================== HERO ===================== -->
   <header class="hero-head px-4 pt-4 sm:pt-6 max-w-6xl mx-auto">
     <div id="hero" class="bulbs px-6 py-7 sm:px-12 sm:py-8 text-center">
+      <svg class="hw-web l" viewBox="0 0 100 100" fill="none" stroke="rgba(235,225,255,.4)" stroke-width="1" aria-hidden="true"><path d="M0 0L100 28M0 0L78 78M0 0L28 100M0 0L100 0M0 0L0 100"/><path d="M24 0Q19 6 23 7Q17 15 17 17Q14 19 7 23Q6 19 0 24"/><path d="M50 0Q42 12 46 14Q36 31 34 34Q28 37 14 46Q12 40 0 50"/><path d="M76 0Q64 18 70 21Q55 47 51 51Q42 56 21 70Q18 61 0 76"/></svg>
+      <svg class="hw-web r" viewBox="0 0 100 100" fill="none" stroke="rgba(235,225,255,.4)" stroke-width="1" aria-hidden="true"><path d="M0 0L100 28M0 0L78 78M0 0L28 100M0 0L100 0M0 0L0 100"/><path d="M24 0Q19 6 23 7Q17 15 17 17Q14 19 7 23Q6 19 0 24"/><path d="M50 0Q42 12 46 14Q36 31 34 34Q28 37 14 46Q12 40 0 50"/><path d="M76 0Q64 18 70 21Q55 47 51 51Q42 56 21 70Q18 61 0 76"/></svg>
+      <span class="hw-pumpkin l" aria-hidden="true">🎃</span><span class="hw-pumpkin r" aria-hidden="true">🎃</span>
       <p id="phHello" class="ph-hello" hidden>👋 Welcome, Product Hunters. Your mission, should you choose to accept it: one shuffle. Mathematics expects nothing from you.</p>
       <p class="mono text-xs tracking-widest text-[#9fb5a8] mb-3">MISSION CONTROL · DEPARTMENT OF IMPOSSIBLE THINGS</p>
       <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl sm:leading-tight lg:text-[3.4rem]" style="text-wrap:balance">Welcome to Humankind's Most Impossible Mission</h1>
@@ -1326,6 +1347,7 @@
 </div>
 
 <button type="button" id="hyperChip" class="hyper-chip" hidden aria-label="Your station's progress, go to your station"></button>
+<div id="hwFx" aria-hidden="true"><span class="bat" style="top:12%;--w:49px;--d:24s;--delay:0s"><svg viewBox="0 0 64 28"><path d="M32 9c-1-2.5-2.6-3.8-2.6-3.8L28.6 8c-2-.8-4-.8-6 .4C17.5 3 9.5 1.8 1 6c5 1.2 8 4.4 9 9.2 3-2 7-2 9.2 1 2-1.8 5-1.8 7 0 1.2-1 3.2-1.8 5.8-1.8s4.6.8 5.8 1.8c2-1.8 5-1.8 7 0 2.2-3 6.2-3 9.2-1 1-4.8 4-8 9-9.2-8.5-4.2-16.5-3-21.6 2.4-2-1.2-4-1.2-6-.4l-.8-2.8S33 6.5 32 9z" fill="#1d0a28"/></svg></span><span class="bat" style="top:27%;--w:34px;--d:31s;--delay:7s"><svg viewBox="0 0 64 28"><path d="M32 9c-1-2.5-2.6-3.8-2.6-3.8L28.6 8c-2-.8-4-.8-6 .4C17.5 3 9.5 1.8 1 6c5 1.2 8 4.4 9 9.2 3-2 7-2 9.2 1 2-1.8 5-1.8 7 0 1.2-1 3.2-1.8 5.8-1.8s4.6.8 5.8 1.8c2-1.8 5-1.8 7 0 2.2-3 6.2-3 9.2-1 1-4.8 4-8 9-9.2-8.5-4.2-16.5-3-21.6 2.4-2-1.2-4-1.2-6-.4l-.8-2.8S33 6.5 32 9z" fill="#1d0a28"/></svg></span><span class="bat" style="top:44%;--w:58px;--d:27s;--delay:14s"><svg viewBox="0 0 64 28"><path d="M32 9c-1-2.5-2.6-3.8-2.6-3.8L28.6 8c-2-.8-4-.8-6 .4C17.5 3 9.5 1.8 1 6c5 1.2 8 4.4 9 9.2 3-2 7-2 9.2 1 2-1.8 5-1.8 7 0 1.2-1 3.2-1.8 5.8-1.8s4.6.8 5.8 1.8c2-1.8 5-1.8 7 0 2.2-3 6.2-3 9.2-1 1-4.8 4-8 9-9.2-8.5-4.2-16.5-3-21.6 2.4-2-1.2-4-1.2-6-.4l-.8-2.8S33 6.5 32 9z" fill="#1d0a28"/></svg></span><span class="bat" style="top:63%;--w:31px;--d:35s;--delay:3s"><svg viewBox="0 0 64 28"><path d="M32 9c-1-2.5-2.6-3.8-2.6-3.8L28.6 8c-2-.8-4-.8-6 .4C17.5 3 9.5 1.8 1 6c5 1.2 8 4.4 9 9.2 3-2 7-2 9.2 1 2-1.8 5-1.8 7 0 1.2-1 3.2-1.8 5.8-1.8s4.6.8 5.8 1.8c2-1.8 5-1.8 7 0 2.2-3 6.2-3 9.2-1 1-4.8 4-8 9-9.2-8.5-4.2-16.5-3-21.6 2.4-2-1.2-4-1.2-6-.4l-.8-2.8S33 6.5 32 9z" fill="#1d0a28"/></svg></span><span class="bat" style="top:19%;--w:40px;--d:29s;--delay:19s"><svg viewBox="0 0 64 28"><path d="M32 9c-1-2.5-2.6-3.8-2.6-3.8L28.6 8c-2-.8-4-.8-6 .4C17.5 3 9.5 1.8 1 6c5 1.2 8 4.4 9 9.2 3-2 7-2 9.2 1 2-1.8 5-1.8 7 0 1.2-1 3.2-1.8 5.8-1.8s4.6.8 5.8 1.8c2-1.8 5-1.8 7 0 2.2-3 6.2-3 9.2-1 1-4.8 4-8 9-9.2-8.5-4.2-16.5-3-21.6 2.4-2-1.2-4-1.2-6-.4l-.8-2.8S33 6.5 32 9z" fill="#1d0a28"/></svg></span><span class="ghost">👻</span></div>
 <button type="button" id="fab" class="shuffle-btn !w-auto !py-3 !px-5 !text-sm lg:hidden" hidden aria-label="Shuffle your deck">Shuffle</button>
 
 <div id="ticker" aria-label="Fellow shufflers feed (jokes, plus real events marked REAL)">
@@ -3816,19 +3838,56 @@ const SFX = {
     [0, 7, 12, 16, 24].forEach(s => mallet(g, t + 1.25, NOTE(s), 0.22));
   }
 };
+/** A ghostly theremin: a sine gliding from f0 to f1 with a slow wobble. */
+function ghostVoice(g, t, f0, f1, dur, gain, pan = 0) {
+  const o = g.ac.createOscillator(), lfo = g.ac.createOscillator(), depth = g.ac.createGain(), v = g.ac.createGain();
+  o.type = 'sine'; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+  lfo.frequency.value = 5.5; depth.gain.value = f0 * 0.03;
+  lfo.connect(depth).connect(o.frequency);
+  v.gain.setValueAtTime(0, t); v.gain.linearRampToValueAtTime(gain, t + 0.12); v.gain.setValueAtTime(gain, t + dur * 0.6); v.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(v).connect(panNode(g, pan));
+  o.start(t); lfo.start(t); o.stop(t + dur + 0.05); lfo.stop(t + dur + 0.05);
+}
+/* Halloween versions: a falling diminished run, low bells and a ghost's "woooo". Same lengths as the normal ones. */
+const SFX_HW = {
+  roll(g, t) {
+    [0, -3, -6, -9, -12, -15].forEach((s, i) => mallet(g, t + i * 0.042, NOTE(s - 12), 0.17, i % 2 ? 0.25 : -0.25));
+  },
+  land(g, t, m) {
+    if (m === 0) { mallet(g, t, NOTE(-18), 0.3); ghostVoice(g, t + 0.02, NOTE(-5), NOTE(-17), 0.9, 0.12); return; }
+    if (m === 1) { mallet(g, t, NOTE(-12), 0.32, -0.1); mallet(g, t + 0.09, NOTE(-6), 0.28, 0.1); ghostVoice(g, t + 0.1, NOTE(-6), NOTE(-9), 0.7, 0.07, 0.2); return; }
+    const big = m >= 6, step = big ? 0.042 : 0.07;
+    const run = m <= 3 ? [0, 3, 6] : m <= 5 ? [0, 3, 6, 9] : [0, 3, 6, 9, 12, 15, 18, 21, 24];
+    run.forEach((s, i) => mallet(g, t + i * step, NOTE(s - 12), 0.3, (i % 3 - 1) * 0.25));
+    const top = NOTE(run[run.length - 1] - 12);
+    ghostVoice(g, t + run.length * step, top, top / 2, big ? 1.4 : 0.9, 0.1);
+  },
+  /** Thunder for unlocking the Haunted Deck. */
+  thunder(g, t) {
+    const src = g.ac.createBufferSource(); src.buffer = g.noise; src.loop = true;
+    const lp = g.ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.setValueAtTime(900, t); lp.frequency.exponentialRampToValueAtTime(120, t + 2.4);
+    const v = g.ac.createGain();
+    v.gain.setValueAtTime(0, t); v.gain.linearRampToValueAtTime(0.5, t + 0.02); v.gain.exponentialRampToValueAtTime(0.18, t + 0.3);
+    v.gain.linearRampToValueAtTime(0.32, t + 0.45); v.gain.exponentialRampToValueAtTime(0.0001, t + 2.6);
+    src.connect(lp).connect(v).connect(g.bus);
+    src.start(t); src.stop(t + 2.7);
+    ghostVoice(g, t + 0.6, NOTE(-3), NOTE(-15), 1.6, 0.09);
+  }
+};
+const sfxSet = name => (document.body.classList.contains('hw') && SFX_HW[name] ? SFX_HW : SFX);   // the Haunted look sounds haunted too
 /** Plays one named sound now (no-op while sound is off). */
 function sfx(name, ...args) {
   if (!audio.on) return;
   const ac = audioCtx(); if (!ac) return;
-  SFX[name](audio.graph, ac.currentTime + 0.005, ...args);
+  sfxSet(name)[name](audio.graph, ac.currentTime + 0.005, ...args);
 }
 /** Roll and landing in one go, for reduced motion and the sound-on preview. */
 function sfxShuffleNow(m) {
   if (!audio.on) return;
   const ac = audioCtx(); if (!ac) return;
   const t = ac.currentTime + 0.01;
-  SFX.roll(audio.graph, t);
-  SFX.land(audio.graph, t + 0.26, m);
+  sfxSet('roll').roll(audio.graph, t);
+  sfxSet('land').land(audio.graph, t + 0.26, m);
 }
 function playFanfare() { sfx('fanfare'); }
 /** Dev hook: renders a shuffle with `m` matches offline and returns its stereo samples (used to check levels). */
@@ -5173,7 +5232,7 @@ function hwUnlock() {
   store.hw = HW.year;
   if (hasAny()) store.hwGold = true;
   saveStore(true);
-  if (fresh) { toast(`🎃 <b>The Haunted Deck is yours, forever.</b> A Halloween ${HW.year} collector's item.${store.hwGold ? ' Sponsors get the <b>Golden Pumpkin</b> too.' : ''}`); track('hw-unlock'); }
+  if (fresh) { sfx('thunder'); toast(`🎃 <b>The Haunted Deck is yours, forever.</b> A Halloween ${HW.year} collector's item.${store.hwGold ? ' Sponsors get the <b>Golden Pumpkin</b> too.' : ''}`); track('hw-unlock'); }
   else if (gold) toast('🎃 <b>Golden Pumpkin unlocked.</b> Thank you for keeping the mission running.');
   applyHaunted(); renderHw();
 }
