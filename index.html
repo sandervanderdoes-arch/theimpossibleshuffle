@@ -157,6 +157,8 @@
   body.th-midnight { background:radial-gradient(ellipse 120% 60% at 50% -10%, #17306a 0%, #0c1a40 35%, #050b1e 70%, #02050d 100%) fixed; }
   body.th-sunset { background:radial-gradient(ellipse 120% 60% at 50% -10%, #8a3b12 0%, #4a1d33 38%, #1d0a1f 70%, #0b0410 100%) fixed; }
   body.th-royal { background:radial-gradient(ellipse 120% 60% at 50% -10%, #4b1784 0%, #2a0b4d 38%, #130524 70%, #08020f 100%) fixed; }
+  /* Halloween: the Haunted look (everyone on Oct 31; kept by whoever shuffled that day). Wins over any theme. */
+  body.hw { background:radial-gradient(ellipse 120% 60% at 50% -10%, #6b2c05 0%, #3a1240 38%, #160620 70%, #070209 100%) fixed; }
   .pcard.ding { animation: ding .5s ease-out; }
   @keyframes ding { 0% { transform:scale(1); } 35% { transform:scale(1.2); filter:brightness(1.25); } 100% { transform:scale(1); } }
 
@@ -635,11 +637,21 @@
   .cb-cyan .pcard.back { background: radial-gradient(circle,#22f3ff 1.4px,transparent 1.6px) 0 0/7px 7px, #052a33; box-shadow: inset 0 0 0 2px rgba(34,243,255,.7), 0 2px 5px rgba(0,0,0,.6); }
   .cb-felt .pcard.back { background: repeating-linear-gradient(45deg,transparent 0 5px,rgba(255,255,255,.12) 5px 6px), repeating-linear-gradient(-45deg,transparent 0 5px,rgba(255,255,255,.12) 5px 6px), #0f5132; box-shadow: inset 0 0 0 2px #ffd23f, 0 2px 5px rgba(0,0,0,.6); }
   .cb-royal .pcard.back { background: repeating-linear-gradient(90deg,#3b0a6b 0 3px,#5a1aa0 3px 6px); box-shadow: inset 0 0 0 2px #ffd23f, inset 0 0 0 4px #3b0a6b, 0 2px 5px rgba(0,0,0,.6); }
+  body.hw .pcard.back { background: linear-gradient(#3c8a2e,#3c8a2e) 50% 26%/2px 18% no-repeat, radial-gradient(ellipse 36% 25% at 50% 55%, #ff7a1a 0 88%, transparent 92%), repeating-linear-gradient(45deg,#1a0a24 0 4px,#2b0f3a 4px 8px); box-shadow: inset 0 0 0 2px #ff7a1a, 0 2px 5px rgba(0,0,0,.6); }
+  body.hw.hw-gold .pcard.back { background: linear-gradient(#3c8a2e,#3c8a2e) 50% 26%/2px 18% no-repeat, radial-gradient(ellipse 36% 25% at 50% 55%, #ffd23f 0 88%, transparent 92%), repeating-linear-gradient(45deg,#1a0a24 0 4px,#2b0f3a 4px 8px); box-shadow: inset 0 0 0 2px #ffd23f, 0 2px 5px rgba(0,0,0,.6); }
   /* Professor outfits: hat band and bow tie. */
   .outfit-midnight .p-band, .outfit-midnight .p-bow { fill:#22f3ff; }
   .outfit-emerald .p-band, .outfit-emerald .p-bow { fill:#2bd46b; }
   .outfit-royal .p-band, .outfit-royal .p-bow { fill:#ffd23f; }
   .outfit-royal .p-hat path:first-of-type { fill:#3b0a6b; }
+  body.hw .p-band, body.hw .p-bow { fill:#ff7a1a; }
+  body.hw .p-hat path:first-of-type { fill:#2a0b3d; }
+  .hw-bar { border:1px solid rgba(255,122,26,.55); background:rgba(255,122,26,.08); border-radius:12px; padding:.5rem .7rem; font-size:.82rem; line-height:1.4; color:#ffd9b8; }
+  .hw-bar[hidden] { display:none; }
+  .hw-bar b { color:#ffb070; }
+  .hw-bar .hw-sub { display:block; margin-top:.15rem; font-size:.74rem; color:#c9a58a; }
+  .hw-bar .hw-toggle { margin-top:.35rem; min-height:32px; padding:.2rem .65rem; border-radius:999px; border:1px solid rgba(255,122,26,.6); background:rgba(0,0,0,.3); color:#ffd9b8; font-size:.75rem; font-weight:700; cursor:pointer; }
+  .hw-bar .hw-toggle:hover { background:rgba(255,122,26,.18); }
   .fund-pill { display:inline-flex; align-items:center; gap:.35rem; min-height:44px; padding:.5rem .9rem; border-radius:12px; border:1px solid #ffd23f; background:rgba(0,0,0,.6); color:#ffe68a; font-weight:800; text-decoration:none; }
   .fund-pill:hover { background:rgba(255,210,63,.18); }
   .merch-btn { display:inline-flex; align-items:center; gap:.45rem; text-decoration:none; }
@@ -900,7 +912,7 @@
 
       <div id="missionStatus" class="ms-go mt-5 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border px-4 py-2 mono text-xs sm:text-sm">
         <span class="inline-flex items-center gap-2 font-bold text-[#7cff6b]"><span class="live-dot go" aria-hidden="true"></span>LIVE</span>
-        <span><b class="text-[#b8ffb0]">MISSION STATUS: ALL SYSTEMS GO.</b> Humanity is shuffling as one. Mathematics is ahead. For now.</span>
+        <span id="msText"><b class="text-[#b8ffb0]">MISSION STATUS: ALL SYSTEMS GO.</b> Humanity is shuffling as one. Mathematics is ahead. For now.</span>
       </div>
       <div id="plaque" class="plaque mt-8" hidden></div>
 
@@ -1014,6 +1026,7 @@
             <a id="apSponsor" class="go-sponsor ap-sponsor" href="#impatient" hidden>🛰️ Faster than Ludicrous? <u>Get a station</u> <span class="gs-arrow" aria-hidden="true">↓</span></a>
           </div>
           <button type="button" id="lbJump" class="lb-jump" hidden></button>
+          <div id="hwBar" class="hw-bar" hidden aria-live="polite"></div>
           <button type="button" id="soundBtn" class="chip-btn w-full" aria-pressed="false">🔇 Sound: off</button>
         </div>
 
@@ -1828,7 +1841,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, giftDraft: null, giftsSent: [], giftsRx: [], lucky: -1, luckyHits: 0, theme: 'classic', gcMine: -1, apUsed: false };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, giftDraft: null, giftsSent: [], giftsRx: [], lucky: -1, luckyHits: 0, theme: 'classic', gcMine: -1, apUsed: false, hw: 0, hwGold: false, hwOn: null };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1857,7 +1870,8 @@ const store = (() => {
       giftsSent: Array.isArray(p.giftsSent) ? p.giftsSent.filter(g => g && typeof g.url === 'string').slice(0, 5) : [],
       giftsRx: Array.isArray(p.giftsRx) ? p.giftsRx.filter(g => g && typeof g.id === 'string').slice(0, 10) : [],
       lucky: Number.isInteger(p.lucky) && p.lucky >= 0 && p.lucky < 52 ? p.lucky : -1, luckyHits: n(p.luckyHits), theme: str(p.theme) || 'classic',
-      gcMine: Number.isInteger(p.gcMine) && p.gcMine >= 0 && p.gcMine < 52 ? p.gcMine : -1, apUsed: p.apUsed === true
+      gcMine: Number.isInteger(p.gcMine) && p.gcMine >= 0 && p.gcMine < 52 ? p.gcMine : -1, apUsed: p.apUsed === true,
+      hw: Number.isInteger(p.hw) && p.hw >= 2026 && p.hw < 2100 ? p.hw : 0, hwGold: p.hwGold === true, hwOn: typeof p.hwOn === 'boolean' ? p.hwOn : null   // Halloween collector's items
     };
   } catch (e) { return def; }
 })();
@@ -2048,6 +2062,9 @@ const LINES = {
     'Commander, humanity thanks you. Mathematics does not.',
     'Commander, your plaque gleams. Your odds do not.'
   ],
+  halloween: ['Happy Halloween. The deck is haunted. Statistically, nothing changes.', 'Boo. Did I frighten you? No? Neither do your odds.',
+    'The only thing scarier than ghosts is 8 × 10⁶⁷.', 'I came dressed as a probability distribution. Terrifying, I know.',
+    'Trick or treat? The trick is mathematics. There is no treat.', 'Even the ghosts gave up on the Holy Grail. They had all eternity.'],
   intro: [
     'Ah, a new challenger. Press the button. Defy me.',
   ],
@@ -2330,6 +2347,7 @@ const rankKey = () => (owned().patron || owned().traveller ? 'rankPatron' : owne
 function profWelcomeBack() {
   const n = store.allTime, f = fmt(n);
   if (!n) return LINES.intro[0];
+  if (HW.day && rnd() < 0.6) return LINES.halloween[0];
   if (rankKey() && rnd() < 0.6) return pick({ rankTea: [`Welcome back, Rookie. ${f} shuffles and counting.`, 'Rookie! You returned. Mathematics sighed.'],
     rankOdds: [`Welcome back, Captain. ${f} shuffles, zero Grails.`, 'Captain on the bridge again! The Grail hid.'],
     rankPatron: [`Welcome back, Commander. ${f} shuffles. Magnificent.`, 'The Commander returns! I have warmed the deck.'] }[rankKey()]);
@@ -2363,6 +2381,7 @@ function setPose(pose, line, slots = profEls()) {
     slot.classList.toggle('fainted', pose === 'faint');
   }
   if (!line && rankKey() && ['yawn', 'clap', 'eyebrow', 'idle'].includes(pose) && rnd() < 0.2) line = profLine(rankKey());   // he knows your rank
+  if (!line && HW.day && ['yawn', 'clap', 'eyebrow', 'idle'].includes(pose) && rnd() < 0.25) line = profLine('halloween');
   if (slots.includes(el.profSlot)) el.bubble.textContent = line || profLine(LINES[pose] ? pose : 'intro');
 }
 function poseFor(m) {
@@ -2617,6 +2636,7 @@ function record(m, deck, manual, rigged, b, n) {
   live.pending++;
   if (store.allTime >= profNext) profMilestone();
   if (!store.badges.duty) unlock('duty');
+  if (HW.day && (!store.hw || (!store.hwGold && hasAny()))) hwUnlock();
   if (m === 0) { if (++session.streak0 >= 5 && !store.badges.derangement) unlock('derangement'); }
   else session.streak0 = 0;
   if (manual) { store.manual++; if (store.manual >= 1000 && !store.badges.handmade) unlock('handmade'); }
@@ -3346,6 +3366,7 @@ for (const k of Object.keys(TICKER)) tickerBags[k] = makeBag(TICKER[k]);
 const recentLines = [];
 function tickerTemplate() {
   const r = rnd();
+  if (HW.day && r < 0.3) return pick(HW_TICKER);
   if (r < 0.025) return tickerBags.claim();
   if (r < 0.37) return tickerBags.misc();
   if (r < 0.52) return tickerBags.count();
@@ -3370,6 +3391,8 @@ const ticker = { x: 0, queue: [], lastT: 0, paused: false, n: 0, realAt: -1 };
 // Real moments from the boards, mixed in between the jokes (about one in four) and marked REAL.
 function realEvents() {
   const ev = [], day = 864e5;
+  if (HW.phase === 'teaser') ev.push(`🎃 Halloween, Oct 31: everyone who shuffles that day keeps the Haunted Deck forever.`);
+  if (HW.day) ev.push(`🎃 Haunted Shift: everyone who shuffles today keeps the Haunted Deck forever.`);
   if (live.total > 0) ev.push(`🌍 Humanity has shuffled ${fmt(live.total)} times so far. Successful matches: 0.`);
   if (recruit.humans > 0) ev.push(`👥 ${fmt(recruit.humans)} humans have joined the mission so far.`);
   if (LB.rows.length) {
@@ -5113,6 +5136,70 @@ function renderHyper() {
   hyperNotifyUI();
 }
 
+/* ---------- Halloween: the Haunted Shift ----------
+   On Oct 31 (the visitor's own date) the whole table goes spooky for everyone, and whoever shuffles that day keeps
+   the Haunted look forever: card backs, table and the Professor's hat. Sponsors also get the Golden Pumpkin deck.
+   Teased from Oct 28. Free and cosmetic only. ?hw=day or ?hw=teaser previews it without keeping anything. */
+const HW = { year: 2026, phase: '', day: false, previewed: false };
+const HW_TICKER = ['{flag} A vampire in {city} got 0/52. Blames the lack of mirrors.', '{flag} {who} in {city} dressed up as the Holy Grail. Still no match.',
+  '{flag} A ghost in {city} shuffled straight through the deck. Literally. 0/52.', '{flag} {who} in {city} carved 52 pumpkins in Grail order. Closest anyone has come.',
+  '{flag} A witch in {city} put a spell on the deck. 1/52. Mathematics is immune.', '{flag} {who} in {city} went trick-or-treating for matches and got a 2 of clubs.',
+  '{flag} A zombie in {city} got 1/52 and asked for brains. The Professor declined.', '{flag} {city} reports a haunted shuffle: 3/52. An exorcist is on standby.'];
+const hwPreview = () => params.get('hw') === 'day' || params.get('hw') === 'teaser';
+function hwRefresh() {
+  const was = HW.phase, d = new Date();
+  HW.phase = hwPreview() ? params.get('hw')
+    : d.getFullYear() !== HW.year || d.getMonth() !== 9 ? '' : d.getDate() === 31 ? 'day' : d.getDate() >= 28 ? 'teaser' : '';
+  HW.day = HW.phase === 'day';
+  if (HW.phase !== was) { applyHaunted(); renderHw(); }
+  const ms = $('#msText');                                   // gone once the mission is accomplished
+  if (ms) {
+    if (!HW.msDefault) HW.msDefault = ms.innerHTML;
+    ms.innerHTML = HW.day ? '<b class="text-[#ffb070]">MISSION STATUS: HAUNTED. 🎃</b> Shuffle today and the Haunted Deck is yours, forever.' : HW.msDefault;
+  }
+}
+const hwLookOn = () => store.hwOn !== false && (HW.day || !!store.hw);
+function applyHaunted() {
+  const on = hwLookOn();
+  document.body.classList.toggle('hw', on);
+  document.body.classList.toggle('hw-gold', on && (!!store.hwGold || (HW.day && hasAny())));
+}
+function hwUnlock() {
+  if (hwPreview()) {                                         // a preview never keeps anything
+    if (!HW.previewed) { HW.previewed = true; toast('🎃 <b>Preview:</b> on Oct 31 this shuffle would make the Haunted Deck yours, forever.'); }
+    return;
+  }
+  const fresh = !store.hw, gold = !store.hwGold && hasAny();
+  store.hw = HW.year;
+  if (hasAny()) store.hwGold = true;
+  saveStore(true);
+  if (fresh) { toast(`🎃 <b>The Haunted Deck is yours, forever.</b> A Halloween ${HW.year} collector's item.${store.hwGold ? ' Sponsors get the <b>Golden Pumpkin</b> too.' : ''}`); track('hw-unlock'); }
+  else if (gold) toast('🎃 <b>Golden Pumpkin unlocked.</b> Thank you for keeping the mission running.');
+  applyHaunted(); renderHw();
+}
+function renderHw() {
+  const bar = $('#hwBar'); if (!bar) return;
+  const toggle = store.hw || HW.day ? `<button type="button" class="hw-toggle" aria-pressed="${hwLookOn()}">Haunted look: ${hwLookOn() ? 'on' : 'off'}</button>` : '';
+  let html = '';
+  if (HW.phase === 'teaser') {
+    const left = Math.max(1, 31 - new Date().getDate());
+    const when = hwPreview() ? 'on Oct 31' : left === 1 ? 'tomorrow' : `on ${new Date(HW.year, 9, 31).toLocaleDateString('en-US', { weekday: 'long' })}`;
+    html = `🎃 <b>Halloween is ${when}.</b> Shuffle once on Oct 31 and the Haunted Deck is yours, forever.`;
+  } else if (HW.day) {
+    html = store.hw ? `🎃 <b>The Haunted Deck is yours.</b> A Halloween ${HW.year} collector's item.${store.hwGold ? ' Golden Pumpkin included.' : ''}`
+      : `🎃 <b>Haunted Shift.</b> Shuffle once today and the Haunted Deck is yours, forever.${hasAny() ? '' : '<span class="hw-sub">Sponsors also get the Golden Pumpkin deck.</span>'}`;
+    html += `<div>${toggle}</div>`;
+  } else if (store.hw) html = `🎃 <b>Haunted Deck</b> · Halloween ${store.hw}${store.hwGold ? ' · Golden Pumpkin' : ''}<div>${toggle}</div>`;
+  bar.innerHTML = html;
+  bar.hidden = !html;
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('#hwBar .hw-toggle')) return;
+  store.hwOn = !hwLookOn(); saveStore(true);
+  applyHaunted(); renderHw();
+  track('hw-look-' + (store.hwOn ? 'on' : 'off'));
+});
+
 /* ---------- Cosmetics ---------- */
 const CARD_BACKS = [
   { id: 'classic', name: 'Classic magenta', need: 'free' }, { id: 'gold', name: 'Casino gold', need: 'any' },
@@ -5138,6 +5225,7 @@ function applyCosmetics() {
   if (th !== 'classic') document.body.classList.add('th-' + th);
   $('#sponsorChip').hidden = !hasAny();
   markLuckySpot();
+  applyHaunted();
 }
 function optionButtons(list, current, key) {
   return list.filter(o => allowed(o.need)).map(o => `<button type="button" class="opt-btn" data-${key}="${o.id}" aria-pressed="${o.id === current}">${o.name}</button>`).join('');
@@ -5344,6 +5432,8 @@ function handleSponsorReset() {
 }
 function initImpatient() {
   handleSponsorReset();
+  renderHw();
+  setInterval(hwRefresh, 60000);                             // midnight on Oct 31 arrives while the tab is open
   renderImpatient();
   handleThanks();
   handleGiftLink();
@@ -6169,6 +6259,7 @@ function initHonors() {
 }
 
 function boot() {
+  hwRefresh();                                               // Halloween first: the welcome line and ticker follow it
   loadAnalytics();
   setupSupportLinks();
   loadGrail();

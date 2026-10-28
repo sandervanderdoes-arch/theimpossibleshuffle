@@ -56,6 +56,13 @@ npx tailwindcss@3.4.17 -c tailwind.config.js -i tw-input.css -o tw.css --minify
 - `g/rookie/`, `g/captain/` and `g/commander/` are `noindex` pages with their own link preview (`g/*.jpg`) that forward to the site. The recipient sees a wrapped present, unwraps it (box, cards and confetti), and gets a certificate with the years, the rank and the message, plus "Start my station", "Say thanks" and "Save the certificate" (a 1080×1350 image). The rank and extras unlock once per browser; opening the link again shows the certificate. Received gifts are listed in the sponsor extras.
 - Like `?thanks=`, a gift link is trusted as is (it only unlocks things in the browser that opens it).
 
+## Halloween: the Haunted Shift
+
+- Oct 28–30 (visitor's own date): a strip in the game panel and a REAL ticker line tease the event.
+- Oct 31: the whole table goes spooky for everyone (background, pumpkin card backs, the Professor's hat), the hero status reads "MISSION STATUS: HAUNTED", the Professor and the ticker get Halloween lines.
+- Anyone who shuffles on Oct 31 keeps the Haunted look forever (`store.hw`), with an on/off switch in the strip. Sponsors also get the Golden Pumpkin deck (`store.hwGold`). Free and cosmetic only, no server involved.
+- Preview without keeping anything: `?hw=day` or `?hw=teaser`. For another year, change `HW.year` in `index.html`.
+
 ## Leaderboard ("Luckiest Shufflers")
 
 - Run `supabase/leaderboard.sql` once in the Supabase SQL editor. Until then the section stays hidden.
