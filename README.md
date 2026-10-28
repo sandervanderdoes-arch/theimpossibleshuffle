@@ -60,7 +60,7 @@ npx tailwindcss@3.4.17 -c tailwind.config.js -i tw-input.css -o tw.css --minify
 
 - Oct 28–30 (visitor's own date): a strip in the game panel and a REAL ticker line tease the event.
 - Oct 31: the whole table goes spooky for everyone: a moonlit background, skull card backs, orange bulbs and title, cobwebs and pumpkins on the hero, bats and a ghost drifting past (off with reduced motion), the Professor dressed up as Count Factorial (cape, fangs, a bat on his hat, a pumpkin bucket instead of tea), and spooky sounds (a falling run, low bells, a ghost's "woooo", thunder when the deck unlocks). The hero status reads "MISSION STATUS: HAUNTED", the Professor and the ticker get Halloween lines.
-- Every shuffle made on Oct 31 counts (by hand, autopilot or a station), with a progress bar in the strip: 31,000 keep the Skull Deck (card backs) forever, 100,000 keep Count Factorial and the full Haunted look forever (`store.hw` = 1 or 2, `store.hwN` = the day's count), with an on/off switch. Sponsors get golden skulls (`store.hwGold`). Goals live in `HW_GOALS`. Free and cosmetic only, no server involved. Autopilot pauses while the tab is hidden, as always.
+- Every shuffle made on Oct 31 counts (by hand, autopilot or a station), with a progress bar in the strip: 31,000 keep the Skull Deck (card backs) forever, 100,000 keep Count Factorial and the full Haunted look forever (`store.hw` = 1 or 2, `store.hwN` = the day's count), with an on/off switch. Sponsors get golden skulls (`store.hwGold`). Goals live in `HW_GOALS`. Free and cosmetic only, no server involved. Autopilot keeps shuffling in a background tab (a tiny worker ticks it while `requestAnimationFrame` sleeps); phones freeze background tabs.
 - Preview without keeping anything: `?hw=day` or `?hw=teaser`. For another year, change `HW.year` in `index.html`.
 
 ## Leaderboard ("Luckiest Shufflers")
@@ -100,6 +100,14 @@ See `time-traveller/README.md`: the Modal app that takes Stripe's webhook, runs 
 site links to `theimpossibleshuffle.com/b/<score>/`, so the link unfurls (X, WhatsApp, iMessage,
 Slack, Facebook) with that score; people who click it land on the site. Higher scores fall back to
 the homepage. The images and pages are generated from the same design as `og-image.png`.
+
+## Challenge a friend
+
+The recruit panel has "⚔️ Challenge a friend to beat your N/52": an optional name, then WhatsApp, Copy link or the
+phone's share sheet. The link is `/b/<best>/?r=<recruit code>#beat=<best>&by=<name>`, so it unfurls with that score,
+the friend counts as your recruit, and the `/b/` page forwards the hash. The friend sees "Sam challenged you: beat
+3/52" on top of the hero (that visit only) and a challenge line in the shuffle panel until they beat it; then a toast
+and "Challenge them back". Stored in `store.ch`; your own name in `store.chMe`. Your own link is ignored.
 
 ## Hall of Firsts
 

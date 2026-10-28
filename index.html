@@ -727,6 +727,21 @@
   .hof-foot { margin-top:.8rem; font-size:.75rem; color:#a8997a; }
   @media (max-width:640px) { .hof-list { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:.75rem .5rem; } .hof-rung { flex-direction:column; align-items:flex-start; gap:.3rem; padding:.75rem .65rem .6rem; } .hof-rung .k { font-size:1.15rem; min-width:0; } .hof-rung.dream { grid-column:1 / -1; } }
   @media (prefers-reduced-motion: reduce) { .hof-rung.next { animation:none; box-shadow:0 0 16px rgba(255,47,214,.4); } }
+  .ch-hello { margin-bottom:.6rem !important; padding:.4rem .9rem !important; border-color:rgba(34,243,255,.55) !important; background:rgba(34,243,255,.1) !important; color:#d8fdff !important; }
+  .ch-hello b { color:#fff; }
+  .ch-bar { border:1px solid rgba(34,243,255,.5); background:rgba(34,243,255,.07); border-radius:12px; padding:.5rem .7rem; font-size:.82rem; line-height:1.45; color:#d8fdff; }
+  .ch-bar[hidden] { display:none; }
+  .ch-bar b { color:#fff; }
+  .ch-bar .ch-sub { display:block; font-size:.74rem; color:#9fc9cf; }
+  .ch-bar .ch-act { margin-top:.35rem; display:flex; flex-wrap:wrap; gap:.4rem; }
+  .ch-bar button { min-height:32px; padding:.2rem .7rem; border-radius:999px; border:1px solid rgba(34,243,255,.6); background:rgba(0,0,0,.3); color:#d8fdff; font-size:.78rem; font-weight:700; cursor:pointer; }
+  .ch-bar button:hover { background:rgba(34,243,255,.18); }
+  .chal-btn { min-height:44px; padding:.55rem 1rem; border-radius:12px; border:1px solid rgba(34,243,255,.7); background:linear-gradient(180deg, rgba(34,243,255,.18), rgba(34,243,255,.06)); color:#e6feff; font-weight:800; font-size:.95rem; cursor:pointer; box-shadow:0 0 16px rgba(34,243,255,.2); }
+  .chal-btn:hover { background:rgba(34,243,255,.24); }
+  .chal-panel { margin-top:.6rem; padding:.7rem; border-radius:12px; border:1px dashed rgba(34,243,255,.4); background:rgba(0,0,0,.25); }
+  .chal-panel[hidden] { display:none; }
+  .chal-label { display:block; margin-bottom:.3rem; font-size:.78rem; font-weight:700; color:#cfe3d7; }
+  .chal-panel .imp-input { width:100%; max-width:20rem; display:block; }
   .ph-hello { margin:0 auto 1rem; max-width:40rem; padding:.55rem .9rem; border-radius:12px; border:1px solid rgba(255,97,84,.55); background:rgba(255,97,84,.12); color:#ffd9d4; font-size:.9rem; line-height:1.45; }
   @media (min-width: 1024px) {                              /* laptops: the counter stays centre stage, the facts share one line */
     #liveBox.live-box { max-width:44rem; padding:.8rem 1.5rem .7rem; }
@@ -930,6 +945,7 @@
       <svg class="hw-web l" viewBox="0 0 100 100" fill="none" stroke="rgba(235,225,255,.4)" stroke-width="1" aria-hidden="true"><path d="M0 0L100 28M0 0L78 78M0 0L28 100M0 0L100 0M0 0L0 100"/><path d="M24 0Q19 6 23 7Q17 15 17 17Q14 19 7 23Q6 19 0 24"/><path d="M50 0Q42 12 46 14Q36 31 34 34Q28 37 14 46Q12 40 0 50"/><path d="M76 0Q64 18 70 21Q55 47 51 51Q42 56 21 70Q18 61 0 76"/></svg>
       <svg class="hw-web r" viewBox="0 0 100 100" fill="none" stroke="rgba(235,225,255,.4)" stroke-width="1" aria-hidden="true"><path d="M0 0L100 28M0 0L78 78M0 0L28 100M0 0L100 0M0 0L0 100"/><path d="M24 0Q19 6 23 7Q17 15 17 17Q14 19 7 23Q6 19 0 24"/><path d="M50 0Q42 12 46 14Q36 31 34 34Q28 37 14 46Q12 40 0 50"/><path d="M76 0Q64 18 70 21Q55 47 51 51Q42 56 21 70Q18 61 0 76"/></svg>
       <span class="hw-pumpkin l" aria-hidden="true">🎃</span><span class="hw-pumpkin r" aria-hidden="true">🎃</span>
+      <p id="chHello" class="ph-hello ch-hello" hidden></p>
       <p id="phHello" class="ph-hello" hidden>👋 Welcome, Product Hunters. Your mission, should you choose to accept it: one shuffle. Mathematics expects nothing from you.</p>
       <p class="mono text-xs tracking-widest text-[#9fb5a8] mb-3">MISSION CONTROL · DEPARTMENT OF IMPOSSIBLE THINGS</p>
       <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl sm:leading-tight lg:text-[3.4rem]" style="text-wrap:balance">Welcome to Humankind's Most Impossible Mission</h1>
@@ -1054,6 +1070,7 @@
           </div>
           <button type="button" id="lbJump" class="lb-jump" hidden></button>
           <div id="hwBar" class="hw-bar" hidden aria-live="polite"></div>
+          <div id="chBar" class="ch-bar" hidden aria-live="polite"></div>
           <button type="button" id="soundBtn" class="chip-btn w-full" aria-pressed="false">🔇 Sound: off</button>
         </div>
 
@@ -1123,7 +1140,20 @@
     <section id="recruitPanel" class="panel recruit-panel p-4 sm:p-5 mt-5 lg:col-start-1 lg:col-span-2" aria-labelledby="recruitTitle" hidden>
       <h2 id="recruitTitle" class="font-display text-base sm:text-lg neon-pink">📣 Humanity needs backup</h2>
       <p class="mt-1 text-sm text-[#cfe3d7]">This only works if everybody shuffles. Send in a friend: every recruit shuffles for humanity, and you get the credit.</p>
-      <div class="share-row mt-3" role="group" aria-label="Recruit a friend">
+      <div class="chal-box mt-3">
+        <button type="button" id="chSend" class="chal-btn" aria-expanded="false" aria-controls="chPanel">⚔️ Challenge a friend</button>
+        <div id="chPanel" class="chal-panel" hidden>
+          <label class="chal-label" for="chName">Your name on the challenge <span class="dim">(optional)</span></label>
+          <input id="chName" class="imp-input" maxlength="20" autocomplete="nickname" placeholder="e.g. Sam">
+          <div class="share-row mt-2" role="group" aria-label="Send the challenge">
+            <button type="button" class="share-btn" data-chs="whatsapp" style="--c:#25d366">WhatsApp</button>
+            <button type="button" class="share-btn" data-chs="copy" style="--c:#ffd23f">Copy link</button>
+            <button type="button" class="share-btn" data-chs="more" style="--c:#a5fbff" hidden>More…</button>
+          </div>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-[#9fb5a8]">Or just send in the mission:</p>
+      <div class="share-row mt-2" role="group" aria-label="Recruit a friend">
         <button type="button" class="share-btn" data-share="whatsapp" style="--c:#25d366">WhatsApp</button>
         <button type="button" class="share-btn" data-share="instagram" style="--c:#e1306c">Instagram</button>
         <button type="button" class="share-btn" data-share="x" style="--c:#e7e9ea">X</button>
@@ -1869,7 +1899,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, giftDraft: null, giftsSent: [], giftsRx: [], lucky: -1, luckyHits: 0, theme: 'classic', gcMine: -1, apUsed: false, hw: 0, hwN: 0, hwGold: false, hwOn: null };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, giftDraft: null, giftsSent: [], giftsRx: [], lucky: -1, luckyHits: 0, theme: 'classic', gcMine: -1, apUsed: false, hw: 0, hwN: 0, hwGold: false, hwOn: null, ch: null, chMe: '' };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1899,7 +1929,8 @@ const store = (() => {
       giftsRx: Array.isArray(p.giftsRx) ? p.giftsRx.filter(g => g && typeof g.id === 'string').slice(0, 10) : [],
       lucky: Number.isInteger(p.lucky) && p.lucky >= 0 && p.lucky < 52 ? p.lucky : -1, luckyHits: n(p.luckyHits), theme: str(p.theme) || 'classic',
       gcMine: Number.isInteger(p.gcMine) && p.gcMine >= 0 && p.gcMine < 52 ? p.gcMine : -1, apUsed: p.apUsed === true,
-      hw: Number.isInteger(p.hw) && p.hw >= 0 && p.hw <= 2 ? p.hw : 0, hwN: n(p.hwN), hwGold: p.hwGold === true, hwOn: typeof p.hwOn === 'boolean' ? p.hwOn : null   // Halloween collector's items
+      hw: Number.isInteger(p.hw) && p.hw >= 0 && p.hw <= 2 ? p.hw : 0, hwN: n(p.hwN), hwGold: p.hwGold === true, hwOn: typeof p.hwOn === 'boolean' ? p.hwOn : null,   // Halloween collector's items
+      ch: p.ch && Number.isInteger(p.ch.n) && p.ch.n >= 0 && p.ch.n <= 52 ? { n: p.ch.n, by: str(p.ch.by).slice(0, 20), won: p.ch.won === true } : null, chMe: str(p.chMe).slice(0, 20)   // a friend's challenge
     };
   } catch (e) { return def; }
 })();
@@ -2551,6 +2582,7 @@ function renderTop() {
 }
 function renderPB() {
   pbDirty = false;
+  chRender();
   if (HOF.next) renderHofMe();                   // the Hall of Firsts line follows your best
   const b = store.best;
   if (b && (b.grail !== GRAIL_ID || !(Array.isArray(b.deck) && b.deck.length === 52 && b.deck.every(code => CODES.includes(code))))) store.best = null;
@@ -2958,6 +2990,62 @@ function shareTo(kind) {
   else if (kind === 'copy') copyText(text);
   else if (kind === 'more') navigator.share({ title: 'The Impossible Shuffle', text }).catch(() => {});
   else if (kind === 'instagram') instagramShare();
+}
+/* ---------- Challenge a friend ----------
+   A link with your best score (and, if you like, your name): theimpossibleshuffle.com/b/<score>/?r=<code>#beat=<score>&by=<name>.
+   The /b/ page unfurls with that score and forwards the hash; your recruit code comes along, so a friend who
+   joins also counts as your recruit. The friend sees the challenge until they beat it, then can challenge you back. */
+const chClean = v => String(v || '').replace(/[^\p{L}\p{N} ._'-]/gu, '').trim().slice(0, 20);
+function chLink(name) {
+  const best = Math.max(0, bestEver()), page = best <= 20 || best === 52 ? `/b/${best}/` : '/';
+  return `${siteBase()}${page}?r=${myCode()}#beat=${best}${name ? '&by=' + encodeURIComponent(name) : ''}`;
+}
+function chText(name) {
+  const best = Math.max(0, bestEver());
+  return `⚔️ ${name ? `${name} got` : 'I got'} ${best}/52 on The Impossible Shuffle. Bet you can't beat it. ${chLink(name)}`;
+}
+function chSend(kind) {
+  const name = chClean($('#chName').value);
+  if (name !== store.chMe) { store.chMe = name; saveStore(true); }
+  const text = chText(name), e = encodeURIComponent;
+  track('challenge-send-' + kind);
+  if (kind === 'whatsapp') window.open(`https://wa.me/?text=${e(text)}`, '_blank', 'noopener');
+  else if (kind === 'copy') copyText(text);
+  else if (kind === 'more') navigator.share({ title: 'The Impossible Shuffle', text }).catch(() => {});
+}
+function chOpenPanel(scroll) {
+  const panel = $('#chPanel');
+  panel.hidden = false; $('#chSend').setAttribute('aria-expanded', 'true');
+  if (!$('#chName').value) $('#chName').value = store.chMe || (store.lb && store.lb.name) || '';
+  if (scroll) $('#recruitPanel').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+}
+/** Reads a challenge from the link (#beat=7&by=Sam) once, then tidies the address bar. */
+function chArrive() {
+  const m = /[#&]beat=(\d{1,2})(?:&by=([^&]*))?/.exec(location.hash);
+  if (!m) return false;
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* file:// */ }
+  const n = Number(m[1]); let by = '';
+  try { by = chClean(decodeURIComponent(m[2] || '')); } catch (e) { by = ''; }
+  if (n > 52 || (params.get('r') && params.get('r') === store.rcode)) return false;   // your own link
+  store.ch = { n, by, won: false }; saveStore(true);
+  track('challenge-arrive');
+  return true;
+}
+function chRender() {
+  const best = Math.max(0, bestEver());
+  $('#chSend').textContent = store.allTime ? `⚔️ Challenge a friend to beat your ${best}/52` : '⚔️ Challenge a friend';
+  const bar = $('#chBar'), c = store.ch;
+  if (!c) { bar.hidden = true; return; }
+  const who = c.by ? escapeHtml(c.by) : 'Your friend';
+  if (!c.won && store.allTime && best > c.n) {
+    c.won = true; saveStore(true); track('challenge-won');
+    toast(`🏆 <b>Challenge won!</b> You beat ${who}'s ${c.n}/52 with ${best}/52. Send one back?`);
+    $('#chHello').hidden = true;
+  }
+  bar.innerHTML = c.won
+    ? `🏆 <b>You beat ${who}'s ${c.n}/52.</b><span class="ch-act"><button type="button" data-ch="back">⚔️ Challenge them back</button><button type="button" data-ch="close">Done</button></span>`
+    : `⚔️ <b>${who}'s challenge:</b> beat ${c.n}/52.<span class="ch-sub">Your best: ${store.allTime ? best + '/52' : 'nothing yet'} · ${c.n + 1}/52 is about 1 in ${shortOdds(c.n + 1)} shuffles.</span>`;
+  bar.hidden = false;
 }
 // Instagram has no share link: hand over the result card (share it on a phone, save it on a computer).
 async function instagramShare() {
@@ -5604,7 +5692,19 @@ function initImpatient() {
     setTimeout(() => shuffleFromButton(true), reduceMotion ? 0 : 500);
   });
   document.querySelectorAll('#recruitPanel [data-share]').forEach(b => b.addEventListener('click', () => shareTo(b.dataset.share)));
-  if (navigator.share) $('#recruitPanel [data-share="more"]').hidden = false;
+  if (navigator.share) { $('#recruitPanel [data-share="more"]').hidden = false; $('#chPanel [data-chs="more"]').hidden = false; }
+  $('#chSend').addEventListener('click', () => { const open = $('#chPanel').hidden; if (open) chOpenPanel(false); else { $('#chPanel').hidden = true; $('#chSend').setAttribute('aria-expanded', 'false'); } track('challenge-open'); });
+  document.querySelectorAll('#chPanel [data-chs]').forEach(b => b.addEventListener('click', () => chSend(b.dataset.chs)));
+  $('#chBar').addEventListener('click', e => {
+    const b = e.target.closest('[data-ch]'); if (!b) return;
+    if (b.dataset.ch === 'back') { chOpenPanel(true); track('challenge-back'); }
+    else { store.ch = null; saveStore(true); chRender(); }
+  });
+  if (chArrive() && store.ch && !(store.allTime && bestEver() > store.ch.n)) {
+    $('#chHello').innerHTML = `⚔️ <b>${store.ch.by ? escapeHtml(store.ch.by) : 'A friend'}</b> challenged you: beat ${store.ch.n}/52. Your move.`;
+    $('#chHello').hidden = false;
+  }
+  chRender();
   const rParam = (params.get('r') || '').toLowerCase();
   if (RCODE_RE.test(rParam) && !store.allTime && !store.rby && rParam !== store.rcode) { store.rby = rParam; saveStore(true); track('recruit-arrival'); }
   loadHumans();
