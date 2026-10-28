@@ -60,7 +60,7 @@ npx tailwindcss@3.4.17 -c tailwind.config.js -i tw-input.css -o tw.css --minify
 
 - Oct 28–30 (visitor's own date): a strip in the game panel and a REAL ticker line tease the event.
 - Oct 31: the whole table goes spooky for everyone: a moonlit background, skull card backs, orange bulbs and title, cobwebs and pumpkins on the hero, bats and a ghost drifting past (off with reduced motion), the Professor dressed up as Count Factorial (cape, fangs, a bat on his hat, a pumpkin bucket instead of tea), and spooky sounds (a falling run, low bells, a ghost's "woooo", thunder when the deck unlocks). The hero status reads "MISSION STATUS: HAUNTED", the Professor and the ticker get Halloween lines.
-- Anyone who shuffles on Oct 31 keeps the Haunted look forever (`store.hw`), with an on/off switch in the strip. Sponsors also get the Golden Pumpkin deck (`store.hwGold`). Free and cosmetic only, no server involved.
+- Every shuffle made on Oct 31 counts (by hand, autopilot or a station), with a progress bar in the strip: 31,000 keep the Skull Deck (card backs) forever, 100,000 keep Count Factorial and the full Haunted look forever (`store.hw` = 1 or 2, `store.hwN` = the day's count), with an on/off switch. Sponsors get golden skulls (`store.hwGold`). Goals live in `HW_GOALS`. Free and cosmetic only, no server involved. Autopilot pauses while the tab is hidden, as always.
 - Preview without keeping anything: `?hw=day` or `?hw=teaser`. For another year, change `HW.year` in `index.html`.
 
 ## Leaderboard ("Luckiest Shufflers")
