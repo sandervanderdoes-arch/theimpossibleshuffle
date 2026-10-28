@@ -3117,7 +3117,8 @@ function setAutopilot(mode) {
   autopilot.ludMs = 0;
   if (m) { hideReplayNote(); hyperPause(); }
   rate.secs.fill(-1); rate.counts.fill(0);   // the pace readout should describe the new mode only
-  if (!m) { el.apRate.textContent = ''; armIdle(); updateStats(); return; }
+  if (!m) { apBgStop(); el.apRate.textContent = ''; armIdle(); updateStats(); return; }
+  apBgStart();
   track('autopilot-' + (m === 'L' ? 'ludicrous' : m));
   if (anim.active) finishAnimNow();
   const now = performance.now();
@@ -3127,15 +3128,32 @@ function setAutopilot(mode) {
   clearTimeout(prof.idleTimer);
   autopilot.raf = requestAnimationFrame(apLoop);
 }
+/* Autopilot keeps going in a background tab: requestAnimationFrame stops while the tab is hidden, so a tiny worker
+   ticks instead (worker timers aren't throttled like the page's). Phones freeze background tabs entirely. */
+const apBg = { w: null, t: 0 };
+function apBgStart() {
+  if (apBg.w || apBg.t) return;
+  try {
+    const url = URL.createObjectURL(new Blob(['setInterval(() => postMessage(0), 250);'], { type: 'text/javascript' }));
+    apBg.w = new Worker(url); apBg.w.onmessage = apBgTick;
+  } catch (e) { apBg.t = setInterval(apBgTick, 250); }
+}
+function apBgStop() { if (apBg.w) { apBg.w.terminate(); apBg.w = null; } clearInterval(apBg.t); apBg.t = 0; }
+function apBgTick() { if (document.hidden && autopilot.mode && !winOpen) apStep(performance.now(), false); }
 function apLoop(t) {
   if (!autopilot.mode || winOpen) return;
+  if (apStep(t, true)) autopilot.raf = requestAnimationFrame(apLoop);
+}
+/** One round of autopilot shuffles, due by the clock. Returns false once it has stopped (a win). */
+function apStep(t, visible) {
   const ap = autopilot;
   const dt = Math.min(100, t - ap.lastT); ap.lastT = t;
   const perSec = ap.mode === 'L' ? LUDICROUS_RATE : ap.mode;
   const due = Math.floor((t - ap.start) / 1000 * perSec);
   let todo = due - ap.done;
-  if (todo > perSec) { ap.done = due - perSec; todo = perSec; }  // don't binge after a hidden tab
-  const budgetEnd = performance.now() + 5;  // leave most of the frame for rendering
+  const cap = visible ? perSec : perSec * 5;                 // a hidden tab ticks a few times a second, or less when throttled
+  if (todo > cap) { ap.done = due - cap; todo = cap; }       // never binge after a frozen tab
+  const budgetEnd = performance.now() + (visible ? 5 : 25);  // visible: leave most of the frame for rendering
   let count = 0, won = null;
   while (count < todo) {
     const slot = ap.ring[ap.pos];
@@ -3150,8 +3168,8 @@ function apLoop(t) {
   }
   ap.done += count;
   noteRate(count);
-  if (ap.mode === 'L') {
-    ap.ludMs += dt;   // rAF pauses in hidden tabs, so only visible time counts
+  if (ap.mode === 'L' && visible) {
+    ap.ludMs += dt;   // the Ludicrous badges count visible time only
     if (ap.ludMs > store.ludBestMs) store.ludBestMs = ap.ludMs;
     if (ap.ludMs >= 60000 && !store.badges.ludicrous) unlock('ludicrous');
     if (ap.ludMs >= 3600000 && !store.badges.heatdeath) unlock('heatdeath');
@@ -3161,11 +3179,11 @@ function apLoop(t) {
     ap.sinceFlush = 0;
     setAutopilot('0');
     reveal(res, false);
-    return;
+    return false;
   }
-  // 1/sec shows every deck; faster speeds update the screen twice a second so it doesn't strobe.
-  if (t - ap.lastFlush >= (ap.mode === 1 ? 100 : 500)) { ap.lastFlush = t; flushAutopilot(); }
-  ap.raf = requestAnimationFrame(apLoop);
+  // 1/sec shows every deck; faster speeds update the screen twice a second so it doesn't strobe. Hidden: nothing to paint.
+  if (visible && t - ap.lastFlush >= (ap.mode === 1 ? 100 : 500)) { ap.lastFlush = t; flushAutopilot(); }
+  return true;
 }
 /** Called at most every 100 ms (1/sec) or 500 ms (faster): pushes the latest attempt to the grids, meter and stats. */
 function flushAutopilot() {
