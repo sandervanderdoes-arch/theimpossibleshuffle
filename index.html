@@ -664,6 +664,10 @@
   .outfit-royal .p-hat path:first-of-type { fill:#3b0a6b; }
   body.hw .p-band, body.hw .p-bow { fill:#ff7a1a; }
   body.hw .p-hat path:first-of-type { fill:#2a0b3d; }
+  /* Count Factorial: cape, collar, fangs, a bat on the hat and a pumpkin bucket instead of tea. */
+  .p-hw { display:none; }
+  body.hw .p-hw { display:inline; }
+  body.hw .p-tea { display:none; }
   .hw-bar { border:1px solid rgba(255,122,26,.55); background:rgba(255,122,26,.08); border-radius:12px; padding:.5rem .7rem; font-size:.82rem; line-height:1.4; color:#ffd9b8; }
   .hw-bar[hidden] { display:none; }
   .hw-bar b { color:#ffb070; }
@@ -1061,7 +1065,7 @@
           <div class="mt-3 flex items-start gap-3">
             <div id="profSlot" class="prof-slot w-[104px] flex-none" aria-hidden="true"></div>
             <div class="flex-1 pt-3">
-              <p class="text-[11px] font-bold tracking-widest text-[#ffe68a] mb-1">PROFESSOR FACTORIAL</p>
+              <p id="profName" class="text-[11px] font-bold tracking-widest text-[#ffe68a] mb-1">PROFESSOR FACTORIAL</p>
               <p id="bubble" class="bubble">Ah, a new challenger. Press the button. Defy me.</p>
             </div>
           </div>
@@ -2017,6 +2021,7 @@ function profSVG() {
 <svg class="prof-svg" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
  <g class="p-all">
   <g class="p-ball"><circle cx="100" cy="258" r="30" fill="#ffd23f" stroke="${ink}" stroke-width="4"/><path d="M84 246 q8 -8 18 -6" stroke="#fff6c9" stroke-width="4" fill="none" stroke-linecap="round" opacity=".75"/></g>
+  <g class="p-hw p-cape"><path d="M60 66 Q30 120 24 214 Q46 205 64 214 Q82 205 100 214 Q118 205 136 214 Q154 205 176 214 Q170 120 140 66 Z" fill="#1a0a24" stroke="${ink}" stroke-width="3"/><path d="M64 74 Q42 126 34 208 Q44 204 52 207 Q56 132 72 78 Z" fill="#b3122e"/><path d="M136 74 Q158 126 166 208 Q156 204 148 207 Q144 132 128 78 Z" fill="#b3122e"/><path d="M60 72 L32 30 L66 54 Z" fill="#b3122e" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/><path d="M140 72 L168 30 L134 54 Z" fill="#b3122e" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/></g>
   <g stroke="${ink}" stroke-width="4" stroke-linecap="round"><line x1="92" y1="206" x2="90" y2="221"/><line x1="108" y1="206" x2="110" y2="221"/></g>
   <ellipse class="p-shoe-l" cx="86" cy="224" rx="10" ry="5" fill="#111"/>
   <ellipse class="p-shoe-r" cx="114" cy="224" rx="10" ry="5" fill="#111"/>
@@ -2032,6 +2037,7 @@ function profSVG() {
    <path class="p-sparkle" d="M138 82 l3 -9 l3 9 l9 3 l-9 3 l-3 9 l-3 -9 l-9 -3 z" fill="#fff" stroke="#ffd23f" stroke-width="1"/>
    <path d="M100 124 q-10 -8 -22 0 q-8 6 -16 0 q6 12 20 8 q10 -2 18 -6 q8 4 18 6 q14 4 20 -8 q-8 6 -16 0 q-12 -8 -22 0 z" fill="#3a2410"/>
    <path class="p-smirk" d="M88 141 q12 6 24 -3" stroke="${ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+   <g class="p-hw p-fangs" fill="#fff" stroke="${ink}" stroke-width="1.6" stroke-linejoin="round"><path d="M93 141 l2.5 8 l3 -7 z"/><path d="M103 141 l3 7 l2.5 -8 z"/></g>
    <ellipse class="p-yawn" cx="100" cy="143" rx="9" ry="11" fill="#5a1020" stroke="${ink}" stroke-width="3"/>
    <ellipse class="p-oh" cx="100" cy="142" rx="6" ry="7" fill="#5a1020" stroke="${ink}" stroke-width="3"/>
    <path class="p-sweat" d="M146 76 q7 11 0 15 q-7 -4 0 -15 z" fill="#7fe3ff" stroke="#1b6c86" stroke-width="1.5"/>
@@ -2046,9 +2052,10 @@ function profSVG() {
   <g class="p-arm-r">
    <path d="M134 140 Q154 150 164 166" stroke="${ink}" stroke-width="4" fill="none" stroke-linecap="round"/>
    <circle cx="165" cy="168" r="6" fill="#fff" stroke="${ink}" stroke-width="2.5"/>
+   <g class="p-hw p-bucket"><path d="M152 176 q13 -18 26 0" stroke="${ink}" stroke-width="2.5" fill="none"/><circle cx="159" cy="175" r="3.2" fill="#ff2fd6"/><circle cx="166" cy="173" r="3.2" fill="#22f3ff"/><circle cx="172" cy="175.5" r="2.8" fill="#ffd23f"/><path d="M150 177 h30 l-3 20 q-12 6 -24 0 z" fill="#ff7a1a" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/><path d="M157 186 l3 -4.5 l3 4.5 z M167 186 l3 -4.5 l3 4.5 z" fill="#3a1a00"/><path d="M157 191 q8 5 16 0" stroke="#3a1a00" stroke-width="2" fill="none" stroke-linecap="round"/></g>
    <g class="p-tea"><path d="M152 172 h26 l-3 16 q-1 5 -10 5 q-9 0 -10 -5 z" fill="#fff" stroke="${ink}" stroke-width="2.5"/><path d="M178 176 q8 0 6 6 q-2 5 -8 4" stroke="${ink}" stroke-width="2.5" fill="none"/><ellipse cx="165" cy="194" rx="18" ry="3.5" fill="#fff" stroke="${ink}" stroke-width="2"/><g stroke="#cfeee6" stroke-width="2" fill="none" opacity=".75"><path d="M160 166 q-4 -6 0 -12 q4 -6 0 -12"/><path d="M170 166 q-4 -6 0 -12"/></g></g>
   </g>
-  <g class="p-hat"><ellipse cx="100" cy="62" rx="56" ry="9" fill="#151515" stroke="#000" stroke-width="2"/><path d="M66 60 L70 12 Q70 6 76 6 L124 6 Q130 6 130 12 L134 60 Z" fill="#1d1d1d" stroke="#000" stroke-width="2"/><rect class="p-band" x="67" y="42" width="66" height="10" fill="#ff2fd6"/><path d="M78 14 L76 38" stroke="#555" stroke-width="3" stroke-linecap="round"/></g>
+  <g class="p-hat"><ellipse cx="100" cy="62" rx="56" ry="9" fill="#151515" stroke="#000" stroke-width="2"/><path d="M66 60 L70 12 Q70 6 76 6 L124 6 Q130 6 130 12 L134 60 Z" fill="#1d1d1d" stroke="#000" stroke-width="2"/><rect class="p-band" x="67" y="42" width="66" height="10" fill="#ff2fd6"/><path d="M78 14 L76 38" stroke="#555" stroke-width="3" stroke-linecap="round"/><g class="p-hw" transform="translate(126 38) scale(.56)"><path d="M32 9c-1-2.5-2.6-3.8-2.6-3.8L28.6 8c-2-.8-4-.8-6 .4C17.5 3 9.5 1.8 1 6c5 1.2 8 4.4 9 9.2 3-2 7-2 9.2 1 2-1.8 5-1.8 7 0 1.2-1 3.2-1.8 5.8-1.8s4.6.8 5.8 1.8c2-1.8 5-1.8 7 0 2.2-3 6.2-3 9.2-1 1-4.8 4-8 9-9.2-8.5-4.2-16.5-3-21.6 2.4-2-1.2-4-1.2-6-.4l-.8-2.8S33 6.5 32 9z" fill="#1d0a28" stroke="#ff9a4a" stroke-width="2.2"/><circle cx="29.5" cy="11" r="1.7" fill="#ff7a1a"/><circle cx="34.5" cy="11" r="1.7" fill="#ff7a1a"/></g></g>
  </g>
  <g class="p-dropped"><circle cx="156" cy="284" r="9" fill="rgba(180,240,255,.3)" stroke="#8a6a00" stroke-width="3"/><path d="M151 280 l4 -4" stroke="#fff" stroke-width="2"/></g>
 </svg>
@@ -2084,7 +2091,8 @@ const LINES = {
     'Commander, humanity thanks you. Mathematics does not.',
     'Commander, your plaque gleams. Your odds do not.'
   ],
-  halloween: ['Happy Halloween. The deck is haunted. Statistically, nothing changes.', 'Boo. Did I frighten you? No? Neither do your odds.',
+  halloween: ['Good evening. I am Count Factorial. I vant to count your shuffles.', 'Happy Halloween. The deck is haunted. Statistically, nothing changes.',
+    'Trick or treat? I have candy. You have 8 × 10⁶⁷ to go.', 'I only come out at night. And whenever someone presses that button.', 'Boo. Did I frighten you? No? Neither do your odds.',
     'The only thing scarier than ghosts is 8 × 10⁶⁷.', 'I came dressed as a probability distribution. Terrifying, I know.',
     'Trick or treat? The trick is mathematics. There is no treat.', 'Even the ghosts gave up on the Holy Grail. They had all eternity.'],
   intro: [
@@ -2368,8 +2376,8 @@ function profMilestone() {
 const rankKey = () => (owned().patron || owned().traveller ? 'rankPatron' : owned().odds ? 'rankOdds' : owned().tea ? 'rankTea' : '');
 function profWelcomeBack() {
   const n = store.allTime, f = fmt(n);
+  if (HW.day && (!n || rnd() < 0.6)) return LINES.halloween[0];   // Count Factorial introduces himself
   if (!n) return LINES.intro[0];
-  if (HW.day && rnd() < 0.6) return LINES.halloween[0];
   if (rankKey() && rnd() < 0.6) return pick({ rankTea: [`Welcome back, Rookie. ${f} shuffles and counting.`, 'Rookie! You returned. Mathematics sighed.'],
     rankOdds: [`Welcome back, Captain. ${f} shuffles, zero Grails.`, 'Captain on the bridge again! The Grail hid.'],
     rankPatron: [`Welcome back, Commander. ${f} shuffles. Magnificent.`, 'The Commander returns! I have warmed the deck.'] }[rankKey()]);
@@ -5222,6 +5230,7 @@ function applyHaunted() {
   const on = hwLookOn();
   document.body.classList.toggle('hw', on);
   document.body.classList.toggle('hw-gold', on && (!!store.hwGold || (HW.day && hasAny())));
+  const name = $('#profName'); if (name) name.textContent = on ? 'COUNT FACTORIAL 🧛' : 'PROFESSOR FACTORIAL';
 }
 function hwUnlock() {
   if (hwPreview()) {                                         // a preview never keeps anything
