@@ -129,7 +129,7 @@ async def stripe_webhook(request: Request):     # a real FastAPI Request, so Str
                   prefer='return=representation,resolution=ignore-duplicates')
     if created:                                          # Stripe retries webhooks: only the first one launches GPUs
         run_mission.spawn(ticket)
-    return {'ok': True, 'launched': bool(created)}
+    return {'ok': True, 'launched': bool(created), 'stars': give_stars(cs, 4)}
 
 
 def sponsor_rank(cents):
@@ -157,7 +157,24 @@ def sponsor_event(cs, cents):
         out.update(stored=False, why=str(e)[:200])
     if rank == 'Commander':
         out['grail_card'] = grail_card(cs, ticket)
+    out['stars'] = give_stars(cs, {'Rookie': 1, 'Captain': 2, 'Commander': 3}[rank])
     return out
+
+
+UUID_RE = re.compile(r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')
+
+
+def give_stars(cs, stars):
+    """Rank stars next to the buyer's name on the world ranking (see tea-and-stars.sql). The page passes the buyer's
+    private leaderboard player id as client_reference_id; no id (an old link, a gift), no stars. Never fails a payment."""
+    ref = (cs.get('client_reference_id') or '').lower()
+    if not UUID_RE.fullmatch(ref):
+        return None
+    try:
+        _sb('rpc/grant_stars', {'p_player': ref, 'p_stars': stars})
+        return stars
+    except RuntimeError as e:                            # tea-and-stars.sql not run yet: the payment still counts
+        return {'error': str(e)[:200]}
 
 
 def grail_card(cs, ticket):

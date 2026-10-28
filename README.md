@@ -101,6 +101,22 @@ site links to `theimpossibleshuffle.com/b/<score>/`, so the link unfurls (X, Wha
 Slack, Facebook) with that score; people who click it land on the site. Higher scores fall back to
 the homepage. The images and pages are generated from the same design as `og-image.png`.
 
+## The Professor's tea fund
+
+Under the tiers: "🍵 The Professor's tea fund: N cups". Every paid station tops it up (Rookie 1 cup, Captain 4,
+Commander 25, Time Traveller 100), counted by `tea_fund()` in `supabase/tea-and-stars.sql` from `sponsor_events` and
+`travellers` (test purchases marked hidden don't count). Milestones in `TEA_LEVELS` give the Professor upgrades every
+visitor sees: 10 a gold teacup (he then holds it in his quiet poses), 30 a gold monocle, 75 a curled moustache,
+150 a feather in his hat, 300 a biscuit with every cup. Hidden until the SQL has been run.
+
+## Rank stars
+
+★ Rookie, ★★ Captain, ★★★ Commander, ★★★★ Time Traveller, by sponsors' names on the world ranking and in the Hall
+of Firsts. A buy link gets this browser's private leaderboard id as `client_reference_id` at the moment of the
+click; the Modal webhook checks Stripe's signature and calls `grant_stars()`. The page only ever reads names and stars
+(`leaderboard_stars()`), never player ids. Stars show once the buyer has joined the ranking in that browser, also if
+they join after paying. Purchases from before this feature (or from another browser) have no stars.
+
 ## Challenge a friend
 
 The recruit panel has "⚔️ Challenge a friend to beat your N/52": an optional name, then WhatsApp, Copy link or the

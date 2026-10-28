@@ -83,6 +83,10 @@ database rebuilds it a third time before it believes it.
    `supabase/traveller-notify.sql` and run it in the SQL editor. Your phone then pings when someone
    boards, when their mission is done (tap it: the deck designer opens with them picked) and if a
    mission fails (refund them in Stripe).
+11. **Tea fund and rank stars:** run `supabase/tea-and-stars.sql`, then redeploy (`modal deploy time_traveller.py`).
+   The page passes the buyer's private leaderboard id to Stripe as `client_reference_id`; the webhook then
+   gives that player ★ (Rookie), ★★ (Captain), ★★★ (Commander) or ★★★★ (Time Traveller) on the world ranking.
+   Nothing to change in Stripe: Payment Links accept `client_reference_id` as they are.
 
 ## Notes
 

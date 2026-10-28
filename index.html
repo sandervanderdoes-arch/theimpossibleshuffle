@@ -667,7 +667,23 @@
   /* Count Factorial: cape, collar, fangs, a bat on the hat and a pumpkin bucket instead of tea. */
   .p-hw { display:none; }
   body.hw .p-hw { display:inline; }
-  body.hw .p-tea { display:none; }
+  body.hw .p-tea { display:none !important; }
+  /* The Professor's Tea Fund: upgrades every visitor sees (cumulative levels). */
+  .p-tea3, .p-tea4, .p-tea5 { display:none; }
+  body.tea-l1 .p-tea > path:first-of-type, body.tea-l1 .p-tea > ellipse { fill:#ffd23f; }
+  body.tea-l1 .pose-intro .p-tea, body.tea-l1 .pose-idle .p-tea, body.tea-l1 .pose-eyebrow .p-tea { display:inline; }   /* he shows off his gold cup */
+  body.tea-l2 .p-monocle > circle { stroke:#ffd23f; filter:drop-shadow(0 0 3px rgba(255,210,63,.9)); }
+  body.tea-l3 .p-tea3, body.tea-l4 .p-tea4, body.tea-l5 .p-tea5 { display:inline; }
+  .tea-fund { margin:1rem auto 0; max-width:34rem; padding:.7rem .9rem; border-radius:14px; border:1px solid rgba(255,210,63,.35); background:rgba(0,0,0,.3); font-size:.85rem; line-height:1.45; color:#cfe3d7; text-align:center; }
+  .tea-fund[hidden] { display:none; }
+  .tea-fund b { color:#ffe68a; }
+  .tea-fund .tea-bar { display:block; height:8px; margin:.45rem auto .35rem; max-width:22rem; border-radius:999px; background:rgba(0,0,0,.45); border:1px solid rgba(255,210,63,.4); overflow:hidden; }
+  .tea-fund .tea-bar i { display:block; height:100%; background:linear-gradient(90deg,#d9a400,#ffe68a); border-radius:999px; }
+  .tea-fund .tea-steps { display:flex; justify-content:center; gap:.35rem; flex-wrap:wrap; margin-top:.2rem; }
+  .tea-fund .tea-steps span { font-size:1.05rem; filter:grayscale(1); opacity:.35; cursor:help; }
+  .tea-fund .tea-steps span.on { filter:none; opacity:1; }
+  .tea-fund .tea-sub { display:block; font-size:.74rem; color:#9fb5a8; }
+  .lb-stars { color:#ffd23f; text-shadow:0 0 6px rgba(255,210,63,.6); font-size:.82em; letter-spacing:-.04em; white-space:nowrap; }
   .hw-bar { border:1px solid rgba(255,122,26,.55); background:rgba(255,122,26,.08); border-radius:12px; padding:.5rem .7rem; font-size:.82rem; line-height:1.4; color:#ffd9b8; }
   .hw-bar[hidden] { display:none; }
   .hw-bar b { color:#ffb070; }
@@ -1227,9 +1243,10 @@
         <span>🔒 Stripe · Apple Pay · Google Pay</span>
       </p>
       <div id="giftSent" class="gift-sent" hidden></div>
+      <div id="teaFund" class="tea-fund" hidden aria-live="polite"></div>
       <div id="ttCard" class="mt-6" hidden></div>
       <p id="impClosed" class="mt-4 text-sm text-[#ffe68a]" hidden></p>
-      <p class="mt-4 text-xs text-[#9fb5a8]">*Your computer's time is an estimate for this device. Your station runs in this browser while the tab is open (on phones, while it's on screen); stand down anytime and it picks up where it left off on your next visit. Your rank and extras unlock in the browser you pay in.</p>
+      <p class="mt-4 text-xs text-[#9fb5a8]">*Your computer's time is an estimate for this device. Your station runs in this browser while the tab is open (on phones, while it's on screen); stand down anytime and it picks up where it left off on your next visit. Your rank and extras unlock in the browser you pay in, and your rank stars (★ to ★★★) show by the name you join the world ranking with there. Every station also tops up the Professor's tea.</p>
 
       <div id="hyperBox" class="hyper-box mt-6" hidden>
         <div class="flex items-center justify-between gap-2 flex-wrap">
@@ -2069,6 +2086,7 @@ function profSVG() {
    <g class="p-monocle"><circle cx="119" cy="100" r="13" fill="rgba(180,240,255,.28)" stroke="#8a6a00" stroke-width="3.5"/><path class="p-glint" d="M111 95 l5 -5" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M131 105 q14 30 4 58" stroke="#8a6a00" stroke-width="1.8" fill="none" stroke-dasharray="3 2"/></g>
    <path class="p-sparkle" d="M138 82 l3 -9 l3 9 l9 3 l-9 3 l-3 9 l-3 -9 l-9 -3 z" fill="#fff" stroke="#ffd23f" stroke-width="1"/>
    <path d="M100 124 q-10 -8 -22 0 q-8 6 -16 0 q6 12 20 8 q10 -2 18 -6 q8 4 18 6 q14 4 20 -8 q-8 6 -16 0 q-12 -8 -22 0 z" fill="#3a2410"/>
+   <g class="p-tea3" stroke="#3a2410" stroke-width="3.5" fill="none" stroke-linecap="round"><path d="M63 127 q-10 -1 -10 -9 q0 -6 6 -5"/><path d="M137 127 q10 -1 10 -9 q0 -6 -6 -5"/></g>
    <path class="p-smirk" d="M88 141 q12 6 24 -3" stroke="${ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
    <g class="p-hw p-fangs" fill="#fff" stroke="${ink}" stroke-width="1.6" stroke-linejoin="round"><path d="M93 141 l2.5 8 l3 -7 z"/><path d="M103 141 l3 7 l2.5 -8 z"/></g>
    <ellipse class="p-yawn" cx="100" cy="143" rx="9" ry="11" fill="#5a1020" stroke="${ink}" stroke-width="3"/>
@@ -2086,9 +2104,9 @@ function profSVG() {
    <path d="M134 140 Q154 150 164 166" stroke="${ink}" stroke-width="4" fill="none" stroke-linecap="round"/>
    <circle cx="165" cy="168" r="6" fill="#fff" stroke="${ink}" stroke-width="2.5"/>
    <g class="p-hw p-bucket"><path d="M152 176 q13 -18 26 0" stroke="${ink}" stroke-width="2.5" fill="none"/><circle cx="159" cy="175" r="3.2" fill="#ff2fd6"/><circle cx="166" cy="173" r="3.2" fill="#22f3ff"/><circle cx="172" cy="175.5" r="2.8" fill="#ffd23f"/><path d="M150 177 h30 l-3 20 q-12 6 -24 0 z" fill="#ff7a1a" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/><path d="M157 186 l3 -4.5 l3 4.5 z M167 186 l3 -4.5 l3 4.5 z" fill="#3a1a00"/><path d="M157 191 q8 5 16 0" stroke="#3a1a00" stroke-width="2" fill="none" stroke-linecap="round"/></g>
-   <g class="p-tea"><path d="M152 172 h26 l-3 16 q-1 5 -10 5 q-9 0 -10 -5 z" fill="#fff" stroke="${ink}" stroke-width="2.5"/><path d="M178 176 q8 0 6 6 q-2 5 -8 4" stroke="${ink}" stroke-width="2.5" fill="none"/><ellipse cx="165" cy="194" rx="18" ry="3.5" fill="#fff" stroke="${ink}" stroke-width="2"/><g stroke="#cfeee6" stroke-width="2" fill="none" opacity=".75"><path d="M160 166 q-4 -6 0 -12 q4 -6 0 -12"/><path d="M170 166 q-4 -6 0 -12"/></g></g>
+   <g class="p-tea"><path d="M152 172 h26 l-3 16 q-1 5 -10 5 q-9 0 -10 -5 z" fill="#fff" stroke="${ink}" stroke-width="2.5"/><path d="M178 176 q8 0 6 6 q-2 5 -8 4" stroke="${ink}" stroke-width="2.5" fill="none"/><ellipse cx="165" cy="194" rx="18" ry="3.5" fill="#fff" stroke="${ink}" stroke-width="2"/><g class="p-tea5"><ellipse cx="177" cy="190.5" rx="6.5" ry="3" fill="#d39a4a" stroke="${ink}" stroke-width="1.5"/><circle cx="175" cy="190" r=".9" fill="#7a4a12"/><circle cx="179" cy="191" r=".9" fill="#7a4a12"/></g><g stroke="#cfeee6" stroke-width="2" fill="none" opacity=".75"><path d="M160 166 q-4 -6 0 -12 q4 -6 0 -12"/><path d="M170 166 q-4 -6 0 -12"/></g></g>
   </g>
-  <g class="p-hat"><ellipse cx="100" cy="62" rx="56" ry="9" fill="#151515" stroke="#000" stroke-width="2"/><path d="M66 60 L70 12 Q70 6 76 6 L124 6 Q130 6 130 12 L134 60 Z" fill="#1d1d1d" stroke="#000" stroke-width="2"/><rect class="p-band" x="67" y="42" width="66" height="10" fill="#ff2fd6"/><path d="M78 14 L76 38" stroke="#555" stroke-width="3" stroke-linecap="round"/><g class="p-hw" transform="translate(126 38) scale(.56)"><path d="M32 9c-1-2.5-2.6-3.8-2.6-3.8L28.6 8c-2-.8-4-.8-6 .4C17.5 3 9.5 1.8 1 6c5 1.2 8 4.4 9 9.2 3-2 7-2 9.2 1 2-1.8 5-1.8 7 0 1.2-1 3.2-1.8 5.8-1.8s4.6.8 5.8 1.8c2-1.8 5-1.8 7 0 2.2-3 6.2-3 9.2-1 1-4.8 4-8 9-9.2-8.5-4.2-16.5-3-21.6 2.4-2-1.2-4-1.2-6-.4l-.8-2.8S33 6.5 32 9z" fill="#1d0a28" stroke="#ff9a4a" stroke-width="2.2"/><circle cx="29.5" cy="11" r="1.7" fill="#ff7a1a"/><circle cx="34.5" cy="11" r="1.7" fill="#ff7a1a"/></g></g>
+  <g class="p-hat"><ellipse cx="100" cy="62" rx="56" ry="9" fill="#151515" stroke="#000" stroke-width="2"/><path d="M66 60 L70 12 Q70 6 76 6 L124 6 Q130 6 130 12 L134 60 Z" fill="#1d1d1d" stroke="#000" stroke-width="2"/><rect class="p-band" x="67" y="42" width="66" height="10" fill="#ff2fd6"/><path d="M78 14 L76 38" stroke="#555" stroke-width="3" stroke-linecap="round"/><g class="p-tea4"><path d="M127 46 Q138 20 160 8 Q154 30 131 48 Z" fill="#22f3ff" stroke="#0b5560" stroke-width="1.5"/><path d="M129 47 Q143 26 157 11" stroke="#0b5560" stroke-width="1.2" fill="none"/></g><g class="p-hw" transform="translate(126 38) scale(.56)"><path d="M32 9c-1-2.5-2.6-3.8-2.6-3.8L28.6 8c-2-.8-4-.8-6 .4C17.5 3 9.5 1.8 1 6c5 1.2 8 4.4 9 9.2 3-2 7-2 9.2 1 2-1.8 5-1.8 7 0 1.2-1 3.2-1.8 5.8-1.8s4.6.8 5.8 1.8c2-1.8 5-1.8 7 0 2.2-3 6.2-3 9.2-1 1-4.8 4-8 9-9.2-8.5-4.2-16.5-3-21.6 2.4-2-1.2-4-1.2-6-.4l-.8-2.8S33 6.5 32 9z" fill="#1d0a28" stroke="#ff9a4a" stroke-width="2.2"/><circle cx="29.5" cy="11" r="1.7" fill="#ff7a1a"/><circle cx="34.5" cy="11" r="1.7" fill="#ff7a1a"/></g></g>
  </g>
  <g class="p-dropped"><circle cx="156" cy="284" r="9" fill="rgba(180,240,255,.3)" stroke="#8a6a00" stroke-width="3"/><path d="M151 280 l4 -4" stroke="#fff" stroke-width="2"/></g>
 </svg>
@@ -2124,6 +2142,9 @@ const LINES = {
     'Commander, humanity thanks you. Mathematics does not.',
     'Commander, your plaque gleams. Your odds do not.'
   ],
+  tea: ['Note my gold teacup. The tea fund paid. Mathematics remains unbribed.', 'A gold monocle, courtesy of the tea fund. It sees your odds even more clearly. Still terrible.',
+    'The tea fund bought moustache wax. I have never looked more improbable.', 'A feather! The sponsors spoil me. You still get no Grail.',
+    'Biscuits with every cup now. The sponsors have won my heart. Not the Grail, though.'],
   halloween: ['Good evening. I am Count Factorial. I vant to count your shuffles.', 'Happy Halloween. The deck is haunted. Statistically, nothing changes.',
     'Trick or treat? I have candy. You have 8 × 10⁶⁷ to go.', 'I only come out at night. And whenever someone presses that button.', 'Boo. Did I frighten you? No? Neither do your odds.',
     'The only thing scarier than ghosts is 8 × 10⁶⁷.', 'I came dressed as a probability distribution. Terrifying, I know.',
@@ -2445,6 +2466,7 @@ function setPose(pose, line, slots = profEls()) {
   }
   if (!line && rankKey() && ['yawn', 'clap', 'eyebrow', 'idle'].includes(pose) && rnd() < 0.2) line = profLine(rankKey());   // he knows your rank
   if (!line && HW.day && ['yawn', 'clap', 'eyebrow', 'idle'].includes(pose) && rnd() < 0.25) line = profLine('halloween');
+  if (!line && TEA.level && ['yawn', 'eyebrow', 'idle'].includes(pose) && rnd() < 0.12) line = pick(LINES.tea.slice(0, TEA.level));   // his tea-fund upgrades
   if (slots.includes(el.profSlot)) el.bubble.textContent = line || profLine(LINES[pose] ? pose : 'intro');
 }
 function poseFor(m) {
@@ -4431,7 +4453,7 @@ const IMP_TIERS = [
     story: 'Basic training: nonstop since the Vikings.', deal: 'Cheaper than a coffee',
     cmp: p => `Your odds: still worse than being dealt <b>${timesInARow(ROYAL_FLUSH, p)} royal flushes in a row</b>.`,
     why: 'Why $1.92? One card is 1.92% of a deck.',
-    perks: ['🍀 <b>A lucky card</b> that glows gold when it lands', '🎩 <b>Professor lines</b> just for your rank', '🃏 <b>Gold <span class="gold-star">★</span> badge</b> + fancy card backs', '🕰️ <b>Live view</b> of your trip through history'] },
+    perks: ['🍀 <b>A lucky card</b> that glows gold when it lands', '🎩 <b>Professor lines</b> just for your rank', '<span class="gold-star">★</span> <b>Rank stars</b> by your name + fancy card backs', '🕰️ <b>Live view</b> of your trip through history'] },
   { id: 'odds', icon: '★★', name: 'Captain', years: 10000, price: '8.07', featured: true,
     story: 'A full shift: nonstop since the last Ice Age.', deal: '10× the years for 4× the price',
     cmp: p => `Your odds: still worse than getting <b>struck by lightning ${timesInARow(LIGHTNING_YEAR, p)} times in one year</b>.`,
@@ -4548,7 +4570,7 @@ function renderImpatient() {
       <p class="imp-why">${t.why}</p>
     </div>`;
   }).join('');
-  $$('#impTiers [data-imp]').forEach(a => a.addEventListener('click', () => track('impatient-' + a.dataset.imp)));
+  $$('#impTiers [data-imp]').forEach(a => a.addEventListener('click', () => { a.href = buyUrl(a.href); track('impatient-' + a.dataset.imp); }));
   $('#giftRow').hidden = !any;
   renderGiftSent();
   renderTTCard();
@@ -4956,7 +4978,9 @@ function handleThanks() {
   try { history.replaceState(null, '', location.pathname + (q ? '?' + q : '') + '#hyperBox'); } catch (e) { /* file:// */ }
   setTimeout(() => {
     $('#hyperBox').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-    toast(`🎖️ <b>Welcome aboard, ${t.name}!</b> ${fmt(t.years)} years of shuffling are assigned to your station. Press Start when you're ready.`);
+    const cups = TEA_CUPS[{ tea: 'rookie', odds: 'captain', patron: 'commander' }[id]] || 0;
+    toast(`🎖️ <b>Welcome aboard, ${t.name}!</b> ${fmt(t.years)} years of shuffling are assigned to your station. Press Start when you're ready.${cups ? `<br>🍵 You also added ${cups} cup${cups === 1 ? '' : 's'} to the Professor's tea fund.` : ''}`);
+    setTimeout(() => { loadTea(); loadStars(); }, 8000);   // the webhook has usually landed by then
     sfx('land', 6);
   }, 600);
 }
@@ -5312,6 +5336,60 @@ function renderHyper() {
   hyperNotifyUI();
 }
 
+/* ---------- Rank stars (tea-and-stars.sql) ----------
+   ★ Rookie, ★★ Captain, ★★★ Commander, ★★★★ Time Traveller, by sponsors' names on the world ranking and in the
+   Hall of Firsts. Buy links carry this browser's private leaderboard id as client_reference_id; the webhook grants
+   the stars after Stripe confirms the payment, so they can't be faked from the page. */
+const STARS = new Map();
+const STAR_RANKS = ['', 'Rookie', 'Captain', 'Commander', 'Time Traveller'];
+const starsFor = name => STARS.get(String(name || '').toLowerCase()) || 0;
+function starsHTML(name) {
+  const n = starsFor(name);
+  return n ? ` <span class="lb-stars" title="Mission Sponsor: ${STAR_RANKS[n]}" aria-label="Mission Sponsor, ${STAR_RANKS[n]}">${'★'.repeat(n)}</span>` : '';
+}
+function buyUrl(url) {
+  try { const u = new URL(url); u.searchParams.set('client_reference_id', lbIdentity().id); return u.toString(); } catch (e) { return url; }
+}
+async function loadStars() {
+  if (!LB.on) return;
+  let rows;
+  try { rows = await lbRpc('leaderboard_stars', {}); } catch (e) { return; }   // tea-and-stars.sql not run yet: no stars
+  STARS.clear();
+  if (Array.isArray(rows)) rows.forEach(r => { const n = Number(r.stars) || 0; if (r.name && n >= 1 && n <= 4) STARS.set(String(r.name).toLowerCase(), n); });
+  if (LB.ready) renderLB();
+  if (hofRowsCache) renderHof(hofRowsCache);
+}
+
+/* ---------- The Professor's Tea Fund (tea-and-stars.sql) ----------
+   Every sponsored station tops up the Professor's tea: Rookie 1 cup, Captain 4, Commander 25, Time Traveller 100.
+   At each milestone he gets an upgrade every visitor sees. */
+const TEA_CUPS = { rookie: 1, captain: 4, commander: 25, traveller: 100 };
+const TEA_LEVELS = [[10, '☕', 'a gold teacup'], [30, '🧐', 'a gold monocle'], [75, '〰️', 'a curled moustache'], [150, '🪶', 'a feather in his hat'], [300, '🍪', 'a biscuit with every cup']];
+const TEA = { cups: null, level: 0 };
+async function loadTea() {
+  if (!live.on) return;
+  try {
+    const f = await lbRpc('tea_fund', {});
+    TEA.cups = Object.entries(TEA_CUPS).reduce((sum, [k, c]) => sum + (Number(f && f[k]) || 0) * c, 0);
+  } catch (e) { TEA.cups = null; }                           // tea-and-stars.sql not run yet: no tea fund
+  renderTea();
+}
+function renderTea() {
+  const box = $('#teaFund'); if (!box) return;
+  if (TEA.cups === null || MISSION.row) { box.hidden = true; return; }
+  const cups = TEA.cups, level = TEA_LEVELS.filter(([n]) => cups >= n).length;
+  TEA.level = level;
+  for (let i = 1; i <= TEA_LEVELS.length; i++) document.body.classList.toggle('tea-l' + i, level >= i);
+  const next = TEA_LEVELS[level], prev = level ? TEA_LEVELS[level - 1][0] : 0;
+  const pct = next ? Math.max(3, Math.min(100, ((cups - prev) / (next[0] - prev)) * 100)) : 100;
+  const steps = TEA_LEVELS.map(([n, ico, what], i) => `<span class="${i < level ? 'on' : ''}" title="${fmt(n)} cups: ${what}${i < level ? ' ✓' : ''}" aria-label="${fmt(n)} cups: ${what}${i < level ? ', unlocked' : ''}">${ico}</span>`).join('');
+  box.innerHTML = `🍵 <b>The Professor's tea fund: ${fmt(cups)} cup${cups === 1 ? '' : 's'}.</b> `
+    + (next ? `Next at ${fmt(next[0])}: ${next[2]}.` : 'Every upgrade unlocked. He is insufferable.')
+    + `<span class="tea-bar" role="progressbar" aria-label="Tea fund" aria-valuemin="${prev}" aria-valuemax="${next ? next[0] : cups}" aria-valuenow="${cups}"><i style="width:${pct}%"></i></span>`
+    + `<span class="tea-steps">${steps}</span><span class="tea-sub">Every station tops it up: Rookie 1 cup, Captain 4, Commander 25. Everyone sees what it buys him.</span>`;
+  box.hidden = false;
+}
+
 /* ---------- Halloween: the Haunted Shift ----------
    On Oct 31 (the visitor's own date) the whole table goes spooky for everyone. Shuffles made that day count, by hand,
    on autopilot or on a station: 31,000 keep the Skull Deck (card backs) forever, 100,000 keep Count Factorial and the
@@ -5652,6 +5730,7 @@ function initImpatient() {
   loadWall();
   loadSponsorEvents();
   loadGrailCards();
+  loadTea();
   $('#hyperGo').addEventListener('click', () => (HYPER.running ? hyperPause() : hyperStart()));
   // Gifts
   $('#giftOpenDlg').addEventListener('click', () => giftDialog());
@@ -5828,6 +5907,7 @@ async function lbLoad() {
   renderLB();
   statsDirty = true;
   hofLoad();
+  loadStars();
 }
 /* ---------- Hall of Firsts (supabase/firsts.sql): the first human to reach each rung keeps it ---------- */
 const HOF_RUNGS = [12, 13, 14, 15, 16, 17, 18, 19, 20];
@@ -5846,7 +5926,7 @@ function renderHof(rows) {
     const odds = `1 in ${shortOdds(k)}`;
     if (!r) return `<li class="${cls}">${k === next ? '<span class="tag">NEXT IN HISTORY</span>' : ''}<b class="k">${k}/52</b><span class="txt"><span class="who open">${k === 20 ? 'The Twenty Club: your name here?' : 'Unclaimed · your name here?'}</span><span class="odds">${odds}</span></span></li>`;
     const when = new Date(r.at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    return `<li class="${cls}"><span class="forever">FOREVER</span><b class="k">${k}/52</b><span class="txt"><span class="who">${r.kind === 'traveller' ? '🚀 ' : ''}${escapeHtml(r.name)}</span><span class="odds">${odds} · ${when}</span></span></li>`;
+    return `<li class="${cls}"><span class="forever">FOREVER</span><b class="k">${k}/52</b><span class="txt"><span class="who">${r.kind === 'traveller' ? '🚀 ' : ''}${escapeHtml(r.name)}${r.kind === 'traveller' ? '' : starsHTML(r.name)}</span><span class="odds">${odds} · ${when}</span></span></li>`;
   }).join('');
   $('#hofCount').textContent = `${HOF_RUNGS.length} places in history. ${open.length ? `${open.length} still empty.` : 'All of them claimed.'}`;
   HOF.next = next;
@@ -5888,7 +5968,7 @@ function renderLB() {
     const rec = r.verified ? { r: r.pf_round, R: r.pf_rand, s: r.pf_seat, n: r.pf_n } : null;
     const tick = validRec(rec) ? ` <button type="button" class="pf-tick" data-verify='${JSON.stringify(rec)}' title="Provably fair: replay this shuffle" aria-label="Replay ${name.innerHTML}'s shuffle">✓</button>`
       : '';                                       // scores from before provably fair shuffles simply have no ✓
-    return `<tr class="${cls}"><td>${medal}</td><td>${name.innerHTML}${isMe ? ' <span class="text-[#22f3ff]">(you)</span>' : ''}</td><td class="best">${r.best}/52${tick}</td><td>${tries}</td><td>1 in ${oneIn(r.best)}</td><td>${when}</td></tr>`;
+    return `<tr class="${cls}"><td>${medal}</td><td>${name.innerHTML}${starsHTML(r.name)}${isMe ? ' <span class="text-[#22f3ff]">(you)</span>' : ''}</td><td class="best">${r.best}/52${tick}</td><td>${tries}</td><td>1 in ${oneIn(r.best)}</td><td>${when}</td></tr>`;
   });
   const fold = !LB.expanded && html.length > LB_SHOW;
   // Folded: the top 10, plus your own row further down if you're on the board.
@@ -6231,7 +6311,7 @@ function renderTTCard() {
   const fold = box.querySelector('.tt-get-d');
   if (fold && matchMedia('(max-width: 640px)').matches) fold.open = false;   // phones: perks fold away, the price stays in view
   const buy = box.querySelector('[data-imp="traveller"]');
-  if (buy) buy.addEventListener('click', () => track('impatient-traveller'));
+  if (buy) buy.addEventListener('click', () => { buy.href = buyUrl(buy.href); track('impatient-traveller'); });
 }
 /* Time Traveller numbers: handed out once, in boarding order (as on the merch). The first ten are the First Crew. */
 const TT_CREW = 10;
