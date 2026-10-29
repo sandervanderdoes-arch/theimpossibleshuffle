@@ -5412,7 +5412,7 @@ function renderTea() {
   box.innerHTML = `🍵 <b>The Professor's tea fund: ${fmt(cups)} cup${cups === 1 ? '' : 's'}.</b> `
     + (next ? `Next at ${fmt(next[0])}: ${next[2]}.` : 'Every upgrade unlocked. He is insufferable.')
     + `<span class="tea-bar" role="progressbar" aria-label="Tea fund" aria-valuemin="${prev}" aria-valuemax="${next ? next[0] : cups}" aria-valuenow="${cups}"><i style="width:${pct}%"></i></span>`
-    + `<span class="tea-steps">${steps}</span><span class="tea-sub">Every station tops it up: Rookie 1 cup, Captain 4, Commander 25. Everyone sees what it buys him.</span>`;
+    + `<span class="tea-steps">${steps}</span><span class="tea-sub">Every station tops it up: Rookie 1 cup, Captain 4, Commander 25.</span><span class="tea-sub">Everyone sees what it buys him.</span>`;
   box.hidden = false;
 }
 
