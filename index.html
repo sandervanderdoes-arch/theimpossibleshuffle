@@ -3591,8 +3591,8 @@ const ticker = { x: 0, queue: [], lastT: 0, paused: false, n: 0, realAt: -1 };
 // Real moments from the boards, mixed in between the jokes (about one in four) and marked REAL.
 function realEvents() {
   const ev = [], day = 864e5;
-  if (HW.phase === 'teaser') ev.push(`🎃 Halloween, Oct 31: 31,000 shuffles that day keep the Skull Deck, 100,000 keep Count Factorial. Forever.`);
-  if (HW.day) ev.push(`🎃 Haunted Shift: 31,000 shuffles today keep the Skull Deck, 100,000 keep Count Factorial. Forever.`);
+  if (HW.phase === 'teaser') ev.push(`🎃 Halloween starts Oct 29: 31,000 shuffles keep the Skull Deck, 100,000 keep Count Factorial. Forever.`);
+  if (HW.day) ev.push(`🎃 Haunted Shift until Oct 31: 31,000 shuffles keep the Skull Deck, 100,000 keep Count Factorial. Forever.`);
   if (live.total > 0) ev.push(`🌍 Humanity has shuffled ${fmt(live.total)} times so far. Successful matches: 0.`);
   if (recruit.humans > 0) ev.push(`👥 ${fmt(recruit.humans)} humans have joined the mission so far.`);
   if (LB.rows.length) {
@@ -5454,11 +5454,11 @@ function renderTea() {
 }
 
 /* ---------- Halloween: the Haunted Shift ----------
-   On Oct 31 (the visitor's own date) the whole table goes spooky for everyone. Shuffles made that day count, by hand,
+   From Oct 29 to Oct 31 (the visitor's own date) the whole table goes spooky for everyone. Shuffles made then count, by hand,
    on autopilot or on a station: 31,000 keep the Skull Deck (card backs) forever, 100,000 keep Count Factorial and the
    full Haunted look forever. Sponsors get golden skulls. Teased from Oct 28. Free and cosmetic only.
    ?hw=day or ?hw=teaser previews it without keeping anything. */
-const HW = { year: 2026, phase: '', day: false, n: 0, lv: 0, previewed: {}, renderT: 0, msDefault: '' };
+const HW = { year: 2026, from: 29, phase: '', day: false, n: 0, lv: 0, previewed: {}, renderT: 0, msDefault: '' };
 const HW_GOALS = [31000, 100000];                            // level 1: Skull Deck (31,000 for Oct 31), level 2: Count Factorial
 const HW_TICKER = ['{flag} A vampire in {city} got 0/52. Blames the lack of mirrors.', '{flag} {who} in {city} dressed up as the Holy Grail. Still no match.',
   '{flag} A ghost in {city} shuffled straight through the deck. Literally. 0/52.', '{flag} {who} in {city} carved 52 pumpkins in Grail order. Closest anyone has come.',
@@ -5468,13 +5468,13 @@ const hwPreview = () => params.get('hw') === 'day' || params.get('hw') === 'teas
 function hwRefresh() {
   const was = HW.phase, d = new Date();
   HW.phase = hwPreview() ? params.get('hw')
-    : d.getFullYear() !== HW.year || d.getMonth() !== 9 ? '' : d.getDate() === 31 ? 'day' : d.getDate() >= 28 ? 'teaser' : '';
+    : d.getFullYear() !== HW.year || d.getMonth() !== 9 ? '' : d.getDate() >= HW.from ? 'day' : d.getDate() >= HW.from - 3 ? 'teaser' : '';   // live Oct 29-31
   HW.day = HW.phase === 'day';
   if (HW.phase !== was) { applyHaunted(); renderHw(); }
   const ms = $('#msText');                                   // gone once the mission is accomplished
   if (ms) {
     if (!HW.msDefault) HW.msDefault = ms.innerHTML;
-    ms.innerHTML = HW.day ? '<b class="text-[#ffb070]">MISSION STATUS: HAUNTED. 🎃</b> Shuffle 100,000 times today and Count Factorial is yours, forever.' : HW.msDefault;
+    ms.innerHTML = HW.day ? '<b class="text-[#ffb070]">MISSION STATUS: HAUNTED. 🎃</b> Shuffle 100,000 times before Halloween ends and Count Factorial is yours, forever.' : HW.msDefault;
   }
 }
 /** Today's Halloween shuffles and level (a preview keeps its own, unsaved). */
@@ -5500,7 +5500,7 @@ function hwUnlock(lv) {
   const what = lv >= 2 ? '🧛 <b>Count Factorial</b> and the full Haunted look' : '💀 The <b>Skull Deck</b>';
   if (hwPreview()) {                                         // a preview never keeps anything
     HW.lv = Math.max(HW.lv, lv);
-    if (!HW.previewed[lv]) { HW.previewed[lv] = true; toast(`🎃 <b>Preview:</b> on Oct 31 this would make ${what.replace(/<\/?b>/g, '')} yours, forever.`); }
+    if (!HW.previewed[lv]) { HW.previewed[lv] = true; toast(`🎃 <b>Preview:</b> during Halloween this would make ${what.replace(/<\/?b>/g, '')} yours, forever.`); }
     return;
   }
   const up = lv > store.hw, gold = !store.hwGold && hasAny();
@@ -5510,7 +5510,7 @@ function hwUnlock(lv) {
   if (up) {
     sfx('thunder');
     toast(lv >= 2 ? `🧛 <b>Count Factorial is yours, forever.</b> The full Haunted look, a Halloween ${HW.year} collector's item.`
-      : `💀 <b>The Skull Deck is yours, forever.</b> ${fmt(HW_GOALS[1])} shuffles today and Count Factorial joins it.`);
+      : `💀 <b>The Skull Deck is yours, forever.</b> ${fmt(HW_GOALS[1])} shuffles before Halloween ends and Count Factorial joins it.`);
     track('hw-level-' + lv);
   } else if (gold) toast('💀 <b>Golden skulls unlocked.</b> Thank you for keeping the mission running.');
   applyHaunted(); renderHw();
@@ -5521,9 +5521,9 @@ function renderHw() {
   const goals = `${fmt(HW_GOALS[0])} → 💀 Skull Deck · ${fmt(HW_GOALS[1])} → 🧛 Count Factorial`;
   let html = '';
   if (HW.phase === 'teaser') {
-    const left = Math.max(1, 31 - new Date().getDate());
-    const when = hwPreview() ? 'on Oct 31' : left === 1 ? 'tomorrow' : `on ${new Date(HW.year, 9, 31).toLocaleDateString('en-US', { weekday: 'long' })}`;
-    html = `🎃 <b>Halloween is ${when}.</b> Every shuffle that day counts. Keep them forever:<span class="hw-sub">${goals}</span>`;
+    const left = Math.max(1, HW.from - new Date().getDate());
+    const when = hwPreview() ? 'coming' : left === 1 ? 'tomorrow' : `on ${new Date(HW.year, 9, HW.from).toLocaleDateString('en-US', { weekday: 'long' })}`;
+    html = `🎃 <b>Halloween is ${when}.</b> Every shuffle counts. Keep them forever:<span class="hw-sub">${goals}</span>`;
   } else if (HW.day) {
     const n = hwN(), lv = hwLevel();
     if (lv >= 2) html = `🧛 <b>Count Factorial is yours, forever.</b> The full Haunted look, Halloween ${HW.year}.${store.hwGold ? ' Golden skulls included.' : ''}<span class="hw-sub">${toggle}</span>`;
@@ -5534,9 +5534,9 @@ function renderHw() {
       const dur = sec => (sec < 5 ? 'seconds' : sec < 60 ? `${Math.ceil(sec)} seconds` : fmtDuration(sec).replace('about ', ''));
       const lud = `Free Ludicrous autopilot: ${dur(left / LUDICROUS_RATE)} to go`;
       const st = hasAny() ? '' : ` · a station: ${dur(left / hyperRateGuess())}`;
-      html = `🎃 <b>Haunted Shift:</b> <b>${fmt(n)}</b> / ${fmt(goal)} today → ${lv ? '🧛 <b>Count Factorial</b>' : '💀 <b>Skull Deck</b>'}`
+      html = `🎃 <b>Haunted Shift:</b> <b>${fmt(n)}</b> / ${fmt(goal)} → ${lv ? '🧛 <b>Count Factorial</b>' : '💀 <b>Skull Deck</b>'}`
         + `<span class="hw-prog" role="progressbar" aria-label="Halloween shuffles" aria-valuemin="0" aria-valuemax="${goal}" aria-valuenow="${Math.min(n, goal)}"><i style="width:${pct}%"></i></span>`
-        + `<span class="hw-sub">${lv ? '💀 Skull Deck ✓' : `Then ${fmt(HW_GOALS[1])} → 🧛 Count Factorial`}. Yours forever. ${lud}${st}.${toggle}</span>`;
+        + `<span class="hw-sub">${lv ? '💀 Skull Deck ✓' : `Then ${fmt(HW_GOALS[1])} → 🧛 Count Factorial`}. Yours forever, until Oct 31 midnight. ${lud}${st}.${toggle}</span>`;
     }
   } else if (store.hw >= 2) html = `🧛 <b>Count Factorial</b> · Halloween ${HW.year}${store.hwGold ? ' · golden skulls' : ''}${toggle}`;
   else if (store.hw >= 1) html = `💀 <b>Skull Deck</b> · Halloween ${HW.year}${store.hwGold ? ' · golden skulls' : ''}${toggle}`;
