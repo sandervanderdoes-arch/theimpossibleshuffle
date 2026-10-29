@@ -686,6 +686,8 @@
   .float-tip { position:fixed; z-index:1000; max-width:15rem; padding:.4rem .6rem; border-radius:8px; background:#0b1f17; color:#e6f2ea; border:1px solid rgba(255,210,63,.7); box-shadow:0 6px 24px rgba(0,0,0,.85); font:600 .75rem/1.35 system-ui, sans-serif; pointer-events:none; }
   .float-tip[hidden] { display:none; }
   .lb-stars[data-ftip] { cursor:help; border-radius:4px; }
+  .foot-link { display:inline-block; vertical-align:middle; margin:1rem .25rem 0; }
+  .foot-link[hidden] { display:none; }
   .lb-stars { color:#ffd23f; text-shadow:0 0 6px rgba(255,210,63,.6); font-size:.82em; letter-spacing:-.04em; white-space:nowrap; }
   .hw-bar { border:1px solid rgba(255,122,26,.55); background:rgba(255,122,26,.08); border-radius:12px; padding:.5rem .7rem; font-size:.82rem; line-height:1.4; color:#ffd9b8; }
   .hw-bar[hidden] { display:none; }
@@ -1391,7 +1393,10 @@
     <div id="merchBox" class="mt-6" hidden>
       <a id="merchLink" class="chip-btn merch-btn" target="_blank" rel="noopener">👕 Mission merch</a>
     </div>
-    <div id="instaBox" class="mt-4" hidden>
+    <div id="supportBox" class="foot-link" hidden>
+      <button type="button" id="supportBtn" class="chip-btn merch-btn">✉️ Support</button>
+    </div>
+    <div id="instaBox" class="foot-link" hidden>
       <a id="instaLink" class="chip-btn merch-btn" target="_blank" rel="noopener me" aria-label="The Impossible Shuffle on Instagram">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>
         @theimpossibleshuffle
@@ -1566,7 +1571,10 @@ const SITE = {
     note: 'Secure checkout by Stripe. Opens in a new tab.'
   },
   merchUrl: '',   // merch shop page, hidden for now; to bring it back: 'https://the-impossible-shuffle-shop.fourthwall.com/'
-  instagram: 'https://www.instagram.com/theimpossibleshuffle/'   // Instagram profile (hidden while empty)
+  instagram: 'https://www.instagram.com/theimpossibleshuffle/',   // Instagram profile (hidden while empty)
+  // Support email for the small button in the footer (hidden while user is empty). Kept in two halves so simple
+  // address harvesters reading the page don't pick it up; the page puts it together only when someone clicks.
+  support: { user: '', domain: 'gmail.com' }
 };
 /* Visitor stats: GoatCounter or Plausible. Both are cookieless, so no consent banner
    is needed. Only page views and a handful of named events are sent: never the deck,
@@ -1615,6 +1623,15 @@ function setupSupportLinks() {
     $('#instaLink').href = SITE.instagram;
     $('#instaLink').addEventListener('click', () => track('instagram'));
     $('#instaBox').hidden = false;
+  }
+  if (SITE.support && SITE.support.user) {
+    $('#supportBtn').addEventListener('click', () => {
+      const to = `${SITE.support.user}@${SITE.support.domain}`;
+      const body = `\n\n---\nShuffles: ${fmt(store.allTime)} · Best: ${store.allTime ? bestEver() + '/52' : '-'} · ${navigator.userAgent}`;
+      track('support');
+      location.href = `mailto:${to}?subject=${encodeURIComponent('The Impossible Shuffle: support')}&body=${encodeURIComponent(body)}`;
+    });
+    $('#supportBox').hidden = false;
   }
   if (SITE.merchUrl) {
     $('#merchLink').href = SITE.merchUrl;
