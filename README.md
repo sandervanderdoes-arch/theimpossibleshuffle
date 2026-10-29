@@ -133,7 +133,7 @@ again every few minutes when it has grown (`lbSyncTotal`); `submit_best` only ev
 
 ## Support
 
-The footer's "✉️ Support" button opens an email to `SITE.support` (theimpossibleshufflesupport@gmail.com), kept in two
+The footer's "✉️ Support" button opens a small panel (Open in Gmail, Mail app, Copy address) for `SITE.support` (theimpossibleshufflesupport@gmail.com), kept in two
 halves in the code against simple address harvesters, with the shuffle count, best and browser filled in.
 
 ## Hall of Firsts
