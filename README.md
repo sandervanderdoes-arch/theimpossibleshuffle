@@ -125,6 +125,17 @@ the friend counts as your recruit, and the `/b/` page forwards the hash. The fri
 3/52" on top of the hero (that visit only) and a challenge line in the shuffle panel until they beat it; then a toast
 and "Challenge them back". Stored in `store.ch`; your own name in `store.chMe`. Your own link is ignored.
 
+## Tries and total shuffles
+
+"Tries" on the world ranking is the shuffle on which a player's best score was reached (fewer ranks higher on a tie);
+its ⓘ says so. Hovering (or tapping) the number shows the player's total shuffles. A joined player's total is sent
+again every few minutes when it has grown (`lbSyncTotal`); `submit_best` only ever raises it.
+
+## Support
+
+The footer's "✉️ Support" button opens an email to `SITE.support` (theimpossibleshufflesupport@gmail.com), kept in two
+halves in the code against simple address harvesters, with the shuffle count, best and browser filled in.
+
 ## Hall of Firsts
 
 - Run `supabase/firsts.sql` once (after `leaderboard.sql` and `honors.sql`). Until then the strip stays hidden.

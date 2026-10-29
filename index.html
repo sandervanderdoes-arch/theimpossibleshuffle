@@ -686,6 +686,8 @@
   .float-tip { position:fixed; z-index:1000; max-width:15rem; padding:.4rem .6rem; border-radius:8px; background:#0b1f17; color:#e6f2ea; border:1px solid rgba(255,210,63,.7); box-shadow:0 6px 24px rgba(0,0,0,.85); font:600 .75rem/1.35 system-ui, sans-serif; pointer-events:none; }
   .float-tip[hidden] { display:none; }
   .lb-stars[data-ftip] { cursor:help; border-radius:4px; }
+  .lb-info { cursor:help; font-weight:400; opacity:.8; }
+  .lb-tries { cursor:help; text-decoration:underline dotted rgba(255,255,255,.35); text-underline-offset:3px; }
   .foot-link { display:inline-block; vertical-align:middle; margin:1rem .25rem 0; }
   .foot-link[hidden] { display:none; }
   .lb-stars { color:#ffd23f; text-shadow:0 0 6px rgba(255,210,63,.6); font-size:.82em; letter-spacing:-.04em; white-space:nowrap; }
@@ -1211,7 +1213,7 @@
       <div id="lbMe" class="lb-me mt-4" aria-live="polite"></div>
       <div class="lb-wrap mt-4">
         <table class="lb">
-          <thead><tr><th scope="col">#</th><th scope="col">Shuffler</th><th scope="col">Best</th><th scope="col">Tries</th><th scope="col">Odds</th><th scope="col">When</th></tr></thead>
+          <thead><tr><th scope="col">#</th><th scope="col">Shuffler</th><th scope="col">Best</th><th scope="col">Tries <span class="lb-info" tabindex="0" data-ftip="The shuffle on which this best score was reached. Fewer is luckier: with the same score, fewer tries ranks higher." aria-label="About tries: the shuffle on which this best score was reached. Fewer is luckier.">ⓘ</span></th><th scope="col">Odds</th><th scope="col">When</th></tr></thead>
           <tbody id="lbBody"></tbody>
         </table>
       </div>
@@ -1574,7 +1576,7 @@ const SITE = {
   instagram: 'https://www.instagram.com/theimpossibleshuffle/',   // Instagram profile (hidden while empty)
   // Support email for the small button in the footer (hidden while user is empty). Kept in two halves so simple
   // address harvesters reading the page don't pick it up; the page puts it together only when someone clicks.
-  support: { user: '', domain: 'gmail.com' }
+  support: { user: 'theimpossibleshufflesupport', domain: 'gmail.com' }
 };
 /* Visitor stats: GoatCounter or Plausible. Both are cookieless, so no consent banner
    is needed. Only page views and a handful of named events are sent: never the deck,
@@ -5951,6 +5953,7 @@ async function lbLoad() {
   statsDirty = true;
   hofLoad();
   loadStars();
+  lbSyncTotal();
 }
 /* ---------- Hall of Firsts (supabase/firsts.sql): the first human to reach each rung keeps it ---------- */
 const HOF_RUNGS = [12, 13, 14, 15, 16, 17, 18, 19, 20];
@@ -6007,7 +6010,8 @@ function renderLB() {
     const medal = ['🥇', '🥈', '🥉'][i] || String(i + 1);
     const when = new Date(r.achieved_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const name = document.createElement('span'); name.textContent = r.name;
-    const tries = r.attempts ? fmt(r.attempts) : '–';
+    const total = Number(r.shuffles) || 0;
+    const tries = r.attempts ? (total ? `<span class="lb-tries" tabindex="0" data-ftip="${total >= 1e6 ? bigShort(total) : fmt(total)} shuffles in total">${fmt(r.attempts)}</span>` : fmt(r.attempts)) : '–';
     const rec = r.verified ? { r: r.pf_round, R: r.pf_rand, s: r.pf_seat, n: r.pf_n } : null;
     const tick = validRec(rec) ? ` <button type="button" class="pf-tick" data-verify='${JSON.stringify(rec)}' title="Provably fair: replay this shuffle" aria-label="Replay ${name.innerHTML}'s shuffle">✓</button>`
       : '';                                       // scores from before provably fair shuffles simply have no ✓
@@ -6108,6 +6112,17 @@ async function lbSubmit(quiet) {
     return null;
   } finally { LB.busy = false; }
 }
+/** Your total shuffles on the board: sent again every few minutes when it has grown (the database only ever raises it). */
+let lbTotalAt = 0;
+async function lbSyncTotal() {
+  if (!LB.ready || !store.lb || !store.lb.name || LB.busy || Date.now() - lbTotalAt < 4 * 60000) return;
+  const row = LB.rows.find(r => r.name.toLowerCase() === store.lb.name.toLowerCase());
+  const known = row ? Number(row.shuffles) || 0 : 0;
+  if (store.allTime - known < Math.max(1000, known * 0.01)) return;   // nothing worth sending
+  lbTotalAt = Date.now();
+  try { if (await lbSubmit(true)) { if (row) row.shuffles = store.allTime; renderLB(); } } catch (e) { /* next round */ }
+}
+setInterval(lbSyncTotal, 60000);
 /** Called (debounced) after every new personal best: rank comment, and an update if you've joined. */
 function lbOnBest() {
   clearTimeout(LB.timer);
