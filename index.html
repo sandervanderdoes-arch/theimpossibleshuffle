@@ -2936,7 +2936,7 @@ function manualShuffle() {
   armIdle();
   if (reduceMotion) { sfxShuffleNow(m); reveal(res, false); }
   else animateShuffle(res);
-  if (HW.day) setTimeout(() => hwMaybeScare(1 / 30), 1100);   // Halloween: now and then, a fright
+  if (HW.day) setTimeout(() => hwMaybeScare(!SCARE.n && ++SCARE.hand >= 5 ? 1 : 1 / 12), 1100);   // Halloween: the first fright comes quickly
 }
 
 function finishAnimNow() {
@@ -5599,10 +5599,11 @@ document.addEventListener('click', e => {
 });
 
 /* ---------- Halloween scares (during the event only) ----------
-   A jump-scare skull or a sudden blackout with eyes in the dark, now and then. Rare: never in the first 30 seconds,
-   at most one every 90 seconds and four per visit, never over a dialog, the win screen or a hidden tab. Nothing
+   A jump-scare skull or a sudden blackout with eyes in the dark. The first comes quickly (by the 5th shuffle by hand, or
+   within about 10 seconds of autopilot), later ones now and then: never in the first 10 seconds, at most one every
+   45 seconds and six per visit, never over a dialog, the win screen or a hidden tab. Nothing
    flashes or flickers. Off with reduced motion and with the "Scares" switch in the Halloween strip. */
-const SCARE = { at: 0, n: 0, start: Date.now(), busy: false };
+const SCARE = { at: 0, n: 0, start: Date.now(), busy: false, hand: 0 };
 const SCARE_LINES = {
   skull: ['Boo! Getting scared just now was about 10⁶⁶ times likelier than matching the Grail.', 'Count Factorial apologises. He does not mean it.', 'Did that scare you? Your odds should.'],
   dark: ['Sorry. Somebody tripped over the cable.', 'The lights went out. The odds did not change.', 'Who turned off the lights? The Grail is still out there. Somewhere.']
@@ -5610,10 +5611,10 @@ const SCARE_LINES = {
 const scaresOn = () => HW.day && hwLookOn() && store.hwScare !== false && !reduceMotion;
 function scareReady() {
   return scaresOn() && !SCARE.busy && !winOpen && !document.hidden && !document.querySelector('dialog[open]')
-    && SCARE.n < 4 && Date.now() - SCARE.start > 30000 && Date.now() - SCARE.at > 90000;
+    && SCARE.n < 6 && Date.now() - SCARE.start > 10000 && Date.now() - SCARE.at > 45000;
 }
 function hwMaybeScare(chance) { if (scareReady() && rnd() < chance) hwScare(); }
-setInterval(() => { if (autopilot.mode || HYPER.running) hwMaybeScare(0.12); }, 15000);   // a long autopilot run gets one too
+setInterval(() => { if (autopilot.mode || HYPER.running) hwMaybeScare(SCARE.n ? 0.2 : 1); }, 5000);   // autopilot and stations get them too
 function hwScare(kind) {
   kind = kind === 'skull' || kind === 'dark' ? kind : rnd() < 0.55 ? 'skull' : 'dark';
   SCARE.busy = true; SCARE.at = Date.now(); SCARE.n++;
