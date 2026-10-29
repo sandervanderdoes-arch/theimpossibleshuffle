@@ -6028,8 +6028,8 @@ function renderLB() {
     const medal = ['🥇', '🥈', '🥉'][i] || String(i + 1);
     const when = new Date(r.achieved_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const name = document.createElement('span'); name.textContent = r.name;
-    const total = Number(r.shuffles) || 0;
-    const tries = r.attempts ? (total ? `<span class="lb-tries" tabindex="0" data-ftip="${total >= 1e6 ? bigShort(total) : fmt(total)} shuffles in total">${fmt(r.attempts)}</span>` : fmt(r.attempts)) : '–';
+    const total = Math.max(Number(r.shuffles) || 0, Number(r.attempts) || 0);   // exact, like the tries (never fewer than them)
+    const tries = r.attempts ? (total ? `<span class="lb-tries" tabindex="0" data-ftip="${fmt(total)} shuffles in total">${fmt(r.attempts)}</span>` : fmt(r.attempts)) : '–';
     const rec = r.verified ? { r: r.pf_round, R: r.pf_rand, s: r.pf_seat, n: r.pf_n } : null;
     const tick = validRec(rec) ? ` <button type="button" class="pf-tick" data-verify='${JSON.stringify(rec)}' title="Provably fair: replay this shuffle" aria-label="Replay ${name.innerHTML}'s shuffle">✓</button>`
       : '';                                       // scores from before provably fair shuffles simply have no ✓
