@@ -697,6 +697,20 @@
   .foot-link { display:inline-block; vertical-align:middle; margin:1rem .25rem 0; }
   .foot-link[hidden] { display:none; }
   .lb-stars { color:#ffd23f; text-shadow:0 0 6px rgba(255,210,63,.6); font-size:.82em; letter-spacing:-.04em; white-space:nowrap; }
+  /* Halloween scares: no flashing, just a fright. */
+  .scare { position:fixed; inset:0; z-index:3000; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .scare.out { opacity:0; transition:opacity .35s ease; }
+  .scare-skull { background:radial-gradient(circle at 50% 50%, rgba(70,0,0,.6), rgba(0,0,0,.94) 70%); animation:scareIn .12s ease-out both; }
+  .scare .scare-face { width:min(72vmin, 540px); height:auto; filter:drop-shadow(0 0 40px rgba(255,60,20,.65)); animation:skullZoom .45s cubic-bezier(.2,1.5,.4,1) both, skullShake .1s linear .45s 5 alternate; }
+  .scare .scare-eye { filter:drop-shadow(0 0 1px #ff3b1a); }
+  .scare-dark { background:#000; animation:scareIn .15s ease-out both; }
+  .scare-eyes { position:absolute; display:flex; gap:22px; opacity:0; animation:eyesIn .5s ease .55s forwards; }
+  .scare-eyes i { width:28px; height:14px; border-radius:50%; background:#ff7a1a; box-shadow:0 0 18px #ff5a00, 0 0 40px rgba(255,90,0,.5); animation:eyeBlink 1.2s ease-in-out 1.1s 1; }
+  @keyframes scareIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes skullZoom { from { transform:scale(.12); } to { transform:scale(1); } }
+  @keyframes skullShake { from { transform:translate(-6px, 2px) rotate(-2deg); } to { transform:translate(6px, -2px) rotate(2deg); } }
+  @keyframes eyesIn { to { opacity:1; } }
+  @keyframes eyeBlink { 0%, 40%, 60%, 100% { transform:scaleY(1); } 50% { transform:scaleY(.1); } }
   .hw-bar { border:1px solid rgba(255,122,26,.55); background:rgba(255,122,26,.08); border-radius:12px; padding:.5rem .7rem; font-size:.82rem; line-height:1.4; color:#ffd9b8; }
   .hw-bar[hidden] { display:none; }
   .hw-bar b { color:#ffb070; }
@@ -1956,7 +1970,7 @@ function verifyComparisons(F52) {
 const STORE_KEY = 'impossible-shuffle:v1';
 const store = (() => {
   const def = { allTime: 0, best: null, top: [], badges: {}, manual: 0, manualBest: 0, royalBest: 0, ludBestMs: 0,
-    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, giftDraft: null, giftsSent: [], giftsRx: [], lucky: -1, luckyHits: 0, theme: 'classic', gcMine: -1, apUsed: false, hw: 0, hwN: 0, hwGold: false, hwOn: null, ch: null, chMe: '' };
+    purchases: {}, hyper: { bought: 0, done: 0, best: 0, rate: 0, from: 0 }, livePending: 0, lb: null, vbest: null, claim: null, missionWon: false, tt: [], ttAt: {}, cardBack: 'classic', outfit: 'classic', certId: '', wallSubmitted: false, profMs: 0, hid: '', rcode: '', rby: '', joined: false, rtitle: 0, acesBest: 0, runBest: 0, giftDraft: null, giftsSent: [], giftsRx: [], lucky: -1, luckyHits: 0, theme: 'classic', gcMine: -1, apUsed: false, hw: 0, hwN: 0, hwGold: false, hwOn: null, hwScare: null, ch: null, chMe: '' };
   const str = v => (typeof v === 'string' ? v.slice(0, 40) : '');
   const n = v => (Number.isFinite(v) && v >= 0 ? v : 0);
   try {
@@ -1986,7 +2000,7 @@ const store = (() => {
       giftsRx: Array.isArray(p.giftsRx) ? p.giftsRx.filter(g => g && typeof g.id === 'string').slice(0, 10) : [],
       lucky: Number.isInteger(p.lucky) && p.lucky >= 0 && p.lucky < 52 ? p.lucky : -1, luckyHits: n(p.luckyHits), theme: str(p.theme) || 'classic',
       gcMine: Number.isInteger(p.gcMine) && p.gcMine >= 0 && p.gcMine < 52 ? p.gcMine : -1, apUsed: p.apUsed === true,
-      hw: Number.isInteger(p.hw) && p.hw >= 0 && p.hw <= 2 ? p.hw : 0, hwN: n(p.hwN), hwGold: p.hwGold === true, hwOn: typeof p.hwOn === 'boolean' ? p.hwOn : null,   // Halloween collector's items
+      hw: Number.isInteger(p.hw) && p.hw >= 0 && p.hw <= 2 ? p.hw : 0, hwN: n(p.hwN), hwGold: p.hwGold === true, hwOn: typeof p.hwOn === 'boolean' ? p.hwOn : null, hwScare: typeof p.hwScare === 'boolean' ? p.hwScare : null,   // Halloween collector's items
       ch: p.ch && Number.isInteger(p.ch.n) && p.ch.n >= 0 && p.ch.n <= 52 ? { n: p.ch.n, by: str(p.ch.by).slice(0, 20), won: p.ch.won === true } : null, chMe: str(p.chMe).slice(0, 20)   // a friend's challenge
     };
   } catch (e) { return def; }
@@ -2922,6 +2936,7 @@ function manualShuffle() {
   armIdle();
   if (reduceMotion) { sfxShuffleNow(m); reveal(res, false); }
   else animateShuffle(res);
+  if (HW.day) setTimeout(() => hwMaybeScare(1 / 30), 1100);   // Halloween: now and then, a fright
 }
 
 function finishAnimNow() {
@@ -4039,6 +4054,33 @@ const SFX_HW = {
     run.forEach((s, i) => mallet(g, t + i * step, NOTE(s - 12), 0.3, (i % 3 - 1) * 0.25));
     const top = NOTE(run[run.length - 1] - 12);
     ghostVoice(g, t + run.length * step, top, top / 2, big ? 1.4 : 0.9, 0.1);
+  },
+  /** A scream for the jump scare: two detuned voices sliding up and down, with a hiss. */
+  scream(g, t) {
+    const bp = g.ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1700; bp.Q.value = 0.8;
+    const v = g.ac.createGain();
+    v.gain.setValueAtTime(0, t); v.gain.linearRampToValueAtTime(0.22, t + 0.03); v.gain.setValueAtTime(0.22, t + 0.55); v.gain.exponentialRampToValueAtTime(0.0001, t + 0.95);
+    bp.connect(v).connect(g.bus);
+    [0, 9].forEach(det => {
+      const o = g.ac.createOscillator(), lfo = g.ac.createOscillator(), d = g.ac.createGain();
+      o.type = 'sawtooth'; o.detune.value = det * 10;
+      o.frequency.setValueAtTime(650, t); o.frequency.exponentialRampToValueAtTime(1350, t + 0.18); o.frequency.exponentialRampToValueAtTime(900, t + 0.9);
+      lfo.frequency.value = 9; d.gain.value = 40; lfo.connect(d).connect(o.frequency);
+      o.connect(bp); o.start(t); lfo.start(t); o.stop(t + 1); lfo.stop(t + 1);
+    });
+    const n = g.ac.createBufferSource(); n.buffer = g.noise; n.loop = true;
+    const hp = g.ac.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 2500;
+    const nv = g.ac.createGain(); nv.gain.setValueAtTime(0.12, t); nv.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
+    n.connect(hp).connect(nv).connect(g.bus); n.start(t); n.stop(t + 0.55);
+  },
+  /** Three slow heartbeats in the dark. */
+  heartbeat(g, t) {
+    [0, 0.85, 1.7].forEach(b => [0, 0.26].forEach((dt, k) => {
+      const at = t + b + dt, o = g.ac.createOscillator(), v = g.ac.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(95, at); o.frequency.exponentialRampToValueAtTime(42, at + 0.14);
+      v.gain.setValueAtTime(0, at); v.gain.linearRampToValueAtTime(k ? 0.32 : 0.45, at + 0.01); v.gain.exponentialRampToValueAtTime(0.0001, at + 0.3);
+      o.connect(v).connect(g.bus); o.start(at); o.stop(at + 0.32);
+    }));
   },
   /** Thunder for a Halloween unlock. */
   thunder(g, t) {
@@ -5517,7 +5559,8 @@ function hwUnlock(lv) {
 }
 function renderHw() {
   const bar = $('#hwBar'); if (!bar) return;
-  const toggle = store.hw || HW.day ? ` <button type="button" class="hw-toggle" aria-pressed="${hwLookOn()}">Haunted look: ${hwLookOn() ? 'on' : 'off'}</button>` : '';
+  const scareBtn = HW.day && !reduceMotion ? ` <button type="button" class="hw-toggle" data-scare aria-pressed="${store.hwScare !== false}">😱 Scares: ${store.hwScare !== false ? 'on' : 'off'}</button>` : '';
+  const toggle = store.hw || HW.day ? ` <button type="button" class="hw-toggle" data-look aria-pressed="${hwLookOn()}">Haunted look: ${hwLookOn() ? 'on' : 'off'}</button>${scareBtn}` : '';
   const goals = `${fmt(HW_GOALS[0])} → 💀 Skull Deck · ${fmt(HW_GOALS[1])} → 🧛 Count Factorial`;
   let html = '';
   if (HW.phase === 'teaser') {
@@ -5544,11 +5587,55 @@ function renderHw() {
   bar.hidden = !html;
 }
 document.addEventListener('click', e => {
-  if (!e.target.closest('#hwBar .hw-toggle')) return;
+  if (e.target.closest('#hwBar [data-scare]')) {
+    store.hwScare = store.hwScare === false; saveStore(true); renderHw();
+    track('hw-scares-' + (store.hwScare ? 'on' : 'off'));
+    return;
+  }
+  if (!e.target.closest('#hwBar [data-look]')) return;
   store.hwOn = !hwLookOn(); saveStore(true);
   applyHaunted(); renderHw();
   track('hw-look-' + (store.hwOn ? 'on' : 'off'));
 });
+
+/* ---------- Halloween scares (during the event only) ----------
+   A jump-scare skull or a sudden blackout with eyes in the dark, now and then. Rare: never in the first 30 seconds,
+   at most one every 90 seconds and four per visit, never over a dialog, the win screen or a hidden tab. Nothing
+   flashes or flickers. Off with reduced motion and with the "Scares" switch in the Halloween strip. */
+const SCARE = { at: 0, n: 0, start: Date.now(), busy: false };
+const SCARE_LINES = {
+  skull: ['Boo! Getting scared just now was about 10⁶⁶ times likelier than matching the Grail.', 'Count Factorial apologises. He does not mean it.', 'Did that scare you? Your odds should.'],
+  dark: ['Sorry. Somebody tripped over the cable.', 'The lights went out. The odds did not change.', 'Who turned off the lights? The Grail is still out there. Somewhere.']
+};
+const scaresOn = () => HW.day && hwLookOn() && store.hwScare !== false && !reduceMotion;
+function scareReady() {
+  return scaresOn() && !SCARE.busy && !winOpen && !document.hidden && !document.querySelector('dialog[open]')
+    && SCARE.n < 4 && Date.now() - SCARE.start > 30000 && Date.now() - SCARE.at > 90000;
+}
+function hwMaybeScare(chance) { if (scareReady() && rnd() < chance) hwScare(); }
+setInterval(() => { if (autopilot.mode || HYPER.running) hwMaybeScare(0.12); }, 15000);   // a long autopilot run gets one too
+function hwScare(kind) {
+  kind = kind === 'skull' || kind === 'dark' ? kind : rnd() < 0.55 ? 'skull' : 'dark';
+  SCARE.busy = true; SCARE.at = Date.now(); SCARE.n++;
+  const ov = document.createElement('div');
+  ov.className = 'scare scare-' + kind; ov.setAttribute('aria-hidden', 'true');
+  ov.innerHTML = kind === 'skull' ? '<svg class="scare-face" viewBox="0 0 20 22"><path d="M10 1C5 1 2 4.5 2 9c0 2.6 1.2 4.4 3 5.4V18h2.2v-2h1.6v2h2.4v-2h1.6v2H15v-3.6c1.8-1 3-2.8 3-5.4 0-4.5-3-8-8-8z" fill="#efe6cf" stroke="#1a0a10" stroke-width=".35"/><path d="M11.5 1.6l-.8 2.2 1.1 1.3-.9 1.6" stroke="#1a0a10" stroke-width=".3" fill="none"/><circle cx="6.8" cy="9.5" r="2.3" fill="#120208"/><circle cx="13.2" cy="9.5" r="2.3" fill="#120208"/><circle class="scare-eye" cx="6.8" cy="9.6" r=".9" fill="#ff3b1a"/><circle class="scare-eye" cx="13.2" cy="9.6" r=".9" fill="#ff3b1a"/><path d="M10 11.6l-1.2 2.2h2.4z" fill="#120208"/></svg>'
+    : `<div class="scare-eyes" style="left:${15 + RNG.below(60)}%;top:${20 + RNG.below(50)}%"><i></i><i></i></div>`;
+  document.body.appendChild(ov);
+  if (audio.on && audioCtx()) SFX_HW[kind === 'skull' ? 'scream' : 'heartbeat'](audio.graph, audio.ctx.currentTime + 0.01);
+  let over = false;
+  const done = () => {
+    if (over) return; over = true;
+    ov.classList.add('out');
+    setTimeout(() => { ov.remove(); SCARE.busy = false; }, 380);
+    const line = pick(SCARE_LINES[kind]);
+    setTimeout(() => { toast(`🧛 ${line}`); setPose('clap', line); }, 450);
+  };
+  ov.addEventListener('pointerdown', done);
+  document.addEventListener('keydown', done, { once: true });
+  setTimeout(done, kind === 'skull' ? 1150 : 2500);
+  track('hw-scare-' + kind);
+}
 
 /* ---------- Cosmetics ---------- */
 const CARD_BACKS = [
