@@ -120,7 +120,9 @@ async def stripe_webhook(request: Request):     # a real FastAPI Request, so Str
     if cs.get('payment_status') != 'paid':
         return {'ok': True, 'waiting': 'payment not settled yet'}
     link = os.environ.get('TT_PAYMENT_LINK_ID')          # plink_… of the Time Traveller link
-    amount = cs.get('amount_total') or 0
+    # With Adaptive Pricing a visitor may pay in their own currency; currency_conversion then holds the amount in
+    # yours (dollars), which is what the tiers are recognised by.
+    amount = (cs.get('currency_conversion') or {}).get('amount_total') or cs.get('amount_total') or 0
     if (link and cs.get('payment_link') != link) or amount < int(os.environ.get('TT_PRICE_CENTS', '50000')):
         return sponsor_event(cs, amount)                 # a Rookie, Captain or Commander station, not a Time Traveller
     name = next((f.get('text', {}).get('value') for f in (cs.get('custom_fields') or []) if f.get('type') == 'text'), None)
