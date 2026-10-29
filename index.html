@@ -683,6 +683,9 @@
   .tea-fund .tea-steps span { font-size:1.05rem; filter:grayscale(1); opacity:.35; cursor:help; }
   .tea-fund .tea-steps span.on { filter:none; opacity:1; }
   .tea-fund .tea-sub { display:block; font-size:.74rem; color:#9fb5a8; }
+  .float-tip { position:fixed; z-index:1000; max-width:15rem; padding:.4rem .6rem; border-radius:8px; background:#0b1f17; color:#e6f2ea; border:1px solid rgba(255,210,63,.7); box-shadow:0 6px 24px rgba(0,0,0,.85); font:600 .75rem/1.35 system-ui, sans-serif; pointer-events:none; }
+  .float-tip[hidden] { display:none; }
+  .lb-stars[data-ftip] { cursor:help; border-radius:4px; }
   .lb-stars { color:#ffd23f; text-shadow:0 0 6px rgba(255,210,63,.6); font-size:.82em; letter-spacing:-.04em; white-space:nowrap; }
   .hw-bar { border:1px solid rgba(255,122,26,.55); background:rgba(255,122,26,.08); border-radius:12px; padding:.5rem .7rem; font-size:.82rem; line-height:1.4; color:#ffd9b8; }
   .hw-bar[hidden] { display:none; }
@@ -5345,8 +5348,31 @@ const STAR_RANKS = ['', 'Rookie', 'Captain', 'Commander', 'Time Traveller'];
 const starsFor = name => STARS.get(String(name || '').toLowerCase()) || 0;
 function starsHTML(name) {
   const n = starsFor(name);
-  return n ? ` <span class="lb-stars" title="Mission Sponsor: ${STAR_RANKS[n]}" aria-label="Mission Sponsor, ${STAR_RANKS[n]}">${'★'.repeat(n)}</span>` : '';
+  return n ? ` <span class="lb-stars" tabindex="0" data-ftip="${STAR_RANKS[n]} · Mission Sponsor" aria-label="${STAR_RANKS[n]}, Mission Sponsor">${'★'.repeat(n)}</span>` : '';
 }
+/* A tooltip that floats above everything (the ranking table scrolls sideways, which would clip a CSS one).
+   Hover with a mouse, tap on a phone. */
+const floatTip = document.createElement('div');
+floatTip.className = 'float-tip'; floatTip.hidden = true; floatTip.setAttribute('aria-hidden', 'true');
+document.body.appendChild(floatTip);
+function showFloatTip(el) {
+  floatTip.textContent = el.dataset.ftip; floatTip.hidden = false;
+  const r = el.getBoundingClientRect(), w = floatTip.offsetWidth, h = floatTip.offsetHeight;
+  floatTip.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2)) + 'px';
+  floatTip.style.top = (r.top - h - 8 < 4 ? r.bottom + 8 : r.top - h - 8) + 'px';
+}
+const hideFloatTip = () => { floatTip.hidden = true; };
+['mouseover', 'focusin', 'click'].forEach(ev => document.addEventListener(ev, e => {
+  const t = e.target.closest && e.target.closest('[data-ftip]');
+  if (t) showFloatTip(t); else if (ev === 'click') hideFloatTip();
+}));
+let ftipTouchAt = 0;                                         // a tap ends with a synthetic mouseout: ignore that one
+document.addEventListener('pointerdown', e => { if (e.pointerType === 'touch') ftipTouchAt = Date.now(); }, true);
+['mouseout', 'focusout'].forEach(ev => document.addEventListener(ev, e => {
+  if (ev === 'mouseout' && Date.now() - ftipTouchAt < 1000) return;
+  if (e.target.closest && e.target.closest('[data-ftip]')) hideFloatTip();
+}));
+addEventListener('scroll', hideFloatTip, { passive: true, capture: true });
 function buyUrl(url) {
   try { const u = new URL(url); u.searchParams.set('client_reference_id', lbIdentity().id); return u.toString(); } catch (e) { return url; }
 }
