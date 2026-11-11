@@ -375,6 +375,8 @@
   #tickerTrack .tk-real b { display:inline-block; margin-right:.2rem; padding:0 .35rem; border-radius:6px; background:#ffd23f; color:#14110a; font:800 .62rem/1.5 "JetBrains Mono", ui-monospace, monospace; letter-spacing:.06em; vertical-align:middle; }
   .tt-cloud { font-size:.8rem; font-weight:700; color:#a5fbff; }
   .hero-cta { width:auto; display:inline-flex; flex-direction:column; align-items:center; padding-left:2.2rem; padding-right:2.2rem; }
+  @media (max-width: 480px) { .hero-cta { padding-left:1.4rem; padding-right:1.4rem; } }
+  @media (min-width: 361px) and (max-width: 480px) { .hero-cta .btn-main { white-space:nowrap; } }
   #ticker .tk-x { flex:none; width:2.2rem; display:flex; align-items:center; justify-content:center; color:#9fb5a8; font-size:1.05rem; border-left:1px solid rgba(255,210,63,.25); background:transparent; }
   #ticker .tk-x:hover { color:#fff; }
   body.no-ticker { padding-bottom:env(safe-area-inset-bottom, 0px) !important; }
@@ -993,7 +995,7 @@
       <p class="mono text-xs tracking-widest text-[#9fb5a8] mb-3">MISSION CONTROL · DEPARTMENT OF IMPOSSIBLE THINGS</p>
       <h1 class="font-display neon-pink text-[1.65rem] leading-tight sm:text-5xl sm:leading-tight lg:text-[3.4rem]" style="text-wrap:balance">Welcome to Humankind's Most Impossible Mission</h1>
       <p class="mt-4 max-w-4xl mx-auto text-base sm:text-lg text-[#cfe3d7]"><span class="block" style="text-wrap:balance">A deck was shuffled once. Together, humanity is trying to shuffle that exact same order a second time.</span> <span class="block mt-1" style="text-wrap:balance">Mathematics says no. We say: hold my cards.</span></p>
-      <button type="button" id="heroShuffle" class="shuffle-btn hero-cta mt-4"><span class="btn-main">Defy Mathematics</span><span class="btn-sub">Free · no sign-up</span></button>
+      <button type="button" id="heroShuffle" class="shuffle-btn hero-cta mt-4"><span class="btn-main">Shuffle the Impossible</span><span class="btn-sub">Free · no sign-up</span></button>
       <p class="hero-trust"><span class="block">Odds: <b>1 in 8 × 10⁶⁷</b> per shuffle.</span><span class="block">Every shuffle is real and anyone can replay it, so even Mission Control can't fake a win.</span></p>
 
       <div id="missionStatus" class="ms-go mt-5 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border px-4 py-2 mono text-xs sm:text-sm">
@@ -1097,7 +1099,7 @@
     <aside class="mt-5 lg:mt-0">
       <div class="lg:sticky lg:top-4 space-y-4">
         <div class="panel p-4 space-y-3">
-          <button type="button" id="shuffleBtn" class="shuffle-btn"><span class="btn-main">Defy Mathematics</span><span class="btn-sub">Shuffle your deck</span></button>
+          <button type="button" id="shuffleBtn" class="shuffle-btn"><span class="btn-main">Shuffle the Impossible</span><span class="btn-sub">Try to match the deck</span></button>
           <p id="miniResult" class="lg:hidden text-center mono text-sm font-bold min-h-[1.25rem]" aria-hidden="true"></p>
           <p class="kbd-hint text-center text-xs text-[#9fb5a8]">or press <kbd class="mono px-1 rounded bg-white/10">Space</kbd> / <kbd class="mono px-1 rounded bg-white/10">Enter</kbd></p>
           <div>
@@ -2902,8 +2904,8 @@ function updateStats() {
    ===================================================================== */
 /** The big button: a headline and a smaller second line. */
 function buttonLabel(n) {
-  if (n < 10) return ['Defy Mathematics', 'Shuffle your deck'];
-  if (n < 50) return ['Defy Mathematics', 'Again'];
+  if (n < 10) return ['Shuffle the Impossible', 'Try to match the deck'];
+  if (n < 50) return ['Shuffle the Impossible', 'Again'];
   if (n < 200) return ['Surely This Time', 'Shuffle your deck'];
   if (n < 1000) return ['This Is Fine 🔥', 'Shuffle anyway'];
   return ['We Have Become One', 'With The Shuffle'];
