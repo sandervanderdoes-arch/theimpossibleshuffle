@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Many Shuffles to Randomize a Deck of Cards? | The Impossible Shuffle</title>
+<meta name="description" content="Seven riffle shuffles mix a 52-card deck well; overhand shuffling takes thousands. The Bayer–Diaconis math, how computers shuffle, and how a shuffle can be provably fair.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://theimpossibleshuffle.com/how-many-shuffles/">
+<meta name="theme-color" content="#03110a">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="The Impossible Shuffle">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://theimpossibleshuffle.com/how-many-shuffles/">
+<meta property="og:title" content="How Many Shuffles Does It Take to Randomize a Deck?">
+<meta property="og:description" content="Seven riffle shuffles. The famous Bayer–Diaconis result, why overhand shuffling is hopeless, and how computers do it properly.">
+<meta property="og:image" content="https://theimpossibleshuffle.com/og/how-many-shuffles.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="How many shuffles it takes to randomize a deck of cards: seven riffle shuffles.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How Many Shuffles Does It Take to Randomize a Deck?">
+<meta name="twitter:description" content="Seven riffle shuffles. The famous Bayer–Diaconis result, why overhand shuffling is hopeless, and how computers do it properly.">
+<meta name="twitter:image" content="https://theimpossibleshuffle.com/og/how-many-shuffles.jpg">
+<meta name="twitter:image:alt" content="How many shuffles it takes to randomize a deck of cards: seven riffle shuffles.">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/learn.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Article",
+   "@id": "https://theimpossibleshuffle.com/how-many-shuffles/#article",
+   "headline": "How Many Shuffles Does It Take to Randomize a Deck?",
+   "description": "Seven riffle shuffles mix a 52-card deck well; overhand shuffling takes thousands. The Bayer–Diaconis math, how computers shuffle, and how a shuffle can be provably fair.",
+   "image": "https://theimpossibleshuffle.com/og/how-many-shuffles.jpg",
+   "datePublished": "2026-11-12",
+   "dateModified": "2026-11-12",
+   "inLanguage": "en",
+   "mainEntityOfPage": "https://theimpossibleshuffle.com/how-many-shuffles/",
+   "isPartOf": {
+    "@id": "https://theimpossibleshuffle.com/#website"
+   },
+   "author": {
+    "@id": "https://theimpossibleshuffle.com/#org"
+   },
+   "publisher": {
+    "@id": "https://theimpossibleshuffle.com/#org"
+   },
+   "about": [
+    {
+     "@type": "Thing",
+     "name": "Factorial"
+    },
+    {
+     "@type": "Thing",
+     "name": "Shuffling"
+    },
+    {
+     "@type": "Thing",
+     "name": "Probability"
+    }
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "The Impossible Shuffle",
+     "item": "https://theimpossibleshuffle.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "The Mathematics Behind the Madness",
+     "item": "https://theimpossibleshuffle.com/math/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "How many shuffles?",
+     "item": "https://theimpossibleshuffle.com/how-many-shuffles/"
+    }
+   ]
+  },
+  {
+   "@type": "Organization",
+   "@id": "https://theimpossibleshuffle.com/#org",
+   "name": "The Impossible Shuffle",
+   "url": "https://theimpossibleshuffle.com/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://theimpossibleshuffle.com/icon-512.png",
+    "width": 512,
+    "height": 512
+   },
+   "sameAs": [
+    "https://www.instagram.com/theimpossibleshuffle/"
+   ]
+  }
+ ]
+}
+</script>
+<script data-goatcounter="https://theimpossibleshuffle.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the article</a>
+<div class="wrap">
+<header class="top">
+  <a class="brand" href="/">The Impossible Shuffle</a>
+  <nav aria-label="The mathematics behind the madness"><a href="/52-factorial/">52! explained</a><a href="/same-deck-twice/">Same deck twice?</a><a href="/how-many-shuffles/" aria-current="page">How many shuffles?</a></nav>
+</header>
+<main id="main">
+<p class="crumbs"><a href="/">Home</a> › <a href="/math/">The math behind the madness</a> › How many shuffles?</p>
+<article>
+<h1>How Many Shuffles Does It Take to Randomize a Deck?</h1>
+<p class="lede">Most people give a deck two or three quick shuffles and call it random. Mathematics politely disagrees.</p>
+
+<div class="answer">
+  <p class="k">The short answer</p>
+  <p><b>Seven riffle shuffles.</b> In 1992, mathematicians Dave Bayer and Persi Diaconis showed that a 52-card deck stays clearly out of order through the first five riffle shuffles and only gets close to random around the seventh. Overhand shuffling is far slower: it takes thousands of shuffles to mix a deck as well.</p>
+</div>
+
+<h2>The table that settled it</h2>
+<p>Bayer and Diaconis measured how far a riffle-shuffled deck is from perfectly random, using a yardstick called <i>total variation distance</i>: 1 means the deck is still easy to tell apart from a random one, 0 means it's indistinguishable. Here are the numbers for a 52-card deck (we recomputed them from their formula):</p>
+<div class="tbl-wrap"><table class="tbl">
+<thead><tr><th>Riffle shuffles</th><th class="r">Distance from random</th><th></th></tr></thead>
+<tbody>
+<tr><td>1</td><td class="r">1.000</td><td>Barely mixed</td></tr>
+<tr><td>2</td><td class="r">1.000</td><td></td></tr>
+<tr><td>3</td><td class="r">1.000</td><td></td></tr>
+<tr><td>4</td><td class="r">1.000</td><td>Still easy to tell apart from random</td></tr>
+<tr><td>5</td><td class="r">0.924</td><td>Order starts to break down</td></tr>
+<tr><td>6</td><td class="r">0.614</td><td></td></tr>
+<tr><td>7</td><td class="r">0.334</td><td><b>Close to random: the "seven shuffles" rule</b></td></tr>
+<tr><td>8</td><td class="r">0.167</td><td></td></tr>
+<tr><td>9</td><td class="r">0.085</td><td></td></tr>
+<tr><td>10</td><td class="r">0.043</td><td>Each extra shuffle roughly halves what is left</td></tr>
+</tbody></table></div>
+<p>Nothing much happens for four shuffles, then the distance collapses. That sudden drop is known as the <b>cutoff phenomenon</b>, and it's why "seven" became the rule of thumb.</p>
+
+<h2>Why riffles work and overhand shuffles don't</h2>
+<p>A riffle shuffle cuts the deck in two and interleaves the halves, so every card can move a long way. After one riffle, though, the deck is made of just two "rising sequences": the cards from each half still appear in their old order relative to each other. Each riffle at most doubles the number of these sequences, and a well-mixed deck has around 26 of them. Magicians use leftover rising sequences for card tricks, which is a good reason to shuffle seven times before playing anyone who owns a top hat.</p>
+<p>An overhand shuffle only slides small packets of cards from one hand to the other. Cards near each other tend to stay near each other, so it takes thousands of overhand shuffles to reach the same level of mixing. "Washing" the cards (smooshing them around on the table) also works well, if you keep at it for long enough.</p>
+
+<h2>How computers shuffle: Fisher–Yates</h2>
+<p>Computers don't riffle. The standard method is the <b>Fisher–Yates shuffle</b>: start at the last card, swap it with a randomly chosen card at or above it, move one card up, repeat. With a good random number generator, every one of the 52! orders is exactly equally likely, in one pass.</p>
+<p>Two classic ways to get it wrong:</p>
+<ul class="facts">
+<li><b>The naive swap.</b> Swapping each card with <i>any</i> card in the deck (instead of only the ones not yet placed) looks fine but makes some orders more likely than others.</li>
+<li><b>A tiny seed.</b> To be able to produce every deck, the random source needs at least 226 bits, because 2<sup>226</sup> is just above 52!. A generator seeded with 32 bits can only ever produce about 4.3 billion different decks, a fraction of roughly 5 × 10<sup>-59</sup> of them all. That's how the online poker shuffle mentioned in <a href="/same-deck-twice/">our same-deck-twice article</a> was cracked.</li>
+</ul>
+
+<h2>How The Impossible Shuffle shuffles</h2>
+<p>On <a href="/">The Impossible Shuffle</a>, every shuffle is cooked from three public ingredients: the randomness of a <a href="https://www.drand.love/" rel="noopener">drand</a> round (published every 30 seconds by the League of Entropy, so nobody can know it in advance), the player's seat and a shuffle number. They go through SHA-256, and the 256-bit result drives Fisher–Yates. Since 2<sup>256</sup> is far bigger than 52!, every deck is possible, and the leftover bias is about 1 in 1.4 billion: too small to ever notice.</p>
+<p>Best of all, anyone can <a href="/#verifyBox">replay any shuffle</a> and get the exact same deck. So if somebody ever does hit the Holy Grail, the whole world can check it.</p>
+</article>
+<aside class="cta" aria-label="Join the mission">
+  <p>Seven shuffles mix a deck. Matching the Holy Grail takes about 8 × 10⁶⁷. Humanity has started.</p>
+  <a class="btn" href="/" data-goatcounter-click="learn-cta/how-many-shuffles">Shuffle the Impossible<small>Free · no sign-up · counted live</small></a>
+</aside>
+<nav class="more" aria-label="More from the mathematics behind the madness"><p><b>Keep falling down the rabbit hole</b></p><ul><li><a href="/52-factorial/">52 Factorial: How Big Is 52! Really?</a></li><li><a href="/same-deck-twice/">Has Anyone Ever Shuffled the Same Deck Twice?</a></li></ul></nav>
+</main>
+<footer class="foot">
+  <p><a href="/">Play</a>·<a href="/math/">The math</a>·<a href="/52-factorial/">52!</a>·<a href="/same-deck-twice/">Same deck twice?</a>·<a href="/how-many-shuffles/">How many shuffles?</a>·<a href="https://www.instagram.com/theimpossibleshuffle/" rel="noopener me">Instagram</a></p>
+  <p>The Impossible Shuffle · humankind's most pointless mission</p>
+</footer>
+</div>
+</body>
+</html>

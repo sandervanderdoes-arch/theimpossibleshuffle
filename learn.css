@@ -1,0 +1,69 @@
+/* The Mathematics Behind the Madness: shared style for the explainer pages (/math/, /52-factorial/, ...).
+   Same look as the game (neon on deep green), but plain HTML and no Tailwind, so these pages load in a blink. */
+:root { --ink:#e6f2ea; --muted:#9fb5a8; --soft:#cfe3d7; --pink:#ff2fd6; --cyan:#22f3ff; --gold:#ffd23f; --line:rgba(34,243,255,.18); }
+* { box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; }
+body { margin:0; min-height:100vh; color:var(--ink); font:400 1.06rem/1.7 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background:radial-gradient(ellipse 120% 60% at 50% -10%, #12402a 0%, #082a1a 35%, #03110a 70%, #020805 100%) fixed, #03110a; }
+a { color:#a5fbff; text-underline-offset:3px; }
+a:hover { color:#fff; }
+:focus-visible { outline:3px solid var(--gold); outline-offset:3px; border-radius:6px; }
+.skip { position:absolute; left:-999px; top:0; background:#000; color:#fff; padding:.5rem 1rem; z-index:9; }
+.skip:focus { left:1rem; top:1rem; }
+.wrap { max-width:46rem; margin:0 auto; padding:0 1rem; }
+.top { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 0; flex-wrap:wrap; }
+.brand { font-family:Bungee, Impact, system-ui, sans-serif; color:#ff8bec; text-decoration:none; font-size:1rem; text-shadow:0 0 6px var(--pink), 0 0 18px rgba(255,47,214,.5); }
+.top nav { display:flex; flex-wrap:wrap; gap:.3rem 1rem; }
+.top nav a { font-size:.85rem; color:var(--muted); }
+.top nav a[aria-current] { color:var(--gold); }
+.crumbs { font-size:.8rem; color:var(--muted); margin:.5rem 0 0; }
+.crumbs a { color:var(--muted); }
+h1, h2, h3 { font-family:Bungee, Impact, system-ui, sans-serif; font-weight:400; line-height:1.2; letter-spacing:.01em; text-wrap:balance; }
+h1 { font-size:clamp(1.6rem, 6vw, 2.6rem); margin:1rem 0 .6rem; color:#ff8bec; text-shadow:0 0 8px var(--pink), 0 0 26px rgba(255,47,214,.5); }
+h2 { font-size:clamp(1.15rem, 4vw, 1.5rem); margin:2.6rem 0 .7rem; color:#ffe68a; text-shadow:0 0 6px var(--gold), 0 0 16px rgba(255,210,63,.4); }
+h3 { font-size:1.02rem; margin:1.6rem 0 .4rem; color:#a5fbff; }
+p, li { color:var(--soft); }
+strong, b { color:var(--ink); }
+.lede { font-size:1.15rem; color:var(--ink); }
+.answer { background:rgba(2,12,8,.72); border:1px solid rgba(255,210,63,.45); border-radius:16px; padding:1rem 1.2rem; margin:1.4rem 0; }
+.answer p { margin:.3rem 0; }
+.answer .k { font:800 .72rem/1 ui-monospace, "JetBrains Mono", monospace; letter-spacing:.14em; color:var(--gold); text-transform:uppercase; }
+.panel { background:rgba(2,12,8,.72); border:1px solid var(--line); border-radius:16px; padding:1rem 1.2rem; margin:1.4rem 0; }
+.num { font:700 .95rem/1.5 ui-monospace, "JetBrains Mono", monospace; color:#ffe68a; overflow-wrap:anywhere; }
+.mono { font-family:ui-monospace, "JetBrains Mono", monospace; }
+.tbl { width:100%; border-collapse:collapse; margin:1rem 0; font-size:.95rem; }
+.tbl th, .tbl td { text-align:left; padding:.5rem .6rem; border-bottom:1px solid rgba(255,255,255,.08); vertical-align:top; }
+.tbl th { color:var(--muted); font-size:.8rem; letter-spacing:.06em; text-transform:uppercase; }
+.tbl td.r, .tbl th.r { text-align:right; white-space:nowrap; font-family:ui-monospace, "JetBrains Mono", monospace; }
+.tbl-wrap { overflow-x:auto; }
+.facts { padding-left:1.2rem; }
+.facts li { margin:.55rem 0; }
+.note { font-size:.88rem; color:var(--muted); }
+.cta { margin:2.4rem 0; padding:1.4rem 1.2rem; text-align:center; border-radius:18px; background:rgba(2,12,8,.8); border:1px solid rgba(255,47,214,.45); box-shadow:0 0 40px rgba(255,47,214,.12); }
+.cta p { margin:.3rem 0 1rem; color:var(--ink); }
+.btn { display:inline-block; text-decoration:none; color:#fff; font:400 1.02rem/1.25 Bungee, Impact, system-ui, sans-serif; padding:1rem 1.6rem; border-radius:18px;
+  background:linear-gradient(135deg,#ff2fd6,#a21caf 55%,#7c3aed); box-shadow:0 0 0 2px #ffb3f0, 0 0 22px rgba(255,47,214,.6), inset 0 -4px 0 rgba(0,0,0,.25); text-shadow:0 2px 0 rgba(0,0,0,.35); }
+.btn:hover { color:#fff; filter:brightness(1.08); }
+.btn small { display:block; margin-top:.25rem; font:800 .68rem/1 ui-monospace, "JetBrains Mono", monospace; letter-spacing:.12em; text-transform:uppercase; opacity:.85; }
+.btn2 { display:inline-block; border:1px solid rgba(34,243,255,.5); background:rgba(34,243,255,.08); color:#a5fbff; border-radius:12px; padding:.55rem 1rem; font:700 .9rem/1.2 system-ui, sans-serif; cursor:pointer; }
+.btn2:hover { background:rgba(34,243,255,.16); }
+.live { font:700 .95rem/1.5 ui-monospace, "JetBrains Mono", monospace; color:#ffe68a; }
+.live[hidden] { display:none; }
+/* The little deck demo */
+.deck { display:grid; grid-template-columns:repeat(13, minmax(0,1fr)); gap:3px; margin:.9rem 0 .5rem; }
+.deck span { display:flex; align-items:center; justify-content:center; aspect-ratio:5/7; border-radius:5px; background:#fdf6e3; color:#1d1606; font:700 clamp(.55rem, 2.3vw, .85rem)/1 ui-monospace, monospace; }
+.deck span.red { color:#c8102e; }
+.deck span.hit { box-shadow:0 0 0 2px var(--cyan), 0 0 10px rgba(34,243,255,.8); }
+.demo-out { min-height:3.4rem; }
+/* Article cards on the hub */
+.cards { display:grid; gap:1rem; margin:1.4rem 0; }
+@media (min-width:640px) { .cards { grid-template-columns:1fr 1fr; } }
+.card { display:block; text-decoration:none; background:rgba(2,12,8,.72); border:1px solid var(--line); border-radius:16px; padding:1rem 1.2rem; }
+.card:hover { border-color:rgba(255,210,63,.6); }
+.card b { display:block; font:400 1.02rem/1.3 Bungee, Impact, system-ui, sans-serif; color:#ffe68a; }
+.card span { display:block; margin-top:.4rem; color:var(--soft); font-size:.95rem; }
+.more { border-top:1px solid rgba(255,255,255,.08); margin-top:2.4rem; padding-top:1rem; }
+.more ul { padding-left:1.2rem; }
+.foot { margin:3rem 0 2rem; text-align:center; font-size:.85rem; color:var(--muted); }
+.foot a { color:var(--muted); margin:0 .4rem; }
+@media (prefers-reduced-motion: reduce) { * { transition:none !important; animation:none !important; } }

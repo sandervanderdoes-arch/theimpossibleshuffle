@@ -37,26 +37,120 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": "https://theimpossibleshuffle.com/#org",
+      "name": "The Impossible Shuffle",
+      "url": "https://theimpossibleshuffle.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://theimpossibleshuffle.com/icon-512.png",
+        "width": 512,
+        "height": 512
+      },
+      "sameAs": [
+        "https://www.instagram.com/theimpossibleshuffle/"
+      ]
+    },
+    {
       "@type": "WebSite",
       "@id": "https://theimpossibleshuffle.com/#website",
       "url": "https://theimpossibleshuffle.com/",
       "name": "The Impossible Shuffle",
       "description": "A deck of cards was shuffled once. Together, humanity is trying to shuffle that exact same order a second time.",
-      "inLanguage": "en"
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://theimpossibleshuffle.com/#org"
+      }
     },
     {
-      "@type": "WebApplication",
+      "@type": [
+        "WebApplication",
+        "VideoGame"
+      ],
       "@id": "https://theimpossibleshuffle.com/#app",
       "name": "The Impossible Shuffle",
       "url": "https://theimpossibleshuffle.com/",
       "applicationCategory": "GameApplication",
+      "genre": [
+        "Card game",
+        "Probability experiment",
+        "Idle game"
+      ],
+      "gamePlatform": "Web browser",
+      "playMode": "CoOp",
       "operatingSystem": "Any (runs in the browser)",
       "browserRequirements": "Requires JavaScript",
       "isAccessibleForFree": true,
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
       "image": "https://theimpossibleshuffle.com/og-image.png",
       "description": "Shuffle a virtual deck of 52 cards and try to match one fixed order, the Holy Grail. The odds are 1 in 52! (about 8.07 × 10^67) per shuffle. Every shuffle is provably fair and counted in a live worldwide total.",
-      "sameAs": ["https://www.instagram.com/theimpossibleshuffle/"]
+      "author": {
+        "@id": "https://theimpossibleshuffle.com/#org"
+      },
+      "publisher": {
+        "@id": "https://theimpossibleshuffle.com/#org"
+      },
+      "sameAs": [
+        "https://www.instagram.com/theimpossibleshuffle/"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://theimpossibleshuffle.com/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is The Impossible Shuffle?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A free browser game and probability experiment. One deck of 52 cards was shuffled once and fixed forever: the Holy Grail Sequence. Everyone who visits shuffles a virtual deck, trying to hit that exact order a second time, and every shuffle by every visitor adds to one live worldwide total."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the odds of matching the Holy Grail?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "1 in 52! per shuffle. 52 factorial is the number of ways to order a deck of cards: 80,658,175,170,943,878,571,660,636,856,403,766,975,289,505,440,883,277,824,000,000,000,000, or about 8.07 × 10^67. On average, one card per shuffle lands in its Grail spot."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Has anyone ever shuffled the same deck twice?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Almost certainly not by chance. Even if every person who ever lived had shuffled once a minute for 80 years, the chance of a single repeat would be about 1 in 7 × 10^30. Repeats only happen with new decks or lazy shuffles."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is every shuffle really random?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, and you can check it. Each shuffle comes from public drand randomness, your seat and a shuffle number, run through SHA-256 and the Fisher–Yates shuffle. Anyone can replay any shuffle and get the exact same deck, so nobody, not even Mission Control, can fake a win."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it free? Do I need an account?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It's free, with no sign-up and no download. It works in any modern browser on a phone or computer. Optional Mission Sponsorships add shuffling power and fun extras; they never change the odds of a single shuffle."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens if somebody actually does it?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The mission ends forever. The winning shuffle is rebuilt and checked from scratch, the Holy Grail Sequence takes the winner's name and the site becomes a monument. There is no money or prize: the honor is the prize."
+          }
+        }
+      ]
     }
   ]
 }
@@ -950,6 +1044,23 @@
   .tt-crew { display:inline-block; margin-left:.35rem; padding:.05rem .4rem; border-radius:999px; background:#ffd23f; color:#1b1300; font:800 .6rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.08em; vertical-align:middle; white-space:nowrap; }
   .tt-buy { display:block; text-align:center; background:linear-gradient(180deg, #fff7c9, #ffd23f 45%, #c98a0b) !important; color:#1d1300 !important; border-color:#6e4500 !important; text-shadow:none !important; }
   .tt-buy[aria-disabled="true"] { filter:grayscale(.6); opacity:.75; cursor:not-allowed; }
+  /* Crawlable explainer bits: intro line, all comparisons, FAQ, footer links */
+  .odds-intro { margin-top:.6rem; font-size:.95rem; color:#cfe3d7; max-width:48rem; }
+  .odds-all { margin-top:1rem; border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:.7rem 1rem; background:rgba(0,0,0,.25); }
+  .odds-all summary { cursor:pointer; font-weight:700; font-size:.9rem; color:#a5fbff; }
+  .odds-all ol { margin:.7rem 0 .2rem; padding-left:1.3rem; list-style:decimal; font-size:.92rem; color:#cfe3d7; }
+  .odds-all li { margin:.45rem 0; }
+  .odds-more, .faq a, .odds-intro a { font-size:.85rem; color:#9fb5a8; }
+  .odds-more { margin-top:.8rem; }
+  .odds-more a, .faq a { color:#a5fbff; text-decoration:underline; text-underline-offset:3px; }
+  .faq { margin-top:1rem; display:grid; gap:.5rem; }
+  .faq details { border:1px solid rgba(34,243,255,.18); border-radius:12px; padding:.75rem 1rem; background:rgba(0,0,0,.25); }
+  .faq summary { cursor:pointer; font-weight:700; color:#e6f2ea; }
+  .faq p { margin-top:.5rem; font-size:.95rem; color:#cfe3d7; line-height:1.6; }
+  .faq a { font-size:inherit; }
+  .foot-learn { margin-top:1.5rem; display:flex; flex-wrap:wrap; justify-content:center; gap:.4rem 1.2rem; font-size:.85rem; }
+  .foot-learn a { color:#9fb5a8; text-decoration:underline; text-underline-offset:3px; }
+  .foot-learn a:hover { color:#e6f2ea; }
 </style>
 </head>
 <body>
@@ -961,7 +1072,7 @@
 <div id="toasts" aria-live="polite"></div>
 <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-<noscript><div style="max-width:40rem;margin:2rem auto;padding:1rem;text-align:center;color:#e6f2ea;font-family:system-ui,sans-serif"><h1>The Impossible Shuffle</h1><p>A deck of 52 cards was shuffled once. Together, humanity is trying to shuffle that exact same order a second time. The odds are 1 in 52! (about 8.07 × 10<sup>67</sup>) per shuffle. Every shuffle is provably fair and counted in a live worldwide total.</p><p>This mission needs JavaScript. Turn it on to start shuffling.</p></div></noscript>
+<noscript><div style="max-width:40rem;margin:2rem auto;padding:1rem;text-align:center;color:#e6f2ea;font-family:system-ui,sans-serif"><p style="font-size:1.5rem;font-weight:700">The Impossible Shuffle</p><p>A deck of 52 cards was shuffled once. Together, humanity is trying to shuffle that exact same order a second time. The odds are 1 in 52! (about 8.07 × 10<sup>67</sup>) per shuffle. Every shuffle is provably fair and counted in a live worldwide total.</p><p>This mission needs JavaScript. Turn it on to start shuffling.</p></div></noscript>
 <div id="app">
   <!-- Golden-helmet astronaut for the Time Travellers (one definition, used everywhere with <use href="#ttAstro">) -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -1356,6 +1467,7 @@
   <section class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="oddsTitle">
     <div class="panel p-4 sm:p-6">
       <h2 id="oddsTitle" class="font-display text-lg sm:text-2xl neon-pink">How Impossible Is This?</h2>
+      <p class="odds-intro">A deck of 52 cards can be shuffled into <b>52! ("52 factorial")</b> different orders. Every shuffle picks one of them at random, so your probability of hitting the Holy Grail is 1 in 52!, per shuffle.</p>
       <p class="mt-4 text-sm text-[#9fb5a8] font-bold">YOUR ODDS OF MATCHING THE HOLY GRAIL, PER SHUFFLE</p>
       <p class="mono text-sm sm:text-base break-all mt-1"><span class="text-[#9fb5a8]">1 in </span><span id="oddsExact" class="neon-gold font-bold">80,658,175,170,943,878,571,660,636,856,403,766,975,289,505,440,883,277,824,000,000,000,000</span></p>
       <p class="mt-4 text-sm text-[#9fb5a8] font-bold">AS A PERCENTAGE</p>
@@ -1371,6 +1483,11 @@
         <button type="button" id="explainBtn" class="explain-btn pulse"><span class="ic" aria-hidden="true">🤯</span><span class="lbl">Explain how impossible this is</span></button>
         <span id="explainStep" class="mono text-xs text-[#9fb5a8]"></span>
       </div>
+      <details class="odds-all">
+        <summary>All 7 ways to picture 52! at once</summary>
+        <ol><li>There are more possible deck orders than atoms on Earth. About 600 quadrillion times more.</li><li>Winning the Powerball jackpot 8 times in a row is still about 1.5× more likely than your next shuffle matching.</li><li>It's roughly like calling 226 coin flips in a row correctly.</li><li>If all 8 billion humans had shuffled once per second since the Big Bang, we'd have tried less than 1 in 10⁴⁰ of all possible orders.</li><li>Even with the entire planet shuffling nonstop, one per second each, the expected wait is ~3 × 10⁵⁰ years. That's about 2 × 10⁴⁰ times the current age of the universe.</li><li>The world's fastest supercomputer, doing 2 quintillion operations per second, would need about 10⁴² years. It would also eat 10 trillion Suns' worth of energy. We're doing it with a button.</li><li>Take one step every billion years around the equator. After each lap, remove one drop from the Pacific. When it's empty, lay down one sheet of paper and refill it. By the time the paper stack reaches the Sun, less than 0.1% of 52! seconds will have passed.</li></ol>
+      </details>
+      <p class="odds-more">More madness: <a href="/52-factorial/">52 factorial explained</a> · <a href="/same-deck-twice/">Has anyone ever shuffled the same deck twice?</a> · <a href="/how-many-shuffles/">How many shuffles randomize a deck?</a></p>
     </div>
   </section>
 
@@ -1410,6 +1527,21 @@
     </div>
   </section>
 
+  <!-- ===================== FAQ (mirrored in the FAQPage structured data in <head>: keep both in sync) ===================== -->
+  <section id="faq" class="px-4 mt-8 max-w-6xl mx-auto" aria-labelledby="faqTitle">
+    <div class="panel p-4 sm:p-6">
+      <h2 id="faqTitle" class="font-display text-lg sm:text-2xl neon-cyan">Questions Humanity Keeps Asking</h2>
+      <div class="faq">
+        <details><summary>What is The Impossible Shuffle?</summary><p>A free browser game and probability experiment. One deck of 52 cards was shuffled once and fixed forever: the <b>Holy Grail Sequence</b>. Everyone who visits shuffles a virtual deck, trying to hit that exact order a second time, and every shuffle by every visitor adds to one live worldwide total.</p></details>
+        <details><summary>What are the odds of matching the Holy Grail?</summary><p>1 in 52! per shuffle. <a href="/52-factorial/">52 factorial</a> is the number of ways to order a deck of cards, about 8.07 × 10<sup>67</sup>. On average, one card per shuffle lands in its Grail spot, which is why the <a href="#lbSection">Luckiest Shufflers</a> board ranks the best partial matches.</p></details>
+        <details><summary>Has anyone ever shuffled the same deck twice?</summary><p>Almost certainly not by chance. Even if every person who ever lived had shuffled once a minute for 80 years, the chance of a single repeat would be about 1 in 7 × 10<sup>30</sup>. <a href="/same-deck-twice/">Here is the full story</a>, including when decks really do repeat.</p></details>
+        <details><summary>Is every shuffle really random?</summary><p>Yes, and you can check it. Each shuffle comes from public drand randomness, your seat and a shuffle number, run through SHA-256 and the Fisher–Yates shuffle. Anyone can <a href="#verifyBox">replay any shuffle</a> and get the exact same deck, so nobody, not even Mission Control, can fake a win. More: <a href="/how-many-shuffles/">how many shuffles it takes to randomize a deck</a>.</p></details>
+        <details><summary>Is it free? Do I need an account?</summary><p>It's free, with no sign-up and no download. It works in any modern browser on a phone or computer. Optional <a href="#impatient">Mission Sponsorships</a> add shuffling power and fun extras; they never change the odds of a single shuffle.</p></details>
+        <details><summary>What happens if somebody actually does it?</summary><p>The mission ends forever. The winning shuffle is rebuilt and checked from scratch, the Holy Grail Sequence takes the winner's name and the site becomes a monument. There is no money or prize: <a href="#honors">the honor is the prize</a>.</p></details>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================== FOOTER ===================== -->
   <footer class="px-4 mt-10 mb-6 max-w-6xl mx-auto text-center">
     <p class="text-xs font-bold tracking-widest text-[#9fb5a8]">FUN FACT</p>
@@ -1427,6 +1559,7 @@
         @theimpossibleshuffle
       </a>
     </div>
+    <nav class="foot-learn" aria-label="The mathematics behind the madness"><a href="/math/">The math behind the madness</a><a href="/52-factorial/">52! explained</a><a href="/same-deck-twice/">Same deck twice?</a><a href="/how-many-shuffles/">How many shuffles?</a></nav>
     <p class="mt-6 font-display text-sm neon-pink">Made with love, stubborn optimism and Fisher–Yates.</p>
     <button type="button" id="tickerBack" class="mt-3 text-xs underline text-[#9fb5a8]" hidden>📻 Bring back the fellow shufflers feed</button>
   </footer>
@@ -1621,6 +1754,18 @@ function loadAnalytics() {
   }
 }
 const tracked = new Set();
+/* Where this visitor came from, for 'first-shuffle-from-…' (so organic search can be measured on its own).
+   Only a coarse label is sent, never the referrer itself. */
+const ARRIVAL = (() => {
+  try {
+    if (/[?&](utm_source|ref|r)=/.test(location.search)) return 'campaign';
+    if (!document.referrer) return 'direct';
+    const r = new URL(document.referrer);
+    if (r.host === location.host) return /^\/(math|52-factorial|same-deck-twice|how-many-shuffles)\//.test(r.pathname) ? 'learn' : 'site';
+    if (/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|qwant|search\.brave|yandex|baidu|startpage)\./.test(r.hostname)) return 'search';
+    return 'referral';
+  } catch (e) { return 'direct'; }
+})();
 /** Counts a named event (at most once per page load). */
 function track(name) {
   if (!analyticsOn || tracked.has(name)) return;
@@ -2934,6 +3079,7 @@ function manualShuffle() {
   const res = { n: session.attempts, m, deck, ts: Date.now(), rigged, pf: rigged ? null : pfRec(pb, pn) };
   if (res.pf) lastRec = res.pf;
   track('first-shuffle');
+  track('first-shuffle-from-' + ARRIVAL);
   updateButtonLabel();
   armIdle();
   if (reduceMotion) { sfxShuffleNow(m); reveal(res, false); }

@@ -7,5 +7,6 @@ Disallow: /README.md
 Disallow: /merch/README.md
 Disallow: /tailwind.config.js
 Disallow: /tw-input.css
+Disallow: /tools/
 
 Sitemap: https://theimpossibleshuffle.com/sitemap.xml

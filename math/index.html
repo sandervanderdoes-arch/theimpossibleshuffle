@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Mathematics Behind the Madness | The Impossible Shuffle</title>
+<meta name="description" content="Why shuffling the same deck twice is (almost) impossible: 52 factorial, the odds of a repeat and how many shuffles a deck needs. Short, accurate and slightly unhinged.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://theimpossibleshuffle.com/math/">
+<meta name="theme-color" content="#03110a">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="The Impossible Shuffle">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://theimpossibleshuffle.com/math/">
+<meta property="og:title" content="The Mathematics Behind the Madness">
+<meta property="og:description" content="One deck, shuffled once. Humanity trying to shuffle it again. Here is the math that says we never will.">
+<meta property="og:image" content="https://theimpossibleshuffle.com/og/math.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Mathematics Behind the Madness: 52 factorial and the odds of shuffling the same deck twice.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Mathematics Behind the Madness">
+<meta name="twitter:description" content="One deck, shuffled once. Humanity trying to shuffle it again. Here is the math that says we never will.">
+<meta name="twitter:image" content="https://theimpossibleshuffle.com/og/math.jpg">
+<meta name="twitter:image:alt" content="The Mathematics Behind the Madness: 52 factorial and the odds of shuffling the same deck twice.">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/learn.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "CollectionPage",
+   "@id": "https://theimpossibleshuffle.com/math/#page",
+   "url": "https://theimpossibleshuffle.com/math/",
+   "name": "The Mathematics Behind the Madness",
+   "description": "Why shuffling the same deck twice is (almost) impossible: 52 factorial, the odds of a repeat and how many shuffles a deck needs. Short, accurate and slightly unhinged.",
+   "inLanguage": "en",
+   "isPartOf": {
+    "@id": "https://theimpossibleshuffle.com/#website"
+   },
+   "publisher": {
+    "@id": "https://theimpossibleshuffle.com/#org"
+   },
+   "hasPart": [
+    {
+     "@type": "Article",
+     "headline": "52 Factorial: How Big Is 52! Really?",
+     "url": "https://theimpossibleshuffle.com/52-factorial/"
+    },
+    {
+     "@type": "Article",
+     "headline": "Has Anyone Ever Shuffled the Same Deck Twice?",
+     "url": "https://theimpossibleshuffle.com/same-deck-twice/"
+    },
+    {
+     "@type": "Article",
+     "headline": "How Many Shuffles Does It Take to Randomize a Deck?",
+     "url": "https://theimpossibleshuffle.com/how-many-shuffles/"
+    }
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "The Impossible Shuffle",
+     "item": "https://theimpossibleshuffle.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "The Mathematics Behind the Madness",
+     "item": "https://theimpossibleshuffle.com/math/"
+    }
+   ]
+  },
+  {
+   "@type": "Organization",
+   "@id": "https://theimpossibleshuffle.com/#org",
+   "name": "The Impossible Shuffle",
+   "url": "https://theimpossibleshuffle.com/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://theimpossibleshuffle.com/icon-512.png",
+    "width": 512,
+    "height": 512
+   },
+   "sameAs": [
+    "https://www.instagram.com/theimpossibleshuffle/"
+   ]
+  }
+ ]
+}
+</script>
+<script data-goatcounter="https://theimpossibleshuffle.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the article</a>
+<div class="wrap">
+<header class="top">
+  <a class="brand" href="/">The Impossible Shuffle</a>
+  <nav aria-label="The mathematics behind the madness"><a href="/52-factorial/">52! explained</a><a href="/same-deck-twice/">Same deck twice?</a><a href="/how-many-shuffles/">How many shuffles?</a></nav>
+</header>
+<main id="main">
+<p class="crumbs"><a href="/">Home</a> › The math behind the madness</p>
+<h1>The Mathematics Behind the Madness</h1>
+<p class="lede">A deck of 52 cards was shuffled once. Humanity is trying to shuffle that exact order again. Here's why that is the most hopeless mission on the internet, with the numbers to prove it.</p>
+
+<div class="answer">
+  <p class="k">The mission in numbers</p>
+  <p>Possible orders of a deck: <b>52! ≈ 8.07 × 10<sup>67</sup></b></p>
+  <p>Chance that one shuffle matches the Holy Grail: <b>1 in 52!</b></p>
+  <p>Cards that land in their Grail spot, on average: <b>1</b></p>
+  <p class="live" data-live hidden>Shuffles by humanity so far: <span data-live-total>…</span></p>
+</div>
+
+<div class="cards">
+  <a class="card" href="/52-factorial/"><b>52 Factorial: How Big Is 52! Really?</b><span>The 68-digit number behind every shuffle, in coin flips, lottery wins and lifetimes of the universe. With a deck to shuffle.</span></a>
+  <a class="card" href="/same-deck-twice/"><b>Has Anyone Ever Shuffled the Same Deck Twice?</b><span>The birthday problem, real repeats (new decks, lazy shuffles, a hacked poker site) and the odds of matching a few cards.</span></a>
+  <a class="card" href="/how-many-shuffles/"><b>How Many Shuffles to Randomize a Deck?</b><span>Why seven riffle shuffles is the magic number, why overhand shuffling is hopeless and how computers do it right.</span></a>
+  <a class="card" href="/#verifyBox"><b>Provably Fair: Check Any Shuffle</b><span>Every shuffle on the site has a public recipe. Replay anyone's shuffle and get the exact same deck.</span></a>
+</div>
+
+<h2>Why bother?</h2>
+<p>Because "the odds are 1 in 8 × 10<sup>67</sup>" is impossible to feel until you've pressed the button a few hundred times and watched mathematics win every single round. The Impossible Shuffle is a joke, a probability experiment and a shared counter for all of humankind. It is also, technically, a game.</p>
+<aside class="cta" aria-label="Join the mission">
+  <p>Enough reading. The Holy Grail won't shuffle itself.</p>
+  <a class="btn" href="/" data-goatcounter-click="learn-cta/math">Shuffle the Impossible<small>Free · no sign-up · counted live</small></a>
+</aside>
+</main>
+<footer class="foot">
+  <p><a href="/">Play</a>·<a href="/math/">The math</a>·<a href="/52-factorial/">52!</a>·<a href="/same-deck-twice/">Same deck twice?</a>·<a href="/how-many-shuffles/">How many shuffles?</a>·<a href="https://www.instagram.com/theimpossibleshuffle/" rel="noopener me">Instagram</a></p>
+  <p>The Impossible Shuffle · humankind's most pointless mission</p>
+</footer>
+</div>
+<script>
+/* The live worldwide total (the same public counter the game shows). Hidden if it can't be loaded. */
+(function () {
+  var K = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtpbnl5enl6ZHJwenh5eHV3cGR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3NjQ1MTUsImV4cCI6MjEwNzM0MDUxNX0.Jr4pqGrwW54jTozB7H2sJubirATPjKVkxc5sVgLNZ1c';
+  fetch('https://kinyyzyzdrpzxyxuwpdt.supabase.co/rest/v1/shuffle_stats?select=attempts&id=eq.1', { headers: { apikey: K, Authorization: 'Bearer ' + K }, cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+    .then(function (rows) {
+      var n = rows && rows[0] && Number(rows[0].attempts);
+      if (!isFinite(n) || n <= 0) return;
+      document.querySelectorAll('[data-live-total]').forEach(function (el) { el.textContent = n.toLocaleString('en-US'); });
+      document.querySelectorAll('[data-live]').forEach(function (el) { el.hidden = false; });
+    }).catch(function () {});
+})();
+</script>
+</body>
+</html>
