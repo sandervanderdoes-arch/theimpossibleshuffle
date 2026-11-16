@@ -976,6 +976,7 @@
   .plaque .facts { margin-top:.6rem; font-size:.85rem; color:#e9dcb0; }
   .plaque .facts b { color:#ffe68a; }
   .plaque .forever { margin-top:.7rem; font:700 .72rem "JetBrains Mono", ui-monospace, monospace; letter-spacing:.08em; color:#c9a75a; }
+  #missionStatus[hidden] { display:none; }   /* hidden while the mission runs; shown only once it is accomplished */
   .ms-go { border-color:rgba(124,255,107,.5); background:rgba(8,40,16,.55); }
   .live-dot.go { background:#7cff6b; box-shadow:0 0 8px #7cff6b; }
   body.mission-done #missionStatus { border-color:rgba(255,210,63,.6); background:rgba(60,42,4,.55); }
@@ -1109,7 +1110,7 @@
       <button type="button" id="heroShuffle" class="shuffle-btn hero-cta mt-4"><span class="btn-main">Shuffle the Impossible</span><span class="btn-sub">Free · no sign-up</span></button>
       <p class="hero-trust"><span class="block">Odds: <b>1 in 8 × 10⁶⁷</b> per shuffle.</span><span class="block">Every shuffle is real and anyone can replay it, so even Mission Control can't fake a win.</span></p>
 
-      <div id="missionStatus" class="ms-go mt-5 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border px-4 py-2 mono text-xs sm:text-sm">
+      <div id="missionStatus" hidden class="ms-go mt-5 inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border px-4 py-2 mono text-xs sm:text-sm">
         <span class="inline-flex items-center gap-2 font-bold text-[#7cff6b]"><span class="live-dot go" aria-hidden="true"></span>LIVE</span>
         <span id="msText"><b class="text-[#b8ffb0]">MISSION STATUS: ALL SYSTEMS GO.</b> Humanity is shuffling as one. Mathematics is ahead. For now.</span>
       </div>
@@ -6491,6 +6492,7 @@ function applyMission(row) {
     ${mine && !row.winner_name ? `<form data-claim="name" class="mt-3 flex flex-wrap gap-2 justify-center items-center"><span class="font-bold">Name it: The</span><label class="sr-only" for="plaqueName">Your name</label><input id="plaqueName" class="imp-input" maxlength="40" placeholder="Your name" autocomplete="name"><span class="font-bold">Sequence</span><button type="submit" class="shuffle-btn !w-auto !text-sm !py-2 !px-4">Carve it in stone</button></form>` : ''}
     <div class="mt-3 flex flex-wrap gap-2 justify-center">${validRec(rec) ? `<button type="button" class="chip-btn !text-xs" data-verify='${recAttr(rec)}'>✓ Replay the winning shuffle</button>` : ''}${mine ? '<button type="button" class="chip-btn !text-xs" data-cert="won">📜 Certificate of Doing the Impossible</button>' : ''}</div>
     <p class="forever">ONE MISSION · ONE WINNER · NO RESET · NO SEASON 2</p>`;
+  $('#missionStatus').hidden = false;
   $('#missionStatus').innerHTML = `<span class="inline-flex items-center gap-2 font-bold text-[#ffd23f]">★ FOREVER</span><span><b class="text-[#ffe68a]">MISSION STATUS: ACCOMPLISHED.</b> Humanity matched the Holy Grail. There will never be another.</span>`;
   $('#liveWins').textContent = '1 successful match in human history. The first, the last, the only.';
   $('#grailTitle').textContent = `The ${missionName()} Sequence`;
